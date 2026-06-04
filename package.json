@@ -1,0 +1,73 @@
+{
+  "name": "banal-ai",
+  "version": "1.0.0",
+  "description": "Banal — the Robinhood of AI. We take the best capabilities the rich pay for and give them to ordinary people for free. Stupidly simple. No account. No card. Fork it. Own it. English primary.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Banal Contributors",
+  "homepage": "https://github.com/yourname/banal-ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourname/banal-ai.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourname/banal-ai/issues"
+  },
+  "keywords": [
+    "ai",
+    "free",
+    "equalizer",
+    "poor",
+    "banal",
+    "simple",
+    "web",
+    "static",
+    "i18n",
+    "japanese",
+    "open-source"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src tests --ext .ts,.js --fix",
+    "lint:check": "eslint src tests --ext .ts,.js",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{ts,js,html,css,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,html,css,json,md}\"",
+    "ci": "npm run lint:check && npm run typecheck && npm run test:run && npm audit --audit-level=moderate"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@typescript-eslint/eslint-plugin": "^7.7.0",
+    "@typescript-eslint/parser": "^7.7.0",
+    "@vitest/coverage-v8": "^4.1.8",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "jsdom": "^24.0.0",
+    "postcss": "^8.4.38",
+    "prettier": "^3.2.5",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.5",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.8"
+  },
+  "overrides": {
+    "semver": "^7.5.4",
+    "braces": "^3.0.3",
+    "micromatch": "^4.0.8",
+    "word-wrap": "^1.2.5",
+    "tough-cookie": "^4.1.3",
+    "undici": "^5.28.5",
+    "form-data": "^4.0.1",
+    "cross-spawn": "^7.0.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
