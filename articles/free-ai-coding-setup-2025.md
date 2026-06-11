@@ -1,6 +1,6 @@
 # The Only Free AI Coding Setup That Actually Works in 2025
 
-*A practical guide for developers who refuse to pay $20/month for a subscription*
+_A practical guide for developers who refuse to pay $20/month for a subscription_
 
 ---
 
@@ -12,7 +12,7 @@ Let me be direct: **I'm not being paid to write this. Nobody is.** This is just 
 
 Here's what nobody tells you upfront:
 
-- **Google Antigravity CLI** is interesting technology but the free tier is *extremely* limited in token count. Useful for quick experiments, not for real projects.
+- **Google Antigravity CLI** is interesting technology but the free tier is _extremely_ limited in token count. Useful for quick experiments, not for real projects.
 - **Visual Studio Code + standard free plugins** gives you basic autocomplete and chat suggestions — but without a paid subscription, you're looking at a few minutes of actual AI assistance per day.
 - **Cursor** (the VS Code fork built around AI) is genuinely excellent software. The problem? Without an account and a linked payment method, the free tier is essentially a teaser. You get a handful of generations, then you're done for the day.
 
@@ -36,13 +36,13 @@ Let's not pretend free models are as good as Claude Opus or GPT-4. They're not. 
 
 The difference between Kilo on free models versus Cursor on paid models:
 
-| Aspect | Kilo (free models) | Cursor (paid) |
-|--------|-------------------|---------------|
-| Code generation | Good, needs occasional refinement | Excellent, often perfect |
-| Cost | $0 | ~$20/month |
-| Token limits | Effectively unlimited with free providers | Generous but finite |
-| Privacy | Local-first, code stays on your machine | Cloud-dependent |
-| Setup | ~5 minutes | Instant (but account required) |
+| Aspect          | Kilo (free models)                        | Cursor (paid)                  |
+| --------------- | ----------------------------------------- | ------------------------------ |
+| Code generation | Good, needs occasional refinement         | Excellent, often perfect       |
+| Cost            | $0                                        | ~$20/month                     |
+| Token limits    | Effectively unlimited with free providers | Generous but finite            |
+| Privacy         | Local-first, code stays on your machine   | Cloud-dependent                |
+| Setup           | ~5 minutes                                | Instant (but account required) |
 
 For my actual workflow — backend APIs, refactoring, test writing, documentation — Kilo on free models handles 85-90% of what I need. The 10-15% where I reach for a paid model is complex architecture decisions or nuanced business logic.
 
@@ -64,11 +64,13 @@ This setup — VS Code + Kilo — is what I'd recommend to anyone starting out. 
 [Google Antigravity CLI](https://github.com/google-gemini/gemini-cli) is Google's command-line AI assistant. It's technically impressive and connects to Gemini models.
 
 The hard truth: the free tier gives you limited daily tokens. It's great for:
+
 - Quick one-off questions
 - Prototyping ideas
 - Learning how AI coding agents work
 
 It's not great for:
+
 - All-day coding sessions
 - Large codebase refactoring
 - Anything requiring deep context
@@ -80,23 +82,27 @@ Think of it as a supplement to your main tool, not a replacement.
 Here's what I actually use, with real links:
 
 ### 1. Kilo (primary AI coding agent)
+
 - **Download/install:** [kilo.ai](https://kilo.ai)
 - **Documentation:** [docs.kilo.ai](https://docs.kilo.ai)
 - **Pricing:** Free tier with free models, paid tiers for premium models
 - **Best for:** Daily coding, refactoring, test generation, documentation
 
 ### 2. Visual Studio Code (editor)
+
 - **Download:** [code.visualstudio.com](https://code.visualstudio.com/)
 - **Marketplace:** [VS Code extensions](https://marketplace.visualstudio.com/vscode)
 - **Pricing:** Completely free, open source
 - **Best for:** The actual coding environment
 
 ### 3. Kilo VS Code Plugin
+
 - **Install:** Search "Kilo" in VS Code extensions marketplace
 - **Setup time:** ~2 minutes after installing Kilo
 - **Best for:** Inline AI assistance without leaving your editor
 
 ### 4. Google Antigravity CLI (supplementary)
+
 - **GitHub:** [google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli)
 - **Documentation:** README in the repository
 - **Pricing:** Free tier available, limits apply
@@ -107,17 +113,20 @@ Here's what I actually use, with real links:
 Let me save you some time by being upfront about where this setup falls short:
 
 **Free models won't match paid models on:**
+
 - Complex multi-step reasoning
 - Large codebase understanding (100K+ files)
 - Cutting-edge library knowledge
 - Architecture-level design decisions
 
 **What you'll need to tolerate:**
+
 - Slower response times than paid APIs
 - Occasional hallucinations (verify the code)
 - Less refined suggestions (more "good starting point" than "done")
 
 **When you should consider paying:**
+
 - If you're building something time-critical
 - If you're client work and need reliability guarantees
 - If you're working with extremely large codebases
@@ -151,10 +160,11 @@ The [Kilo](https://kilo.ai) + VS Code combination gives you 85-90% of what Curso
 
 ---
 
-*Tools mentioned in this article:*
-- *[Kilo](https://kilo.ai) — Free AI coding agent*
-- *[VS Code](https://code.visualstudio.com/) — Free code editor*
-- *[Kilo VS Code Plugin](https://plugins.jetbrains.com/plugin/00000-kilo) — Editor integration*
-- *[Google Antigravity CLI](https://github.com/google-gemini/gemini-cli) — Free terminal AI*
-- *[Kilo Pricing](https://kilo.ai/pricing) — Free tier available*
-- *[Kilo Documentation](https://docs.kilo.ai) — Setup and usage guides*
+_Tools mentioned in this article:_
+
+- _[Kilo](https://kilo.ai) — Free AI coding agent_
+- _[VS Code](https://code.visualstudio.com/) — Free code editor_
+- _[Kilo VS Code Plugin](https://plugins.jetbrains.com/plugin/00000-kilo) — Editor integration_
+- _[Google Antigravity CLI](https://github.com/google-gemini/gemini-cli) — Free terminal AI_
+- _[Kilo Pricing](https://kilo.ai/pricing) — Free tier available_
+- _[Kilo Documentation](https://docs.kilo.ai) — Setup and usage guides_

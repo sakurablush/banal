@@ -11,6 +11,10 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        'articles/free-ai-coding-setup-2026': resolve(
+          __dirname,
+          'articles/free-ai-coding-setup-2026/index.html'
+        ),
       },
     },
   },
