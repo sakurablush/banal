@@ -1,5 +1,9 @@
 /**
  * Cipher Rotary Menu — koncentriczne ringi nawigacyjne
+ *
+ * FUTURE WORK: This component is not currently used in the application.
+ * It was created as an experimental navigation UI but has not been integrated.
+ * Consider removing if not needed, or integrating into the main navigation.
  */
 export interface CipherMenuItem {
   id: string;
@@ -43,8 +47,10 @@ export class CipherMenu {
 
   private renderSegments(): void {
     const svg = this.container.querySelector('.cipher-svg')!;
-    const cx = 200, cy = 200;
-    const outerR = 175, innerR = 125;
+    const cx = 200,
+      cy = 200;
+    const outerR = 175,
+      innerR = 125;
     const count = this.items.length;
     const gap = 3;
     const slice = (360 - count * gap) / count;
@@ -98,7 +104,7 @@ export class CipherMenu {
   }
 
   private activate(id: string): void {
-    this.container.querySelectorAll<SVGElement>('.cipher-segment-active').forEach(el => {
+    this.container.querySelectorAll<SVGElement>('.cipher-segment-active').forEach((el) => {
       el.classList.remove('cipher-segment-active');
       el.setAttribute('fill', '');
     });
@@ -116,15 +122,33 @@ export class CipherMenu {
     const p4 = this.cart(cx, cy, ir, e);
     const large = e - s > 180 ? 1 : 0;
     return [
-      'M', p1.x, p1.y,
-      'A', or, or, 0, large, 0, p2.x, p2.y,
-      'L', p3.x, p3.y,
-      'A', ir, ir, 0, large, 1, p4.x, p4.y,
-      'Z'
+      'M',
+      p1.x,
+      p1.y,
+      'A',
+      or,
+      or,
+      0,
+      large,
+      0,
+      p2.x,
+      p2.y,
+      'L',
+      p3.x,
+      p3.y,
+      'A',
+      ir,
+      ir,
+      0,
+      large,
+      1,
+      p4.x,
+      p4.y,
+      'Z',
     ].join(' ');
   }
 
-  private cart(cx: number, cy: number, r: number, a: number): {x: number; y: number} {
+  private cart(cx: number, cy: number, r: number, a: number): { x: number; y: number } {
     const rad = (a * Math.PI) / 180;
     return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
   }
