@@ -24,7 +24,7 @@ interface TemplateData {
 }
 
 /**
-  * The 9 core prompt templates. Each is a complete, ready-to-paste prompt.
+ * The 9 core prompt templates. Each is a complete, ready-to-paste prompt.
  * Variables use {{camelCase}} so extractTemplateVariables + fill() work reliably.
  * Japanese versions are native-level, empathetic, and culturally calibrated (keigo for bureaucracy, softening for mental health).
  */

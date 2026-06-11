@@ -71,12 +71,12 @@ export const PLAYGROUND_PROVIDERS: PlaygroundProvider[] = [
   // Pollinations Text removed (2026-06-11): Now requires Cloudflare Turnstile (CAPTCHA)
   // for anonymous requests, so it's no longer truly "no key required".
   // See: https://pollinations.ai - they changed policy in March 2025.
-  
+
   // Pollinations Image removed (2026-06-11): Same provider as Text, likely to have
   // similar Turnstile requirements or rate limiting issues. For transparency and
   // reliability, removing both to avoid user confusion.
   // See: https://pollinations.ai - they changed policy in March 2025.
-  
+
   {
     id: 'ovh-anon',
     name: 'OVHcloud AI (Anonymous)',

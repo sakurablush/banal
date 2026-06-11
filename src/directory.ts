@@ -91,7 +91,7 @@ export function initDirectory(): void {
       // Determine which section to scroll to based on category prefix
       const targetSection = cat.startsWith('ai-') ? 'ai-tools' : 'dev-tools';
       const targetRoot = document.getElementById(`${targetSection}-root`);
-      
+
       // Find the search input in the rendered panel and set its value
       const searchInput = targetRoot?.querySelector('input[type="text"]') as HTMLInputElement;
       if (searchInput) {

@@ -1,6 +1,6 @@
 /**
  * Chat Modal Module — renders chat UI in a modal dialog.
- * 
+ *
  * This module handles opening/closing the chat modal and renders the chat UI
  * inside the modal container. All chat functionality (quick starts, prompt templates,
  * export, keys modal) is preserved from the original chat.ts implementation.
@@ -34,7 +34,7 @@ export function initChatModal(): void {
   const openModal = () => {
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden'; // Prevent background scroll
-    
+
     // Initialize chat UI if not already done
     if (!isInitialized) {
       renderChatUI(content);
@@ -84,7 +84,7 @@ export function initChatModal(): void {
  * Call this when the component unmounts or needs to be reinitialized.
  */
 export function cleanup(): void {
-  cleanupFunctions.forEach(fn => fn());
+  cleanupFunctions.forEach((fn) => fn());
   cleanupFunctions = [];
   isInitialized = false;
 }
@@ -98,15 +98,15 @@ function renderChatUI(container: HTMLElement): void {
   const wrapper = document.createElement('div');
   wrapper.id = 'chat-modal-wrapper';
   wrapper.className = 'h-full flex flex-col';
-  
+
   // Create the chat root container that chat.ts expects
   const chatRoot = document.createElement('div');
   chatRoot.id = 'experience';
   chatRoot.className = 'flex-1 overflow-hidden';
-  
+
   wrapper.appendChild(chatRoot);
   container.appendChild(wrapper);
-  
+
   // Initialize chat - this will render into the #experience container
   try {
     initChat();

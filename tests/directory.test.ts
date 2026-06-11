@@ -79,9 +79,7 @@ describe('directory module initialization & behavior', () => {
 
     initDirectory();
 
-    const chatCard = document.querySelector(
-      '[data-filter="ai-chat"]'
-    ) as HTMLAnchorElement;
+    const chatCard = document.querySelector('[data-filter="ai-chat"]') as HTMLAnchorElement;
 
     // Should not throw when clicking a data-filter card
     expect(() => chatCard.click()).not.toThrow();
@@ -102,9 +100,7 @@ describe('directory module initialization & behavior', () => {
     window.dispatchEvent(new CustomEvent('banal:language-changed', { detail: { lang: 'ja' } }));
 
     // After re-render all AI tools are still rendered (first page)
-    expect(aiRoot.querySelectorAll('.zk2-card').length).toBe(
-      Math.min(PAGE_SIZE, aiToolsCount)
-    );
+    expect(aiRoot.querySelectorAll('.zk2-card').length).toBe(Math.min(PAGE_SIZE, aiToolsCount));
   });
 
   it('displays error message when renderZeroKeyPowerPanel throws', async () => {

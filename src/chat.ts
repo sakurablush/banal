@@ -391,7 +391,9 @@ function showGhostReflection(
  * Pulls from i18n so full reactive on lang switch. Always appends the narrative tie "— another body..."
  * Poetic, fire-giving, GitS: the ghost waking in the poor, refusal as the protocol.
  */
-function showGhostLog(context?: 'prompt-template' | 'export' | 'zero-key' | 'empty' | 'spread'): void {
+function showGhostLog(
+  context?: 'prompt-template' | 'export' | 'zero-key' | 'empty' | 'spread'
+): void {
   if (!ghostLogEl) return;
   const now = Date.now();
   if (now - lastGhostLogTs < 420000) return; // ~7min cooldown — truly rare, only on the deepest moments

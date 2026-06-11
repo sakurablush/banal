@@ -32,7 +32,8 @@ export const translations: Record<Lang, Translations> = {
       'Type anything. Job help, study plan, letter to the office, “I feel like shit”…',
     'chat.input.send': 'Send',
     'chat.input.sending': 'Thinking…',
-    'chat.empty': 'Start here. Or tap a quick prompt template below — made for exactly this moment.',
+    'chat.empty':
+      'Start here. Or tap a quick prompt template below — made for exactly this moment.',
     'chat.quickstarts': 'Quick starts for when you have nothing',
     'chat.promptTemplates': 'All 9 Prompt Templates',
     'chat.promptTemplates.hint':
@@ -83,7 +84,8 @@ export const translations: Record<Lang, Translations> = {
     'promptTemplates.form.title': 'Fill the blanks (only what feels true)',
     'promptTemplates.form.send': 'Send this prompt template',
     'promptTemplates.form.cancel': 'Cancel',
-    'promptTemplates.form.missing': 'Some blanks left as-is — the AI will still help you finish them.',
+    'promptTemplates.form.missing':
+      'Some blanks left as-is — the AI will still help you finish them.',
     'exports.json.filename': 'banal-conversation.json',
     'exports.html.title': 'Banal — My Offline Conversation',
     'exports.html.note':

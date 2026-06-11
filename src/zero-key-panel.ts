@@ -36,6 +36,7 @@ const categoryIcons: Record<ZeroKeyCategory, string> = {
   'ai-presentation': '\u{1F4CA}',
   'ai-math': '\u{1F9EE}',
   'ai-coding': '\u{1F916}',
+  'ai-agents': '\u{1F916}',
   // Developer categories
   'dev-coding': '\u{1F4BB}',
   'dev-docs': '\u{1F4DA}',
@@ -311,7 +312,7 @@ function renderCategorySidebar(): HTMLElement {
     const item = create('button', `zk2-cat-item${state.activeCategory === cat ? ' active' : ''}`);
     item.type = 'button';
     item.dataset.category = cat;
-    item.innerHTML = `<span class="zk2-cat-icon">${categoryIcons[cat]}</span><span class="zk2-cat-label">${categoryLabels[cat].split(' ').slice(0, 3).join(' ')}</span><span class="zk2-cat-count">${count}</span>`;
+    item.innerHTML = `<span class="zk2-cat-icon">${categoryIcons[cat]}</span><span class="zk2-cat-label">${categoryLabels[cat]}</span><span class="zk2-cat-count">${count}</span>`;
     item.addEventListener('click', () => {
       state.activeCategory = state.activeCategory === cat ? null : cat;
       performSearch(state.query);
@@ -385,7 +386,7 @@ function renderToolCard(result: SearchResult): HTMLElement {
 
   // Access type badges
   const accessBadges = create('div', 'zk2-card-access-badges');
-  
+
   // AI vs Dev badge
   const isAI = tool.category.startsWith('ai-');
   const typeBadge = create('span', `zk2-access-badge zk2-access-${isAI ? 'ai' : 'dev'}`);
@@ -607,11 +608,12 @@ export function renderZeroKeyPowerPanel(
   state.query = '';
   state.activeCategory = null;
   state.visibleCount = PAGE_SIZE;
-  
+
   // Filter tools by category prefix if specified
   const filteredTools = categoryPrefix
     ? zeroKeyTools.filter((t) => matchesCategoryPrefix(t.category, categoryPrefix))
     : zeroKeyTools;
+  state.allTools = filteredTools;
   state.results = filteredTools.map((tool) => ({ tool, score: 0, matches: {} }));
   state.container = container;
 

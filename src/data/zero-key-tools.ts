@@ -13,7 +13,7 @@
 export type ZeroKeySurface = 'web' | 'api' | 'cli';
 
 export type ZeroKeyCategory =
-  // AI categories (10)
+  // AI categories (11)
   | 'ai-chat'
   | 'ai-image'
   | 'ai-video'
@@ -24,6 +24,7 @@ export type ZeroKeyCategory =
   | 'ai-presentation'
   | 'ai-math'
   | 'ai-coding'
+  | 'ai-agents'
   // Developer categories (9)
   | 'dev-coding'
   | 'dev-backend'
@@ -67,6 +68,7 @@ export const categoryLabels: Record<ZeroKeyCategory, string> = {
   'ai-presentation': 'AI Presentations & Slides',
   'ai-math': 'AI Math, Science & Education',
   'ai-coding': 'AI Coding Assistants',
+  'ai-agents': 'AI Agent Platforms',
   // Developer categories
   'dev-coding': 'Coding & Developer Workflow',
   'dev-backend': 'Backend, Hosting & Databases',
@@ -2647,32 +2649,6 @@ export const zeroKeyTools: ZeroKeyTool[] = [
   // AI CODING ASSISTANTS (NEW - Professional Setup)
   // ──────────────────────────────────────────────────────────────────────────
   {
-    id: 'kilo-code',
-    name: 'Kilo Code',
-    url: 'https://kilo.ai/',
-    surface: 'cli',
-    category: 'ai-coding',
-    access: 'free-key',
-    badges: ['VS Code', 'JetBrains', 'CLI', '500+ models', 'Apache-2.0'],
-    bestFor: 'Professional AI coding with free models. Auto-routing to best free model.',
-    qualityNote: 'Kilo Auto (free) routes to best available free models automatically. No credit card. Apache-2.0 open source.',
-    caveat: 'Free models may have rate limits. For heavy usage, consider Kilo Pass ($20/mo) or BYOK.',
-    lastVerified: '2026-06-11',
-  },
-  {
-    id: 'cline',
-    name: 'Cline',
-    url: 'https://github.com/cline/cline',
-    surface: 'cli',
-    category: 'ai-coding',
-    access: 'open-source',
-    badges: ['VS Code', 'JetBrains', 'Neovim', 'Zed', 'BYOK', 'Apache-2.0'],
-    bestFor: 'Open source AI coding with native subagents. 80.8% SWE-bench with Claude API.',
-    qualityNote: 'Apache-2.0 licensed. Tool is free, you pay for model tokens. Native subagents for parallel work.',
-    caveat: 'Requires API key from your chosen provider (Anthropic, OpenAI, etc.).',
-    lastVerified: '2026-06-11',
-  },
-  {
     id: 'continue',
     name: 'Continue',
     url: 'https://continue.dev/',
@@ -2682,32 +2658,6 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['VS Code', 'JetBrains', 'BYOK', 'model-agnostic'],
     bestFor: 'IDE extension with open source flexibility. Works with any model provider.',
     qualityNote: 'Apache-2.0 licensed. Model-agnostic - use any provider or local models.',
-    caveat: 'Tool is free, you pay for model tokens.',
-    lastVerified: '2026-06-11',
-  },
-  {
-    id: 'opencode',
-    name: 'OpenCode',
-    url: 'https://github.com/opencode-ai/opencode',
-    surface: 'cli',
-    category: 'ai-coding',
-    access: 'open-source',
-    badges: ['Terminal CLI', '120K+ stars', 'LSP', 'multi-session'],
-    bestFor: 'Terminal power users. LSP integration, multi-session parallel agents.',
-    qualityNote: 'Open source with 120K+ GitHub stars. Supports 75+ LLM providers.',
-    caveat: 'Tool is free, you pay for model tokens.',
-    lastVerified: '2026-06-11',
-  },
-  {
-    id: 'aider',
-    name: 'Aider',
-    url: 'https://aider.chat/',
-    surface: 'cli',
-    category: 'ai-coding',
-    access: 'open-source',
-    badges: ['Terminal CLI', 'Git integration', 'pair programming'],
-    bestFor: 'Git-heavy refactoring and pair programming in terminal.',
-    qualityNote: 'Excellent Git integration. Open source with strong community.',
     caveat: 'Tool is free, you pay for model tokens.',
     lastVerified: '2026-06-11',
   },
@@ -2733,8 +2683,10 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     access: 'no-login',
     badges: ['Local API', 'OAuth tokens', '150+ models', 'OpenAI-compatible'],
     bestFor: 'Unified API access to Claude, ChatGPT, Gemini using OAuth tokens. Zero API keys.',
-    qualityNote: 'Local-first, drop-in OpenAI/Anthropic compatibility. Uses OAuth tokens from CLI tools.',
-    caveat: 'Shared with CLI tools (Claude Code, Codex CLI, Gemini CLI). Avoid running both simultaneously.',
+    qualityNote:
+      'Local-first, drop-in OpenAI/Anthropic compatibility. Uses OAuth tokens from CLI tools.',
+    caveat:
+      'Shared with CLI tools (Claude Code, Codex CLI, Gemini CLI). Avoid running both simultaneously.',
     lastVerified: '2026-06-11',
   },
   {
@@ -2759,7 +2711,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     access: 'free-tier',
     badges: ['Web IDE', 'CLI', 'iOS', 'Android', '50K tokens/day'],
     bestFor: 'Qwen Coder 7B with session sync CLI ↔ web. 50K tokens/day free.',
-    qualityNote: 'Open source CLI (MIT). 346+ models via OpenRouter. Session sync across platforms.',
+    qualityNote:
+      'Open source CLI (MIT). 346+ models via OpenRouter. Session sync across platforms.',
     caveat: '50K tokens/day free. BYOK for unlimited usage.',
     lastVerified: '2026-06-11',
   },
@@ -2850,7 +2803,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     access: 'open-source',
     badges: ['VS Code', 'cost-optimized', 'context optimization', 'BYOK'],
     bestFor: 'Cost-optimized AI coding with intelligent context optimization.',
-    qualityNote: 'Open source and model-agnostic. Intelligent context optimization reduces token usage.',
+    qualityNote:
+      'Open source and model-agnostic. Intelligent context optimization reduces token usage.',
     caveat: 'Tool is free, you pay for model tokens.',
     lastVerified: '2026-06-11',
   },
@@ -2876,7 +2830,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     access: 'open-source',
     badges: ['Desktop app', 'Electron', 'React', 'Monaco', 'agent-first'],
     bestFor: 'Agent-first desktop workspace. Built from scratch, not a VS Code fork.',
-    qualityNote: 'Apache-2.0. Local-first with no cloud lock-in. Built from scratch on Electron + React + Monaco.',
+    qualityNote:
+      'Apache-2.0. Local-first with no cloud lock-in. Built from scratch on Electron + React + Monaco.',
     caveat: 'Tool is free, you pay for model tokens.',
     lastVerified: '2026-06-11',
   },
@@ -2889,7 +2844,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     access: 'open-source',
     badges: ['Local gateway', 'automatic failover', 'Claude Code', 'Codex', 'Gemini CLI'],
     bestFor: 'Automatic failover across free providers. Wraps Claude Code, Codex, Gemini CLI.',
-    qualityNote: 'Open source. Local-first gateway with automatic failover across OpenRouter, Groq, NVIDIA NIM, etc.',
+    qualityNote:
+      'Open source. Local-first gateway with automatic failover across OpenRouter, Groq, NVIDIA NIM, etc.',
     caveat: 'Uses free tiers from multiple providers. Rate limits apply.',
     lastVerified: '2026-06-11',
   },
@@ -2954,7 +2910,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     access: 'no-login',
     badges: ['Web UI', 'Gemini', 'prototyping', 'completely free'],
     bestFor: 'Prototyping with Gemini models. Completely free in all regions.',
-    qualityNote: 'Google-backed. Completely free in all available regions. Great for testing and prototyping.',
+    qualityNote:
+      'Google-backed. Completely free in all available regions. Great for testing and prototyping.',
     caveat: 'Rate limits apply, but generous for testing. Not intended for production use.',
     lastVerified: '2026-06-11',
   },
@@ -3118,12 +3075,12 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Gemini CLI',
     url: 'https://github.com/google-gemini/gemini-cli',
     surface: 'cli',
-    category: 'ai-coding',
-    access: 'no-login',
-    badges: ['1M context', 'Google', '78% SWE-bench'],
-    bestFor: 'Largest context window among CLI coding tools, ideal for monorepos.',
-    qualityNote: 'Google-backed, open source, 78% SWE-bench Verified. 1M token context window.',
-    caveat: 'Free tier with frontier models, but requires Google account.',
+    category: 'ai-agents',
+    access: 'free-tier',
+    badges: ['105K stars', '1M context', '1K req/day', 'Apache-2.0'],
+    bestFor: 'Largest context window (1M tokens), free frontier models, Google-backed.',
+    qualityNote: 'Google-backed, Apache-2.0. ReAct loop, MCP support. 1,000 req/day, 60 req/min with Google account.',
+    caveat: 'Requires Google account. Rate limits apply (1,000 req/day, 60 req/min). 70.7% Terminal-Bench 2.1.',
     lastVerified: '2026-06-11',
   },
   {
@@ -3148,7 +3105,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     access: 'open-source',
     badges: ['cross-session memory', 'Xiaomi', '3.9K stars'],
     bestFor: 'Cross-session memory - persistent understanding of project across sessions.',
-    qualityNote: 'MIT License, 3.9K GitHub stars, fork of OpenCode. MiMo Auto free for limited time.',
+    qualityNote:
+      'MIT License, 3.9K GitHub stars, fork of OpenCode. MiMo Auto free for limited time.',
     caveat: 'MiMo Auto is free for limited time, then BYOK.',
     lastVerified: '2026-06-11',
   },
@@ -3157,12 +3115,365 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'korgex',
     url: 'https://github.com/New1Direction/korgex',
     surface: 'cli',
-    category: 'ai-coding',
+    category: 'ai-agents',
     access: 'open-source',
-    badges: ['auditable', 'tamper-evident', '1.5K tests'],
-    bestFor: 'Auditable coding - everything saved to tamper-proof record.',
-    qualityNote: 'MIT License, ~1,586 tests, hash-chained causal ledger. New project (2026-05-24).',
-    caveat: 'BYOK, requires setup.',
+    badges: ['tamper-evident', 'hash-chained', '1.5K tests', 'MCP'],
+    bestFor: 'Tamper-evident ledger, hash-chained causal ledger, auditable, MCP.',
+    qualityNote: '~1,586 tests, Python 3.10-3.13, MCP support. Verifiable ledger, causal cognition trace.',
+    caveat: 'BYOK, newer project (less mature). MIT license.',
+    lastVerified: '2026-06-11',
+  },
+  // ──────────────────────────────────────────────────────────────────────────
+  // AI AGENT PLATFORMS (Production-Ready)
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'openhands',
+    name: 'OpenHands (OpenDevin)',
+    url: 'https://github.com/All-Hands-AI/OpenHands',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['72K stars', 'autonomous', '53-72% SWE-bench', 'MIT'],
+    bestFor: 'Autonomous coding agent, issue-to-PR workflow, production-grade.',
+    qualityNote: '$18.8M Series A, used by AMD, Apple, Google, Amazon, Netflix, NVIDIA. Event-stream architecture, Docker sandbox.',
+    caveat: 'Requires Docker, BYOK (bring your own key). 53-72% SWE-bench Verified with Claude 4.5/4.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'agent-zero',
+    name: 'Agent Zero',
+    url: 'https://github.com/agent0ai/agent-zero',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['18K stars', 'full Linux', 'plugin hub', 'A0 CLI'],
+    bestFor: 'Full Linux system for agent, plugin hub, skills, Space Agent.',
+    qualityNote: '50 contributors, 61 releases, actively maintained. Docker-based, A0 CLI Connector for host machine.',
+    caveat: 'Requires Docker. Do not mount /home unless you understand the risk. Grant A0 CLI access only for machines you trust.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'opencode',
+    name: 'OpenCode',
+    url: 'https://github.com/anomalyco/opencode',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['172K stars', '75+ providers', 'local models', 'MIT'],
+    bestFor: 'Terminal-first, 75+ LLM providers, local models via Ollama/LM Studio.',
+    qualityNote: 'Most-starred open-source coding agent. MIT license, Zen model list (tested for agentic coding).',
+    caveat: 'BYOK - you pay for API calls. Supports 75+ providers through AI SDK and Models.dev catalog.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'claude-code',
+    name: 'Claude Code',
+    url: 'https://claude.ai/code',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'free-tier',
+    badges: ['131K stars', 'best reasoning', '1M context', '88.6% SWE-bench'],
+    bestFor: 'Best reasoning, terminal + IDE + desktop, 1M context, Opus 4.8.',
+    qualityNote: 'Anthropic-backed. Opus 4.8 model. 78.9% Terminal-Bench 2.1, 88.6% SWE-bench Verified.',
+    caveat: 'Requires Claude subscription ($20/mo) or API key. 4x less likely to let flaws pass unremarked vs Opus 4.7.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'cline',
+    name: 'Cline',
+    url: 'https://github.com/cline/cline',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['63K stars', 'VS Code', 'JetBrains', 'Apache-2.0'],
+    bestFor: 'VS Code + JetBrains + CLI, full terminal and browser access.',
+    qualityNote: 'Apache-2.0, actively maintained. Full terminal and browser access for Claude/GPT.',
+    caveat: 'BYOK - you pay for API calls. Model-dependent performance.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'aider',
+    name: 'Aider',
+    url: 'https://github.com/paul-gauthier/aider',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['45K stars', 'Git-aware', 'any LLM', 'Apache-2.0'],
+    bestFor: 'Git-aware pair programming, any LLM, mature project.',
+    qualityNote: 'Apache-2.0, mature project. Git-aware, works with any LLM.',
+    caveat: 'BYOK - you pay for API calls. Model-dependent performance.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'kilo-code',
+    name: 'Kilo Code',
+    url: 'https://kilo.ai/',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['500+ models', 'zero markup', 'multiple modes', 'Apache-2.0'],
+    bestFor: '500+ models, multiple agent modes, no vendor lock-in, zero markup.',
+    qualityNote: 'Apache-2.0, actively maintained. 500+ models at exact provider rates, no credit system.',
+    caveat: 'BYOK - you pay for API calls, but zero markup. Works in VS Code, JetBrains, and CLI.',
+    lastVerified: '2026-06-11',
+  },
+  // ──────────────────────────────────────────────────────────────────────────
+  // AI AGENT PLATFORMS (Specialized Frameworks)
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'freeagent',
+    name: 'FreeAgent',
+    url: 'https://github.com/transformer24/freeagent',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['60+ tools', '100% local', 'no API keys', 'ComfyUI'],
+    bestFor: '60+ tools, 100% local, no API keys required, image generation.',
+    qualityNote: 'Local-first, no cloud dependency. Image generation (ComfyUI), OSINT, cybersecurity, email automation.',
+    caveat: 'Requires GPU (RTX 3090 recommended), 64GB RAM. ChromaDB persistent memory, intent router.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'mragent',
+    name: 'MRAgent',
+    url: 'https://github.com/bonzainsights/MrAgent',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'free-tier',
+    badges: ['NVIDIA NIM', 'Qwen OAuth', '~2K req/day', 'voice input'],
+    bestFor: 'Lightweight, privacy-first, web UI, voice input, free providers.',
+    qualityNote: 'Free providers out of the box (NVIDIA NIM, Qwen OAuth ~2K req/day, Groq). No credit card required.',
+    caveat: 'Rate limits on free tiers. Web UI on port 6326, voice input (Groq Whisper), Telegram/Discord/Slack.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'drodo',
+    name: 'Drodo',
+    url: 'https://github.com/Drodo44/Drodo.io',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['2,397 skills', '14,936 templates', '238 agents', 'n8n'],
+    bestFor: '2,397 AI skills, 14,936 workflow templates, 238 expert agents, n8n automation.',
+    qualityNote: 'Model agnostic, live multi-agent mission control, analytics. n8n automation engine (auto-installed).',
+    caveat: 'Requires Node.js, Git, n8n (auto-installed). Multi-channel (Telegram/Slack/Discord).',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'synapse',
+    name: 'Synapse',
+    url: 'https://github.com/droxer/HiAgent',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['20+ tools', 'MCP', 'Google OAuth', 'Tauri v2'],
+    bestFor: '20+ built-in tools, MCP integration, Google OAuth, desktop app.',
+    qualityNote: 'Plan mode, artifact management, persistent memory. Desktop app (Tauri v2), channel integrations (Telegram).',
+    caveat: 'Requires Python 3.12+, Node.js, PostgreSQL (optional). Apache-2.0.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'codebot-ai',
+    name: 'CodeBot AI',
+    url: 'https://github.com/Ascendral/codebot-ai',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['audit trail', '8 providers', '32 tools', 'CORD safety'],
+    bestFor: 'Cryptographic audit trail, policy-governed, sandboxed, 8 providers.',
+    qualityNote: '8 providers (local + cloud), 32 built-in tools, CORD safety engine. SHA-256 hash-chained logs.',
+    caveat: 'BYOK, local LLM quality depends on model. 48% SWE-bench Verified (50-task slice). MIT.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: '8gent-code',
+    name: '8gent Code',
+    url: 'https://github.com/PodJamz/8gent-code',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['local-first', 'NemoClaw', '8 powers', 'voice chat'],
+    bestFor: 'Local-first, free by default, NemoClaw policy engine, 8 powers.',
+    qualityNote: '8 powers (memory, parallel worktrees, self-evolution, etc.). Voice chat, AST-first editing, HyperAgent.',
+    caveat: 'Requires local LLM (Ollama) or OpenRouter free tier. NemoClaw policy engine (YAML-based).',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'yuan',
+    name: 'YUAN',
+    url: 'https://github.com/yuaone/yuan',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['deterministic', '3 modes', '15 tools', 'SubAgent'],
+    bestFor: 'Deterministic Decision Engine, code quality enforcement, 3 modes.',
+    qualityNote: '3 modes (CHAT/HYBRID/AGENT), 15 built-in tools, SubAgent orchestration. HierarchicalPlanner.',
+    caveat: 'BYOK (OpenAI/Anthropic/Google). Stall Detector, Self-Evaluation, Execution Receipt.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'kode',
+    name: 'Kode',
+    url: 'https://github.com/sicario-labs/kode',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['verification-first', 'Go binary', 'security', 'browser'],
+    bestFor: 'Verification-first, Go binary, deterministic validation, security.',
+    qualityNote: '30 releases, TypeScript + Go, Tree-sitter. Security verification, browser verification.',
+    caveat: 'BYOK, newer project. Async subagents, Kode CIV PR Gateway.',
+    lastVerified: '2026-06-11',
+  },
+  // ──────────────────────────────────────────────────────────────────────────
+  // AI AGENT PLATFORMS (Autonomous & Self-Evolving)
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'autopilot',
+    name: 'Autopilot',
+    url: 'https://github.com/rish-e/autopilot',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['self-expanding', 'Guardian', 'parallel', 'webhook'],
+    bestFor: 'Self-expanding, hard safety rails, fully autonomous, parallel multi-agent.',
+    qualityNote: 'Guardian safety layer, browser credential acquisition, session save/resume. Webhook daemon.',
+    caveat: 'Requires Claude Code. macOS/Linux/Windows. Parallel multi-agent, MCP auto-discovery.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'auroracoder',
+    name: 'AuroraCoder',
+    url: 'https://github.com/1001WillsStudio/AuroraCoder',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['DeepSeek V4 Pro', 'VNC desktop', 'parallel', 'Docker'],
+    bestFor: 'DeepSeek V4 Pro, VNC desktop, parallel tools, Docker sandbox.',
+    qualityNote: '5 releases, Python + JavaScript + Go, native OpenAI function calling. VNC desktop (port 6080).',
+    caveat: 'Requires Docker. Experimental npm launcher (no sandbox). MIT license.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'yoyo-evolve',
+    name: 'yoyo-evolve',
+    url: 'https://github.com/yologdev/yoyo-evolve',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['1.8K stars', 'self-evolving', '51K lines', '2K tests'],
+    bestFor: 'Self-evolving, 200 lines → 51,000+ lines, 2,000+ tests, 52 days.',
+    qualityNote: 'Rust-based, 52 days of autonomous evolution, 35 source files. Streaming output, extended thinking.',
+    caveat: 'Requires Anthropic API key. Subagent spawning, parallel tools, provider failover.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'xethryon',
+    name: 'XETHRYON',
+    url: 'https://github.com/EstarinAzx/XETHRYON',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['swarm', 'autonomy', 'knowledge graph', 'cyberpunk'],
+    bestFor: 'Swarm orchestration, autonomy mode, knowledge graph, cyberpunk theme.',
+    qualityNote: 'Fork of OpenCode + Claude Code features. 3 agent modes (CONSTRUCT/ARCHITECT/COORDINATE).',
+    caveat: 'Requires autonomy mode (F4) for swarm. Live swarm dashboard, cross-session memory.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'continuous-agent',
+    name: 'Continuous Agent',
+    url: 'https://github.com/jackzhaojin/continuous-agent',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['24/7', 'prioritized queue', 'multi-vendor', 'PM2'],
+    bestFor: '24/7 autonomous, prioritized queue, multi-vendor workers, PM2 daemon.',
+    qualityNote: 'PM2 daemon, markdown-based communication, 10-failure constitutional limit. Strategy selection.',
+    caveat: 'Requires PM2, multi-vendor setup (Claude/Codex/Kimi). needs-you.md for human help.',
+    lastVerified: '2026-06-11',
+  },
+  // ──────────────────────────────────────────────────────────────────────────
+  // AI AGENT PLATFORMS (Frameworks & Orchestration)
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'langchain',
+    name: 'LangChain / LangGraph',
+    url: 'https://github.com/langchain-ai/langchain',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'open-source',
+    badges: ['100K stars', '34.5M downloads', 'graph-based', '40+ providers'],
+    bestFor: 'Enterprise adoption, 34.5M monthly downloads, graph-based orchestration.',
+    qualityNote: 'Most adopted agent framework. Stateful directed graphs, memory, tools, human-in-the-loop.',
+    caveat: 'Requires setup, BYOK. 40+ model providers. MIT license.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'crewai',
+    name: 'CrewAI',
+    url: 'https://github.com/crewAIInc/crewAI',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'free-tier',
+    badges: ['30K stars', 'role-based', 'visual', 'free tier'],
+    bestFor: 'Role-based multi-agent teams, visual design, free tier (50 executions).',
+    qualityNote: 'Free tier (50 executions, 1 live crew, 1 seat). Paid plans from $99/mo. Crews, agents, tasks.',
+    caveat: 'Free tier limited (50 executions, 1 live crew). MIT license.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'dify',
+    name: 'Dify',
+    url: 'https://github.com/langgenius/dify',
+    surface: 'cli',
+    category: 'ai-agents',
+    access: 'free-tier',
+    badges: ['144K stars', 'RAG', 'visual workflow', 'observability'],
+    bestFor: 'RAG and agent pipelines, all-in-one workflows, observability.',
+    qualityNote: 'Most starred agent platform (144K stars). Visual workflow builder, RAG, agent orchestration.',
+    caveat: 'Cloud free tier limited, self-hosted requires setup. Apache-2.0.',
+    lastVerified: '2026-06-11',
+  },
+  // ──────────────────────────────────────────────────────────────────────────
+  // AI AGENT PLATFORMS (Chinese)
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'tencent-adp',
+    name: 'Tencent Cloud ADP (Agent Development Platform)',
+    url: 'https://cloud.tencent.com/product/adp',
+    surface: 'api',
+    category: 'ai-agents',
+    access: 'free-tier',
+    badges: ['enterprise', 'multi-agent', '150+ plugins', 'WeChat'],
+    bestFor: 'Enterprise-grade, multi-agent, 150+ plugins, MCP support, WeChat integration.',
+    qualityNote: 'Tencent-backed. 3 modes (Multi-Agent/Workflow/Single-Agent), YouTu-Agent open-source. RAG + Text-to-SQL.',
+    caveat: 'China only, requires Tencent Cloud account, real-name auth. Proprietary.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'baidu-appbuilder',
+    name: 'Baidu Qianfan AppBuilder',
+    url: 'https://github.com/baidubce/app-builder',
+    surface: 'api',
+    category: 'ai-agents',
+    access: 'free-tier',
+    badges: ['578 stars', '40+ components', 'ERNIE', 'Apache-2.0'],
+    bestFor: '40+ Baidu ecosystem components, ERNIE models, RAG, AgentRuntime.',
+    qualityNote: 'Apache-2.0, 50 contributors, 29 releases. AgentRuntime (Flask/Chainlit), appbuilder_bce_deploy.',
+    caveat: 'China only, requires Baidu Cloud account, free trial limits. Trace functionality.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'tencent-cloudbase-agent-ui',
+    name: 'Tencent CloudBase Agent UI',
+    url: 'https://github.com/TencentCloudBase/cloudbase-agent-ui',
+    surface: 'api',
+    category: 'ai-agents',
+    access: 'free-tier',
+    badges: ['86 stars', 'WeChat mini-program', 'DeepSeek', 'Hunyuan'],
+    bestFor: 'WeChat mini-program integration, DeepSeek/Hunyuan models, dual mode.',
+    qualityNote: 'MIT license, 37 releases, actively maintained. Dual mode (Agent/Model), streaming output.',
+    caveat: 'China only, requires Tencent CloudBase environment. Multi-round sessions.',
     lastVerified: '2026-06-11',
   },
 ];
@@ -3195,25 +3506,48 @@ export function getToolsBySurface(): Record<ZeroKeySurface, ZeroKeyTool[]> {
  * - Duplicate IDs
  * - Valid URLs
  * - Valid enum values
- * 
+ *
  * @returns Array of validation errors, empty if all valid
  */
 export function validateZeroKeyTools(): string[] {
   const errors: string[] = [];
   const seenIds = new Set<string>();
-  
+
   const validSurfaces: ZeroKeySurface[] = ['web', 'api', 'cli'];
   const validCategories: ZeroKeyCategory[] = [
-    'ai-chat', 'ai-image', 'ai-video', 'ai-audio', 'ai-writing',
-    'ai-search', 'ai-pdf', 'ai-presentation', 'ai-math', 'ai-coding',
-    'dev-coding', 'dev-backend', 'dev-automation', 'dev-security',
-    'dev-productivity', 'dev-learning', 'dev-data', 'dev-docs', 'dev-design'
+    'ai-chat',
+    'ai-image',
+    'ai-video',
+    'ai-audio',
+    'ai-writing',
+    'ai-search',
+    'ai-pdf',
+    'ai-presentation',
+    'ai-math',
+    'ai-coding',
+    'ai-agents',
+    'dev-coding',
+    'dev-backend',
+    'dev-automation',
+    'dev-security',
+    'dev-productivity',
+    'dev-learning',
+    'dev-data',
+    'dev-docs',
+    'dev-design',
   ];
-  const validAccessTypes = ['no-login', 'public-api', 'open-source', 'free-tier', 'free-key', 'self-host'];
-  
+  const validAccessTypes = [
+    'no-login',
+    'public-api',
+    'open-source',
+    'free-tier',
+    'free-key',
+    'self-host',
+  ];
+
   zeroKeyTools.forEach((tool, index) => {
     const prefix = `Tool at index ${index}`;
-    
+
     // Check required fields
     if (!tool.id) errors.push(`${prefix}: missing id`);
     if (!tool.name) errors.push(`${prefix}: missing name`);
@@ -3224,7 +3558,7 @@ export function validateZeroKeyTools(): string[] {
     if (!tool.badges) errors.push(`${prefix}: missing badges`);
     if (!tool.bestFor) errors.push(`${prefix}: missing bestFor`);
     if (!tool.qualityNote) errors.push(`${prefix}: missing qualityNote`);
-    
+
     // Check for duplicate IDs
     if (tool.id) {
       if (seenIds.has(tool.id)) {
@@ -3232,7 +3566,7 @@ export function validateZeroKeyTools(): string[] {
       }
       seenIds.add(tool.id);
     }
-    
+
     // Validate URL format
     if (tool.url) {
       try {
@@ -3241,7 +3575,7 @@ export function validateZeroKeyTools(): string[] {
         errors.push(`${prefix} (${tool.id}): invalid URL "${tool.url}"`);
       }
     }
-    
+
     // Validate enum values
     if (tool.surface && !validSurfaces.includes(tool.surface)) {
       errors.push(`${prefix} (${tool.id}): invalid surface "${tool.surface}"`);
@@ -3253,6 +3587,6 @@ export function validateZeroKeyTools(): string[] {
       errors.push(`${prefix} (${tool.id}): invalid access type "${tool.access}"`);
     }
   });
-  
+
   return errors;
 }

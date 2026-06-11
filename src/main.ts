@@ -16,7 +16,6 @@ import { renderPlayground } from './api-playground';
 import { renderPromptTemplatesStandalone } from './prompt-templates-standalone';
 import { initChatModal } from './chat-modal';
 import { initFreeModels } from './free-models';
-import { initQuickStart } from './quickstart';
 
 // Boot i18n first (lang switcher + data-i18n + events for dynamic parts)
 initI18n();
@@ -59,13 +58,6 @@ try {
   initFreeModels();
 } catch (error) {
   console.error('Free models section failed to initialize:', error);
-}
-
-// Quick Start section (5 popular prompt templates)
-try {
-  initQuickStart();
-} catch (error) {
-  console.error('Quick start section failed to initialize:', error);
 }
 
 // Prompt Templates standalone section

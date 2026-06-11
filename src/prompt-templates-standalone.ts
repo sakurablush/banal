@@ -4,7 +4,11 @@
  * without needing the chat system.
  */
 
-import { PromptTemplatesLibrary, extractTemplateVariables, type Locale } from './lib/prompt-templates';
+import {
+  PromptTemplatesLibrary,
+  extractTemplateVariables,
+  type Locale,
+} from './lib/prompt-templates';
 
 interface PromptTemplatesUIOptions {
   container: HTMLElement;

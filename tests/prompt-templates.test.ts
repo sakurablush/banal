@@ -158,7 +158,9 @@ describe('PromptTemplatesLibrary — fill (happy + edges)', () => {
   });
 
   it('throws clear error on unknown id', () => {
-    expect(() => libEn.fill('does-not-exist')).toThrow(/Unknown prompt template id: does-not-exist/);
+    expect(() => libEn.fill('does-not-exist')).toThrow(
+      /Unknown prompt template id: does-not-exist/
+    );
     expect(() => libEn.fill('does-not-exist')).toThrow(/Valid ids:/);
   });
 

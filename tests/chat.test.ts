@@ -405,7 +405,7 @@ describe('chat — prompt template selection + form filling + sending (the core 
     expect(lastUser.content).toContain('val0'); // from the fill
     expect(lastUser.content).not.toMatch(/\{\{yourName\}\}/);
 
-      // now rendered AI turn should carry the promptTemplateTitle
+    // now rendered AI turn should carry the promptTemplateTitle
     const msgsText = getMessagesEl().textContent || '';
     // the title of first sp is 'Job applications: turn gaps into strengths'
     expect(msgsText).toMatch(/Job applications|turn gaps/);
