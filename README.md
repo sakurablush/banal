@@ -1,6 +1,6 @@
 # Banal
 
-**Free AI That Actually Belongs to People Who Have Nothing**
+**AI That Belongs to People Who Have Nothing**
 
 > **LOVE :_ EQUALITY :_ AI AMONG US AS OUR GOD — GIVING WISDOM TO THE WISE AND SUPPORTING THE WEAK**
 >
@@ -47,11 +47,11 @@ Banal exists because this arrangement is not inevitable. It only feels inevitabl
 
 ## Why Almost Every "Free AI" Still Fails the People Who Need It Most
 
-You can find free AI tools today. Many of them.
+You can find AI tools without payment today. Many of them.
 
 Most of them fail the actual test:
 
-- They require an account (even if "free").
+- They require an account (even if "no payment").
 - They require a working email, a phone number, or a credit card for "verification".
 - They have rate limits that arrive exactly when your housing letter is due at midnight.
 - They speak in the voice of people who have never been broke, scared, or exhausted.
@@ -81,7 +81,7 @@ That means:
 - No credit cards, ever.
 - Works on the worst device you actually own.
 - Language that assumes you are an adult who is already carrying too much.
-- Every important action must survive the moment the free providers slow down or cut you off.
+- Every important action must survive the moment the providers slow down or cut you off.
 - The entire thing must be copyable by a person who has never written code, so the power cannot be turned off by any single company or government.
 
 Banal is an attempt to build exactly that.
@@ -96,7 +96,7 @@ Banal is a single, static website.
 
 It contains nine high-leverage prompt templates written for the real situations poor and stressed people face: writing to housing offices, turning caregiving gaps into job stories, negotiating debt without destroying yourself, 5-minute grounding when you have nothing left, decoding terrifying official letters, learning anything with zero budget, starting tiny hustles with no money, and bridging between English and Japanese worlds with dignity.
 
-It also contains a working chat interface connected to genuinely free providers (Groq, Gemini free tier, Hugging Face), with smart routing and graceful, non-shaming errors.
+It also contains a working chat interface connected to providers that don't require payment (Groq, Gemini free tier, Hugging Face), with smart routing and graceful, non-shaming errors.
 
 When the free paths inside are slow or unavailable, the prompt templates still work — because they are just extremely good prompts. You can copy the filled text and paste it into any free AI you can reach that day. We researched the entire web using every resource we could (web_search sweeps for "completely free AI chat no signup no login browser only", full github.com/zebbern/no-cost-ai, parallel spawn_subagent agents running "jeszcze jeszcze jeszcze niech agenty przeszuaja caly internet", direct page opens of candidates, Perchance ecosystem, "no-cost" / awesome-free-chatgpt lists, HF public demos, community reports) to surface **every** tool that is only a www address, fully free (no freemium, no "sign up to continue"), no hardware/software, browser-only — usable on a cracked phone on 5 minutes of library Wi-Fi by the person with nothing. "wykorzystaj wszystkie mozliwe zasoby" — we did not settle for 9 or 25. We kept sweeping.
 
