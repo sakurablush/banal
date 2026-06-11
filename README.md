@@ -212,16 +212,26 @@ This is a living, ruthlessly curated underground resource. We filtered for tools
 
 ## 📋 Complete Tools Directory
 
-> **200+ verified free AI tools** — auto-generated from `src/data/zero-key-tools.ts`. Run `npx tsx scripts/generate-tools-readme.ts` to update.
+> **227+ verified free tools** — 128 AI tools + 99 developer tools. Auto-generated from `src/data/zero-key-tools.ts`. Run `npx tsx scripts/generate-tools-readme.ts` to update.
+
+The directory is split into two clear sections:
+- **🤖 AI Tools (128+)** — AI-powered tools for chat, image, video, code, PDF, and research
+- **💻 Developer Tools (99+)** — Free tools for coding, backend, automation, security, and learning
 
 ### Quick Jump
 
-[AI Assistants](#ai-help-that-actually-works) | [AI Image](#ai-image-generation--editing) | [AI Video](#ai-video-generation--editing) | [AI Audio](#ai-audio-music-voice--tts) | [AI Writing](#ai-writing-summarization--translation) | [AI Search](#ai-search--research-engines) | [AI PDF](#ai-document--pdf-tools) | [AI Presentations](#ai-presentations--slides) | [AI Math](#ai-math-science--education) | [Coding](#coding-and-developer-workflow) | [Docs](#docs-research-and-knowledge) | [Public Data](#public-data-and-open-datasets) | [Design](#design-images-audio-and-video) | [Backend](#backend-hosting-databases) | [Automation](#automation-ops-monitoring) | [Security](#security-and-privacy) | [Productivity](#life-admin-and-productivity) | [Learning](#learning-and-career-leverage)
+**AI Tools:** [AI Chat](#ai-chat--assistants) | [AI Image](#ai-image-generation--editing) | [AI Video](#ai-video-generation--editing) | [AI Audio](#ai-audio-music-voice--tts) | [AI Writing](#ai-writing-summarization--translation) | [AI Search](#ai-search--research-engines) | [AI PDF](#ai-document--pdf-tools) | [AI Presentations](#ai-presentations--slides) | [AI Math](#ai-math-science--education) | [AI Coding](#ai-coding-assistants)
+
+**Developer Tools:** [Coding](#coding--developer-workflow) | [Backend](#backend-hosting--databases) | [Automation](#automation-ops--monitoring) | [Security](#security--privacy) | [Productivity](#productivity--life-admin) | [Learning](#learning--career-leverage) | [Public Data](#public-data--open-datasets) | [Docs](#docs-research--knowledge) | [Design](#design-images-audio--video)
 
 <details>
-<summary><strong>Click to expand full tools directory (200+ tools)</strong></summary>
+<summary><strong>Click to expand full tools directory (227+ tools)</strong></summary>
 
-### AI help that actually works
+## 🤖 AI Tools (128+ tools)
+
+Free AI-powered tools for chat, image, video, code, PDF, and research.
+
+### AI Chat & Assistants
 
 | Tool                                                | Description                                         | Type   | Access      |
 | --------------------------------------------------- | --------------------------------------------------- | ------ | ----------- |
@@ -312,7 +322,42 @@ This is a living, ruthlessly curated underground resource. We filtered for tools
 | [Desmos](https://www.desmos.com/)              | Interactive graphing calculator             | 🌐 WEB | No login  |
 | [Khan Academy](https://www.khanacademy.org/)   | Free world-class education with AI tutoring | 🌐 WEB | Free tier |
 
-### Coding and developer workflow
+### AI Coding Assistants
+
+| Tool | Description | Type | Access |
+| ---- | ----------- | ---- | ------ |
+| [Kilo Code](https://kilo.ai/) | Professional AI coding with 500+ models | 💻 CLI | Free key |
+| [Cline](https://github.com/cline/cline) | Open source AI coding, native subagents | 💻 CLI | Open source |
+| [Continue](https://continue.dev/) | IDE extension with open source flexibility | 💻 CLI | Open source |
+| [OpenCode](https://github.com/opencode-ai/opencode) | Terminal CLI with 120K+ GitHub stars | 💻 CLI | Open source |
+| [Aider](https://aider.chat/) | Git-heavy refactoring and pair programming | 💻 CLI | Open source |
+| [Multi.dev](https://multi.dev/) | Zero config, 36 providers, task forking | 💻 CLI | No login |
+| [FreeHive](https://github.com/Nazzero/FreeHive) | Unified API access using OAuth tokens | 💻 CLI | No login |
+| [Nova](https://github.com/AethyrionAI/Nova) | 346+ models, 12 providers, 30K+ requests/day | 🌐 WEB | Free tier |
+| [Free.ai Coder](https://free.ai/coder/) | Qwen Coder 7B with session sync | 🌐 WEB | Free tier |
+| [Firebase Studio](https://firebase.studio/) | Full-stack apps with Gemini prototyping | 🌐 WEB | No login |
+| [Google Antigravity](https://antigravity.google/) | Visual agent management, Gemini-based | 🌐 WEB | No login |
+| [Kursor](https://github.com/teee32/kursor) | Cursor alternative powered by Kimi | 💻 CLI | Free key |
+| [Terax](https://terax.app/) | Lightweight (7MB) terminal IDE, agentic AI | 💻 CLI | Open source |
+| [Claurst](https://github.com/Kuberwastaken/claurst) | Multi-provider terminal TUI, chat forking | 💻 CLI | Open source |
+| [OpenADE](https://github.com/bearlyai/OpenADE) | Agentic development environment, local-first | 💻 CLI | Open source |
+| [Kodely](https://kodely.dev/) | Cost-optimized with context optimization | 💻 CLI | Open source |
+| [Code Mavi](https://github.com/oplta/codemavi) | Transparent prompts, self-correction loops | 💻 CLI | Open source |
+| [Async IDE](https://github.com/ZYKJShadow/Async) | Agent-first desktop workspace | 💻 CLI | Open source |
+| [FreeRide](https://github.com/Shaivpidadi/FreeRideV3) | Automatic failover across free providers | 💻 CLI | Open source |
+| [Free Claude Code](https://github.com/ALISHAHRYAR1/FREE-CLAUDE-CODE) | Use Claude Code with any provider | 💻 CLI | Open source |
+| [GitHub Copilot Free](https://github.com/features/copilot) | 2K completions + 50 chats/month free | 💻 CLI | Free tier |
+| [Gemini Code Assist](https://cloud.google.com/gemini/docs/codeassist/overview) | 180K completions/month free | 💻 CLI | Free tier |
+| [Amazon Q Developer](https://aws.amazon.com/q/developer/) | Unlimited completions, AWS infrastructure | 💻 CLI | Free tier |
+| [Google AI Studio](https://aistudio.google.com/) | Prototyping with Gemini models | 🌐 WEB | No login |
+
+---
+
+## 💻 Developer Tools (99+ tools)
+
+Free tools for coding, backend, automation, security, and learning.
+
+### Coding & Developer Workflow
 
 | Tool                                  | Description                        | Type   | Access      |
 | ------------------------------------- | ---------------------------------- | ------ | ----------- |
@@ -320,12 +365,11 @@ This is a living, ruthlessly curated underground resource. We filtered for tools
 | [Bolt.new](https://bolt.new/)         | Full-stack apps in browser with AI | 🌐 WEB | Free tier   |
 | [v0 by Vercel](https://v0.dev/)       | Generate React/Next.js components  | 🌐 WEB | Free tier   |
 | [Replit](https://replit.com/)         | Code in browser with AI assistance | 🌐 WEB | Free tier   |
-| [Continue.dev](https://continue.dev/) | AI code assistance for VS Code     | 💻 CLI | Open source |
 | [Ollama](https://ollama.com/)         | Run AI models locally              | 💻 CLI | Open source |
 | [Codeium](https://codeium.com/)       | Free AI code autocomplete          | 🌐 WEB | Free tier   |
 | [Zed Editor](https://zed.dev/)        | Fast IDE with built-in AI          | 💻 CLI | Open source |
 
-### Docs, research, and knowledge
+### Docs, Research & Knowledge
 
 | Tool                                     | Description                          | Type   | Access      |
 | ---------------------------------------- | ------------------------------------ | ------ | ----------- |
@@ -333,7 +377,7 @@ This is a living, ruthlessly curated underground resource. We filtered for tools
 | [Anytype](https://anytype.io/)           | Privacy-focused knowledge management | 🌐 WEB | Open source |
 | [GitBook Free](https://www.gitbook.com/) | Beautiful public documentation       | 🌐 WEB | Free tier   |
 
-### Backend, hosting, databases
+### Backend, Hosting & Databases
 
 | Tool                                              | Description                           | Type   | Access    |
 | ------------------------------------------------- | ------------------------------------- | ------ | --------- |
@@ -343,7 +387,7 @@ This is a living, ruthlessly curated underground resource. We filtered for tools
 | [Vercel Free](https://vercel.com/)                | Free frontend deployment              | 🌐 WEB | Free tier |
 | [Neon](https://neon.tech/)                        | Free Postgres database                | 🌐 WEB | Free tier |
 
-### Security and privacy
+### Security & Privacy
 
 | Tool                                         | Description                       | Type   | Access      |
 | -------------------------------------------- | --------------------------------- | ------ | ----------- |
@@ -351,7 +395,7 @@ This is a living, ruthlessly curated underground resource. We filtered for tools
 | [Proton Drive Free](https://proton.me/drive) | Private encrypted file storage    | 🌐 WEB | Free tier   |
 | [Syncthing](https://syncthing.net/)          | Private file sync between devices | 💻 CLI | Open source |
 
-### Life admin and productivity
+### Productivity & Life Admin
 
 | Tool                                  | Description                   | Type   | Access      |
 | ------------------------------------- | ----------------------------- | ------ | ----------- |
@@ -360,7 +404,7 @@ This is a living, ruthlessly curated underground resource. We filtered for tools
 | [Obsidian](https://obsidian.md/)      | Local-first knowledge base    | 💻 CLI | Free tier   |
 | [Logseq](https://logseq.com/)         | Outliner knowledge management | 🌐 WEB | Open source |
 
-### Learning and career leverage
+### Learning & Career Leverage
 
 | Tool                                          | Description                  | Type   | Access    |
 | --------------------------------------------- | ---------------------------- | ------ | --------- |
@@ -371,7 +415,38 @@ This is a living, ruthlessly curated underground resource. We filtered for tools
 
 </details>
 
-_Total: 200+ tools across 18 categories. Full list searchable in the live app._
+_Total: 227+ tools (128 AI + 99 developer tools) across 19 categories. Full list searchable in the live app._
+
+---
+
+## Honest Limitations
+
+We will not lie to you. Here's what "free" really means:
+
+**🔍 "Free" means different things**
+Some tools are truly free (no key, no limits). Others require a free API key (no credit card). Others have rate limits or daily quotas. We mark every tool clearly.
+
+**🤖 AI tools are not magic**
+They can hallucinate, give wrong answers, or refuse legitimate requests. Always verify important information. Never trust AI blindly.
+
+**⏱️ Rate limits are real**
+Free tiers exist to share resources. If you hit a limit, wait or try another tool. This protects the free service for everyone.
+
+**🔒 Privacy matters**
+Do not treat any hosted AI as confidential legal, medical, or financial counsel. Your prompts may be logged or used for training.
+
+**🔄 Tools change**
+Free tiers can be reduced or removed. We verify regularly, but always test yourself. If something breaks, let us know on GitHub.
+
+**✅ We mark everything**
+Every tool has its access type and limitations clearly marked:
+- 🤖 AI / 💻 Dev — tool type
+- 🆓 No Key / 🔑 Free Key — access type
+- ⚡ Rate Limited — when caveat mentions rate limits
+
+You know what to expect before you click. No surprises.
+
+Found outdated information? [Report it on GitHub →](https://github.com)
 
 ---
 
