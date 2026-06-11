@@ -19,6 +19,7 @@ Secondary goal: **full audit** — find all UX bugs, type issues, and edge cases
 ## 2. Objectives and Scope
 
 ### In scope
+
 1. Full UI redesign — sci-fi cockpit theme (CSS variables + Tailwind extensions)
 2. Cipher rotary menu — central circle with concentric navigation rings
 3. Holographic panels — glassmorphism + scanlines + glow
@@ -28,6 +29,7 @@ Secondary goal: **full audit** — find all UX bugs, type issues, and edge cases
 7. Accessibility — WCAG 2.1 AA compliance maintained through redesign
 
 ### Out of scope
+
 - New features (UI/UX + bugfixes only)
 - Backend changes
 - New APIs
@@ -37,6 +39,7 @@ Secondary goal: **full audit** — find all UX bugs, type issues, and edge cases
 ## 3. Threat Model and Risk Analysis
 
 ### Assets
+
 - UI/UX consistency — redesign must be coherent across all pages
 - Performance — sci-fi effects cannot slow down interaction (particles, glow, scanlines)
 - Accessibility — fancy UI must not break WCAG compliance
@@ -44,32 +47,36 @@ Secondary goal: **full audit** — find all UX bugs, type issues, and edge cases
 
 ### STRIDE
 
-| Threat | Risk | Mitigation |
-|---|---|---|
-| **S**poofing: fake "sci-fi" without real function | LOW | Every UI element has real onClick/inputs |
-| **T**ampering: CSS broken on mobile | MEDIUM | Mobile-first approach, design breakpoints before visuals |
-| **R**epudiation: unclear what works | MEDIUM | Audit checklist before every change |
-| **I**nformation disclosure: missing alt/titles | LOW | A11y checks in tests |
-| **D**enial of Service: too many animations | MEDIUM | prefers-reduced-motion, will-change sparingly |
-| **E**levation: decorative elements over content | LOW | Strict z-index hierarchy |
+| Threat                                            | Risk   | Mitigation                                               |
+| ------------------------------------------------- | ------ | -------------------------------------------------------- |
+| **S**poofing: fake "sci-fi" without real function | LOW    | Every UI element has real onClick/inputs                 |
+| **T**ampering: CSS broken on mobile               | MEDIUM | Mobile-first approach, design breakpoints before visuals |
+| **R**epudiation: unclear what works               | MEDIUM | Audit checklist before every change                      |
+| **I**nformation disclosure: missing alt/titles    | LOW    | A11y checks in tests                                     |
+| **D**enial of Service: too many animations        | MEDIUM | prefers-reduced-motion, will-change sparingly            |
+| **E**levation: decorative elements over content   | LOW    | Strict z-index hierarchy                                 |
 
 ---
 
 ## 4. Options Analysis and Recommendations
 
 ### Option A: Keep current UI
+
 **Risk:** Loss of wow-factor, gap between vision and reality
 **Effort:** 0
 **Recommendation:** ❌
 
 ### Option B: Mini changes + patches
+
 **What:** A few new effects, a few bugfixes
 **Risk:** Incoherent look, half-baked sci-fi
 **Effort:** Medium
 **Recommendation:** ⚠️ TEMPORARY
 
 ### Option C: Full sci-fi cockpit redesign (RECOMMENDED)
+
 **What:**
+
 1. Full CSS doppler + scanlines + holo panels
 2. Cipher rotary menu as sole navigation (concentric rings)
 3. EN/JA translations
@@ -125,6 +132,7 @@ src/
 ```
 
 **Technique:**
+
 - SVG `<circle>` + `<path>` for rings
 - Concentric, clickable segments
 - Rotate animation on hover/active
@@ -133,6 +141,7 @@ src/
 - Keyboard nav: Tab through segments, Enter to activate
 
 ### Component: Holographic Panel
+
 - Background: `rgba(10, 10, 20, 0.7)` + `backdrop-filter: blur(12px)`
 - Border: `1px solid rgba(168, 85, 247, 0.3)` + glow
 - Scanlines overlay: `repeating-linear-gradient` with `opacity: 0.03`
@@ -140,12 +149,14 @@ src/
 - Content fade-in on appear
 
 ### Component: Cockpit Frame (HUD)
+
 - Top bar: status indicators (pulsing dot, "SYSTEM ONLINE", "183 TOOLS")
 - Side accents: thin vertical lines with gradient
 - Corner decorations: L-shape brackets
 - Bottom bar: version, uptime, FPS counter (dev mode)
 
 ### CSS Variables (cockpit theme)
+
 ```css
 :root {
   --cockpit-bg: #06060b;
@@ -164,6 +175,7 @@ src/
 ## 5. Audit Checklist (before redesign)
 
 ### Functional
+
 - [ ] All footer links work
 - [ ] Language switch EN ↔ JA works on all sections
 - [ ] API Playground: all 5 providers return data (or graceful error)
@@ -174,6 +186,7 @@ src/
 - [ ] Keys modal: save/clear/getkey
 
 ### Performance
+
 - [ ] Lighthouse Performance > 90
 - [ ] Lighthouse Accessibility > 90
 - [ ] First Contentful Paint < 2s on 3G
@@ -181,6 +194,7 @@ src/
 - [ ] Zero console errors/warnings
 
 ### Visual
+
 - [ ] All sections have expected states (empty, loading, error)
 - [ ] Typography: consistent font-family, weight, line-height
 - [ ] Colors: contrast ratio > 4.5:1 for text
@@ -188,6 +202,7 @@ src/
 - [ ] Focus visible on all interactive elements
 
 ### Accessibility
+
 - [ ] All images have alt text
 - [ ] Forms have labels
 - [ ] ARIA labels on icon-only buttons
@@ -199,12 +214,14 @@ src/
 ## 6. Implementation Phases
 
 ### Phase 1: Audit (Day 1, 2h)
+
 - [ ] Conduct manual audit per checklist
 - [ ] Log all bugs in `audit/fix-log.md`
 - [ ] Screenshots of problematic areas
 - [ ] Prioritization: P0 (blocks prod) → P3 (nice to have)
 
 ### Phase 2: Cipher Menu Core (Day 1–2, 3h)
+
 - [ ] Create SVG-based rotary menu
 - [ ] Add click handlers + keyboard nav
 - [ ] Add animations (rotate, pulse, glow)
@@ -212,6 +229,7 @@ src/
 - [ ] Tests: click, hover, keyboard, focus states
 
 ### Phase 3: Cockpit UI System (Day 2, 2h)
+
 - [ ] Move all styles to `cockpit.css`
 - [ ] Add scanlines overlay (global, subtle)
 - [ ] Implement holographic-panel component
@@ -219,17 +237,20 @@ src/
 - [ ] Adapt zero-key-panel to new design
 
 ### Phase 4: Bugfixes from audit (Day 2–3, 2h)
+
 - [ ] Fix all P0/P1 bugs from fix-log.md
 - [ ] Improve UX edge cases
 - [ ] Test on mobile (375px), tablet (768px), desktop (1440px)
 
 ### Phase 5: Polish + Micro-interactions (Day 3, 1h)
+
 - [ ] Hover transitions on all elements
 - [ ] Loading states (skeleton → content)
 - [ ] Transition animations between "pages" (fade/slide)
 - [ ] Sound effects (optional, Web Audio API)
 
 ### Phase 6: Final QA + Deploy (Day 3, 1h)
+
 - [ ] Full test run: `npm run test:run` → 0 failures
 - [ ] Build: `npm run build`
 - [ ] Lighthouse audit
@@ -241,16 +262,19 @@ src/
 ## 7. Risks, Assumptions, Open Questions
 
 ### Risks
+
 1. Rotary menu may be unintuitive — solution: tooltips + keyboard hints + bounce animation on first visit
 2. Scanlines may hurt readability — solution: opacity 0.02–0.03, disable on scroll
 3. Mobile may not handle GPU-heavy effects — solution: reduced-motion + sparing will-change
 
 ### Assumptions
+
 - Users accept "fancy" UI if it is fast
 - Cipher menu is more intuitive than standard navbar on desktop
 - On mobile, rotary menu transforms to bottom nav or drawer
 
 ### Open Questions
+
 1. Do we want sound? (only if user enables it)
 2. Do we want "theater mode" (fullscreen without UI)?
 3. Do we want FPS counter in HUD (dev-only toggle)?
@@ -260,6 +284,7 @@ src/
 ## 8. Success Criteria
 
 ### Definition of Done
+
 - [ ] Cipher rotary menu works on desktop + mobile
 - [ ] All 122 tests green
 - [ ] TypeScript clean
@@ -270,6 +295,7 @@ src/
 - [ ] Screenshot comparison: before/after approved
 
 ### Verification
+
 ```bash
 npm run typecheck    # clean
 npm run test:run     # 122/122 green
