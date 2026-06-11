@@ -2610,18 +2610,6 @@ export const zeroKeyTools: ZeroKeyTool[] = [
 
   // ADDITIONAL UNIQUE TOOLS
   {
-    id: 'claude-free',
-    name: 'Claude Free',
-    url: 'https://claude.ai/',
-    surface: 'web',
-    category: 'ai-chat',
-    access: 'free-tier',
-    badges: ['Claude Sonnet', 'coding', 'analysis'],
-    bestFor: 'High-quality AI chat with strong reasoning and coding abilities.',
-    qualityNote: 'Claude Sonnet is excellent for complex analysis and coding tasks.',
-    caveat: 'Daily message limits on free tier; requires account.',
-  },
-  {
     id: 'poe-free',
     name: 'Poe Free',
     url: 'https://poe.com/',
@@ -2970,6 +2958,213 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     caveat: 'Rate limits apply, but generous for testing. Not intended for production use.',
     lastVerified: '2026-06-11',
   },
+  // ──────────────────────────────────────────────────────────────────────────
+  // INTERNATIONAL VERIFIED TOOLS (2026)
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'claude-free',
+    name: 'Claude Free',
+    url: 'https://claude.ai/',
+    surface: 'web',
+    category: 'ai-chat',
+    access: 'no-login',
+    badges: ['Sonnet 4.6', 'highest quality', 'Anthropic'],
+    bestFor: 'Highest quality per message - writing, analysis, coding, document review.',
+    qualityNote: 'Anthropic-backed, best reasoning and writing quality. ~10-20 messages/day.',
+    caveat: 'Daily limit is genuinely restrictive; no file uploads on free tier.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'free-ai',
+    name: 'Free.ai',
+    url: 'https://free.ai/',
+    surface: 'web',
+    category: 'ai-chat',
+    access: 'no-login',
+    badges: ['400+ tools', '30K tokens/day', 'Qwen 2.5 72B'],
+    bestFor: '400+ AI tools in one place - chat, image, video, voice, music, writing, code.',
+    qualityNote: 'Open-source models (Qwen 2.5 72B, FLUX, CogVideoX, Kokoro), commercial use OK.',
+    caveat: '30K tokens/day free forever; paid plans start at $5/month for higher limits.',
+    lastVerified: '2026-06-11',
+  },
+  // ──────────────────────────────────────────────────────────────────────────
+  // CHINESE VERIFIED TOOLS (中国验证工具)
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'doubao',
+    name: 'Doubao (豆包)',
+    url: 'https://doubao.com/',
+    surface: 'web',
+    category: 'ai-chat',
+    access: 'no-login',
+    badges: ['260M MAU', 'ByteDance', 'multimodal'],
+    bestFor: 'Chinese consumers - multimodal, 260M MAU, fastest growth in China.',
+    qualityNote: 'ByteDance-backed, overtook Baidu in Q1 2026. 1M tokens/day free.',
+    caveat: 'China only, requires Chinese phone number.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'ernie-bot',
+    name: 'ERNIE Bot (文心一言)',
+    url: 'https://yiyan.baidu.com/',
+    surface: 'web',
+    category: 'ai-chat',
+    access: 'no-login',
+    badges: ['220M MAU', 'Baidu', 'enterprise'],
+    bestFor: 'Enterprise API usage, tight integration with Baidu Maps, Baidu Cloud.',
+    qualityNote: 'Baidu-backed, leader in enterprise API usage. 2M tokens/day free.',
+    caveat: 'China only, requires Baidu account.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'quark',
+    name: 'Quark (夸克)',
+    url: 'https://quark.sm.cn/',
+    surface: 'web',
+    category: 'ai-search',
+    access: 'no-login',
+    badges: ['180M MAU', 'Alibaba', '256K context'],
+    bestFor: 'Long-document research - 256K context window, exam-prep and student queries.',
+    qualityNote: 'Alibaba-backed, fastest growth in Alibaba family. 500K tokens/day free.',
+    caveat: 'China only, requires Alibaba account.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'yuanbao',
+    name: 'Yuanbao (元宝)',
+    url: 'https://yuanbao.tencent.com/',
+    surface: 'web',
+    category: 'ai-chat',
+    access: 'no-login',
+    badges: ['150M MAU', 'Tencent', 'WeChat'],
+    bestFor: 'WeChat-first workflows - direct integration with WeChat, QQ, Tencent Docs.',
+    qualityNote: 'Tencent-backed, fourth largest Chinese AI search engine. 500K tokens/day free.',
+    caveat: 'China only, requires Tencent/WeChat account.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'kimi',
+    name: 'Kimi',
+    url: 'https://kimi.moonshot.cn/',
+    surface: 'web',
+    category: 'ai-chat',
+    access: 'no-login',
+    badges: ['90M MAU', 'Moonshot AI', '2M context'],
+    bestFor: 'Long-document research - largest context window (2M tokens).',
+    qualityNote: 'Moonshot AI-backed, best for long-context tasks. 1M tokens/day free.',
+    caveat: 'China + HK only, requires Chinese phone number.',
+    lastVerified: '2026-06-11',
+  },
+  // ──────────────────────────────────────────────────────────────────────────
+  // CHINESE CLOUD PLATFORMS (Free API Credits)
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'volcano-engine',
+    name: 'Volcano Engine (火山引擎)',
+    url: 'https://www.volcengine.com/',
+    surface: 'api',
+    category: 'ai-chat',
+    access: 'free-key',
+    badges: ['2M tokens/day', 'ByteDance', 'unlimited concurrency'],
+    bestFor: 'High-frequency API calls - largest daily quota, unlimited concurrency.',
+    qualityNote: 'ByteDance-backed, 2M tokens/day permanent, auto on signup.',
+    caveat: 'China only, requires real-name auth.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'alibaba-bailian',
+    name: 'Alibaba Cloud Bailian (阿里云百炼)',
+    url: 'https://bailian.console.aliyun.com/',
+    surface: 'api',
+    category: 'ai-chat',
+    access: 'free-key',
+    badges: ['1M tokens permanent', 'Alibaba', 'multi-model'],
+    bestFor: 'Multi-model testing - Qwen, GLM, MiniMax, etc.',
+    qualityNote: 'Alibaba-backed, 1M tokens permanent, new users only.',
+    caveat: 'China only, requires real-name auth, new users only.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'baidu-qianfan',
+    name: 'Baidu Qianfan (百度千帆)',
+    url: 'https://cloud.baidu.com/product/qianfan',
+    surface: 'api',
+    category: 'ai-chat',
+    access: 'free-key',
+    badges: ['1M tokens/model', 'Baidu', '3 months'],
+    bestFor: 'Baidu ecosystem - ERNIE models, long test period.',
+    qualityNote: 'Baidu-backed, 1M tokens/model, 3 months validity.',
+    caveat: 'China only, requires real-name auth, 3 months validity.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'tencent-hunyuan',
+    name: 'Tencent HunYuan (腾讯混元)',
+    url: 'https://cloud.tencent.com/product/hunyuan',
+    surface: 'api',
+    category: 'ai-chat',
+    access: 'free-key',
+    badges: ['1M tokens/year', 'Tencent', '12 months'],
+    bestFor: 'Long-term projects - stable, 12-month validity.',
+    qualityNote: 'Tencent-backed, 1M tokens/year, HunYuan-Lite directly free.',
+    caveat: 'China only, requires real-name auth, concurrency limits (TPM/RPM).',
+    lastVerified: '2026-06-11',
+  },
+  // ──────────────────────────────────────────────────────────────────────────
+  // AI CODING ASSISTANTS (Additional Verified 2026)
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'gemini-cli',
+    name: 'Gemini CLI',
+    url: 'https://github.com/google-gemini/gemini-cli',
+    surface: 'cli',
+    category: 'ai-coding',
+    access: 'no-login',
+    badges: ['1M context', 'Google', '78% SWE-bench'],
+    bestFor: 'Largest context window among CLI coding tools, ideal for monorepos.',
+    qualityNote: 'Google-backed, open source, 78% SWE-bench Verified. 1M token context window.',
+    caveat: 'Free tier with frontier models, but requires Google account.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'costrict',
+    name: 'CoStrict',
+    url: 'https://costrict.ai/',
+    surface: 'cli',
+    category: 'ai-coding',
+    access: 'open-source',
+    badges: ['enterprise', 'strict mode', '3.9K stars'],
+    bestFor: 'Enterprise-grade development - strict mode, code review, completion.',
+    qualityNote: 'Apache-2.0, 3.9K GitHub stars, 260 contributors. Private deployment.',
+    caveat: 'BYOK (bring your own key), requires setup.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'mimocode',
+    name: 'MiMoCode (Xiaomi)',
+    url: 'https://github.com/XiaomiMiMo/MiMo-Code',
+    surface: 'cli',
+    category: 'ai-coding',
+    access: 'open-source',
+    badges: ['cross-session memory', 'Xiaomi', '3.9K stars'],
+    bestFor: 'Cross-session memory - persistent understanding of project across sessions.',
+    qualityNote: 'MIT License, 3.9K GitHub stars, fork of OpenCode. MiMo Auto free for limited time.',
+    caveat: 'MiMo Auto is free for limited time, then BYOK.',
+    lastVerified: '2026-06-11',
+  },
+  {
+    id: 'korgex',
+    name: 'korgex',
+    url: 'https://github.com/New1Direction/korgex',
+    surface: 'cli',
+    category: 'ai-coding',
+    access: 'open-source',
+    badges: ['auditable', 'tamper-evident', '1.5K tests'],
+    bestFor: 'Auditable coding - everything saved to tamper-proof record.',
+    qualityNote: 'MIT License, ~1,586 tests, hash-chained causal ledger. New project (2026-05-24).',
+    caveat: 'BYOK, requires setup.',
+    lastVerified: '2026-06-11',
+  },
 ];
 
 export function getToolsByCategory(): Record<ZeroKeyCategory, ZeroKeyTool[]> {
@@ -2991,4 +3186,73 @@ export function getToolsBySurface(): Record<ZeroKeySurface, ZeroKeyTool[]> {
     grouped[tool.surface].push(tool);
   }
   return grouped;
+}
+
+/**
+ * Validates the zero-key tools data structure.
+ * Checks for:
+ * - Required fields (id, name, url, surface, category, access, badges, bestFor, qualityNote)
+ * - Duplicate IDs
+ * - Valid URLs
+ * - Valid enum values
+ * 
+ * @returns Array of validation errors, empty if all valid
+ */
+export function validateZeroKeyTools(): string[] {
+  const errors: string[] = [];
+  const seenIds = new Set<string>();
+  
+  const validSurfaces: ZeroKeySurface[] = ['web', 'api', 'cli'];
+  const validCategories: ZeroKeyCategory[] = [
+    'ai-chat', 'ai-image', 'ai-video', 'ai-audio', 'ai-writing',
+    'ai-search', 'ai-pdf', 'ai-presentation', 'ai-math', 'ai-coding',
+    'dev-coding', 'dev-backend', 'dev-automation', 'dev-security',
+    'dev-productivity', 'dev-learning', 'dev-data', 'dev-docs', 'dev-design'
+  ];
+  const validAccessTypes = ['no-login', 'public-api', 'open-source', 'free-tier', 'free-key', 'self-host'];
+  
+  zeroKeyTools.forEach((tool, index) => {
+    const prefix = `Tool at index ${index}`;
+    
+    // Check required fields
+    if (!tool.id) errors.push(`${prefix}: missing id`);
+    if (!tool.name) errors.push(`${prefix}: missing name`);
+    if (!tool.url) errors.push(`${prefix}: missing url`);
+    if (!tool.surface) errors.push(`${prefix}: missing surface`);
+    if (!tool.category) errors.push(`${prefix}: missing category`);
+    if (!tool.access) errors.push(`${prefix}: missing access`);
+    if (!tool.badges) errors.push(`${prefix}: missing badges`);
+    if (!tool.bestFor) errors.push(`${prefix}: missing bestFor`);
+    if (!tool.qualityNote) errors.push(`${prefix}: missing qualityNote`);
+    
+    // Check for duplicate IDs
+    if (tool.id) {
+      if (seenIds.has(tool.id)) {
+        errors.push(`${prefix}: duplicate id "${tool.id}"`);
+      }
+      seenIds.add(tool.id);
+    }
+    
+    // Validate URL format
+    if (tool.url) {
+      try {
+        new URL(tool.url);
+      } catch {
+        errors.push(`${prefix} (${tool.id}): invalid URL "${tool.url}"`);
+      }
+    }
+    
+    // Validate enum values
+    if (tool.surface && !validSurfaces.includes(tool.surface)) {
+      errors.push(`${prefix} (${tool.id}): invalid surface "${tool.surface}"`);
+    }
+    if (tool.category && !validCategories.includes(tool.category)) {
+      errors.push(`${prefix} (${tool.id}): invalid category "${tool.category}"`);
+    }
+    if (tool.access && !validAccessTypes.includes(tool.access)) {
+      errors.push(`${prefix} (${tool.id}): invalid access type "${tool.access}"`);
+    }
+  });
+  
+  return errors;
 }

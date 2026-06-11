@@ -15,6 +15,15 @@ import { type SearchResult, searchTools } from './fuse-search';
 
 // ─── Category Icons ──────────────────────────────────────────────────────────
 
+/**
+ * Checks if a category matches the given prefix.
+ * Uses delimiter-based matching to avoid false positives.
+ * Example: "ai" matches "ai-chat" but not "aid" or "airplane"
+ */
+function matchesCategoryPrefix(category: string, prefix: 'ai' | 'dev'): boolean {
+  return category === prefix || category.startsWith(`${prefix}-`);
+}
+
 const categoryIcons: Record<ZeroKeyCategory, string> = {
   // AI categories
   'ai-chat': '\u{1F4AC}',
@@ -196,7 +205,7 @@ function buildHaystack(tool: ZeroKeyTool): string {
 function getCategoryCounts(): Record<string, number> {
   const counts: Record<string, number> = {};
   const tools = state.categoryPrefix
-    ? state.allTools.filter((t) => t.category.startsWith(state.categoryPrefix!))
+    ? state.allTools.filter((t) => matchesCategoryPrefix(t.category, state.categoryPrefix!))
     : state.allTools;
   for (const tool of tools) {
     counts[tool.category] = (counts[tool.category] || 0) + 1;
@@ -231,7 +240,7 @@ function performSearch(query: string): void {
 
   // Filter tools by category prefix if specified
   const filteredTools = state.categoryPrefix
-    ? state.allTools.filter((t) => t.category.startsWith(state.categoryPrefix!))
+    ? state.allTools.filter((t) => matchesCategoryPrefix(t.category, state.categoryPrefix!))
     : state.allTools;
 
   let results: SearchResult[];
@@ -277,14 +286,14 @@ function renderCategorySidebar(): HTMLElement {
   // Filter categories by prefix if specified
   const allCategories = Object.keys(categoryLabels) as ZeroKeyCategory[];
   const categories = state.categoryPrefix
-    ? allCategories.filter((cat) => cat.startsWith(state.categoryPrefix!))
+    ? allCategories.filter((cat) => matchesCategoryPrefix(cat, state.categoryPrefix!))
     : allCategories;
 
   // "All" item
   const allItem = create('button', `zk2-cat-item${!state.activeCategory ? ' active' : ''}`);
   allItem.type = 'button';
   const totalTools = state.categoryPrefix
-    ? state.allTools.filter((t) => t.category.startsWith(state.categoryPrefix!)).length
+    ? state.allTools.filter((t) => matchesCategoryPrefix(t.category, state.categoryPrefix!)).length
     : state.allTools.length;
   allItem.innerHTML = `<span class="zk2-cat-label">${copy.allCategory}</span><span class="zk2-cat-count">${totalTools}</span>`;
   allItem.addEventListener('click', () => {
@@ -601,7 +610,7 @@ export function renderZeroKeyPowerPanel(
   
   // Filter tools by category prefix if specified
   const filteredTools = categoryPrefix
-    ? zeroKeyTools.filter((t) => t.category.startsWith(categoryPrefix))
+    ? zeroKeyTools.filter((t) => matchesCategoryPrefix(t.category, categoryPrefix))
     : zeroKeyTools;
   state.results = filteredTools.map((tool) => ({ tool, score: 0, matches: {} }));
   state.container = container;

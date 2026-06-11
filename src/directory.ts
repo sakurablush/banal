@@ -24,11 +24,16 @@ export function initDirectory(): void {
         });
       } catch (error) {
         console.error('Failed to render AI tools directory:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         aiRoot.innerHTML = `
           <div class="text-center py-16 text-white/60">
             <div class="inline-block px-8 py-4 rounded-2xl glass-card">
               <p class="text-lg mb-2">⚠️ Unable to load AI tools</p>
+              <p class="text-sm mb-4">Error: ${escapeHtml(errorMessage)}</p>
               <p class="text-sm">Please refresh the page or try again later.</p>
+              <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors">
+                Refresh Page
+              </button>
             </div>
           </div>
         `;
@@ -47,11 +52,16 @@ export function initDirectory(): void {
         });
       } catch (error) {
         console.error('Failed to render developer tools directory:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         devRoot.innerHTML = `
           <div class="text-center py-16 text-white/60">
             <div class="inline-block px-8 py-4 rounded-2xl glass-card">
               <p class="text-lg mb-2">⚠️ Unable to load developer tools</p>
+              <p class="text-sm mb-4">Error: ${escapeHtml(errorMessage)}</p>
               <p class="text-sm">Please refresh the page or try again later.</p>
+              <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors">
+                Refresh Page
+              </button>
             </div>
           </div>
         `;
@@ -96,6 +106,15 @@ export function initDirectory(): void {
       }
     });
   });
+}
+
+/**
+ * Escape HTML to prevent XSS in error messages
+ */
+function escapeHtml(text: string): string {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 /**

@@ -224,8 +224,37 @@ The directory is split into two clear sections:
 
 **Developer Tools:** [Coding](#coding--developer-workflow) | [Backend](#backend-hosting--databases) | [Automation](#automation-ops--monitoring) | [Security](#security--privacy) | [Productivity](#productivity--life-admin) | [Learning](#learning--career-leverage) | [Public Data](#public-data--open-datasets) | [Docs](#docs-research--knowledge) | [Design](#design-images-audio--video)
 
+### International Verified Tools
+
+| Tool | Description | Type | Access |
+| ---- | ----------- | ---- | ------ |
+| [ChatGPT Free](https://chat.openai.com/) | GPT-4o mini unlimited, GPT-4o limited | 🌐 WEB | No login |
+| [Claude Free](https://claude.ai/) | Sonnet 4.6, highest quality | 🌐 WEB | No login |
+| [Gemini Free](https://gemini.google.com/) | Gemini 3.1 Flash, unlimited | 🌐 WEB | No login |
+| [Perplexity Free](https://www.perplexity.ai/) | Cited sources, real-time research | 🌐 WEB | No login |
+| [Free.ai](https://free.ai/) | 400+ tools, 30K tokens/day | 🌐 WEB | No login |
+
+### Chinese Verified Tools (中国验证工具)
+
+| Tool | Description | Type | Access |
+| ---- | ----------- | ---- | ------ |
+| [Doubao (豆包)](https://doubao.com/) | 260M MAU, ByteDance | 🌐 WEB | No login |
+| [ERNIE Bot (文心一言)](https://yiyan.baidu.com/) | 220M MAU, Baidu | 🌐 WEB | No login |
+| [Quark (夸克)](https://quark.sm.cn/) | 180M MAU, 256K context | 🌐 WEB | No login |
+| [Yuanbao (元宝)](https://yuanbao.tencent.com/) | 150M MAU, WeChat | 🌐 WEB | No login |
+| [Kimi](https://kimi.moonshot.cn/) | 90M MAU, 2M context | 🌐 WEB | No login |
+
+### Chinese Cloud Platforms (Free API Credits)
+
+| Platform | Free Quota | Valid Period | Models |
+| -------- | ---------- | ------------ | ------ |
+| [Volcano Engine (火山引擎)](https://www.volcengine.com/) | 2M tokens/day | Permanent | Doubao, DeepSeek |
+| [Alibaba Cloud Bailian (阿里云百炼)](https://bailian.console.aliyun.com/) | 1M tokens | Permanent | Qwen3.5, GLM-5 |
+| [Baidu Qianfan (百度千帆)](https://cloud.baidu.com/product/qianfan) | 1M tokens/model | 3 months | ERNIE, DeepSeek |
+| [Tencent HunYuan (腾讯混元)](https://cloud.tencent.com/product/hunyuan) | 1M tokens/year | 12 months | HunYuan-Lite |
+
 <details>
-<summary><strong>Click to expand full tools directory (227+ tools)</strong></summary>
+<summary><strong>Click to expand full tools directory (241+ tools)</strong></summary>
 
 ## 🤖 AI Tools (128+ tools)
 

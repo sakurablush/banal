@@ -9,12 +9,16 @@
 import { initChat } from './chat';
 
 let isInitialized = false;
+let cleanupFunctions: Array<() => void> = [];
 
 /**
  * Initialize the chat modal functionality.
  * Sets up event listeners for opening/closing the modal.
  */
 export function initChatModal(): void {
+  // Cleanup any previous initialization
+  cleanup();
+
   const openBtn = document.getElementById('open-chat-modal');
   const openBtnMobile = document.getElementById('open-chat-modal-mobile');
   const closeBtn = document.getElementById('close-chat-modal');
@@ -38,30 +42,51 @@ export function initChatModal(): void {
     }
   };
 
-  openBtn?.addEventListener('click', openModal);
-  openBtnMobile?.addEventListener('click', openModal);
-
   // Close modal handlers
   const closeModal = () => {
     modal.classList.add('hidden');
     document.body.style.overflow = ''; // Restore background scroll
   };
 
-  closeBtn?.addEventListener('click', closeModal);
-
   // Close on backdrop click
-  modal.addEventListener('click', (e) => {
+  const handleBackdropClick = (e: Event) => {
     if (e.target === modal) {
       closeModal();
     }
-  });
+  };
 
   // Close on Escape key
-  document.addEventListener('keydown', (e) => {
+  const handleEscapeKey = (e: KeyboardEvent) => {
     if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
       closeModal();
     }
-  });
+  };
+
+  // Attach event listeners
+  openBtn?.addEventListener('click', openModal);
+  openBtnMobile?.addEventListener('click', openModal);
+  closeBtn?.addEventListener('click', closeModal);
+  modal.addEventListener('click', handleBackdropClick);
+  document.addEventListener('keydown', handleEscapeKey);
+
+  // Store cleanup functions
+  cleanupFunctions = [
+    () => openBtn?.removeEventListener('click', openModal),
+    () => openBtnMobile?.removeEventListener('click', openModal),
+    () => closeBtn?.removeEventListener('click', closeModal),
+    () => modal.removeEventListener('click', handleBackdropClick),
+    () => document.removeEventListener('keydown', handleEscapeKey),
+  ];
+}
+
+/**
+ * Cleanup function to remove event listeners and reset state.
+ * Call this when the component unmounts or needs to be reinitialized.
+ */
+export function cleanup(): void {
+  cleanupFunctions.forEach(fn => fn());
+  cleanupFunctions = [];
+  isInitialized = false;
 }
 
 /**
