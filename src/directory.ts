@@ -4,35 +4,62 @@ import { zeroKeyTools } from './data/zero-key-tools';
 
 /**
  * Initialize the main page Zero-Key Tools Directory.
- * Renders the panel inside #zero-key-directory-root,
+ * Renders two separate panels: AI Tools and Developer Tools,
  * populates the category badges/counts, and wires quick navigation filters.
  */
 export function initDirectory(): void {
-  const root = document.getElementById('zero-key-directory-root');
-  if (!root) return;
+  const aiRoot = document.getElementById('ai-tools-root');
+  const devRoot = document.getElementById('dev-tools-root');
 
   const render = (lang = getCurrentLang()) => {
-    try {
-      renderZeroKeyPowerPanel(root, {
-        lang,
-        onToolOpen: () => {
-          // Safe tracking or custom callback if needed
-        },
-      });
-
-      // Update dynamic tool counts
-      updateToolCounts();
-    } catch (error) {
-      console.error('Failed to render tools directory:', error);
-      root.innerHTML = `
-        <div class="text-center py-16 text-white/60">
-          <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-            <p class="text-lg mb-2">⚠️ Unable to load tools</p>
-            <p class="text-sm">Please refresh the page or try again later.</p>
+    // Render AI Tools section
+    if (aiRoot) {
+      try {
+        renderZeroKeyPowerPanel(aiRoot, {
+          lang,
+          categoryPrefix: 'ai',
+          onToolOpen: () => {
+            // Safe tracking or custom callback if needed
+          },
+        });
+      } catch (error) {
+        console.error('Failed to render AI tools directory:', error);
+        aiRoot.innerHTML = `
+          <div class="text-center py-16 text-white/60">
+            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
+              <p class="text-lg mb-2">⚠️ Unable to load AI tools</p>
+              <p class="text-sm">Please refresh the page or try again later.</p>
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      }
     }
+
+    // Render Developer Tools section
+    if (devRoot) {
+      try {
+        renderZeroKeyPowerPanel(devRoot, {
+          lang,
+          categoryPrefix: 'dev',
+          onToolOpen: () => {
+            // Safe tracking or custom callback if needed
+          },
+        });
+      } catch (error) {
+        console.error('Failed to render developer tools directory:', error);
+        devRoot.innerHTML = `
+          <div class="text-center py-16 text-white/60">
+            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
+              <p class="text-lg mb-2">⚠️ Unable to load developer tools</p>
+              <p class="text-sm">Please refresh the page or try again later.</p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Update dynamic tool counts
+    updateToolCounts();
   };
 
   // Initial render
@@ -51,15 +78,19 @@ export function initDirectory(): void {
       const cat = card.getAttribute('data-filter');
       if (!cat) return;
 
+      // Determine which section to scroll to based on category prefix
+      const targetSection = cat.startsWith('ai-') ? 'ai-tools' : 'dev-tools';
+      const targetRoot = document.getElementById(`${targetSection}-root`);
+      
       // Find the search input in the rendered panel and set its value
-      const searchInput = root.querySelector('input[type="text"]') as HTMLInputElement;
+      const searchInput = targetRoot?.querySelector('input[type="text"]') as HTMLInputElement;
       if (searchInput) {
         searchInput.value = cat;
         searchInput.dispatchEvent(new Event('input', { bubbles: true }));
       }
 
-      // Smooth scroll to the tools section
-      const toolsSec = document.getElementById('tools');
+      // Smooth scroll to the appropriate section
+      const toolsSec = document.getElementById(targetSection);
       if (toolsSec) {
         toolsSec.scrollIntoView({ behavior: 'smooth' });
       }
@@ -71,23 +102,38 @@ export function initDirectory(): void {
  * Calculates tool counts and updates category count elements and the total counter.
  */
 function updateToolCounts(): void {
-  const counts: Record<string, number> = {};
+  const aiCount = zeroKeyTools.filter((t) => t.category.startsWith('ai-')).length;
+  const devCount = zeroKeyTools.filter((t) => t.category.startsWith('dev-')).length;
+  const total = zeroKeyTools.length;
 
+  // Update category count badges (e.g. "(31)")
+  const categoryCounts: Record<string, number> = {};
   zeroKeyTools.forEach((tool) => {
-    counts[tool.category] = (counts[tool.category] || 0) + 1;
+    categoryCounts[tool.category] = (categoryCounts[tool.category] || 0) + 1;
   });
 
-  // Update category count badges (e.g. "(12)")
   document.querySelectorAll('[data-category-count]').forEach((el) => {
     const cat = el.getAttribute('data-category-count');
-    if (cat) {
-      el.textContent = `(${counts[cat] || 0})`;
+    if (cat && categoryCounts[cat]) {
+      el.textContent = `(${categoryCounts[cat]})`;
     }
   });
 
-  // Update total tool count badges across the page
-  const total = zeroKeyTools.length;
-  document.querySelectorAll('.tool-count-badge').forEach((el) => {
-    el.textContent = `${total}+`;
-  });
+  // Update AI tools count
+  const aiCountEl = document.querySelector('#ai-tools .tool-count-badge');
+  if (aiCountEl) {
+    aiCountEl.textContent = `${aiCount}+`;
+  }
+
+  // Update Dev tools count
+  const devCountEl = document.querySelector('#dev-tools .tool-count-badge');
+  if (devCountEl) {
+    devCountEl.textContent = `${devCount}+`;
+  }
+
+  // Update total tool count in hero section
+  const heroCountEl = document.getElementById('stat-tools');
+  if (heroCountEl) {
+    heroCountEl.textContent = `${total}+`;
+  }
 }

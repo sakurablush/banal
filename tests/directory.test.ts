@@ -10,21 +10,27 @@ function makeDirectoryDOM() {
     <div id="lang-ja"></div>
     <div class="tool-count-badge">0+</div>
     <div class="stat-number tool-count-badge">0+</div>
+    <div id="stat-tools">227+</div>
     
     <div id="categories">
-      <a href="#tools" class="category-card" data-filter="ai-assistants">
-        <span class="category-count" data-category-count="ai-assistants"></span>
+      <a href="#ai-tools" class="category-card" data-filter="ai-chat">
+        <span class="category-count" data-category-count="ai-chat"></span>
       </a>
-      <a href="#tools" class="category-card" data-filter="ai-image">
+      <a href="#ai-tools" class="category-card" data-filter="ai-image">
         <span class="category-count" data-category-count="ai-image"></span>
       </a>
     </div>
 
-    <div id="zero-key-directory-root">
+    <div id="ai-tools-root" data-category-prefix="ai">
       <div class="tools-directory-container">Loading...</div>
     </div>
 
-    <div id="tools"></div>
+    <div id="dev-tools-root" data-category-prefix="dev">
+      <div class="tools-directory-container">Loading...</div>
+    </div>
+
+    <div id="ai-tools"></div>
+    <div id="dev-tools"></div>
   `;
 }
 
@@ -39,58 +45,65 @@ describe('directory module initialization & behavior', () => {
   it('mounts the Zero-Key directory and updates tool counts', () => {
     initDirectory();
 
-    const root = document.getElementById('zero-key-directory-root')!;
-    // v2 uses card grid with lazy loading (PAGE_SIZE per page)
-    const cards = root.querySelectorAll('.zk2-card');
-    expect(cards.length).toBe(Math.min(PAGE_SIZE, zeroKeyTools.length));
+    // Check AI tools section
+    const aiRoot = document.getElementById('ai-tools-root')!;
+    const aiCards = aiRoot.querySelectorAll('.zk2-card');
+    const aiToolsCount = zeroKeyTools.filter((t) => t.category.startsWith('ai-')).length;
+    expect(aiCards.length).toBe(Math.min(PAGE_SIZE, aiToolsCount));
 
-    // Verify total count badges are updated
-    const badges = document.querySelectorAll('.tool-count-badge');
-    expect(badges[0].textContent).toBe(`${zeroKeyTools.length}+`);
-    expect(badges[1].textContent).toBe(`${zeroKeyTools.length}+`);
+    // Check Dev tools section
+    const devRoot = document.getElementById('dev-tools-root')!;
+    const devCards = devRoot.querySelectorAll('.zk2-card');
+    const devToolsCount = zeroKeyTools.filter((t) => t.category.startsWith('dev-')).length;
+    expect(devCards.length).toBe(Math.min(PAGE_SIZE, devToolsCount));
+
+    // Verify total count in hero section
+    const heroCount = document.getElementById('stat-tools');
+    expect(heroCount?.textContent).toBe(`${zeroKeyTools.length}+`);
 
     // Verify category count badges are populated
-    const countAssistants = document.querySelector('[data-category-count="ai-assistants"]')!;
+    const countChat = document.querySelector('[data-category-count="ai-chat"]')!;
     const countImage = document.querySelector('[data-category-count="ai-image"]')!;
 
-    const expectedAssistants = zeroKeyTools.filter((t) => t.category === 'ai-assistants').length;
+    const expectedChat = zeroKeyTools.filter((t) => t.category === 'ai-chat').length;
     const expectedImage = zeroKeyTools.filter((t) => t.category === 'ai-image').length;
 
-    expect(countAssistants.textContent).toBe(`(${expectedAssistants})`);
+    expect(countChat.textContent).toBe(`(${expectedChat})`);
     expect(countImage.textContent).toBe(`(${expectedImage})`);
   });
 
   it('wires data-filter category click events to trigger list filtering', () => {
     const scrollMock = vi.fn();
-    const toolsSec = document.getElementById('tools')!;
-    toolsSec.scrollIntoView = scrollMock;
+    const aiToolsSec = document.getElementById('ai-tools')!;
+    aiToolsSec.scrollIntoView = scrollMock;
 
     initDirectory();
 
-    const assistantsCard = document.querySelector(
-      '[data-filter="ai-assistants"]'
+    const chatCard = document.querySelector(
+      '[data-filter="ai-chat"]'
     ) as HTMLAnchorElement;
 
     // Should not throw when clicking a data-filter card
-    expect(() => assistantsCard.click()).not.toThrow();
+    expect(() => chatCard.click()).not.toThrow();
 
-    // Should scroll smoothly
+    // Should scroll smoothly to AI tools section
     expect(scrollMock).toHaveBeenCalledWith({ behavior: 'smooth' });
   });
 
   it('re-renders directory when language-changed custom event fires', () => {
     initDirectory();
 
-    const root = document.getElementById('zero-key-directory-root')!;
-    const firstCount = root.querySelectorAll('.zk2-card').length;
-    expect(firstCount).toBe(Math.min(PAGE_SIZE, zeroKeyTools.length));
+    const aiRoot = document.getElementById('ai-tools-root')!;
+    const aiToolsCount = zeroKeyTools.filter((t) => t.category.startsWith('ai-')).length;
+    const firstCount = aiRoot.querySelectorAll('.zk2-card').length;
+    expect(firstCount).toBe(Math.min(PAGE_SIZE, aiToolsCount));
 
     // Re-render after language change
     window.dispatchEvent(new CustomEvent('banal:language-changed', { detail: { lang: 'ja' } }));
 
-    // After re-render all tools are still rendered (first page)
-    expect(root.querySelectorAll('.zk2-card').length).toBe(
-      Math.min(PAGE_SIZE, zeroKeyTools.length)
+    // After re-render all AI tools are still rendered (first page)
+    expect(aiRoot.querySelectorAll('.zk2-card').length).toBe(
+      Math.min(PAGE_SIZE, aiToolsCount)
     );
   });
 
@@ -105,9 +118,9 @@ describe('directory module initialization & behavior', () => {
 
     initDirectory();
 
-    const root = document.getElementById('zero-key-directory-root')!;
-    expect(root.innerHTML).toContain('Unable to load tools');
-    expect(root.innerHTML).toContain('Please refresh the page');
+    const aiRoot = document.getElementById('ai-tools-root')!;
+    expect(aiRoot.innerHTML).toContain('Unable to load AI tools');
+    expect(aiRoot.innerHTML).toContain('Please refresh the page');
 
     // Restore the spy
     spy.mockRestore();

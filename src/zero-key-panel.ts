@@ -16,7 +16,8 @@ import { type SearchResult, searchTools } from './fuse-search';
 // ─── Category Icons ──────────────────────────────────────────────────────────
 
 const categoryIcons: Record<ZeroKeyCategory, string> = {
-  'ai-assistants': '\u{1F4AC}',
+  // AI categories
+  'ai-chat': '\u{1F4AC}',
   'ai-image': '\u{1F3A8}',
   'ai-video': '\u{1F3AC}',
   'ai-audio': '\u{1F3B5}',
@@ -25,15 +26,17 @@ const categoryIcons: Record<ZeroKeyCategory, string> = {
   'ai-pdf': '\u{1F4C4}',
   'ai-presentation': '\u{1F4CA}',
   'ai-math': '\u{1F9EE}',
-  'coding-devtools': '\u{1F4BB}',
-  'docs-knowledge': '\u{1F4DA}',
-  'public-data': '\u{1F5C4}\uFE0F',
-  'design-media': '\u{1F58C}\uFE0F',
-  'backend-infra': '\u{2601}\uFE0F',
-  'automation-ops': '\u{2699}\uFE0F',
-  'security-privacy': '\u{1F512}',
-  productivity: '\u{1F4CB}',
-  'learning-career': '\u{1F393}',
+  'ai-coding': '\u{1F916}',
+  // Developer categories
+  'dev-coding': '\u{1F4BB}',
+  'dev-docs': '\u{1F4DA}',
+  'dev-data': '\u{1F5C4}\uFE0F',
+  'dev-design': '\u{1F58C}\uFE0F',
+  'dev-backend': '\u{2601}\uFE0F',
+  'dev-automation': '\u{2699}\uFE0F',
+  'dev-security': '\u{1F512}',
+  'dev-productivity': '\u{1F4CB}',
+  'dev-learning': '\u{1F393}',
 };
 
 // ─── Copy / i18n ─────────────────────────────────────────────────────────────
@@ -118,7 +121,7 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
       label: e('For devs', '\u958B\u767A\u8005\u5411\u3051'),
       predicate: (tool, h) =>
         tool.surface !== 'web' ||
-        tool.category === 'coding-devtools' ||
+        tool.category === 'dev-coding' ||
         /developer|coding|api|cli|git|database|deploy/i.test(h),
     },
   ];
@@ -129,6 +132,7 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
 export interface ZeroKeyPanelOptions {
   lang: Lang;
   onToolOpen?: () => void;
+  categoryPrefix?: 'ai' | 'dev'; // Filter tools by category prefix
 }
 
 const PAGE_SIZE = 24;
@@ -144,6 +148,7 @@ interface PanelState {
   visibleCount: number;
   onToolOpen?: () => void;
   container: HTMLElement | null;
+  categoryPrefix?: 'ai' | 'dev';
 }
 
 const state: PanelState = {
@@ -155,6 +160,7 @@ const state: PanelState = {
   visibleCount: PAGE_SIZE,
   onToolOpen: undefined,
   container: null,
+  categoryPrefix: undefined,
 };
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
@@ -189,7 +195,10 @@ function buildHaystack(tool: ZeroKeyTool): string {
 
 function getCategoryCounts(): Record<string, number> {
   const counts: Record<string, number> = {};
-  for (const tool of state.allTools) {
+  const tools = state.categoryPrefix
+    ? state.allTools.filter((t) => t.category.startsWith(state.categoryPrefix!))
+    : state.allTools;
+  for (const tool of tools) {
     counts[tool.category] = (counts[tool.category] || 0) + 1;
   }
   return counts;
@@ -220,11 +229,16 @@ function performSearch(query: string): void {
   state.query = query;
   state.visibleCount = PAGE_SIZE;
 
+  // Filter tools by category prefix if specified
+  const filteredTools = state.categoryPrefix
+    ? state.allTools.filter((t) => t.category.startsWith(state.categoryPrefix!))
+    : state.allTools;
+
   let results: SearchResult[];
   if (!query.trim()) {
-    results = state.allTools.map((tool) => ({ tool, score: 0, matches: {} }));
+    results = filteredTools.map((tool) => ({ tool, score: 0, matches: {} }));
   } else {
-    results = searchTools(state.allTools, query, MAX_RESULTS);
+    results = searchTools(filteredTools, query, MAX_RESULTS);
   }
 
   results = applyCategoryFilter(results);
@@ -260,10 +274,19 @@ function renderCategorySidebar(): HTMLElement {
   const counts = getCategoryCounts();
   const copy = COPY[state.lang];
 
+  // Filter categories by prefix if specified
+  const allCategories = Object.keys(categoryLabels) as ZeroKeyCategory[];
+  const categories = state.categoryPrefix
+    ? allCategories.filter((cat) => cat.startsWith(state.categoryPrefix!))
+    : allCategories;
+
   // "All" item
   const allItem = create('button', `zk2-cat-item${!state.activeCategory ? ' active' : ''}`);
   allItem.type = 'button';
-  allItem.innerHTML = `<span class="zk2-cat-label">${copy.allCategory}</span><span class="zk2-cat-count">${state.allTools.length}</span>`;
+  const totalTools = state.categoryPrefix
+    ? state.allTools.filter((t) => t.category.startsWith(state.categoryPrefix!)).length
+    : state.allTools.length;
+  allItem.innerHTML = `<span class="zk2-cat-label">${copy.allCategory}</span><span class="zk2-cat-count">${totalTools}</span>`;
   allItem.addEventListener('click', () => {
     state.activeCategory = null;
     performSearch(state.query);
@@ -272,7 +295,6 @@ function renderCategorySidebar(): HTMLElement {
   sidebar.appendChild(allItem);
 
   // Category items
-  const categories = Object.keys(categoryLabels) as ZeroKeyCategory[];
   for (const cat of categories) {
     const count = counts[cat] || 0;
     if (count === 0) continue;
@@ -530,7 +552,7 @@ export function renderZeroKeyPowerPanel(
   container: HTMLElement,
   options: ZeroKeyPanelOptions
 ): void {
-  const { lang, onToolOpen } = options;
+  const { lang, onToolOpen, categoryPrefix } = options;
 
   // Abort previous hero listeners to prevent accumulation on re-render
   if (heroAbortController) {
@@ -543,10 +565,16 @@ export function renderZeroKeyPowerPanel(
   activeLifeFilters.clear();
   state.lang = lang;
   state.onToolOpen = onToolOpen;
+  state.categoryPrefix = categoryPrefix;
   state.query = '';
   state.activeCategory = null;
   state.visibleCount = PAGE_SIZE;
-  state.results = zeroKeyTools.map((tool) => ({ tool, score: 0, matches: {} }));
+  
+  // Filter tools by category prefix if specified
+  const filteredTools = categoryPrefix
+    ? zeroKeyTools.filter((t) => t.category.startsWith(categoryPrefix))
+    : zeroKeyTools;
+  state.results = filteredTools.map((tool) => ({ tool, score: 0, matches: {} }));
   state.container = container;
 
   container.innerHTML = '';

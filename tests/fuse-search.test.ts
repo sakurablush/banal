@@ -33,7 +33,7 @@ describe('fuse-search', () => {
     it('finds tools by category', () => {
       const results = searchTools(zeroKeyTools, 'database');
       expect(results.length).toBeGreaterThan(0);
-      const hasDbCategory = results.some((r) => r.tool.category === 'backend-infra');
+      const hasDbCategory = results.some((r) => r.tool.category === 'dev-backend');
       expect(hasDbCategory).toBe(true);
     });
 
@@ -79,7 +79,7 @@ describe('fuse-search', () => {
           name: 'test tool',
           url: 'https://example.com',
           surface: 'web' as const,
-          category: 'ai-assistants' as const,
+          category: 'ai-chat' as const,
           access: 'free-tier' as const,
           badges: ['test'],
           bestFor: 'testing purposes',
@@ -91,7 +91,7 @@ describe('fuse-search', () => {
           name: 'another tool',
           url: 'https://example.com',
           surface: 'web' as const,
-          category: 'ai-assistants' as const,
+          category: 'ai-chat' as const,
           access: 'free-tier' as const,
           badges: ['other'],
           bestFor: 'test in description',
