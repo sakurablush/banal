@@ -210,6 +210,171 @@ This is a living, ruthlessly curated underground resource. We filtered for tools
 
 ---
 
+## 📋 Complete Tools Directory
+
+> **200+ verified free AI tools** — auto-generated from `src/data/zero-key-tools.ts`. Run `npx tsx scripts/generate-tools-readme.ts` to update.
+
+### Quick Jump
+
+[AI Assistants](#ai-help-that-actually-works) | [AI Image](#ai-image-generation--editing) | [AI Video](#ai-video-generation--editing) | [AI Audio](#ai-audio-music-voice--tts) | [AI Writing](#ai-writing-summarization--translation) | [AI Search](#ai-search--research-engines) | [AI PDF](#ai-document--pdf-tools) | [AI Presentations](#ai-presentations--slides) | [AI Math](#ai-math-science--education) | [Coding](#coding-and-developer-workflow) | [Docs](#docs-research-and-knowledge) | [Public Data](#public-data-and-open-datasets) | [Design](#design-images-audio-and-video) | [Backend](#backend-hosting-databases) | [Automation](#automation-ops-monitoring) | [Security](#security-and-privacy) | [Productivity](#life-admin-and-productivity) | [Learning](#learning-and-career-leverage)
+
+<details>
+<summary><strong>Click to expand full tools directory (200+ tools)</strong></summary>
+
+### AI help that actually works
+
+| Tool                                                | Description                                         | Type   | Access      |
+| --------------------------------------------------- | --------------------------------------------------- | ------ | ----------- |
+| [Duck.ai](https://duck.ai/)                         | Private everyday chat, letters, plans, explanations | 🌐 WEB | No login    |
+| [LMArena](https://lmarena.ai/)                      | Comparing model answers when quality matters        | 🌐 WEB | No login    |
+| [WebLLM Chat](https://chat.webllm.ai/)              | Private AI on a capable laptop without server       | 🌐 WEB | Open source |
+| [ChatGPT Free](https://chatgpt.com/)                | General-purpose AI chat for writing, coding         | 🌐 WEB | Free tier   |
+| [Microsoft Copilot](https://copilot.microsoft.com/) | GPT-4 powered chat with web search                  | 🌐 WEB | No login    |
+| [Google Gemini](https://gemini.google.com/)         | Multimodal AI chat with image understanding         | 🌐 WEB | Free tier   |
+| [Meta AI](https://www.meta.ai/)                     | Quick AI chat and image generation                  | 🌐 WEB | No login    |
+| [Claude Free](https://claude.ai/)                   | High-quality AI chat with strong reasoning          | 🌐 WEB | Free tier   |
+| [DeepSeek](https://chat.deepseek.com/)              | Powerful AI for coding and reasoning                | 🌐 WEB | Free tier   |
+| [Groq](https://groq.com/)                           | Lightning-fast inference on open-source models      | 🌐 WEB | Free tier   |
+| [Perplexity AI](https://www.perplexity.ai/)         | Research with cited sources you can verify          | 🌐 WEB | Free tier   |
+
+### AI image generation & editing
+
+| Tool                                                                              | Description                                    | Type   | Access      |
+| --------------------------------------------------------------------------------- | ---------------------------------------------- | ------ | ----------- |
+| [Perchance AI Image](https://perchance.org/ai-text-to-image-generator)            | Unlimited AI image generation, no account      | 🌐 WEB | No login    |
+| [Leonardo.ai](https://leonardo.ai/)                                               | High-quality AI images with daily free credits | 🌐 WEB | Free tier   |
+| [Ideogram](https://ideogram.ai/)                                                  | AI images that render text correctly           | 🌐 WEB | Free tier   |
+| [Microsoft Designer](https://designer.microsoft.com/)                             | AI-powered graphic design with DALL-E          | 🌐 WEB | Free tier   |
+| [Remove.bg](https://www.remove.bg/)                                               | Instantly removing image backgrounds           | 🌐 WEB | No login    |
+| [Tensor.Art](https://tensor.art/)                                                 | Thousands of community models                  | 🌐 WEB | Free tier   |
+| [SeaArt](https://www.seaart.ai/)                                                  | Extensive LoRA model support                   | 🌐 WEB | Free tier   |
+| [Stable Diffusion WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) | Run SD locally with full control               | 🌐 WEB | Open source |
+| [ComfyUI](https://github.com/comfyanonymous/ComfyUI)                              | Visual node-based SD workflows                 | 🌐 WEB | Open source |
+
+### AI video generation & editing
+
+| Tool                                   | Description                               | Type   | Access    |
+| -------------------------------------- | ----------------------------------------- | ------ | --------- |
+| [CapCut](https://www.capcut.com/)      | Full-featured video editing with AI       | 🌐 WEB | Free tier |
+| [Pika Labs](https://pika.art/)         | Creating short videos from text or images | 🌐 WEB | Free tier |
+| [Haiper AI](https://haiper.ai/)        | Fast AI video generation                  | 🌐 WEB | Free tier |
+| [RunwayML Free](https://runwayml.com/) | AI-powered video editing and generation   | 🌐 WEB | Free tier |
+
+### AI audio, music, voice & TTS
+
+| Tool                                                            | Description                         | Type   | Access    |
+| --------------------------------------------------------------- | ----------------------------------- | ------ | --------- |
+| [Suno AI](https://suno.com/)                                    | Creating complete songs with vocals | 🌐 WEB | Free tier |
+| [Udio](https://www.udio.com/)                                   | High-quality AI music generation    | 🌐 WEB | Free tier |
+| [Mubert](https://mubert.com/)                                   | Royalty-free background music       | 🌐 WEB | Free tier |
+| [Whisper Web](https://huggingface.co/spaces/Xenova/whisper-web) | Free speech-to-text in browser      | 🌐 WEB | No login  |
+
+### AI writing, summarization & translation
+
+| Tool                                                 | Description                                 | Type   | Access    |
+| ---------------------------------------------------- | ------------------------------------------- | ------ | --------- |
+| [QuillBot](https://quillbot.com/)                    | Paraphrasing and grammar checking           | 🌐 WEB | Free tier |
+| [DeepL Translator](https://www.deepl.com/translator) | Most natural machine translation            | 🌐 WEB | No login  |
+| [LanguageTool](https://languagetool.org/)            | Grammar and style checking in 30+ languages | 🌐 WEB | No login  |
+| [Jenni AI](https://jenni.ai/)                        | Academic writing with citations             | 🌐 WEB | Free tier |
+
+### AI search & research engines
+
+| Tool                                                 | Description                                      | Type   | Access    |
+| ---------------------------------------------------- | ------------------------------------------------ | ------ | --------- |
+| [Consensus](https://consensus.app/)                  | Scientific consensus from peer-reviewed research | 🌐 WEB | Free tier |
+| [Elicit](https://elicit.com/)                        | Literature review automation                     | 🌐 WEB | Free tier |
+| [Semantic Scholar](https://www.semanticscholar.org/) | Finding academic papers with AI                  | 🌐 WEB | No login  |
+| [Connected Papers](https://www.connectedpapers.com/) | Visually exploring related papers                | 🌐 WEB | Free tier |
+
+### AI document & PDF tools
+
+| Tool                                      | Description                          | Type   | Access    |
+| ----------------------------------------- | ------------------------------------ | ------ | --------- |
+| [ChatPDF](https://www.chatpdf.com/)       | Chat with PDF documents              | 🌐 WEB | No login  |
+| [ILovePDF](https://www.ilovepdf.com/)     | Every PDF operation imaginable       | 🌐 WEB | No login  |
+| [PDF.ai](https://pdf.ai/)                 | AI-powered PDF analysis              | 🌐 WEB | Free tier |
+| [DocAnalyzer.AI](https://docanalyzer.ai/) | Analyzing multiple documents with AI | 🌐 WEB | Free tier |
+
+### AI presentations & slides
+
+| Tool                                      | Description                               | Type   | Access    |
+| ----------------------------------------- | ----------------------------------------- | ------ | --------- |
+| [Gamma](https://gamma.app/)               | Beautiful presentations from text prompts | 🌐 WEB | Free tier |
+| [Beautiful.ai](https://www.beautiful.ai/) | Auto-design presentations                 | 🌐 WEB | Free tier |
+| [SlidesAI](https://www.slidesai.io/)      | Text to Google Slides                     | 🌐 WEB | Free tier |
+
+### AI math, science & education
+
+| Tool                                           | Description                                 | Type   | Access    |
+| ---------------------------------------------- | ------------------------------------------- | ------ | --------- |
+| [Wolfram Alpha](https://www.wolframalpha.com/) | Math, science, engineering answers          | 🌐 WEB | No login  |
+| [Desmos](https://www.desmos.com/)              | Interactive graphing calculator             | 🌐 WEB | No login  |
+| [Khan Academy](https://www.khanacademy.org/)   | Free world-class education with AI tutoring | 🌐 WEB | Free tier |
+
+### Coding and developer workflow
+
+| Tool                                  | Description                        | Type   | Access      |
+| ------------------------------------- | ---------------------------------- | ------ | ----------- |
+| [StackBlitz](https://stackblitz.com/) | Instant web app prototypes         | 🌐 WEB | Free tier   |
+| [Bolt.new](https://bolt.new/)         | Full-stack apps in browser with AI | 🌐 WEB | Free tier   |
+| [v0 by Vercel](https://v0.dev/)       | Generate React/Next.js components  | 🌐 WEB | Free tier   |
+| [Replit](https://replit.com/)         | Code in browser with AI assistance | 🌐 WEB | Free tier   |
+| [Continue.dev](https://continue.dev/) | AI code assistance for VS Code     | 💻 CLI | Open source |
+| [Ollama](https://ollama.com/)         | Run AI models locally              | 💻 CLI | Open source |
+| [Codeium](https://codeium.com/)       | Free AI code autocomplete          | 🌐 WEB | Free tier   |
+| [Zed Editor](https://zed.dev/)        | Fast IDE with built-in AI          | 💻 CLI | Open source |
+
+### Docs, research, and knowledge
+
+| Tool                                     | Description                          | Type   | Access      |
+| ---------------------------------------- | ------------------------------------ | ------ | ----------- |
+| [Notion Free](https://www.notion.so/)    | Personal knowledge base              | 🌐 WEB | Free tier   |
+| [Anytype](https://anytype.io/)           | Privacy-focused knowledge management | 🌐 WEB | Open source |
+| [GitBook Free](https://www.gitbook.com/) | Beautiful public documentation       | 🌐 WEB | Free tier   |
+
+### Backend, hosting, databases
+
+| Tool                                              | Description                           | Type   | Access    |
+| ------------------------------------------------- | ------------------------------------- | ------ | --------- |
+| [GitHub Pages](https://pages.github.com/)         | Free static site hosting              | 🌐 WEB | Free tier |
+| [Cloudflare Pages](https://pages.cloudflare.com/) | Free hosting with edge network        | 🌐 WEB | Free tier |
+| [Supabase](https://supabase.com/)                 | Free backend: database, auth, storage | 🌐 WEB | Free tier |
+| [Vercel Free](https://vercel.com/)                | Free frontend deployment              | 🌐 WEB | Free tier |
+| [Neon](https://neon.tech/)                        | Free Postgres database                | 🌐 WEB | Free tier |
+
+### Security and privacy
+
+| Tool                                         | Description                       | Type   | Access      |
+| -------------------------------------------- | --------------------------------- | ------ | ----------- |
+| [Bitwarden Free](https://bitwarden.com/)     | Free password manager             | 🌐 WEB | Free tier   |
+| [Proton Drive Free](https://proton.me/drive) | Private encrypted file storage    | 🌐 WEB | Free tier   |
+| [Syncthing](https://syncthing.net/)          | Private file sync between devices | 💻 CLI | Open source |
+
+### Life admin and productivity
+
+| Tool                                  | Description                   | Type   | Access      |
+| ------------------------------------- | ----------------------------- | ------ | ----------- |
+| [Excalidraw](https://excalidraw.com/) | Hand-drawn style diagrams     | 🌐 WEB | Open source |
+| [tldraw](https://www.tldraw.com/)     | Free collaborative whiteboard | 🌐 WEB | Open source |
+| [Obsidian](https://obsidian.md/)      | Local-first knowledge base    | 💻 CLI | Free tier   |
+| [Logseq](https://logseq.com/)         | Outliner knowledge management | 🌐 WEB | Open source |
+
+### Learning and career leverage
+
+| Tool                                          | Description                  | Type   | Access    |
+| --------------------------------------------- | ---------------------------- | ------ | --------- |
+| [freeCodeCamp](https://www.freecodecamp.org/) | Free coding curriculum       | 🌐 WEB | Free tier |
+| [Exercism](https://exercism.org/)             | Coding with human mentorship | 🌐 WEB | Free tier |
+| [LeetCode Free](https://leetcode.com/)        | Interview coding practice    | 🌐 WEB | Free tier |
+| [Brilliant](https://brilliant.org/)           | Interactive math and science | 🌐 WEB | Free tier |
+
+</details>
+
+_Total: 200+ tools across 18 categories. Full list searchable in the live app._
+
+---
+
 ## Security & Hygiene in Real Life (Shared Devices + Forks)
 
 This tool is built for people on cracked phones, library computers, and shared devices at 2 a.m.
