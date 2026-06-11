@@ -374,6 +374,35 @@ function renderToolCard(result: SearchResult): HTMLElement {
   header.appendChild(surface);
   card.appendChild(header);
 
+  // Access type badges
+  const accessBadges = create('div', 'zk2-card-access-badges');
+  
+  // AI vs Dev badge
+  const isAI = tool.category.startsWith('ai-');
+  const typeBadge = create('span', `zk2-access-badge zk2-access-${isAI ? 'ai' : 'dev'}`);
+  typeBadge.textContent = isAI ? '🤖 AI' : '💻 Dev';
+  accessBadges.appendChild(typeBadge);
+
+  // Access type badge
+  if (tool.access === 'no-login' || tool.access === 'public-api') {
+    const accessBadge = create('span', 'zk2-access-badge zk2-access-no-key');
+    accessBadge.textContent = '🆓 No Key';
+    accessBadges.appendChild(accessBadge);
+  } else if (tool.access === 'free-key' || tool.access === 'free-tier') {
+    const accessBadge = create('span', 'zk2-access-badge zk2-access-free-key');
+    accessBadge.textContent = '🔑 Free Key';
+    accessBadges.appendChild(accessBadge);
+  }
+
+  // Rate limit badge
+  if (tool.caveat && tool.caveat.toLowerCase().includes('rate limit')) {
+    const rateBadge = create('span', 'zk2-access-badge zk2-access-rate-limited');
+    rateBadge.textContent = '⚡ Rate Limited';
+    accessBadges.appendChild(rateBadge);
+  }
+
+  card.appendChild(accessBadges);
+
   // Name
   const name = create('h3', 'zk2-card-name');
   name.textContent = tool.name;
