@@ -1158,7 +1158,7 @@ describe('chat — misc coverage (fallback mount, humanize, render empty after c
       (b.textContent || '').includes('All 9 Prompt Templates')
     );
     expect(promptTemplatesBtn).toBeTruthy();
-    promptTemplatesBtn.click();
+    promptTemplatesBtn!.click();
 
     // Verify prompt templates panel is visible
     const panel = document.getElementById('prompt-templates-panel');

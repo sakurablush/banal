@@ -93,22 +93,6 @@ function persist(): void {
     // quota or incognito — conversation still works this session
   }
 }
-  } catch {
-    chatHistory = [];
-  }
-}
-
-function persist(): void {
-  try {
-    localStorage.setItem(CHAT_STORAGE, JSON.stringify(chatHistory));
-    localStorage.setItem(
-      SP_STORAGE,
-      JSON.stringify({ id: currentPromptTemplateId, vars: currentPromptTemplateVars })
-    );
-  } catch {
-    // quota / incognito — conversation still works this session
-  }
-}
 
 /**
  * Clears ALL sensitive data from browser storage (API keys + full chat history + current prompt template state).
@@ -119,7 +103,7 @@ function persist(): void {
 function clearAllSensitiveData(): void {
   try {
     localStorage.removeItem(CHAT_STORAGE);
-    localStorage.removeItem(SP_STORAGE);
+    localStorage.removeItem(PT_STORAGE);
   } catch {
     // ignore
   }
@@ -1028,7 +1012,7 @@ function wireExportButtons(root: HTMLElement): void {
           return `<div style="margin:12px 0;padding:12px;border-radius:16px;background:${turn.role === 'user' ? '#28241f' : '#f0ede6'};color:${turn.role === 'user' ? '#f8f7f4' : '#28241f'};max-width:85%;${turn.role === 'user' ? 'margin-left:auto' : ''}">
             <div style="font-size:10px;opacity:.6;margin-bottom:4px">${who}</div>
             <div style="white-space:pre-wrap">${safeContent}</div>
-            ${sp}
+            ${pt}
           </div>`;
         })
         .join('');

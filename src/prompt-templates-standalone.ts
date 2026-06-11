@@ -55,7 +55,7 @@ function createPromptTemplateCard(
 
   const title = document.createElement('h3');
   title.className = 'sp-card-title';
-  title.textContent = sp.title;
+  title.textContent = pt.title;
   header.appendChild(title);
 
   card.appendChild(header);
@@ -63,11 +63,11 @@ function createPromptTemplateCard(
   // Description
   const desc = document.createElement('p');
   desc.className = 'sp-card-desc';
-  desc.textContent = sp.description;
+  desc.textContent = pt.description;
   card.appendChild(desc);
 
   // Variables info
-  const variables = extractTemplateVariables(sp.template);
+  const variables = extractTemplateVariables(pt.template);
   if (variables.length > 0) {
     const varsDiv = document.createElement('div');
     varsDiv.className = 'sp-card-vars';
@@ -86,7 +86,7 @@ function createPromptTemplateCard(
   copyBtn.textContent = lang === 'ja' ? 'テンプレートをコピー' : 'Copy Template';
   copyBtn.addEventListener('click', async () => {
     try {
-      await navigator.clipboard.writeText(sp.template);
+      await navigator.clipboard.writeText(pt.template);
       const originalText = copyBtn.textContent;
       copyBtn.textContent = lang === 'ja' ? '✓ コピーしました' : '✓ Copied!';
       setTimeout(() => {
@@ -105,7 +105,7 @@ function createPromptTemplateCard(
   fillBtn.className = 'sp-btn sp-btn-secondary';
   fillBtn.textContent = lang === 'ja' ? '入力してコピー' : 'Fill & Copy';
   fillBtn.addEventListener('click', () => {
-    openFillModal(sp, lib, lang);
+    openFillModal(pt, lib, lang);
   });
   actions.appendChild(fillBtn);
 
