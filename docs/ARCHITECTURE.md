@@ -1,6 +1,6 @@
 # Banal Architecture
 
-**Why this shape? How providers, superpowers, and chat actually work together. Data flow. Why deliberately no backend.**
+**Why this shape? How providers, prompt templates, and chat actually work together. Data flow. Why deliberately no backend.**
 
 Banal is built for the person who has almost nothing: limited time, limited data, limited battery, high stress, possibly a shared or old device. The architecture is a direct reflection of that constraint and of the deeper goal: _forkable or it didn't happen_.
 
@@ -30,7 +30,7 @@ The experience is delivered from a single `index.html` + a small set of focused 
 
 ### 1. Static Shell & Boot
 
-- `index.html` is the entire app. It contains the hero, manifesto, teaser cards (static marketing for the 6 visible superpowers), fork section, and a placeholder `#chat-placeholder` that gets replaced at runtime.
+- `index.html` is the entire app. It contains the hero, manifesto, teaser cards (static marketing for the 6 visible prompt templates), fork section, and a placeholder `#chat-placeholder` that gets replaced at runtime.
 - `src/main.ts` is two lines: `initI18n()` then `initChat()`. Deliberately tiny so the project stays understandable.
 - Vite builds everything to `dist/` with `base: './'` so it works when hosted at a subpath (GitHub Pages, etc.) or even opened directly from a file system in many cases.
 
@@ -39,7 +39,7 @@ The experience is delivered from a single `index.html` + a small set of focused 
 - English is the source of truth.
 - A flat(ish) nested object of translations. `t(lang, 'dotted.key')` + `data-i18n` attributes on static HTML.
 - Language switcher persists choice to localStorage and fires a `banal:language-changed` custom event.
-- Dynamic parts (chat bubbles, superpowers panel, forms, status, errors) listen to the event and re-render with the new language.
+- Dynamic parts (chat bubbles, prompt templates panel, forms, status, errors) listen to the event and re-render with the new language.
 - Japanese is full professional quality (not machine). Keigo, softening, cultural notes are real.
 
 See also `docs/JAPANESE.md`.
@@ -64,44 +64,44 @@ This is where the "real AI" happens.
 - "Get free key" URLs are hardcoded safe links (no affiliates).
 - `hasAnyKey()` and `getCurrentProviderStatus()` power the UI badges and empty states.
 
-If the user has no key at all, the first send gives a clear "add a free key (30-60s)" message + CTA to open the keys modal + escape hatch to use superpowers elsewhere.
+If the user has no key at all, the first send gives a clear "add a free key (30-60s)" message + CTA to open the keys modal + escape hatch to use prompt templates elsewhere.
 
-**Important current limitation (honest):** There is no WebLLM / browser-local LLM fallback yet. The superpowers + export features + "copy the filled prompt" guidance exist precisely so people can still get value even when hitting free tier walls here.
+**Important current limitation (honest):** There is no WebLLM / browser-local LLM fallback yet. The prompt templates + export features + "copy the filled prompt" guidance exist precisely so people can still get value even when hitting free tier walls here.
 
-### 4. Superpowers Library — Portable Prompts That Matter (src/lib/superpowers.ts)
+### 4. Prompt Templates Library — Portable Prompts That Matter (src/lib/prompt-templates.ts)
 
-The 9 superpowers are not marketing copy. They are complete, production-grade prompt templates.
+The 9 prompt templates are not marketing copy. They are complete, production-grade prompt templates.
 
 - Stored as `TEMPLATES` data: for each id, `title`, `description`, and `template` in both `en` and `ja`.
 - Variables use `{{camelCase}}` (e.g. `{{yourName}}`, `{{gapSituation}}`). This makes `extractTemplateVariables()` reliable and `fill(id, values)` safe.
-- `SuperpowersLibrary` (class + singleton):
+- `PromptTemplatesLibrary` (class + singleton):
   - `getAll()`, `getById(id)`, `fill(id, values)` — missing vars left as `{{var}}` gracefully.
   - `setLocale()` / constructor for switching (chat re-instantiates on lang change).
   - `static validateParity()` — enforces that every template has matching EN/JA titles/descriptions + identical placeholder sets. Used in tests.
 - Every template hard-codes the assumptions of the target user: zero budget, library computer or phone only, low energy days, public/shared device, "you are not behind", "you are not a bad person", "your life did not make you less qualified".
 - Japanese versions are not literal: proper keigo for bureaucracy letters ("いただきたく存じます"), permission + short sentences for mental health/low energy, cultural notes in the bridge template.
 
-**Why superpowers as data + fill instead of hard-coded flows?** Because the real superpower is the _prompt itself_. A user who is rate-limited on every provider in Banal can still open the panel, fill the blanks, copy the resulting text (it appears as the "user" turn in history), and paste it into ChatGPT free, Gemini web, Claude, Grok, a local Ollama, whatever they have access to today. The templates are designed to be portable.
+**Why prompt templates as data + fill instead of hard-coded flows?** Because the real power is the _prompt itself_. A user who is rate-limited on every provider in Banal can still open the panel, fill the blanks, copy the resulting text (it appears as the "user" turn in history), and paste it into ChatGPT free, Gemini web, Claude, Grok, a local Ollama, whatever they have access to today. The templates are designed to be portable.
 
-The 6 teaser cards in the marketing section are still static (in i18n) for simplicity; the full 9 live in the library and in the working "All 9 Superpowers" panel.
+The 6 teaser cards in the marketing section are still static (in i18n) for simplicity; the full 9 live in the library and in the working "All 9 Prompt Templates" panel.
 
-See `tests/superpowers.test.ts` for the empathy smoke tests and parity enforcement.
+See `tests/prompt-templates.test.ts` for the empathy smoke tests and parity enforcement.
 
 ### 5. The Chat Module — Where It All Comes Alive (src/chat.ts)
 
 This is the largest module because it owns the delightful, zero-friction experience.
 
-- On mount, it replaces the placeholder with the full DOM (header with status + keys button, messages area, quickstarts, superpowers button + export buttons, input, plus two hidden panels: superpowers slide-up and keys modal).
+- On mount, it replaces the placeholder with the full DOM (header with status + keys button, messages area, quickstarts, prompt templates button + export buttons, input, plus two hidden panels: prompt templates slide-up and keys modal).
 - Persisted state (localStorage):
-  - `banal-chat-history-v1`: array of `ChatTurn` (role, content, ts, optional `superpowerId` + `superpowerTitle` so context travels with the turn).
-  - `banal-current-superpower-v1`: id + filled vars so you can come back later.
+  - `banal-chat-history-v1`: array of `ChatTurn` (role, content, ts, optional `promptTemplateId` + `promptTemplateTitle` so context travels with the turn).
+  - `banal-current-prompt-template-v1`: id + filled vars so you can come back later.
 - Normal send: takes current history + new input, calls `performSend` which calls `sendFreeMessage` (as full history for context), appends user + AI turns.
-- Superpower send: opens panel → pick → render form with extracted vars + smart placeholder hints from template → on "Send this superpower" it does `lib.fill()`, closes panel, sends the _filled text_ as the user utterance (so it appears in history), attaches sp meta to the AI response turn.
+- Prompt template send: opens panel → pick → render form with extracted vars + smart placeholder hints from template → on "Send this prompt template" it does `lib.fill()`, closes panel, sends the _filled text_ as the user utterance (so it appears in history), attaches pt meta to the AI response turn.
 - Exports:
   - JSON: full payload with history + current sp state (importable by future versions or readable by humans).
   - HTML: generates a completely self-contained single-file HTML (inline styles, no external deps) titled "Banal — My Offline Conversation". Opens in any browser, forever.
 - Keys modal: lists the three providers, current saved (masked), inputs to paste/save/clear, direct "Get free key →" links, and the important note "Keys never leave your phone or computer. Banal has no servers."
-- Error banner: injected on demand, with actionable buttons (e.g. "Free keys & providers", "All 9 Superpowers"). Auto-hides but rate-limit errors stay longer.
+- Error banner: injected on demand, with actionable buttons (e.g. "Free keys & providers", "All 9 Prompt Templates"). Auto-hides but rate-limit errors stay longer.
 - Language reactivity: on `banal:language-changed`, updates lib, placeholders, re-renders messages (re-labels "You"/"Banal (free)"), quickstarts, status, and if a panel is open, refreshes it.
 - Lots of small kindnesses: auto-growing textarea, scroll to bottom, toasts for exports, escape key handling, mobile-friendly panel behavior.
 
@@ -110,10 +110,10 @@ The quickstarts are a curated subset of the 9 for "when you have nothing" moment
 ### Data Flow (text diagram)
 
 ```
-User action (type + Send, or Quickstart, or Superpower card/form)
+User action (type + Send, or Quickstart, or Prompt Template card/form)
         │
         ▼
-handleNormalSend() or superpower send path
+handleNormalSend() or prompt template send path
         │
         ▼
 build history array (previous ChatTurn[] → ProviderChatMessage[])
@@ -134,7 +134,7 @@ sendFreeMessage(historyOrString, {provider:'auto'})
         ▼
 append user turn (if plain) + AI turn (with spMeta if any)
 persist() to localStorage
-renderMessages()  (shows ✦ free power + • Superpower Title on AI bubbles)
+renderMessages()  (shows ✦ free power + • Prompt Template Title on AI bubbles)
 updateStatus()
 ```
 
@@ -144,8 +144,8 @@ Exports and modals are side paths from the same root state.
 
 ## Testing & Quality Gates
 
-- Everything that can be pure is pure and tested in isolation (`providers`, `superpowers`, `i18n`, `utils`).
-- `SuperpowersLibrary.validateParity()` + dedicated empathy smoke tests protect the "never shames, always assumes best under constraints" contract.
+- Everything that can be pure is pure and tested in isolation (`providers`, `prompt-templates`, `i18n`, `utils`).
+- `PromptTemplatesLibrary.validateParity()` + dedicated empathy smoke tests protect the "never shames, always assumes best under constraints" contract.
 - Provider tests cover key roundtrips, graceful localStorage failures (incognito/private mode), routing preference, rate limit shaping.
 - Chat is exercised through DOM simulation in jsdom + event firing.
 - `npm run ci` = lint:check + typecheck + test:run. Coverage report is generated; thresholds in vitest.config prevent silent drops.
@@ -156,7 +156,7 @@ Exports and modals are side paths from the same root state.
 ## Honest Trade-offs & Current Limitations
 
 - Depends on third-party free tiers. They can (and do) rate limit, change models, or have bad days. The UX is built to make this survivable and non-shaming.
-- No fully private/offline LLM built-in yet (size, complexity, and "works on library computer with no install" constraints make WebLLM non-trivial). Superpowers + exports + "use the prompt anywhere" are the mitigation.
+- No fully private/offline LLM built-in yet (size, complexity, and "works on library computer with no install" constraints make WebLLM non-trivial). Prompt templates + exports + "use the prompt anywhere" are the mitigation.
 - Conversation state and keys are device-local only. No cross-device sync (deliberate: adds accounts/servers/complexity/privacy surface).
 - The three providers are the current free paths that are generous enough for real use. Adding more is straightforward but must keep the "warm error + clear next step" bar.
 - Build step requires Node 18+ (but the _output_ is pure static browser code — no runtime dependency on Node for end users).
@@ -168,7 +168,7 @@ These are not failures. They are the result of prioritizing "a broke person on a
 ## Extending the System (for contributors)
 
 - **New provider:** Add to `Provider` type + `ALL_PROVIDERS`, implement the fetch branch in `sendFreeMessage`, add key helpers, update the keys modal in `chat.ts`, add tests. Keep the friendly error language.
-- **New superpower:** Add entry to `TEMPLATES` (must provide full EN + JA + identical `{{vars}}`), run `validateParity()`, add empathy test cases, consider adding its id to the quickstarts array. The fill mechanism and UI just work.
+- **New prompt template:** Add entry to `TEMPLATES` (must provide full EN + JA + identical `{{vars}}`), run `validateParity()`, add empathy test cases, consider adding its id to the quickstarts array. The fill mechanism and UI just work.
 - **New language:** See i18n section in README and `docs/CONTRIBUTING.md`.
 - **Export that carries the fire:** The JSON and self-contained HTML are versioned and self-describing. Every export is another body for the ghost — future forks will always be able to read the will of the people who came before.
 - **Offline LLM:** Would likely live as an optional "private mode" that only activates when user explicitly wants it and accepts the download size / first-run time. Must not become a barrier for the default path.
@@ -181,7 +181,7 @@ Japanese support is not a translation layer on top. It is co-designed:
 
 - Keigo is used correctly and consistently in bureaucracy templates (not overdone in personal/low-energy ones).
 - The parity validator + tests ensure no English string drifts without its Japanese counterpart.
-- Cultural notes are embedded in the bridge superpower.
+- Cultural notes are embedded in the bridge prompt template.
 - UI copy for errors, hints, and status was written by (or reviewed with) the same "poor stressed user" empathy lens.
 
 See `docs/JAPANESE.md` for the full current status, translation principles, and how to contribute improvements without breaking the contract.

@@ -1,14 +1,14 @@
 /**
- * Quick Start Module — renders 5 popular superpowers as cards.
+ * Quick Start Module — renders 5 popular prompt templates as cards.
  * 
- * This module displays a curated selection of the most commonly used superpowers
- * between the DIRECTORY and SUPERPOWERS sections. Each card shows the title,
+ * This module displays a curated selection of the most commonly used prompt templates
+ * between the DIRECTORY and PROMPT TEMPLATES sections. Each card shows the title,
  * description, and a "Copy Template" button that opens a modal form.
  */
 
-import { SuperpowersLibrary, extractTemplateVariables, type Locale } from './lib/superpowers';
+import { PromptTemplatesLibrary, extractTemplateVariables, type Locale } from './lib/prompt-templates';
 
-const POPULAR_SUPERPOWERS = [
+const POPULAR_TEMPLATES = [
   'job-gaps-as-strengths',
   'grounding-low-energy',
   'zero-budget-learning',
@@ -18,7 +18,7 @@ const POPULAR_SUPERPOWERS = [
 
 /**
  * Initialize the quick start section.
- * Renders 5 popular superpower cards into the #quickstart-root container.
+ * Renders 5 popular prompt template cards into the #quickstart-root container.
  */
 export function initQuickStart(): void {
   const root = document.getElementById('quickstart-root');
@@ -33,16 +33,16 @@ export function initQuickStart(): void {
   grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
   
   const lang = document.documentElement.lang?.startsWith('ja') ? 'ja' : 'en';
-  const lib = new SuperpowersLibrary(lang as Locale);
+  const lib = new PromptTemplatesLibrary(lang as Locale);
   
-  POPULAR_SUPERPOWERS.forEach(id => {
-    const sp = lib.getById(id);
-    if (!sp) {
-      console.warn(`Superpower ${id} not found`);
+  POPULAR_TEMPLATES.forEach(id => {
+    const pt = lib.getById(id);
+    if (!pt) {
+      console.warn(`Prompt template ${id} not found`);
       return;
     }
     
-    const card = createSuperpowerCard(sp, lib, lang as Locale);
+    const card = createPromptTemplateCard(pt, lib, lang as Locale);
     grid.appendChild(card);
   });
   
@@ -50,11 +50,11 @@ export function initQuickStart(): void {
 }
 
 /**
- * Create a card element for a superpower.
+ * Create a card element for a prompt template.
  */
-function createSuperpowerCard(
-  sp: { id: string; title: string; description: string; template: string },
-  lib: SuperpowersLibrary,
+function createPromptTemplateCard(
+  pt: { id: string; title: string; description: string; template: string },
+  lib: PromptTemplatesLibrary,
   lang: Locale
 ): HTMLElement {
   const card = document.createElement('article');
@@ -63,15 +63,15 @@ function createSuperpowerCard(
   // Title
   const title = document.createElement('h3');
   title.className = 'text-xl font-bold text-white mb-2';
-  title.textContent = sp.title;
+  title.textContent = pt.title;
   
   // Description
   const description = document.createElement('p');
   description.className = 'text-white/60 text-sm mb-4';
-  description.textContent = sp.description;
+  description.textContent = pt.description;
   
   // Variables info
-  const variables = extractTemplateVariables(sp.template);
+  const variables = extractTemplateVariables(pt.template);
   if (variables.length > 0) {
     const varsDiv = document.createElement('div');
     varsDiv.className = 'mb-4';
@@ -102,7 +102,7 @@ function createSuperpowerCard(
   copyBtn.textContent = lang === 'ja' ? 'テンプレートをコピー' : 'Copy Template';
   copyBtn.addEventListener('click', async () => {
     try {
-      await navigator.clipboard.writeText(sp.template);
+      await navigator.clipboard.writeText(pt.template);
       const originalText = copyBtn.textContent;
       copyBtn.textContent = lang === 'ja' ? '✓ コピーしました' : '✓ Copied!';
       setTimeout(() => {
@@ -120,7 +120,7 @@ function createSuperpowerCard(
   fillBtn.className = 'flex-1 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold rounded-lg transition-colors';
   fillBtn.textContent = lang === 'ja' ? '入力してコピー' : 'Fill & Copy';
   fillBtn.addEventListener('click', () => {
-    openFillModal(sp, lib, lang);
+    openFillModal(pt, lib, lang);
   });
   
   actions.appendChild(copyBtn);
@@ -131,14 +131,14 @@ function createSuperpowerCard(
 }
 
 /**
- * Open a modal form for filling in superpower variables.
+ * Open a modal form for filling in prompt template variables.
  */
 function openFillModal(
-  sp: { id: string; title: string; description: string; template: string },
-  lib: SuperpowersLibrary,
+  pt: { id: string; title: string; description: string; template: string },
+  lib: PromptTemplatesLibrary,
   lang: Locale
 ): void {
-  const variables = extractTemplateVariables(sp.template);
+  const variables = extractTemplateVariables(pt.template);
   
   // Create modal
   const modal = document.createElement('div');
@@ -153,7 +153,7 @@ function openFillModal(
   
   const title = document.createElement('h3');
   title.className = 'text-2xl font-bold text-white';
-  title.textContent = sp.title;
+  title.textContent = pt.title;
   
   const closeBtn = document.createElement('button');
   closeBtn.type = 'button';
@@ -231,7 +231,7 @@ function openFillModal(
       values[key] = input.value || `[${key}]`;
     });
     
-    const filled = lib.fill(sp.id, values);
+    const filled = lib.fill(pt.id, values);
     
     try {
       await navigator.clipboard.writeText(filled);

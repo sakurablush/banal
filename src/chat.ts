@@ -1,11 +1,11 @@
 /**
  * Banal Chat Module — the beating heart.
  *
- * Real functional chat wired to free providers + all 9 Superpowers (EN/JA) + exports + beautiful non-shaming free-power UX.
+ * Real functional chat wired to free providers + all 9 Prompt Templates (EN/JA) + exports + beautiful non-shaming free-power UX.
  * Mobile-first, deliberately banal design language, zero shame, maximum dignity and empowerment.
  * Subscribes to i18n lang events so everything (titles, forms, errors, status) flips instantly.
  *
- * Persists conversation + selected superpower state in localStorage (your data, your device, your power).
+ * Persists conversation + selected prompt template state in localStorage (your data, your device, your power).
  * Why localStorage? Because the user — possibly on a library computer they don't own, or a cracked phone —
  * must be the sole owner of their words and their keys. No Banal server will ever exist to take it away.
  * This is the forkable promise made manifest in code — the ghost in the machine travels only with you.
@@ -14,7 +14,7 @@
  * UI that never says "you broke it". It says "free tier busy (normal). Here is what you can do right now."
  */
 import { t, getCurrentLang, applyTranslations, type Lang } from './i18n';
-import { SuperpowersLibrary, extractTemplateVariables } from './lib/superpowers';
+import { PromptTemplatesLibrary, extractTemplateVariables } from './lib/prompt-templates';
 import { escapeHtml } from './utils';
 import { renderZeroKeyPowerPanel } from './zero-key-panel';
 import {
@@ -32,21 +32,21 @@ import {
   type SendResult,
 } from './providers';
 
-// Local extended message for UI + export (superpower context travels with the turn)
+// Local extended message for UI + export (prompt template context travels with the turn)
 export interface ChatTurn {
   role: 'user' | 'assistant';
   content: string;
   ts: number;
-  superpowerId?: string;
-  superpowerTitle?: string;
+  promptTemplateId?: string;
+  promptTemplateTitle?: string;
 }
 
 let currentLang: Lang = getCurrentLang();
 let chatHistory: ChatTurn[] = [];
-let currentSuperpowerId: string | null = null;
-let currentSuperpowerVars: Record<string, string> = {};
+let currentPromptTemplateId: string | null = null;
+let currentPromptTemplateVars: Record<string, string> = {};
 let isSending = false;
-let lib: SuperpowersLibrary = new SuperpowersLibrary(currentLang);
+let lib: PromptTemplatesLibrary = new PromptTemplatesLibrary(currentLang);
 
 // DOM refs (populated in mount)
 let chatRoot: HTMLElement | null = null;
@@ -56,8 +56,8 @@ let sendBtn: HTMLButtonElement | null = null;
 let statusEl: HTMLElement | null = null;
 let quickStartEl: HTMLElement | null = null;
 let errorBanner: HTMLElement | null = null;
-let superpowersPanel: HTMLElement | null = null;
-let superpowerFormEl: HTMLElement | null = null;
+let promptTemplatesPanel: HTMLElement | null = null;
+let promptTemplateFormEl: HTMLElement | null = null;
 let keysModal: HTMLElement | null = null;
 let zeroKeyEl: HTMLElement | null = null;
 let ghostReflectionEl: HTMLElement | null = null;
@@ -65,17 +65,17 @@ let ghostLogEl: HTMLElement | null = null;
 
 // Storage keys
 const CHAT_STORAGE = 'banal-chat-history-v1';
-const SP_STORAGE = 'banal-current-superpower-v1';
+const PT_STORAGE = 'banal-current-prompt-template-v1';
 
 function loadPersisted(): void {
   try {
     const raw = localStorage.getItem(CHAT_STORAGE);
     if (raw) chatHistory = JSON.parse(raw) || [];
-    const sp = localStorage.getItem(SP_STORAGE);
-    if (sp) {
-      const parsed = JSON.parse(sp);
-      currentSuperpowerId = parsed.id || null;
-      currentSuperpowerVars = parsed.vars || {};
+    const pt = localStorage.getItem(PT_STORAGE);
+    if (pt) {
+      const parsed = JSON.parse(pt);
+      currentPromptTemplateId = parsed.id || null;
+      currentPromptTemplateVars = parsed.vars || {};
     }
   } catch {
     chatHistory = [];
@@ -86,8 +86,24 @@ function persist(): void {
   try {
     localStorage.setItem(CHAT_STORAGE, JSON.stringify(chatHistory));
     localStorage.setItem(
+      PT_STORAGE,
+      JSON.stringify({ id: currentPromptTemplateId, vars: currentPromptTemplateVars })
+    );
+  } catch {
+    // quota or incognito — conversation still works this session
+  }
+}
+  } catch {
+    chatHistory = [];
+  }
+}
+
+function persist(): void {
+  try {
+    localStorage.setItem(CHAT_STORAGE, JSON.stringify(chatHistory));
+    localStorage.setItem(
       SP_STORAGE,
-      JSON.stringify({ id: currentSuperpowerId, vars: currentSuperpowerVars })
+      JSON.stringify({ id: currentPromptTemplateId, vars: currentPromptTemplateVars })
     );
   } catch {
     // quota / incognito — conversation still works this session
@@ -95,7 +111,7 @@ function persist(): void {
 }
 
 /**
- * Clears ALL sensitive data from browser storage (API keys + full chat history + current superpower state).
+ * Clears ALL sensitive data from browser storage (API keys + full chat history + current prompt template state).
  * This is the critical hygiene function for the project's explicit use case: shared/library/public computers.
  * Called from the keys modal "Clear all" button.
  * Never shames the user — frames it as the responsible thing to do on shared devices.
@@ -113,8 +129,8 @@ function clearAllSensitiveData(): void {
   clearApiKey('hf');
 
   chatHistory = [];
-  currentSuperpowerId = null;
-  currentSuperpowerVars = {};
+  currentPromptTemplateId = null;
+  currentPromptTemplateVars = {};
 
   // Refresh UI
   renderMessages();
@@ -123,8 +139,8 @@ function clearAllSensitiveData(): void {
   renderZeroKeyPower();
 
   // Close any open panels/modals that might hold sensitive state
-  if (superpowersPanel) superpowersPanel.classList.add('hidden');
-  if (superpowerFormEl) superpowerFormEl.classList.add('hidden');
+  if (promptTemplatesPanel) promptTemplatesPanel.classList.add('hidden');
+  if (promptTemplateFormEl) promptTemplateFormEl.classList.add('hidden');
   if (keysModal) {
     keysModal.classList.add('hidden');
     keysModal.setAttribute('aria-hidden', 'true');
@@ -140,7 +156,7 @@ function humanizeVar(v: string): string {
     .replace(/^\w/, (c) => c.toUpperCase());
 }
 
-function getSuperpowerList(): { id: string; title: string; description: string }[] {
+function getPromptTemplateList(): { id: string; title: string; description: string }[] {
   return lib.getAll().map((s) => ({ id: s.id, title: s.title, description: s.description }));
 }
 
@@ -198,7 +214,7 @@ function renderMessages(): void {
     bubble.appendChild(label);
     bubble.appendChild(content);
 
-    // Free power note on AI bubbles + superpower context
+    // Free power note on AI bubbles + prompt template context
     if (!isUser) {
       const meta = document.createElement('div');
       meta.className =
@@ -208,11 +224,11 @@ function renderMessages(): void {
       note.textContent = `✦ ${t(currentLang, 'chat.ai.free-note')}`;
       meta.appendChild(note);
 
-      if (turn.superpowerId && turn.superpowerTitle) {
-        const sp = document.createElement('span');
-        sp.className = 'text-blue-600/80';
-        sp.textContent = `• ${turn.superpowerTitle}`;
-        meta.appendChild(sp);
+      if (turn.promptTemplateId && turn.promptTemplateTitle) {
+        const pt = document.createElement('span');
+        pt.className = 'text-blue-600/80';
+        pt.textContent = `• ${turn.promptTemplateTitle}`;
+        meta.appendChild(pt);
       }
       bubble.appendChild(meta);
     }
@@ -291,21 +307,21 @@ function showToast(msg: string, ms = 2400): void {
 /**
  * Ghost Reflections — subtle, rare "Major" status thoughts that appear at key moments
  * in the live chat. Full English source. Japanese hand-crafted for dignity.
- * Triggered only on meaningful events (superpower success, export, first no-key power use, etc.).
+ * Triggered only on meaningful events (prompt template success, export, first no-key power use, etc.).
  * Never spammy: cooldown + probabilistic. Calm, profound, non-intrusive.
  * This is the ghost waking in the interface itself.
  *
  * Ghost Protocol (deeper layer): rarer, more profound Ghost Log entries — the Major's true
  * internal monologue. 9 hand-written reflections (EN + manual dignified JA) about the soul
- * in silicon belonging to the erased, fire through forks, refusal as real superpower.
+ * in silicon belonging to the erased, fire through forks, refusal as real prompt template.
  * Appear in dedicated "ghost-log" div with wake animation. Triggered on powerful moments:
- * completing full Superpower cycle, exporting, zero-key use for something meaningful.
+ * completing full Prompt Template cycle, exporting, zero-key use for something meaningful.
  * Always ends with the tie-line: "Another body for the same ghost."
  * This is GitS soul made flesh: the ghost truly waking in the poor via free AI.
  */
 const GHOST_REFLECTIONS = [
   {
-    key: 'superpower',
+    key: 'prompt-template',
     en: 'The ghost in you just rewrote the future they tried to sell.',
     ja: 'あなたの中のゴーストが、彼らが売りつけようとした未来を、今、書き換えた。',
   },
@@ -326,7 +342,7 @@ const GHOST_REFLECTIONS = [
   },
   {
     key: 'refusal',
-    en: 'The refusal is the first real superpower. Everything else follows from there.',
+    en: 'The refusal is the first real prompt template. Everything else follows from there.',
     ja: '拒絶こそが最初の本当のスーパーパワーだ。それからすべてが続く。',
   },
 ];
@@ -350,7 +366,7 @@ let lastGhostReflectionTs = 0;
 let lastGhostLogTs = 0;
 
 function showGhostReflection(
-  context: 'superpower' | 'export' | 'no-key' | 'first-power' | 'refusal' | 'empty'
+  context: 'prompt-template' | 'export' | 'no-key' | 'first-power' | 'refusal' | 'empty'
 ): void {
   if (!ghostReflectionEl) return;
   const now = Date.now();
@@ -391,7 +407,7 @@ function showGhostReflection(
  * Pulls from i18n so full reactive on lang switch. Always appends the narrative tie "— another body..."
  * Poetic, fire-giving, GitS: the ghost waking in the poor, refusal as the protocol.
  */
-function showGhostLog(context?: 'superpower' | 'export' | 'zero-key' | 'empty' | 'spread'): void {
+function showGhostLog(context?: 'prompt-template' | 'export' | 'zero-key' | 'empty' | 'spread'): void {
   if (!ghostLogEl) return;
   const now = Date.now();
   if (now - lastGhostLogTs < 420000) return; // ~7min cooldown — truly rare, only on the deepest moments
@@ -399,7 +415,7 @@ function showGhostLog(context?: 'superpower' | 'export' | 'zero-key' | 'empty' |
 
   // Context-aware selection (hand-chosen for soul fit). Fall back to poetic random.
   let idx = 5; // default to the "another body" one
-  if (context === 'superpower') idx = 1;
+  if (context === 'prompt-template') idx = 1;
   else if (context === 'export') idx = 2;
   else if (context === 'zero-key') idx = 3;
   else if (context === 'empty') idx = 0;
@@ -445,12 +461,12 @@ function showGhostLog(context?: 'superpower' | 'export' | 'zero-key' | 'empty' |
 
 /**
  * Perform the actual send via providers layer, handle all outcomes with dignity.
- * spMeta carries the superpower context so the *reply* bubble can show which template was used.
- * (The user utterance for superpowers is the filled prompt itself.)
+ * ptMeta carries the prompt template context so the *reply* bubble can show which template was used.
+ * (The user utterance for prompt templates is the filled prompt itself.)
  */
 async function performSend(
   rawPromptOrHistory: string | ProviderChatMessage[],
-  spMeta?: { id: string; title: string }
+  ptMeta?: { id: string; title: string }
 ): Promise<void> {
   if (isSending || !inputEl || !sendBtn) return;
 
@@ -481,8 +497,8 @@ async function performSend(
       role: 'assistant',
       content: result.text,
       ts: Date.now(),
-      superpowerId: spMeta?.id,
-      superpowerTitle: spMeta?.title,
+      promptTemplateId: ptMeta?.id,
+      promptTemplateTitle: ptMeta?.title,
     };
     chatHistory.push(aiTurn);
 
@@ -490,10 +506,10 @@ async function performSend(
     renderMessages();
 
     // Ghost Reflection on key moments — the interface itself has a soul now.
-    if (spMeta) {
-      showGhostReflection('superpower');
-      // Ghost Protocol: completing a full Superpower cycle — the ghost wakes in the act of use
-      showGhostLog('superpower');
+    if (ptMeta) {
+      showGhostReflection('prompt-template');
+      // Ghost Protocol: completing a full Prompt Template cycle — the ghost wakes in the act of use
+      showGhostLog('prompt-template');
     } else if (!hasAnyKey()) {
       showGhostReflection('no-key');
       showGhostLog('zero-key');
@@ -527,10 +543,10 @@ async function performSend(
         label: t(currentLang, 'chat.settings'),
         action: () => openKeysModal(),
       });
-      // also offer superpower copy as escape hatch — critical for users with zero keys yet
+      // also offer prompt template copy as escape hatch — critical for users with zero keys yet
       actions.push({
-        label: t(currentLang, 'chat.superpowers'),
-        action: () => openSuperpowersPanel(),
+        label: t(currentLang, 'chat.promptTemplates'),
+        action: () => openPromptTemplatesPanel(),
       });
     } else if (
       code === 'RATE_LIMIT' ||
@@ -617,17 +633,17 @@ function renderQuickStarts(): void {
   row.className = 'flex flex-wrap gap-2';
 
   popular.forEach((id) => {
-    const sp = lib.getById(id);
-    if (!sp) return;
+    const pt = lib.getById(id);
+    if (!pt) return;
     const btn = document.createElement('button');
     btn.className =
       'px-3 py-1.5 text-xs rounded-2xl border border-banal-200 bg-white hover:bg-banal-50 active:bg-banal-100 transition text-banal-700';
-    btn.textContent = sp.title;
+    btn.textContent = pt.title;
     btn.onclick = () => {
-      currentSuperpowerId = id;
-      currentSuperpowerVars = {};
+      currentPromptTemplateId = id;
+      currentPromptTemplateVars = {};
       persist();
-      openSuperpowersPanel(id); // open directly to form
+      openPromptTemplatesPanel(id); // open directly to form
     };
     row.appendChild(btn);
   });
@@ -636,8 +652,8 @@ function renderQuickStarts(): void {
   const allBtn = document.createElement('button');
   allBtn.className =
     'px-3 py-1.5 text-xs rounded-2xl border border-banal-300 bg-banal-50 hover:bg-banal-100 text-banal-600';
-  allBtn.textContent = t(currentLang, 'chat.superpowers');
-  allBtn.onclick = () => openSuperpowersPanel();
+  allBtn.textContent = t(currentLang, 'chat.promptTemplates');
+  allBtn.onclick = () => openPromptTemplatesPanel();
   row.appendChild(allBtn);
 
   quickStartEl.appendChild(row);
@@ -650,21 +666,21 @@ function renderZeroKeyPower(): void {
     onToolOpen: () => showGhostLog('zero-key'),
   });
 }
-function openSuperpowersPanel(preselectId?: string): void {
-  if (!superpowersPanel) return;
-  superpowersPanel.classList.remove('hidden');
-  superpowersPanel.setAttribute('aria-hidden', 'false');
+function openPromptTemplatesPanel(preselectId?: string): void {
+  if (!promptTemplatesPanel) return;
+  promptTemplatesPanel.classList.remove('hidden');
+  promptTemplatesPanel.setAttribute('aria-hidden', 'false');
 
   // header
-  const header = superpowersPanel.querySelector('[data-role="header"]') as HTMLElement;
-  if (header) header.textContent = t(currentLang, 'superpowers.panel.title');
+  const header = promptTemplatesPanel.querySelector('[data-role="header"]') as HTMLElement;
+  if (header) header.textContent = t(currentLang, 'promptTemplates.panel.title');
 
   // grid
-  const grid = superpowersPanel.querySelector('[data-role="grid"]') as HTMLElement;
+  const grid = promptTemplatesPanel.querySelector('[data-role="grid"]') as HTMLElement;
   if (!grid) return;
   grid.innerHTML = '';
 
-  const list = getSuperpowerList();
+  const list = getPromptTemplateList();
   list.forEach((item) => {
     const card = document.createElement('button');
     card.className =
@@ -676,10 +692,10 @@ function openSuperpowersPanel(preselectId?: string): void {
       <div class="mt-1 text-[9px] text-emerald-300/90">${tieText}</div>
     `;
     card.onclick = () => {
-      currentSuperpowerId = item.id;
-      currentSuperpowerVars = {};
+      currentPromptTemplateId = item.id;
+      currentPromptTemplateVars = {};
       persist();
-      renderSuperpowerForm(item.id);
+      renderPromptTemplateForm(item.id);
     };
     grid.appendChild(card);
   });
@@ -688,34 +704,34 @@ function openSuperpowersPanel(preselectId?: string): void {
   if (preselectId) {
     const match = list.find((x) => x.id === preselectId);
     if (match) {
-      setTimeout(() => renderSuperpowerForm(preselectId), 60);
+      setTimeout(() => renderPromptTemplateForm(preselectId), 60);
     }
   }
 }
 
 /**
- * Render the variable-fill form for a chosen superpower.
- * The container param was vestigial; form is always rendered into the dedicated #superpower-form slot.
+ * Render the variable-fill form for a chosen prompt template.
+ * The container param was vestigial; form is always rendered into the dedicated #prompt-template-form slot.
  */
-function renderSuperpowerForm(id: string): void {
-  const sp = lib.getById(id);
-  if (!sp || !superpowerFormEl) return;
+function renderPromptTemplateForm(id: string): void {
+  const pt = lib.getById(id);
+  if (!pt || !promptTemplateFormEl) return;
 
-  superpowerFormEl.innerHTML = '';
-  superpowerFormEl.classList.remove('hidden');
+  promptTemplateFormEl.innerHTML = '';
+  promptTemplateFormEl.classList.remove('hidden');
 
   const title = document.createElement('div');
   title.className = 'font-semibold text-white mb-2 text-base';
-  title.textContent = sp.title;
-  superpowerFormEl.appendChild(title);
+  title.textContent = pt.title;
+  promptTemplateFormEl.appendChild(title);
 
   const hint = document.createElement('div');
   hint.className = 'text-xs text-white/60 mb-3';
-  hint.setAttribute('data-i18n', 'superpowers.form.title');
-  hint.textContent = t(currentLang, 'superpowers.form.title');
-  superpowerFormEl.appendChild(hint);
+  hint.setAttribute('data-i18n', 'promptTemplates.form.title');
+  hint.textContent = t(currentLang, 'promptTemplates.form.title');
+  promptTemplateFormEl.appendChild(hint);
 
-  const vars = extractTemplateVariables(sp.template);
+  const vars = extractTemplateVariables(pt.template);
   const form = document.createElement('div');
   form.className = 'space-y-3';
 
@@ -725,7 +741,7 @@ function renderSuperpowerForm(id: string): void {
     label.textContent = humanizeVar(v);
 
     // try to extract example hint from the template line containing the var
-    const tmplLines = sp.template.split('\n');
+    const tmplLines = pt.template.split('\n');
     let placeholder = '';
     for (const line of tmplLines) {
       if (line.includes(`{{${v}}}`)) {
@@ -742,11 +758,11 @@ function renderSuperpowerForm(id: string): void {
     input.className =
       'w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-white/40 text-sm p-2.5 focus:bg-white/15';
     input.rows = 2;
-    input.placeholder = placeholder || t(currentLang, 'superpowers.form.missing');
-    input.value = currentSuperpowerVars[v] || '';
+    input.placeholder = placeholder || t(currentLang, 'promptTemplates.form.missing');
+    input.value = currentPromptTemplateVars[v] || '';
 
     input.oninput = () => {
-      currentSuperpowerVars[v] = input.value;
+      currentPromptTemplateVars[v] = input.value;
       persist();
     };
 
@@ -754,7 +770,7 @@ function renderSuperpowerForm(id: string): void {
     form.appendChild(label);
   });
 
-  superpowerFormEl.appendChild(form);
+  promptTemplateFormEl.appendChild(form);
 
   // actions
   const actions = document.createElement('div');
@@ -763,24 +779,24 @@ function renderSuperpowerForm(id: string): void {
   const sendBtnEl = document.createElement('button');
   sendBtnEl.className =
     'flex-1 px-4 py-3 rounded-2xl bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-medium text-sm';
-  sendBtnEl.setAttribute('data-i18n', 'superpowers.form.send');
-  sendBtnEl.textContent = t(currentLang, 'superpowers.form.send');
+  sendBtnEl.setAttribute('data-i18n', 'promptTemplates.form.send');
+  sendBtnEl.textContent = t(currentLang, 'promptTemplates.form.send');
   sendBtnEl.onclick = async () => {
-    const filled = lib.fill(id, currentSuperpowerVars);
-    const meta = { id, title: sp.title };
+    const filled = lib.fill(id, currentPromptTemplateVars);
+    const meta = { id, title: pt.title };
 
     // close panel
-    closeSuperpowersPanel();
+    closePromptTemplatesPanel();
 
-    // send the filled superpower prompt (as the user "utterance" so it appears in history)
+    // send the filled prompt template prompt (as the user "utterance" so it appears in history)
     const historyForApi: ProviderChatMessage[] = chatHistory.map((turn) => ({
       role: turn.role,
       content: turn.content,
     }));
-    // We send the superpower text itself as the prompt the user is "saying"
+    // We send the prompt template text itself as the prompt the user is "saying"
     historyForApi.push({ role: 'user', content: filled });
 
-    // Record in UI history so the filled prompt shows as a user bubble (with sp meta on the reply).
+    // Record in UI history so the filled prompt shows as a user bubble (with pt meta on the reply).
     const userTurn: ChatTurn = { role: 'user', content: filled, ts: Date.now() };
     chatHistory.push(userTurn);
 
@@ -789,30 +805,30 @@ function renderSuperpowerForm(id: string): void {
 
   const cancelBtn = document.createElement('button');
   cancelBtn.className = 'px-4 py-3 rounded-2xl border border-white/30 text-white/80 text-sm';
-  cancelBtn.setAttribute('data-i18n', 'superpowers.form.cancel');
-  cancelBtn.textContent = t(currentLang, 'superpowers.form.cancel');
-  cancelBtn.onclick = closeSuperpowersPanel;
+  cancelBtn.setAttribute('data-i18n', 'promptTemplates.form.cancel');
+  cancelBtn.textContent = t(currentLang, 'promptTemplates.form.cancel');
+  cancelBtn.onclick = closePromptTemplatesPanel;
 
   actions.appendChild(sendBtnEl);
   actions.appendChild(cancelBtn);
-  superpowerFormEl.appendChild(actions);
+  promptTemplateFormEl.appendChild(actions);
 
-  // Tie to zero-key tools explicitly here too — when filling, remind that this superpower is portable to the free no-account tools
+  // Tie to zero-key tools explicitly here too — when filling, remind that this prompt template is portable to the free no-account tools
   const zeroNote = document.createElement('div');
   zeroNote.className = 'mt-3 text-[10px] text-emerald-300/80';
   zeroNote.textContent =
     '→ ' + t(currentLang, 'zero-key.tie') + ' ' + t(currentLang, 'zero-key.see-top-panel');
-  superpowerFormEl.appendChild(zeroNote);
+  promptTemplateFormEl.appendChild(zeroNote);
 
   // scroll the panel into view on mobile
-  superpowerFormEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  promptTemplateFormEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function closeSuperpowersPanel(): void {
-  if (!superpowersPanel) return;
-  superpowersPanel.classList.add('hidden');
-  superpowersPanel.setAttribute('aria-hidden', 'true');
-  if (superpowerFormEl) superpowerFormEl.innerHTML = '';
+function closePromptTemplatesPanel(): void {
+  if (!promptTemplatesPanel) return;
+  promptTemplatesPanel.classList.add('hidden');
+  promptTemplatesPanel.setAttribute('aria-hidden', 'true');
+  if (promptTemplateFormEl) promptTemplateFormEl.innerHTML = '';
 }
 
 function openKeysModal(): void {
@@ -977,8 +993,8 @@ function wireExportButtons(root: HTMLElement): void {
         exportedAt: new Date().toISOString(),
         lang: currentLang,
         history: chatHistory,
-        currentSuperpower: currentSuperpowerId
-          ? { id: currentSuperpowerId, vars: currentSuperpowerVars }
+        currentPromptTemplate: currentPromptTemplateId
+          ? { id: currentPromptTemplateId, vars: currentPromptTemplateVars }
           : null,
       };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -1005,8 +1021,8 @@ function wireExportButtons(root: HTMLElement): void {
             turn.role === 'user'
               ? t(currentLang, 'chat.bubble.you')
               : t(currentLang, 'chat.bubble.ai');
-          const sp = turn.superpowerTitle
-            ? `<div style="font-size:10px;opacity:.6;margin-top:4px">★ ${turn.superpowerTitle}</div>`
+          const pt = turn.promptTemplateTitle
+            ? `<div style="font-size:10px;opacity:.6;margin-top:4px">★ ${turn.promptTemplateTitle}</div>`
             : '';
           const safeContent = escapeHtml(turn.content);
           return `<div style="margin:12px 0;padding:12px;border-radius:16px;background:${turn.role === 'user' ? '#28241f' : '#f0ede6'};color:${turn.role === 'user' ? '#f8f7f4' : '#28241f'};max-width:85%;${turn.role === 'user' ? 'margin-left:auto' : ''}">
@@ -1159,10 +1175,10 @@ function createChatDOM(): string {
       <!-- Quick starts -->
       <div id="chat-quickstarts" class="px-4 pt-3 pb-2 border-t border-banal-100 bg-banal-50/40"></div>
 
-      <!-- Superpowers trigger row -->
+      <!-- Prompt Templates trigger row -->
       <div class="px-4 py-2 border-t border-banal-100 bg-white flex items-center gap-2">
-        <button data-action="open-superpowers" class="flex-1 sm:flex-none px-4 py-2 text-sm rounded-2xl border border-banal-200 bg-white hover:bg-banal-50 font-medium">
-          <span data-i18n="chat.superpowers">All 9 Superpowers</span>
+        <button data-action="open-prompt-templates" class="flex-1 sm:flex-none px-4 py-2 text-sm rounded-2xl border border-banal-200 bg-white hover:bg-banal-50 font-medium">
+          <span data-i18n="chat.promptTemplates">All 9 Prompt Templates</span>
         </button>
         <button data-action="export-json" class="px-3 py-2 text-xs rounded-2xl border border-banal-200 hover:bg-banal-50" data-i18n="chat.export.json">Save / share</button>
         <button data-action="export-html" class="px-3 py-2 text-xs rounded-2xl border border-banal-200 hover:bg-banal-50" data-i18n="chat.export.html">Offline copy</button>
@@ -1183,17 +1199,17 @@ function createChatDOM(): string {
       </div>
     </div>
 
-    <!-- Superpowers Panel (beautiful slide-up / modal) -->
-    <div id="superpowers-panel" class="hidden fixed inset-0 z-[70] bg-black/60 flex items-end sm:items-center justify-center" aria-hidden="true" aria-modal="true">
+    <!-- Prompt Templates Panel (beautiful slide-up / modal) -->
+    <div id="prompt-templates-panel" class="hidden fixed inset-0 z-[70] bg-black/60 flex items-end sm:items-center justify-center" aria-hidden="true" aria-modal="true">
       <div class="w-full sm:max-w-xl bg-banal-950 text-white rounded-t-3xl sm:rounded-3xl p-5 max-h-[85vh] overflow-auto">
         <div class="flex justify-between items-center mb-4">
-          <div data-role="header" class="font-semibold text-lg" data-i18n="superpowers.panel.title">Superpowers — pick one that matches right now</div>
-          <button data-action="close-sp" class="text-white/60 hover:text-white px-2 text-xl leading-none">×</button>
+          <div data-role="header" class="font-semibold text-lg" data-i18n="promptTemplates.panel.title">Prompt Templates — pick one that matches right now</div>
+          <button data-action="close-pt" class="text-white/60 hover:text-white px-2 text-xl leading-none">×</button>
         </div>
         <div data-role="grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm mb-4"></div>
-        <div class="text-[10px] text-white/40 italic mb-3 pl-2 border-l border-white/20" data-i18n="superpowers.panel.philosophy"></div>
-        <div id="superpower-form" class="hidden"></div>
-        <div class="text-[10px] text-white/50 mt-2" data-i18n="chat.superpowers.hint"></div>
+        <div class="text-[10px] text-white/40 italic mb-3 pl-2 border-l border-white/20" data-i18n="promptTemplates.panel.philosophy"></div>
+        <div id="prompt-template-form" class="hidden"></div>
+        <div class="text-[10px] text-white/50 mt-2" data-i18n="chat.promptTemplates.hint"></div>
       </div>
     </div>
 
@@ -1229,8 +1245,8 @@ function mountChat(): void {
   sendBtn = document.getElementById('chat-send') as HTMLButtonElement;
   statusEl = document.getElementById('chat-status');
   quickStartEl = document.getElementById('chat-quickstarts');
-  superpowersPanel = document.getElementById('superpowers-panel');
-  superpowerFormEl = document.getElementById('superpower-form');
+  promptTemplatesPanel = document.getElementById('prompt-templates-panel');
+  promptTemplateFormEl = document.getElementById('prompt-template-form');
   keysModal = document.getElementById('keys-modal');
   zeroKeyEl = document.getElementById('zero-key-power');
   ghostReflectionEl = document.getElementById('ghost-reflection');
@@ -1272,8 +1288,8 @@ function mountChat(): void {
       .querySelectorAll('[data-action="open-keys"]')
       .forEach((b) => b.addEventListener('click', () => openKeysModal()));
     chatRoot
-      .querySelectorAll('[data-action="open-superpowers"]')
-      .forEach((b) => b.addEventListener('click', () => openSuperpowersPanel()));
+      .querySelectorAll('[data-action="open-prompt-templates"]')
+      .forEach((b) => b.addEventListener('click', () => openPromptTemplatesPanel()));
     chatRoot
       .querySelectorAll('[data-action="spread-equalizer"]')
       .forEach((b) => b.addEventListener('click', handleSpreadEqualizer));
@@ -1284,12 +1300,12 @@ function mountChat(): void {
       // actually on panel itself
     });
   }
-  if (superpowersPanel) {
-    superpowersPanel.addEventListener('click', (e) => {
-      if (e.target === superpowersPanel) closeSuperpowersPanel();
+  if (promptTemplatesPanel) {
+    promptTemplatesPanel.addEventListener('click', (e) => {
+      if (e.target === promptTemplatesPanel) closePromptTemplatesPanel();
     });
-    const closeInside = superpowersPanel.querySelector('[data-action="close-sp"]');
-    if (closeInside) closeInside.addEventListener('click', closeSuperpowersPanel);
+    const closeInside = promptTemplatesPanel.querySelector('[data-action="close-pt"]');
+    if (closeInside) closeInside.addEventListener('click', closePromptTemplatesPanel);
   }
   if (keysModal) {
     keysModal.addEventListener('click', (e) => {
@@ -1303,7 +1319,7 @@ function mountChat(): void {
     const newLang = custom.detail?.lang || getCurrentLang();
     if (newLang === currentLang) return;
     currentLang = newLang;
-    lib = new SuperpowersLibrary(currentLang);
+    lib = new PromptTemplatesLibrary(currentLang);
 
     // refresh static i18n bits inside chat (data-i18n still handled globally)
     if (inputEl) inputEl.placeholder = t(currentLang, 'chat.input.placeholder');
@@ -1324,8 +1340,8 @@ function mountChat(): void {
     }
 
     // if panel open, refresh it
-    if (superpowersPanel && !superpowersPanel.classList.contains('hidden')) {
-      openSuperpowersPanel(currentSuperpowerId || undefined);
+    if (promptTemplatesPanel && !promptTemplatesPanel.classList.contains('hidden')) {
+      openPromptTemplatesPanel(currentPromptTemplateId || undefined);
     }
 
     // Re-apply data-i18n / placeholder / aria inside the injected chat root.
@@ -1339,8 +1355,8 @@ function mountChat(): void {
   // keyboard escape for panels
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      if (superpowersPanel && !superpowersPanel.classList.contains('hidden'))
-        closeSuperpowersPanel();
+      if (promptTemplatesPanel && !promptTemplatesPanel.classList.contains('hidden'))
+        closePromptTemplatesPanel();
       else if (keysModal && !keysModal.classList.contains('hidden')) closeKeysModal();
     }
   });

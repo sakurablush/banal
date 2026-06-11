@@ -304,7 +304,7 @@ describe('providers — sendFreeMessage happy paths (real structure, mocked netw
     expect(result.text).toContain('Free path returned empty');
   });
 
-  it('accepts full chat history + systemPrompt (used by superpowers)', async () => {
+  it('accepts full chat history + systemPrompt (used by prompt templates)', async () => {
     storeApiKey('gemini', 'AIza_real');
     const mockResponse = {
       ok: true,

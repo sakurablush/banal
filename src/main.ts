@@ -1,6 +1,6 @@
 /**
  * Banal main entry — the complete, wired, delightful experience.
- * Core + providers routing (100% tested) + superpowers (9 templates + JA) + real chat + Ghost Protocol.
+ * Core + providers routing (100% tested) + prompt templates (9 templates + JA) + real chat + Ghost Protocol.
  *
  * Deliberately two lines. The entire "app" is these two calls because:
  * - A human being with 3 minutes and a text editor on a public computer must be able to understand
@@ -13,7 +13,7 @@ import { initI18n } from './i18n';
 import { initDirectory } from './directory';
 import { ParticleSystem } from './lib/particle-system';
 import { renderPlayground } from './api-playground';
-import { renderSuperpowersStandalone } from './superpowers-standalone';
+import { renderPromptTemplatesStandalone } from './prompt-templates-standalone';
 import { initChatModal } from './chat-modal';
 import { initFreeModels } from './free-models';
 import { initQuickStart } from './quickstart';
@@ -61,24 +61,24 @@ try {
   console.error('Free models section failed to initialize:', error);
 }
 
-// Quick Start section (5 popular superpowers)
+// Quick Start section (5 popular prompt templates)
 try {
   initQuickStart();
 } catch (error) {
   console.error('Quick start section failed to initialize:', error);
 }
 
-// Superpowers standalone section
+// Prompt Templates standalone section
 try {
-  const superpowersRoot = document.getElementById('superpowers-root');
-  if (superpowersRoot) {
-    renderSuperpowersStandalone({
-      container: superpowersRoot,
+  const promptTemplatesRoot = document.getElementById('prompt-templates-root');
+  if (promptTemplatesRoot) {
+    renderPromptTemplatesStandalone({
+      container: promptTemplatesRoot,
       lang: document.documentElement.lang?.startsWith('ja') ? 'ja' : 'en',
     });
   }
 } catch (error) {
-  console.error('Superpowers section failed to initialize:', error);
+  console.error('Prompt Templates section failed to initialize:', error);
 }
 
 // API Playground — try free APIs directly in the browser

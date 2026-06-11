@@ -2,7 +2,7 @@
  * Chat Modal Module — renders chat UI in a modal dialog.
  * 
  * This module handles opening/closing the chat modal and renders the chat UI
- * inside the modal container. All chat functionality (quick starts, superpowers,
+ * inside the modal container. All chat functionality (quick starts, prompt templates,
  * export, keys modal) is preserved from the original chat.ts implementation.
  */
 

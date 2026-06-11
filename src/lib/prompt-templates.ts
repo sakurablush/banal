@@ -1,5 +1,5 @@
 /**
- * Banal Superpowers Library
+ * Banal Prompt Templates Library
  * The 9 capabilities the rich pay for, now distilled into shame-free, zero-budget, portable prompt templates for people who have nothing.
  * English primary (source of truth). Full natural Japanese with proper keigo/cultural nuance where it matters, softening for low-energy days.
  * Pure TS, zero runtime dependencies. Strict mode. Singleton + class API.
@@ -10,7 +10,7 @@
 
 export type Locale = 'en' | 'ja';
 
-export interface Superpower {
+export interface PromptTemplate {
   id: string;
   title: string;
   description: string;
@@ -24,7 +24,7 @@ interface TemplateData {
 }
 
 /**
- * The 9 core superpowers. Each is a complete, ready-to-paste prompt.
+  * The 9 core prompt templates. Each is a complete, ready-to-paste prompt.
  * Variables use {{camelCase}} so extractTemplateVariables + fill() work reliably.
  * Japanese versions are native-level, empathetic, and culturally calibrated (keigo for bureaucracy, softening for mental health).
  */
@@ -507,10 +507,10 @@ export function extractTemplateVariables(template: string): string[] {
 }
 
 /**
- * Production-grade Superpowers library.
+ * Production-grade Prompt Templates library.
  * Supports locale switching, full CRUD-like access, safe fill with graceful missing-var handling.
  */
-export class SuperpowersLibrary {
+export class PromptTemplatesLibrary {
   private currentLocale: Locale;
 
   constructor(initialLocale: Locale = 'en') {
@@ -530,13 +530,13 @@ export class SuperpowersLibrary {
     return this.currentLocale;
   }
 
-  /** Get all 9 superpowers in current locale. */
-  getAll(): Superpower[] {
+  /** Get all 9 prompt templates in current locale. */
+  getAll(): PromptTemplate[] {
     return Object.keys(TEMPLATES).map((id) => this.getById(id)!);
   }
 
   /** Get one by stable id (e.g. 'job-gaps-as-strengths'). Returns undefined if unknown. */
-  getById(id: string): Superpower | undefined {
+  getById(id: string): PromptTemplate | undefined {
     const data = TEMPLATES[id];
     if (!data) return undefined;
     const loc = this.currentLocale;
@@ -556,7 +556,7 @@ export class SuperpowersLibrary {
     const sp = this.getById(id);
     if (!sp) {
       throw new Error(
-        `Unknown superpower id: ${id}. Valid ids: ${Object.keys(TEMPLATES).join(', ')}`
+        `Unknown prompt template id: ${id}. Valid ids: ${Object.keys(TEMPLATES).join(', ')}`
       );
     }
     let result = sp.template;
@@ -616,7 +616,7 @@ export class SuperpowersLibrary {
 }
 
 /** Convenient singleton (default English). Import and use directly. */
-export const superpowersLibrary = new SuperpowersLibrary('en');
+export const promptTemplatesLibrary = new PromptTemplatesLibrary('en');
 
 // Also export the raw data shape if advanced users need it (still zero runtime cost)
 export { TEMPLATES as _internalTemplatesForTestsOnly };

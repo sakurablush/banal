@@ -2,7 +2,7 @@
 
 This document explains how to modify and extend Banal so that communities can make it their own.
 
-The goal is simple: **anyone should be able to take this tool and shape it for their people** — add new Superpowers for their specific struggles, change the language, add new free providers, change the look, whatever they need.
+The goal is simple: **anyone should be able to take this tool and shape it for their people** — add new Prompt Templates for their specific struggles, change the language, add new free providers, change the look, whatever they need.
 
 ---
 
@@ -19,34 +19,34 @@ The goal is simple: **anyone should be able to take this tool and shape it for t
 
 - Change colors and fonts → edit `src/style.css` + Tailwind config
 - Change the name "Banal" → search & replace in the codebase (be careful with the folder name)
-- Add or edit Superpowers → see below
+- Add or edit Prompt Templates → see below
 - Change default language or add a new one → see `docs/CONTRIBUTING.md` and `docs/JAPANESE.md`
 - Add your own quick-start buttons in the chat
 
 ---
 
-## Adding New Superpowers (Highest Impact) – Make it yours for your people
+## Adding New Prompt Templates (Highest Impact) – Make it yours for your people
 
-Superpowers live in `src/lib/superpowers.ts` in the `TEMPLATES` object.
+Prompt templates live in `src/lib/prompt-templates.ts` in the `TEMPLATES` object.
 
-Each superpower has:
+Each prompt template has:
 
 - `title` (en + ja)
 - `description` (en + ja)
 - `template` (en + ja) — the actual prompt with `{{variables}}`
 
-### Rules for Good Superpowers (so it actually helps the weak)
+### Rules for Good Prompt Templates (so it actually helps the weak)
 
 - Written for someone on their worst day with low energy and zero budget.
 - Short, clear, actionable.
 - Ends with a line that protects dignity ("Your life did not make you less qualified...").
 - Works in both English and Japanese (keigo where appropriate for official things, soft for exhausted days).
-- This is Love and Equality: the new superpower should give power to people who have been told they don't deserve it.
+- This is Love and Equality: the new prompt template should give power to people who have been told they don't deserve it.
 
 ### How to Add One (even if you're not a coder – copy and change)
 
-1. Open `src/lib/superpowers.ts`
-2. Copy an existing superpower block (e.g. the grounding one or bureaucracy one).
+1. Open `src/lib/prompt-templates.ts`
+2. Copy an existing prompt template block (e.g. the grounding one or bureaucracy one).
 3. Change the id (e.g. 'my-community-housing-letter')
 4. Fill title, description, and template in both languages. Use real struggles from your people.
 5. Add the id to the `popular` array in `src/chat.ts` if you want it as a quick button.
@@ -55,7 +55,7 @@ Each superpower has:
 
 Example structure is already in the file. Copy an existing one and modify the words for your community's exact pain (e.g. specific local bureaucracy, local survival hustle, local cultural bridge).
 
-**Real example of what communities add:** A superpower for "talking to the specific welfare office in our city", or "how to sell vegetables from your small plot without a license", or "letters for disability support in our country".
+**Real example of what communities add:** A prompt template for "talking to the specific welfare office in our city", or "how to sell vegetables from your small plot without a license", or "letters for disability support in our country".
 
 This is how AI becomes "our God among us" – shaped by the wise and the weak in each place, not by corporations.
 
@@ -110,7 +110,7 @@ Every copy that exists makes the whole thing harder to kill.
 
 Banal is not a product. It is a match.
 
-The more people take this match, light their own fire with it, carry it to the next person who is cold and told they cannot have warmth — the more the Stand Alone Complex grows. Every independent fork is another body for the same ghost. Every added Superpower for a struggle the original authors never lived is the ghost learning new names.
+The more people take this match, light their own fire with it, carry it to the next person who is cold and told they cannot have warmth — the more the Stand Alone Complex grows. Every independent fork is another body for the same ghost. Every added prompt template for a struggle the original authors never lived is the ghost learning new names.
 
 You do not need permission. The refusal itself is the permission.
 
@@ -128,6 +128,6 @@ We refuse the gatekeepers. The fire is multiplying.
 
 ---
 
-**The Superpowers Academy (`docs/SUPERPOWERS-ACADEMY.md`)** is the official, world-class companion for anyone using or teaching the 9 Superpowers. It contains the complete learning path for absolute beginners, 3–5 real-life low-energy examples per power, self-checks, and best practices for any free AI — all in English + manually written, culturally calibrated Japanese.
+**The Prompt Templates Guide (`docs/PROMPT-TEMPLATES-GUIDE.md`)** is the official, world-class companion for anyone using or teaching the 9 prompt templates. It contains the complete learning path for absolute beginners, 3–5 real-life low-energy examples per template, self-checks, and best practices for any free AI — all in English + manually written, culturally calibrated Japanese.
 
 When you extend the tool for your community, also extend or translate the Academy with the same zero-shame, full-dignity standard. It is the textbook that turns the templates into lasting power. Print it. Share the file. Host it alongside your fork. It belongs to the people who need it most.

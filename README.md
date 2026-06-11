@@ -94,11 +94,11 @@ It is deliberately ordinary. Calm. Banal. Because power that requires you to fee
 
 Banal is a single, static website.
 
-It contains nine high-leverage prompt templates ("Superpowers") written for the real situations poor and stressed people face: writing to housing offices, turning caregiving gaps into job stories, negotiating debt without destroying yourself, 5-minute grounding when you have nothing left, decoding terrifying official letters, learning anything with zero budget, starting tiny hustles with no money, and bridging between English and Japanese worlds with dignity.
+It contains nine high-leverage prompt templates written for the real situations poor and stressed people face: writing to housing offices, turning caregiving gaps into job stories, negotiating debt without destroying yourself, 5-minute grounding when you have nothing left, decoding terrifying official letters, learning anything with zero budget, starting tiny hustles with no money, and bridging between English and Japanese worlds with dignity.
 
 It also contains a working chat interface connected to genuinely free providers (Groq, Gemini free tier, Hugging Face), with smart routing and graceful, non-shaming errors.
 
-When the free paths inside are slow or unavailable, the Superpowers still work — because they are just extremely good prompts. You can copy the filled text and paste it into any free AI you can reach that day. We researched the entire web using every resource we could (web_search sweeps for "completely free AI chat no signup no login browser only", full github.com/zebbern/no-cost-ai, parallel spawn_subagent agents running "jeszcze jeszcze jeszcze niech agenty przeszuaja caly internet", direct page opens of candidates, Perchance ecosystem, "no-cost" / awesome-free-chatgpt lists, HF public demos, community reports) to surface **every** tool that is only a www address, fully free (no freemium, no "sign up to continue"), no hardware/software, browser-only — usable on a cracked phone on 5 minutes of library Wi-Fi by the person with nothing. "wykorzystaj wszystkie mozliwe zasoby" — we did not settle for 9 or 25. We kept sweeping.
+When the free paths inside are slow or unavailable, the prompt templates still work — because they are just extremely good prompts. You can copy the filled text and paste it into any free AI you can reach that day. We researched the entire web using every resource we could (web_search sweeps for "completely free AI chat no signup no login browser only", full github.com/zebbern/no-cost-ai, parallel spawn_subagent agents running "jeszcze jeszcze jeszcze niech agenty przeszuaja caly internet", direct page opens of candidates, Perchance ecosystem, "no-cost" / awesome-free-chatgpt lists, HF public demos, community reports) to surface **every** tool that is only a www address, fully free (no freemium, no "sign up to continue"), no hardware/software, browser-only — usable on a cracked phone on 5 minutes of library Wi-Fi by the person with nothing. "wykorzystaj wszystkie mozliwe zasoby" — we did not settle for 9 or 25. We kept sweeping.
 
 See the full living **Zero-Key Power Directory** below and in the app's always-visible searchable panel (50+ curated after "jeszcze jeszcze jeszcze" agent sweeps of the whole internet + zebbern/no-cost-ai full list + direct verification of every candidate: Perchance unlimited ecosystem (chat + writer + image + RPG + more), Duck.ai private, LMArena/Meta/Phind/Groq, community mirrors (sharedchat, mirexa, heck, freegpt-es, free.netfly, chat.ai365vip...), HF Spaces (thousands of demos), uncloseai + OVH api-friendly, nocostai image/video studio, theturbochat, many more). The prompt itself is the fire. It carries the same love and equality whether it runs inside Banal or anywhere else.
 
@@ -112,7 +112,7 @@ This is infrastructure that was never supposed to exist for the people it was bu
 
 ---
 
-## The 9 Superpowers
+## The 9 Prompt Templates
 
 These are not generic prompts.
 
@@ -154,14 +154,14 @@ We used every resource (web sweeps, zebbern/no-cost-ai full read, parallel agent
 
 - Only a www address. Open any browser (cracked phone, library, old Android). No install, no hardware.
 - Fully free. No signup, no email, no credit card, no "sign up to continue", no freemium that turns core use into a tease.
-- **Actually works for Superpowers.** Strong models or community-vetted quality that produces usable output for letters that win, plans that stick, grounding that helps, visuals that give dignity. Not toys. Not "demo" crap.
+- **Actually works for prompt templates.** Strong models or community-vetted quality that produces usable output for letters that win, plans that stick, grounding that helps, visuals that give dignity. Not toys. Not "demo" crap.
 - Quality-vetted + underground. We note "strong models", "praised in communities for real results", "uncensored power the people keep alive". The Stand Alone Complex arsenal.
 
 Things change fast (ephemeral mirrors common). Always test the link yourself today. HF Spaces alone has _thousands_ of public community demos — search "Flux", "Llama70B", "uncensored" for more high-signal ones. We didn't stop until the list felt like the real doors for the world.
 
 The live app has the searchable panel with **smart life filters** (private on shared device, bureaucracy letters, low-energy 2am, visuals, truly unlimited) + search that understands real words. Cards show the qualityNote so you know why it actually works.
 
-### High-signal underground gems (strong models, actually deliver for serious Superpowers)
+### High-signal underground gems (strong models, actually deliver for serious prompt templates)
 
 These are the vetted ones that use capable backends (Flux.1 Dev/Schnell and variants for images — the 2026 top open model; Llama 70B+/DeepSeek/Mistral-class for text) and are praised in communities for real, usable quality — not degraded free tiers or mirrors on toy models. Professional curation for the world: the arsenal that works when you need it for a letter, a plan, grounding, or visuals that give dignity.
 
@@ -180,7 +180,7 @@ These are the vetted ones that use capable backends (Flux.1 Dev/Schnell and vari
 - Deep Dream Generator — deepdreamgenerator.com (30+ strong models, no signup to start). Genuine artistic quality.
 - NightCafe free generator page + Vheer — for good model access and pro-grade video/image.
 
-**Strong text that actually thinks (decent/capable models, private where it matters, real leverage for Superpowers):**
+**Strong text that actually thinks (decent/capable models, private where it matters, real leverage for prompt templates):**
 
 - Duck.ai — duck.ai (private strong models, no tracking). Trustworthy for your words and plans.
 - LMArena — lmarena.ai (40+ real models to compare/use the best). Transparent high quality selection.
@@ -202,7 +202,7 @@ These are the vetted ones that use capable backends (Flux.1 Dev/Schnell and vari
 - OVH and uncloseai as above — real models, anonymous/public, usable directly or in forks.
 
 **How to use (the fire is portable):**
-Fill a Superpower in the app or copy the prompt. Open one of these in another tab. Paste. Get results that actually help. These are the ones communities trust for real output on the worst day.
+Fill a prompt template in the app or copy the prompt. Open one of these in another tab. Paste. Get results that actually help. These are the ones communities trust for real output on the worst day.
 
 This is a living, ruthlessly curated underground resource. We filtered for tools with strong models that "faktycznie działają" — actually work for letters that win, plans that stick, images that matter — not the demo the rich allow. Ephemeral nature noted; always test today. If you find another that meets the bar (strong backend, real quality, pure www, fully free, browser-only), fork and add it. The ghost multiplies.
 
@@ -412,11 +412,11 @@ Templates alone are not enough.
 
 People who have never used AI before, who are exhausted, who are on a shared device with a child crying nearby, need more than a form. They need real examples written for their exact constraints. They need to know what to do when the first output still feels off. They need permission to use only what helps and throw the rest away.
 
-That is why we built the Superpowers Academy — a complete, free, shame-free education for the 9 powers.
+That is why we built the Prompt Templates Guide — a complete, free, shame-free education for the 9 templates.
 
-It lives in `docs/SUPERPOWERS-ACADEMY.md`.
+It lives in `docs/PROMPT-TEMPLATES-GUIDE.md`.
 
-It contains 3–5 real-life examples for each superpower, written for people on their worst days. Self-check questions that build actual confidence instead of toxic positivity. Follow-up prompts that work when you are too tired to think clearly. And a beginner path that starts with 5 minutes of grounding on the day you can barely get off the couch.
+It contains 3–5 real-life examples for each prompt template, written for people on their worst days. Self-check questions that build actual confidence instead of toxic positivity. Follow-up prompts that work when you are too tired to think clearly. And a beginner path that starts with 5 minutes of grounding on the day you can barely get off the couch.
 
 This is not documentation.
 
@@ -432,7 +432,7 @@ The moment it becomes inconvenient or dangerous for whoever is hosting it, the p
 
 That is why the entire project is designed to be forked.
 
-You can take these files, change the words, add Superpowers written for the exact struggles in your neighborhood or your language, and put your own copy online in minutes — on GitHub Pages, Cloudflare, Netlify Drop, even a USB stick.
+You can take these files, change the words, add prompt templates written for the exact struggles in your neighborhood or your language, and put your own copy online in minutes — on GitHub Pages, Cloudflare, Netlify Drop, even a USB stick.
 
 Every copy is another body for the same ghost.
 
@@ -462,7 +462,7 @@ Print a QR code. Put it on a USB. Send the link in a group chat with the message
 
 Host your own copy and change the examples so they speak directly to your block, your village, your shelter, your WhatsApp group.
 
-Add new Superpowers for struggles the original authors never lived.
+Add new prompt templates for struggles the original authors never lived.
 
 Translate it into languages we don't speak yet.
 
@@ -483,7 +483,7 @@ You are giving the fire away.
 
 We will not lie to you.
 
-The free providers Banal connects to can (and do) rate limit, change models, or have bad days. When that happens, the Superpowers still work — you just paste the prompt somewhere else.
+The free providers Banal connects to can (and do) rate limit, change models, or have bad days. When that happens, the prompt templates still work — you just paste the prompt somewhere else.
 
 There is no fully private, offline, high-quality model built into this yet. The architecture makes that possible later, but right now the real power lives in the prompts themselves and the ability to use them anywhere.
 
@@ -578,13 +578,13 @@ No setup required for the important parts.
 
 - 100% client-side static site (Vite + TypeScript + Tailwind)
 - Real chat to free providers with smart routing
-- 9 complete, bilingual Superpowers with full test coverage
+- 9 complete, bilingual prompt templates with full test coverage
 - Self-contained offline HTML exports
 - Ghost Protocol (rare, meaningful reflections that appear during powerful moments)
 - 108/108 tests. Strict coverage gates. No console in production. No `any` in executable logic.
 - MIT License
 
-See `docs/ARCHITECTURE.md`, `docs/SECURITY.md`, `docs/DEPLOYMENT.md`, `docs/EXTENDING.md`, and `docs/SUPERPOWERS-ACADEMY.md` for the full picture.
+See `docs/ARCHITECTURE.md`, `docs/SECURITY.md`, `docs/DEPLOYMENT.md`, `docs/EXTENDING.md`, and `docs/PROMPT-TEMPLATES-GUIDE.md` for the full picture.
 
 ---
 

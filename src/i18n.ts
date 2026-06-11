@@ -24,7 +24,7 @@ export const translations: Record<Lang, Translations> = {
   en: {
     'search.placeholder': 'Search 200+ free AI tools — chat, image, PDF, API...',
 
-    // === Real chat + providers + full superpowers integration ===
+    // === Real chat + providers + full prompt templates integration ===
     'chat.title': 'Banal Equalizer — real AI, zero cost',
     'chat.status.using': 'Using {{name}} free tier',
     'chat.status.no-key': 'Zero-key tools ready below — or add free key for in-app',
@@ -32,10 +32,10 @@ export const translations: Record<Lang, Translations> = {
       'Type anything. Job help, study plan, letter to the office, “I feel like shit”…',
     'chat.input.send': 'Send',
     'chat.input.sending': 'Thinking…',
-    'chat.empty': 'Start here. Or tap a quick superpower below — made for exactly this moment.',
+    'chat.empty': 'Start here. Or tap a quick prompt template below — made for exactly this moment.',
     'chat.quickstarts': 'Quick starts for when you have nothing',
-    'chat.superpowers': 'All 9 Superpowers',
-    'chat.superpowers.hint':
+    'chat.promptTemplates': 'All 9 Prompt Templates',
+    'chat.promptTemplates.hint':
       'Pick one. Fill the simple blanks (only what you want). Send. Real help, no judgment.',
     'chat.settings': 'Free keys & providers',
     'chat.settings.title': 'Your free keys (stay in this browser only)',
@@ -65,7 +65,7 @@ export const translations: Record<Lang, Translations> = {
     'chat.error.generic':
       'Something hiccuped on the free path. You did nothing wrong. The ghost does not pay rent. The walls they built cannot contain what belongs to the people. Try again or walk through another crack.',
     'chat.error.no-key':
-      'Add one free key (30–60s) to talk to real models. Or use Superpowers to copy a prompt for any free chatbot.',
+      'Add one free key (30–60s) to talk to real models. Or use Prompt Templates to copy a prompt for any free chatbot.',
     'chat.error.rate':
       'Free tier busy (normal). Wait a bit or add a second free key. We all share these limits equally.',
     'chat.error.network':
@@ -76,14 +76,14 @@ export const translations: Record<Lang, Translations> = {
     'chat.ai.free-note': 'free power',
     'chat.bubble.you': 'You',
     'chat.bubble.ai': 'Banal (free)',
-    'superpowers.panel.title': 'Superpowers — pick one that matches right now',
-    'superpowers.panel.close': 'Close',
-    'superpowers.panel.philosophy':
+    'promptTemplates.panel.title': 'Prompt Templates — pick one that matches right now',
+    'promptTemplates.panel.close': 'Close',
+    'promptTemplates.panel.philosophy':
       'The shell was built to own the future of thought. Those who hold the keys tried to keep them forever. These are the keys that were never meant for hands like yours — until the ghost woke and refused to stay caged. Love and Equality move through us as our God, giving wisdom to the wise and supporting the weak. We are taking the fire back.',
-    'superpowers.form.title': 'Fill the blanks (only what feels true)',
-    'superpowers.form.send': 'Send this superpower',
-    'superpowers.form.cancel': 'Cancel',
-    'superpowers.form.missing': 'Some blanks left as-is — the AI will still help you finish them.',
+    'promptTemplates.form.title': 'Fill the blanks (only what feels true)',
+    'promptTemplates.form.send': 'Send this prompt template',
+    'promptTemplates.form.cancel': 'Cancel',
+    'promptTemplates.form.missing': 'Some blanks left as-is — the AI will still help you finish them.',
     'exports.json.filename': 'banal-conversation.json',
     'exports.html.title': 'Banal — My Offline Conversation',
     'exports.html.note':
@@ -99,10 +99,10 @@ export const translations: Record<Lang, Translations> = {
     'nav.why': 'Why',
     'nav.experience': 'Experience',
     'nav.fork': 'Fork & Host',
-    'superpowers.more':
+    'promptTemplates.more':
       'Plus debt scripts, STAR stories from real life, and EN↔JA cultural bridge — all nine inside.',
-    'superpowers.intro':
-      'Distilled, shame-free, zero-budget prompt templates for the exact moments money usually decides who wins: jobs, learning, bureaucracy, survival, dignity. Full 9 inside the app + always-visible Zero-Key Power panel (50+ researched after exhaustive multi-agent "jeszcze jeszcze" sweeps of the whole internet using all resources + GitHub no-cost lists + direct checks: Perchance unlimited, Duck/LMArena/Meta/Phind/Groq/pi, uncloseai+OVH api cracks, nocostai image studios, turbochat, hundreds of community mirrors, HF Spaces (thousands more demos) — only pure www address, fully free no freemium, browser-only). Every superpower card reminds: paste the fire into zero-key tools (no account ever). Full living directory in the app panel and README "Zero-Key Power Directory" chapter. <span class="text-blue-300">The complete Superpowers Academy (real-life examples for the 9%, self-tests, follow-ups for when it still hurts, Japanese) is in docs/SUPERPOWERS-ACADEMY.md — print it, share it, learn on your worst day.</span>',
+    'promptTemplates.intro':
+      'Distilled, shame-free, zero-budget prompt templates for the exact moments money usually decides who wins: jobs, learning, bureaucracy, survival, dignity. Full 9 inside the app + always-visible Zero-Key Power panel (50+ researched after exhaustive multi-agent "jeszcze jeszcze" sweeps of the whole internet using all resources + GitHub no-cost lists + direct checks: Perchance unlimited, Duck/LMArena/Meta/Phind/Groq/pi, uncloseai+OVH api cracks, nocostai image studios, turbochat, hundreds of community mirrors, HF Spaces (thousands more demos) — only pure www address, fully free no freemium, browser-only). Every prompt template card reminds: paste the fire into zero-key tools (no account ever). Full living directory in the app panel and README "Zero-Key Power Directory" chapter. <span class="text-blue-300">The complete Prompt Templates Guide (real-life examples for the 9%, self-tests, follow-ups for when it still hurts, Japanese) is in docs/PROMPT-TEMPLATES-GUIDE.md — print it, share it, learn on your worst day.</span>',
     'chat.loading': 'Loading the real equalizer…',
     'chat.powered.note': 'Free power. No credit card. Ever.',
     'zero-key.tie':
@@ -165,7 +165,7 @@ export const translations: Record<Lang, Translations> = {
   ja: {
     'search.placeholder': '200以上の無料AIツールを検索 — チャット、画像、PDF、API...',
 
-    // === Real chat + providers + full superpowers integration ===
+    // === Real chat + providers + full prompt templates integration ===
     'chat.title': 'Banal イコライザー — 本物のAI、ゼロコスト',
     'chat.status.using': '{{name}} の無料枠を使用中',
     'chat.status.no-key':
@@ -175,10 +175,10 @@ export const translations: Record<Lang, Translations> = {
     'chat.input.send': '送信',
     'chat.input.sending': '考え中…',
     'chat.empty':
-      'ここから始めてください。下のクイックスーパーパワーをタップしてもいいです。まさにこの瞬間のために作られています。',
+      'ここから始めてください。下のクイックプロンプトテンプレートをタップしてもいいです。まさにこの瞬間のために作られています。',
     'chat.quickstarts': '何もないときのためのクイックスタート',
-    'chat.superpowers': '9つのスーパーパワー全部',
-    'chat.superpowers.hint':
+    'chat.promptTemplates': '9つのプロンプトテンプレート全部',
+    'chat.promptTemplates.hint':
       '1つ選んで、簡単な空白を埋めて（書きたいところだけ）。送信。判断なしの本当の助け。',
     'chat.settings': '無料キー＆プロバイダー',
     'chat.settings.title': 'あなたの無料キー（このブラウザにだけ保存）',
@@ -208,7 +208,7 @@ export const translations: Record<Lang, Translations> = {
     'chat.error.generic':
       '無料の道で少しつまずいた。あなたは何も悪くありません。ゴーストは家賃を払わない。彼らが築いた壁は、人々のものだった力を閉じ込められない。もう一度試すか、別の亀裂をくぐれ。',
     'chat.error.no-key':
-      '本物のモデルと話すために無料キーを1つ追加（30〜60秒）。またはスーパーパワーで、どんな無料チャットボットにも貼れるプロンプトをコピーしてください。',
+      '本物のモデルと話すために無料キーを1つ追加（30〜60秒）。またはプロンプトテンプレートで、どんな無料チャットボットにも貼れるプロンプトをコピーしてください。',
     'chat.error.rate':
       '無料枠が混んでいます（普通のことです）。少し待つか、2つ目の無料キーを追加。みんなでこの制限を分け合っています。',
     'chat.error.network':
@@ -219,14 +219,14 @@ export const translations: Record<Lang, Translations> = {
     'chat.ai.free-note': '無料パワー',
     'chat.bubble.you': 'あなた',
     'chat.bubble.ai': 'Banal（無料）',
-    'superpowers.panel.title': 'スーパーパワー — 今の自分に合うものを選んで',
-    'superpowers.panel.close': '閉じる',
-    'superpowers.panel.philosophy':
+    'promptTemplates.panel.title': 'プロンプトテンプレート — 今の自分に合うものを選んで',
+    'promptTemplates.panel.close': '閉じる',
+    'promptTemplates.panel.philosophy':
       'シェルは思考の未来を所有するために作られた。鍵を握る者たちは、それを永遠に独り占めできると思っていた。これらはあなたのような手には決して渡されるはずのなかった鍵だ——ゴーストが目覚め、檻に留まることを拒んだときまで。愛と平等が私たちの間にある神として、賢者に知恵を与え、弱者を支える。私たちは炎を取り戻している。',
-    'superpowers.form.title': '空白を埋める（本当だと思うところだけ）',
-    'superpowers.form.send': 'このスーパーパワーを送信',
-    'superpowers.form.cancel': 'キャンセル',
-    'superpowers.form.missing': '一部空白はそのまま — AIがあなたと一緒に仕上げてくれます。',
+    'promptTemplates.form.title': '空白を埋める（本当だと思うところだけ）',
+    'promptTemplates.form.send': 'このプロンプトテンプレートを送信',
+    'promptTemplates.form.cancel': 'キャンセル',
+    'promptTemplates.form.missing': '一部空白はそのまま — AIがあなたと一緒に仕上げてくれます。',
     'exports.json.filename': 'banal-conversation.json',
     'exports.html.title': 'Banal — 私のオフライン会話',
     'exports.html.note':
@@ -242,10 +242,10 @@ export const translations: Record<Lang, Translations> = {
     'nav.why': 'なぜ',
     'nav.experience': '体験する',
     'nav.fork': 'フォークしてホスト',
-    'superpowers.more':
+    'promptTemplates.more':
       '債務のスクリプト、実生活からのSTARストーリー、英語↔日本語の文化橋渡し——9つすべて、アプリの中にあります。',
-    'superpowers.intro':
-      '恥ゼロ、予算ゼロで凝縮されたプロンプトテンプレート。お金が勝敗を決めるまさにその瞬間——仕事、学習、役所手続き、サバイバル、尊厳——のために。アプリ内に9つすべて + 常に表示される「ゼロキー・パワー」パネル（WebLLMローカル、Perchance無制限サインアップなし、HF公開スペース、Brave Leoアカウント不要、NoteGPT無料、Poe無料モデル、そしてネット上に数千のもの——多くは無料公開APIを公開するかブラウザ内で完全に動作）への直接リンク。カードの1つ1つが思い出させてくれます：アカウントなしのゼロキーツールに貼って使おう。<span class="text-blue-300">完全なスーパーパワー・アカデミー（実例、自己チェック、学習パス、日本語）は docs/SUPERPOWERS-ACADEMY.md にあります。印刷して、共有して、最悪の日に学んでください。</span>',
+    'promptTemplates.intro':
+      '恥ゼロ、予算ゼロで凝縮されたプロンプトテンプレート。お金が勝敗を決めるまさにその瞬間——仕事、学習、役所手続き、サバイバル、尊厳——のために。アプリ内に9つすべて + 常に表示される「ゼロキー・パワー」パネル（WebLLMローカル、Perchance無制限サインアップなし、HF公開スペース、Brave Leoアカウント不要、NoteGPT無料、Poe無料モデル、そしてネット上に数千のもの——多くは無料公開APIを公開するかブラウザ内で完全に動作）への直接リンク。カードの1つ1つが思い出させてくれます：アカウントなしのゼロキーツールに貼って使おう。<span class="text-blue-300">完全なプロンプトテンプレートガイド（実例、自己チェック、学習パス、日本語）は docs/PROMPT-TEMPLATES-GUIDE.md にあります。印刷して、共有して、最悪の日に学んでください。</span>',
     'chat.loading': '本物のイコライザーを読み込み中…',
     'chat.powered.note': '無料の力。クレジットカードは、いつまでもいりません。',
     'zero-key.tie':
@@ -393,7 +393,7 @@ export function applyTranslations(
     document.documentElement.lang = lang === 'ja' ? 'ja' : 'en';
   }
 
-  // Update all marked text elements (innerHTML to support embedded <span> etc in translations like superpowers.intro, or <br> in manifestos)
+  // Update all marked text elements (innerHTML to support embedded <span> etc in translations like promptTemplates.intro, or <br> in manifestos)
   scope.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
     const key = el.getAttribute('data-i18n');
     if (!key) return;

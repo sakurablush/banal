@@ -112,7 +112,7 @@ Help someone who has less than you find a copy.
 
 Host one yourself.
 
-Add the Superpowers your people actually need.
+Add the prompt templates your people actually need.
 
 Then give it away.
 

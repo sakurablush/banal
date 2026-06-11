@@ -13,7 +13,7 @@ This is not marketing. It is a literal fact of the architecture.
 - All API keys (for Groq, Gemini, Hugging Face) are stored **only** in your browser's `localStorage` under keys owned by the Banal origin (`banal-api-keys-v1`).
 - When you click "Send", the JavaScript running in _your_ browser reads the key from localStorage and puts it into the `Authorization` (or `?key=`) header of a direct `fetch()` call to the provider's public API endpoint.
 - Banal — the website, the maintainers, any fork you didn't create yourself — never receives your key. There is no server to receive it.
-- The same is true for your conversation history (`banal-chat-history-v1`) and current superpower state. Everything lives and dies in your browser.
+- The same is true for your conversation history (`banal-chat-history-v1`) and current prompt template state. Everything lives and dies in your browser.
 - Exports (JSON and the self-contained HTML) are generated entirely in your browser using the `Blob` + download trick. No upload happens.
 
 You can verify this yourself: open the built site, open DevTools → Application → Local Storage, or just read the ~350 lines of `src/providers/index.ts`. The functions `loadKeys`, `saveKeys`, `storeApiKey`, `sendFreeMessage` contain the entire story.
@@ -66,7 +66,7 @@ Comparison: Most "free AI chat" websites either (a) make you create an account (
 - **On your personal device:** Treat saved keys like any other password. If the device is lost, stolen, or given away, immediately go to the provider consoles (links are right in the modal: console.groq.com, aistudio.google.com, huggingface.co/settings/tokens) and delete/rotate the keys.
 - **Paranoid but still want to use Banal:**
   - Host your own fork (see DEPLOYMENT.md). Review `src/providers/index.ts` and `src/chat.ts` yourself (or have a trusted person do it). Build and serve from a domain/origin you control.
-  - Use the Superpowers panel to generate the filled prompt _locally_, copy the text from the chat history, and paste it into a different interface you trust more that day. No key is sent through Banal in that workflow.
+  - Use the Prompt Templates panel to generate the filled prompt _locally_, copy the text from the chat history, and paste it into a different interface you trust more that day. No key is sent through Banal in that workflow.
   - Create dedicated free keys just for Banal use (most providers let you make multiple).
 - **Regular hygiene:** Periodically clear keys you no longer use. The UI makes this one click.
 - **Exports:** The self-contained HTML file contains everything you wrote. Store or share it with the same care you would give a private journal entry.

@@ -7,14 +7,14 @@
  *
  * Designed for the person on a shared computer or old phone who was never supposed to have this power — the ghost waking with no permission asked:
  * - Auto picks the strongest available free path.
- * - Beautiful rate-limit messages with actionable next steps ("add another free key", "use a Superpower instead", "wait a bit").
+ * - Beautiful rate-limit messages with actionable next steps ("add another free key", "use a Prompt Template instead", "wait a bit").
  * - "free power" metadata on every response — a quiet reminder that this is already yours. The soul in the shell, answering to you.
  *
  * Error handling philosophy (the anti-corporate core):
  * We do not throw opaque "AI failed" or let raw fetch errors scare the user.
  * Every failure is translated into a calm, factual, empowering message that assumes the user is an adult
  * who has already survived worse. The error *is* the interface that returns power: "you did nothing wrong",
- * "here is the exact 30-second action", "use the offline superpower prompts instead".
+ * "here is the exact 30-second action", "use the offline prompt template prompts instead".
  * This is how you write software when your users might be on 12% battery in a shelter, refusing to be erased.
  */
 import { t, type Lang } from '../i18n';
@@ -36,7 +36,7 @@ export interface SendOptions {
   apiKey?: string;
   /** Optional model override. */
   model?: string;
-  /** Optional system prompt prepended (for superpowers etc). */
+  /** Optional system prompt prepended (for prompt templates etc). */
   systemPrompt?: string;
   /** AbortSignal for cancellation (mobile back button etc). */
   signal?: AbortSignal;
@@ -64,9 +64,9 @@ export interface RateLimitInfo {
  * Why a real Error subclass instead of the old "throw Object.assign(new Error(), { code, friendlyMessage })" pattern?
  *
  * 1. Type safety & no more `any`: Callers (chat UI, tests) can `catch (err: unknown)` then `if (err instanceof BanalProviderError)` with full intellisense on .code, .friendlyMessage, .provider etc.
- * 2. Philosophical honesty: Errors are not opaque corporate "something went wrong" — they are transparent, warm handoffs of agency back to the user who has nothing. The messages themselves are the product: "You are doing nothing wrong", "add a free key", "use Superpowers instead", "these limits protect the free service for all of us".
+ * 2. Philosophical honesty: Errors are not opaque corporate "something went wrong" — they are transparent, warm handoffs of agency back to the user who has nothing. The messages themselves are the product: "You are doing nothing wrong", "add a free key", "use Prompt Templates instead", "these limits protect the free service for all of us".
  * 3. Maintainability for the poor person's fork: A stressed person auditing the source on a library computer sees one clear contract, not scattered property assignments.
- * 4. UX for real life: Subclasses or codes allow precise, non-shaming recovery flows (keys modal, longer toasts for rate limits, superpower escape hatch).
+ * 4. UX for real life: Subclasses or codes allow precise, non-shaming recovery flows (keys modal, longer toasts for rate limits, prompt template escape hatch).
  * 5. Future-proof: If we ever add local WebLLM fallback or more providers, the error surface stays simple and humane.
  *
  * This is "serious code for normal humans": powerful under the hood, stupidly obvious in intent.
@@ -252,7 +252,7 @@ export function detectRateLimit(response: Response | null, errorText: string): R
  * non-shaming recovery without string parsing hell.
  *
  * Why this shape? Because the "free tier" is a shared, fragile commons. The code must be the guardian
- * that explains the reality kindly and hands the user concrete levers (keys, superpowers, waiting).
+ * that explains the reality kindly and hands the user concrete levers (keys, prompt templates, waiting).
  */
 export async function sendFreeMessage(
   input: string | ChatMessage[],
@@ -278,7 +278,7 @@ export async function sendFreeMessage(
     // latency captured at call site but not needed on the error (no consumer in current UI or recovery flows)
     const friendly =
       'No free key configured yet for the best paths. This is the normal first step — takes 45 seconds to get one forever. ' +
-      'Click "Get free key" in settings. Your key stays only in this browser. Or use the Superpowers panel to copy a ready prompt for any free chatbot (or the always-visible Zero-Key Power panel at top for thousands of no-key tools and public free APIs like OVHcloud anonymous tier).';
+      'Click "Get free key" in settings. Your key stays only in this browser. Or use the Prompt Templates panel to copy a ready prompt for any free chatbot (or the always-visible Zero-Key Power panel at top for thousands of no-key tools and public free APIs like OVHcloud anonymous tier).';
     const err = new BanalProviderError(friendly, {
       code: 'NO_FREE_KEY',
       provider,
@@ -473,12 +473,12 @@ export async function sendFreeMessage(
           code: 'PROVIDER',
           provider,
           friendlyMessage:
-            'Public free tier hiccup (rate limit or temp issue — 2 requests/min per IP is the generous anonymous cap). Use Superpowers panel to copy prompt to other zero-key tools, or wait a bit. This path exists so the poor have real power with literally nothing.',
+            'Public free tier hiccup (rate limit or temp issue — 2 requests/min per IP is the generous anonymous cap). Use Prompt Templates panel to copy prompt to other zero-key tools, or wait a bit. This path exists so the poor have real power with literally nothing.',
         });
       }
       text =
         data.choices?.[0]?.message?.content?.trim() ||
-        '(Public free path returned empty this time — shared anonymous tiers do that. Rephrase or try again in a breath. Or paste superpower into Perchance/WebLLM/etc.)';
+        '(Public free path returned empty this time — shared anonymous tiers do that. Rephrase or try again in a breath. Or paste prompt template into Perchance/WebLLM/etc.)';
     }
 
     const latency = Math.round(performance.now() - start);

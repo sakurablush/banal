@@ -149,7 +149,7 @@ jobs:
   **Your site is published at https://YOURUSERNAME.github.io/banal-ai/**
 
 - Click it. You should see the full Banal experience — your own hosted copy.
-- Test the chat, language switcher, superpowers, exports. Everything should just work.
+- Test the chat, language switcher, prompt templates, exports. Everything should just work.
 
 **Congratulations. You now own a copy of the AI equalizer.**
 
@@ -214,16 +214,16 @@ GitHub's web interface lets you edit files directly:
 - Go to your fork.
 - Click on `index.html` or `src/i18n.ts`.
 - Click the pencil icon (Edit this file).
-- Change the hero text, add a new language button, tweak a superpower description, whatever feels right for _your_ people.
+- Change the hero text, add a new language button, tweak a prompt template description, whatever feels right for _your_ people.
 - At the bottom, write a commit message like "Made the welcome text warmer for our group" and click "Commit changes".
 - If you used the GitHub Pages workflow, it will automatically rebuild and redeploy in a minute or two.
 - For Cloudflare, push any change to the main branch (web edit counts as a push) and it will redeploy.
 
-For bigger changes (new superpowers, big UI work), clone to your computer and use the normal dev commands (see README).
+For bigger changes (new prompt templates, big UI work), clone to your computer and use the normal dev commands (see README).
 
 ### Keep your copy updated with improvements from the main project (optional but recommended)
 
-The main Banal repo will keep getting better superpowers, kinder error messages, more languages, etc.
+The main Banal repo will keep getting better prompt templates, kinder error messages, more languages, etc.
 
 Simple way (you only need to do this when you want new stuff):
 

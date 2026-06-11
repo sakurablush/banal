@@ -37,8 +37,8 @@ export default defineConfig({
           branches: 99,
           statements: 97,
         },
-        // Superpowers library is core to the "poor people" promise — 100% enforced
-        'src/lib/superpowers.ts': {
+        // Prompt templates library is core to the "poor people" promise — 100% enforced
+        'src/lib/prompt-templates.ts': {
           lines: 100,
           functions: 100,
           branches: 100,

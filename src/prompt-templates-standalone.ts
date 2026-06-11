@@ -1,49 +1,49 @@
 /**
- * Standalone Superpowers UI
- * Renders the 9 superpower templates as cards that users can copy and use
+ * Standalone Prompt Templates UI
+ * Renders the 9 prompt templates as cards that users can copy and use
  * without needing the chat system.
  */
 
-import { SuperpowersLibrary, extractTemplateVariables, type Locale } from './lib/superpowers';
+import { PromptTemplatesLibrary, extractTemplateVariables, type Locale } from './lib/prompt-templates';
 
-interface SuperpowersUIOptions {
+interface PromptTemplatesUIOptions {
   container: HTMLElement;
   lang: Locale;
 }
 
-export function renderSuperpowersStandalone(options: SuperpowersUIOptions): void {
+export function renderPromptTemplatesStandalone(options: PromptTemplatesUIOptions): void {
   const { container, lang } = options;
 
   try {
-    const lib = new SuperpowersLibrary(lang);
-    const superpowers = lib.getAll();
+    const lib = new PromptTemplatesLibrary(lang);
+    const promptTemplates = lib.getAll();
 
     container.innerHTML = '';
 
     const grid = document.createElement('div');
     grid.className = 'sp-grid';
 
-    superpowers.forEach((sp) => {
-      const card = createSuperpowerCard(sp, lib, lang);
+    promptTemplates.forEach((pt) => {
+      const card = createPromptTemplateCard(pt, lib, lang);
       grid.appendChild(card);
     });
 
     container.appendChild(grid);
   } catch (error) {
-    console.error('Failed to render superpowers:', error);
+    console.error('Failed to render prompt templates:', error);
     container.innerHTML = `
       <div class="text-center py-12 text-white/60">
         <div class="inline-block px-6 py-3 rounded-xl glass-card">
-          <p class="text-sm">⚠️ Unable to load superpowers</p>
+          <p class="text-sm">⚠️ Unable to load prompt templates</p>
         </div>
       </div>
     `;
   }
 }
 
-function createSuperpowerCard(
-  sp: { id: string; title: string; description: string; template: string },
-  lib: SuperpowersLibrary,
+function createPromptTemplateCard(
+  pt: { id: string; title: string; description: string; template: string },
+  lib: PromptTemplatesLibrary,
   lang: Locale
 ): HTMLElement {
   const card = document.createElement('article');
@@ -116,7 +116,7 @@ function createSuperpowerCard(
 
 function openFillModal(
   sp: { id: string; title: string; description: string; template: string },
-  lib: SuperpowersLibrary,
+  lib: PromptTemplatesLibrary,
   lang: Locale
 ): void {
   const variables = extractTemplateVariables(sp.template);

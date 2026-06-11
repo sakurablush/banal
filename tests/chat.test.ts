@@ -1,12 +1,12 @@
 /**
  * High-quality, production-grade tests for src/chat.ts — the beating heart of Banal.
  * Covers all critical user flows for the "poor user on a library computer":
- *   - normal sends + superpower sends (filled prompt becomes user utterance + meta on AI turn)
- *   - full superpower selection, form fill (with persistence of vars), send
+ *   - normal sends + prompt template sends (filled prompt becomes user utterance + meta on AI turn)
+ *   - full prompt template selection, form fill (with persistence of vars), send
  *   - every error path with warm non-shaming messages + actionable CTAs
  *   - both exports (JSON payload + fully self-contained HTML)
  *   - language reactivity (event-driven, re-renders labels, quickstarts, forms, status)
- *   - persistence roundtrips for history + current superpower (and graceful survive on quota/incognito)
+ *   - persistence roundtrips for history + current prompt template (and graceful survive on quota/incognito)
  *   - edges: empty input, whitespace, very long input, isSending guard, textarea grow, escape/click-outside closes, etc.
  *
  * Uses real DOM mounting (jsdom), spies on providers, custom events, localStorage simulation.
@@ -58,14 +58,14 @@ beforeEach(() => {
 });
 
 afterEach(async () => {
-  // Drain any setTimeout(60) preselect timers scheduled by openSuperpowersPanel in chat.ts.
+  // Drain any setTimeout(60) preselect timers scheduled by openPromptTemplatesPanel in chat.ts.
   // These close over module-level DOM refs; without drain they can fire after remount/reset
   // and call scrollIntoView (or other) on stale elements, producing uncaught in jsdom.
   await new Promise((r) => setTimeout(r, 120));
 });
 
 // We use dynamic import after resetModules so each test gets a fresh chat module
-// (module-level state like chatHistory, currentSuperpower*, isSending, lib, DOM refs).
+// (module-level state like chatHistory, currentPromptTemplate*, isSending, lib, DOM refs).
 // This gives true isolation without leaking state between tests.
 
 type ChatMod = typeof import('../src/chat');
@@ -117,11 +117,11 @@ function getStatusEl() {
 }
 
 function getSpPanel() {
-  return document.getElementById('superpowers-panel');
+  return document.getElementById('prompt-templates-panel');
 }
 
 function getSpForm() {
-  return document.getElementById('superpower-form');
+  return document.getElementById('prompt-template-form');
 }
 
 function getKeysModal() {
@@ -142,7 +142,7 @@ function getExportHtmlBtn() {
 
 function getOpenSpBtn() {
   return getChatRoot()?.querySelector(
-    '[data-action="open-superpowers"]'
+    '[data-action="open-prompt-templates"]'
   ) as HTMLButtonElement | null;
 }
 
@@ -190,7 +190,7 @@ describe('chat — mounting & basic structure (banal, calm, zero-friction)', () 
 
   it('starts with empty state message (empathetic for first-time poor user)', () => {
     const msgs = getMessagesEl();
-    expect(msgs.textContent).toContain('Start here. Or tap a quick superpower');
+    expect(msgs.textContent).toContain('Start here. Or tap a quick prompt template');
   });
 
   it('wires the send button and enter key (no shift)', async () => {
@@ -280,12 +280,12 @@ describe('chat — normal message sending + history', () => {
   });
 });
 
-describe('chat — superpower selection + form filling + sending (the core "poor user" flow)', () => {
+describe('chat — prompt template selection + form filling + sending (the core "poor user" flow)', () => {
   beforeEach(async () => {
     await mountFreshChat();
   });
 
-  it('quickstart buttons set current superpower, persist it, and open the panel directly to form', async () => {
+  it('quickstart buttons set current prompt template, persist it, and open the panel directly to form', async () => {
     const qs = getQuickstarts();
     // find one of the popular (job-gaps-as-strengths is first) — robust find avoids 'All 9'
     const buttons = Array.from(qs!.querySelectorAll('button'));
@@ -300,7 +300,7 @@ describe('chat — superpower selection + form filling + sending (the core "poor
     // the preselect path does setTimeout(60) before renderForm (which unhides the form)
     await new Promise((r) => setTimeout(r, 100));
 
-    const rawSp = localStorage.getItem('banal-current-superpower-v1');
+    const rawSp = localStorage.getItem('banal-current-prompt-template-v1');
     expect(rawSp).toBeTruthy();
     const parsed = JSON.parse(rawSp!);
     expect(parsed.id).toBe('job-gaps-as-strengths');
@@ -356,12 +356,12 @@ describe('chat — superpower selection + form filling + sending (the core "poor
     ta.dispatchEvent(new Event('input', { bubbles: true }));
     await new Promise((r) => setTimeout(r, 0));
 
-    const raw = localStorage.getItem('banal-current-superpower-v1');
+    const raw = localStorage.getItem('banal-current-prompt-template-v1');
     const parsed = JSON.parse(raw!);
     expect(Object.values(parsed.vars).join('')).toContain('walk dogs');
   });
 
-  it('clicking "Send this superpower" fills the template, sends the filled text as user utterance, attaches sp meta to AI turn, closes panel', async () => {
+  it('clicking "Send this prompt template" fills the template, sends the filled text as user utterance, attaches pt meta to AI turn, closes panel', async () => {
     (providers.sendFreeMessage as any).mockClear();
 
     const openBtn = getOpenSpBtn();
@@ -386,7 +386,7 @@ describe('chat — superpower selection + form filling + sending (the core "poor
     // the send button inside form
     const sendSpBtn = Array.from(form!.querySelectorAll('button')).find(
       (b) =>
-        (b.textContent || '').includes('Send this superpower') ||
+        (b.textContent || '').includes('Send this prompt template') ||
         (b.getAttribute('data-i18n') || '').includes('send')
     ) as HTMLButtonElement;
     expect(sendSpBtn).toBeTruthy();
@@ -405,7 +405,7 @@ describe('chat — superpower selection + form filling + sending (the core "poor
     expect(lastUser.content).toContain('val0'); // from the fill
     expect(lastUser.content).not.toMatch(/\{\{yourName\}\}/);
 
-    // now rendered AI turn should carry the superpowerTitle
+      // now rendered AI turn should carry the promptTemplateTitle
     const msgsText = getMessagesEl().textContent || '';
     // the title of first sp is 'Job applications: turn gaps into strengths'
     expect(msgsText).toMatch(/Job applications|turn gaps/);
@@ -417,7 +417,7 @@ describe('chat — error handling (never shames the poor stressed user)', () => 
     await mountFreshChat();
   });
 
-  it('NO_FREE_KEY shows kind message + "Free keys & providers" + "All 9 Superpowers" CTAs', async () => {
+  it('NO_FREE_KEY shows kind message + "Free keys & providers" + "All 9 Prompt Templates" CTAs', async () => {
     (providers.sendFreeMessage as any).mockRejectedValueOnce(
       Object.assign(new Error('NO_FREE_KEY'), {
         code: 'NO_FREE_KEY',
@@ -437,7 +437,7 @@ describe('chat — error handling (never shames the poor stressed user)', () => 
 
     const actionBtns = Array.from(banner.querySelectorAll('button'));
     expect(actionBtns.some((b) => (b.textContent || '').includes('Free keys'))).toBe(true);
-    expect(actionBtns.some((b) => (b.textContent || '').includes('Superpowers'))).toBe(true);
+    expect(actionBtns.some((b) => (b.textContent || '').includes('Prompt Templates'))).toBe(true);
   });
 
   it('RATE_LIMIT shows the shared-burden message + settings CTA (stays visible longer)', async () => {
@@ -501,7 +501,7 @@ describe('chat — export (JSON + self-contained offline HTML) — ownership for
     vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
   });
 
-  it('JSON export produces versioned payload with history + currentSuperpower + lang', async () => {
+  it('JSON export produces versioned payload with history + currentPromptTemplate + lang', async () => {
     // seed some history + sp state
     const input = getInputEl();
     input.value = 'Export test message for my friend who has no computer at home.';
@@ -583,14 +583,14 @@ describe('chat — language reactivity (instant flip for EN/JA users on shared d
     dispatchLangChange('en');
     await new Promise((r) => setTimeout(r, 50));
     const header = getSpPanel()!.querySelector('[data-role="header"]');
-    expect(header?.textContent).toMatch(/Superpowers|pick one/);
+    expect(header?.textContent).toMatch(/Prompt Templates|pick one/);
   });
 });
 
 describe('chat — persistence edges (library computer, incognito, quota, shared device)', () => {
   it('loadPersisted survives bad JSON in storage (corrupt from previous crash or manual edit)', async () => {
     localStorage.setItem('banal-chat-history-v1', '{not json at all');
-    localStorage.setItem('banal-current-superpower-v1', 'also bad');
+    localStorage.setItem('banal-current-prompt-template-v1', 'also bad');
 
     await mountFreshChat();
 
@@ -618,7 +618,7 @@ describe('chat — persistence edges (library computer, incognito, quota, shared
     localStorage.setItem = origSet;
   });
 
-  it('current superpower state roundtrips (user can leave mid-form on phone and come back)', async () => {
+  it('current prompt template state roundtrips (user can leave mid-form on phone and come back)', async () => {
     await mountFreshChat();
 
     // set via quickstart (pick a real popular, not the "+ all" button)
@@ -632,7 +632,7 @@ describe('chat — persistence edges (library computer, incognito, quota, shared
     spBtn.click();
     await new Promise((r) => setTimeout(r, 0));
 
-    const raw = localStorage.getItem('banal-current-superpower-v1');
+    const raw = localStorage.getItem('banal-current-prompt-template-v1');
     expect(raw).toBeTruthy();
   });
 });
@@ -675,7 +675,7 @@ describe('chat — edge cases + kindnesses (auto-grow, guards, close behaviors, 
     expect(providers.sendFreeMessage).toHaveBeenCalledTimes(1);
   });
 
-  it('clicking outside superpowers panel or × closes it and clears form', async () => {
+  it('clicking outside prompt templates panel or × closes it and clears form', async () => {
     getOpenSpBtn()!.click();
     await new Promise((r) => setTimeout(r, 0));
 
@@ -1136,7 +1136,7 @@ describe('chat — misc coverage (fallback mount, humanize, render empty after c
     });
   });
 
-  it('NO_FREE_KEY error shows "All 9 Superpowers" button that opens superpowers panel', async () => {
+  it('NO_FREE_KEY error shows "All 9 Prompt Templates" button that opens prompt templates panel', async () => {
     await mountFreshChat();
 
     // Mock sendFreeMessage to throw NO_FREE_KEY error
@@ -1153,17 +1153,15 @@ describe('chat — misc coverage (fallback mount, humanize, render empty after c
     getSendBtn().click();
     await new Promise((r) => setTimeout(r, 100));
 
-    // Find and click "All 9 Superpowers" button
-    const superpowersBtn = Array.from(document.querySelectorAll('button')).find((b) =>
-      (b.textContent || '').includes('All 9 Superpowers')
-    ) as HTMLButtonElement;
+    // Find and click "All 9 Prompt Templates" button
+    const promptTemplatesBtn = Array.from(document.querySelectorAll('button')).find((b) =>
+      (b.textContent || '').includes('All 9 Prompt Templates')
+    );
+    expect(promptTemplatesBtn).toBeTruthy();
+    promptTemplatesBtn.click();
 
-    expect(superpowersBtn).toBeTruthy();
-    superpowersBtn.click();
-    await new Promise((r) => setTimeout(r, 100));
-
-    // Verify superpowers panel is visible
-    const panel = document.getElementById('superpowers-panel');
+    // Verify prompt templates panel is visible
+    const panel = document.getElementById('prompt-templates-panel');
     expect(panel?.classList.contains('hidden')).toBe(false);
   });
 
