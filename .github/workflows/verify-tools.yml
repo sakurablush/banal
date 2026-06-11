@@ -1,0 +1,76 @@
+name: Verify Tools
+
+on:
+  schedule:
+    # Run weekly on Sundays at 00:00 UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tool verification
+        run: npx tsx scripts/verify-tools.ts
+        continue-on-error: true
+
+      - name: Upload verification results
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-results
+          path: verification-results.json
+          retention-days: 90
+
+      - name: Check failure rate
+        run: |
+          TOTAL=$(jq '.totalTools' verification-results.json)
+          FAILED=$(jq '.failed + .errors' verification-results.json)
+          RATE=$(echo "scale=2; $FAILED / $TOTAL * 100" | bc)
+          echo "Failure rate: $RATE%"
+          if (( $(echo "$RATE > 15" | bc -l) )); then
+            echo "::warning::High failure rate detected: $RATE%"
+          fi
+
+      - name: Create issue on high failure rate
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('verification-results.json', 'utf8'));
+            const failures = results.results.filter(r => !r.ok);
+            
+            const body = `## Tool Verification Report
+            
+            **Date:** ${results.timestamp}
+            **Total tools:** ${results.totalTools}
+            **Verified:** ${results.verified}
+            **Failed:** ${results.failed}
+            **Errors:** ${results.errors}
+            
+            ### Failed Tools
+            
+            ${failures.slice(0, 20).map(f => `- [ ] ${f.name}: ${f.url} (${f.status})`).join('\n')}
+            ${failures.length > 20 ? `\n... and ${failures.length - 20} more` : ''}
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔴 Tool Verification: ${results.failed + results.errors} tools need attention`,
+              body: body,
+              labels: ['maintenance', 'tools']
+            });
