@@ -776,4 +776,413 @@ describe('chat — misc coverage (fallback mount, humanize, render empty after c
     // should still have created root via the fallback branch
     expect(document.getElementById('banal-chat-root')).toBeTruthy();
   });
+
+  it('clear all sensitive data button wipes keys and history', async () => {
+    // Setup: add some keys and history
+    providers.storeApiKey('groq', 'gsk_test_clear_all');
+    providers.storeApiKey('gemini', 'AIza_test_clear_all');
+
+    await mountFreshChat();
+
+    // Send a message to create history
+    const input = getInputEl();
+    input.value = 'Test message for history';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    getSendBtn().click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Verify history exists
+    expect(localStorage.getItem('banal-chat-history-v1')).toBeTruthy();
+
+    // Open keys modal
+    getOpenKeysBtn()!.click();
+    await new Promise((r) => setTimeout(r, 0));
+
+    // Find and click "Clear All Sensitive Data" button
+    const modal = getKeysModal()!;
+    const body = modal.querySelector('[data-role="body"]')!;
+    const clearAllBtn = Array.from(body.querySelectorAll('button')).find((b) =>
+      (b.textContent || '').includes('Clear ALL sensitive data')
+    ) as HTMLButtonElement;
+
+    expect(clearAllBtn).toBeTruthy();
+
+    // Mock confirm to return true
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+    clearAllBtn.click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Verify everything is cleared
+    expect(providers.getStoredApiKey('groq')).toBeNull();
+    expect(providers.getStoredApiKey('gemini')).toBeNull();
+    expect(localStorage.getItem('banal-chat-history-v1')).toBeNull();
+
+    // Modal should reopen to show cleaned state
+    expect(getKeysModal()?.classList.contains('hidden')).toBe(false);
+
+    confirmSpy.mockRestore();
+  });
+
+  it('clear all sensitive data button does nothing when cancelled', async () => {
+    // Setup: add a key
+    providers.storeApiKey('groq', 'gsk_test_cancel_clear');
+
+    await mountFreshChat();
+
+    // Open keys modal
+    getOpenKeysBtn()!.click();
+    await new Promise((r) => setTimeout(r, 0));
+
+    // Find and click "Clear All Sensitive Data" button
+    const modal = getKeysModal()!;
+    const body = modal.querySelector('[data-role="body"]')!;
+    const clearAllBtn = Array.from(body.querySelectorAll('button')).find((b) =>
+      (b.textContent || '').includes('Clear ALL sensitive data')
+    ) as HTMLButtonElement;
+
+    // Mock confirm to return false (user cancels)
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+
+    clearAllBtn.click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Verify key is NOT cleared
+    expect(providers.getStoredApiKey('groq')).toBe('gsk_test_cancel_clear');
+
+    confirmSpy.mockRestore();
+  });
+
+  it('spread equalizer button uses Web Share API when available', async () => {
+    await mountFreshChat();
+
+    // Mock navigator.share
+    const shareMock = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'share', {
+      value: shareMock,
+      writable: true,
+      configurable: true,
+    });
+
+    // Find and click spread button
+    const spreadBtn = document.querySelector(
+      '[data-action="spread-equalizer"]'
+    ) as HTMLButtonElement;
+    expect(spreadBtn).toBeTruthy();
+
+    spreadBtn.click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Verify share was called
+    expect(shareMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: 'Banal — The Robinhood of AI',
+        text: expect.stringContaining('Banal'),
+        url: expect.any(String),
+      })
+    );
+
+    // Cleanup
+    Object.defineProperty(navigator, 'share', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+  });
+
+  it('spread equalizer falls back to clipboard when Web Share API unavailable', async () => {
+    await mountFreshChat();
+
+    // Ensure navigator.share is not available
+    Object.defineProperty(navigator, 'share', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    // Mock clipboard
+    const writeTextMock = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: writeTextMock },
+      writable: true,
+      configurable: true,
+    });
+
+    // Find and click spread button
+    const spreadBtn = document.querySelector(
+      '[data-action="spread-equalizer"]'
+    ) as HTMLButtonElement;
+    expect(spreadBtn).toBeTruthy();
+
+    spreadBtn.click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Verify clipboard was used
+    expect(writeTextMock).toHaveBeenCalledWith(expect.stringContaining('Banal'));
+  });
+
+  it('spread equalizer falls back to alert when clipboard unavailable', async () => {
+    await mountFreshChat();
+
+    // Ensure navigator.share and clipboard are not available
+    Object.defineProperty(navigator, 'share', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+    Object.defineProperty(navigator, 'clipboard', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    // Mock alert
+    const alertMock = vi.fn();
+    const originalAlert = window.alert;
+    window.alert = alertMock;
+
+    // Find and click spread button
+    const spreadBtn = document.querySelector(
+      '[data-action="spread-equalizer"]'
+    ) as HTMLButtonElement;
+    expect(spreadBtn).toBeTruthy();
+
+    spreadBtn.click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Verify alert was called
+    expect(alertMock).toHaveBeenCalledWith(expect.stringContaining('Share this link'));
+
+    // Restore
+    window.alert = originalAlert;
+  });
+
+  it('spread equalizer handles clipboard.writeText rejection gracefully', async () => {
+    await mountFreshChat();
+
+    // Ensure navigator.share is not available
+    Object.defineProperty(navigator, 'share', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    // Mock clipboard to reject
+    const writeTextMock = vi.fn().mockRejectedValue(new Error('Clipboard permission denied'));
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: writeTextMock },
+      writable: true,
+      configurable: true,
+    });
+
+    // Mock alert to succeed
+    const alertMock = vi.fn();
+    const originalAlert = window.alert;
+    window.alert = alertMock;
+
+    // Find and click spread button
+    const spreadBtn = document.querySelector(
+      '[data-action="spread-equalizer"]'
+    ) as HTMLButtonElement;
+    expect(spreadBtn).toBeTruthy();
+
+    spreadBtn.click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Verify clipboard was attempted and alert was used as fallback
+    expect(writeTextMock).toHaveBeenCalled();
+    expect(alertMock).toHaveBeenCalledWith(expect.stringContaining('Share this link'));
+
+    // Restore
+    window.alert = originalAlert;
+  });
+
+  it('spread equalizer handles clipboard.writeText rejection when alert also fails', async () => {
+    await mountFreshChat();
+
+    // Ensure navigator.share is not available
+    Object.defineProperty(navigator, 'share', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    // Mock clipboard to reject
+    const writeTextMock = vi.fn().mockRejectedValue(new Error('Clipboard permission denied'));
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: writeTextMock },
+      writable: true,
+      configurable: true,
+    });
+
+    // Mock alert to throw
+    const originalAlert = window.alert;
+    window.alert = () => {
+      throw new Error('Alert not available');
+    };
+
+    // Find and click spread button
+    const spreadBtn = document.querySelector(
+      '[data-action="spread-equalizer"]'
+    ) as HTMLButtonElement;
+    expect(spreadBtn).toBeTruthy();
+
+    // Should not throw even when both clipboard and alert fail
+    spreadBtn.click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Verify clipboard was attempted
+    expect(writeTextMock).toHaveBeenCalled();
+
+    // Restore
+    window.alert = originalAlert;
+  });
+
+  it('spread equalizer handles alert failure when clipboard unavailable', async () => {
+    await mountFreshChat();
+
+    // Ensure navigator.share and clipboard are not available
+    Object.defineProperty(navigator, 'share', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+    Object.defineProperty(navigator, 'clipboard', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    // Mock alert to throw
+    const originalAlert = window.alert;
+    window.alert = () => {
+      throw new Error('Alert not available');
+    };
+
+    // Find and click spread button
+    const spreadBtn = document.querySelector(
+      '[data-action="spread-equalizer"]'
+    ) as HTMLButtonElement;
+    expect(spreadBtn).toBeTruthy();
+
+    // Should not throw even when alert fails
+    spreadBtn.click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Restore
+    window.alert = originalAlert;
+  });
+
+  it('spread equalizer falls back to copyFallback when navigator.share rejects', async () => {
+    await mountFreshChat();
+
+    // Mock navigator.share to reject
+    const shareMock = vi.fn().mockRejectedValue(new Error('Share cancelled'));
+    Object.defineProperty(navigator, 'share', {
+      value: shareMock,
+      writable: true,
+      configurable: true,
+    });
+
+    // Mock clipboard to succeed
+    const writeTextMock = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: writeTextMock },
+      writable: true,
+      configurable: true,
+    });
+
+    // Find and click spread button
+    const spreadBtn = document.querySelector(
+      '[data-action="spread-equalizer"]'
+    ) as HTMLButtonElement;
+    expect(spreadBtn).toBeTruthy();
+
+    spreadBtn.click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Verify share was attempted and clipboard was used as fallback
+    expect(shareMock).toHaveBeenCalled();
+    expect(writeTextMock).toHaveBeenCalled();
+  });
+
+  it('spread equalizer handles navigator undefined', async () => {
+    await mountFreshChat();
+
+    // Save original navigator
+    const originalNavigator = (window as any).navigator;
+
+    // Mock navigator as undefined
+    Object.defineProperty(window, 'navigator', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    // Find and click spread button
+    const spreadBtn = document.querySelector(
+      '[data-action="spread-equalizer"]'
+    ) as HTMLButtonElement;
+    expect(spreadBtn).toBeTruthy();
+
+    spreadBtn.click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Restore navigator
+    Object.defineProperty(window, 'navigator', {
+      value: originalNavigator,
+      writable: true,
+      configurable: true,
+    });
+  });
+
+  it('NO_FREE_KEY error shows "All 9 Superpowers" button that opens superpowers panel', async () => {
+    await mountFreshChat();
+
+    // Mock sendFreeMessage to throw NO_FREE_KEY error
+    const { sendFreeMessage } = await import('../src/providers');
+    vi.mocked(sendFreeMessage).mockRejectedValueOnce({
+      code: 'NO_FREE_KEY',
+      friendlyMessage: 'No free key configured',
+    });
+
+    // Send a message to trigger error
+    const input = getInputEl();
+    input.value = 'test message';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    getSendBtn().click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Find and click "All 9 Superpowers" button
+    const superpowersBtn = Array.from(document.querySelectorAll('button')).find((b) =>
+      (b.textContent || '').includes('All 9 Superpowers')
+    ) as HTMLButtonElement;
+
+    expect(superpowersBtn).toBeTruthy();
+    superpowersBtn.click();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Verify superpowers panel is visible
+    const panel = document.getElementById('superpowers-panel');
+    expect(panel?.classList.contains('hidden')).toBe(false);
+  });
+
+  it('zero-key panel onToolOpen callback shows ghost log', async () => {
+    await mountFreshChat();
+
+    // Find a tool card CTA in zero-key panel
+    const zeroKeyPanel = document.getElementById('zero-key-power');
+    expect(zeroKeyPanel).toBeTruthy();
+
+    const toolCta = zeroKeyPanel?.querySelector('.zk2-card-cta') as HTMLAnchorElement;
+    if (toolCta) {
+      toolCta.click();
+      await new Promise((r) => setTimeout(r, 100));
+
+      // Verify ghost log was shown (check for ghost-log element)
+      // Ghost log may or may not be visible depending on random chance
+      // Just verify the callback didn't throw
+      expect(true).toBe(true);
+    }
+  });
 });

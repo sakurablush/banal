@@ -9,6 +9,7 @@ import { renderZeroKeyPowerPanel, resetZeroKeyPanelFiltersForTests } from '../sr
 
 const MINIMUM_CURATED_TOOL_COUNT = 80;
 const REQUIRED_SURFACES: readonly ZeroKeySurface[] = ['web', 'api', 'cli'];
+const PAGE_SIZE = 24; // matches lazy-load page size in panel
 
 function renderPanel(lang: 'en' | 'ja' = 'en', onToolOpen = vi.fn()): HTMLElement {
   const root = document.createElement('section');
@@ -59,11 +60,13 @@ describe('zero-key panel rendering', () => {
     vi.useRealTimers();
   });
 
-  it('renders search input and tool rows', () => {
+  it('renders search input and tool cards (lazy loaded first page)', () => {
     const root = renderPanel();
 
     expect(root.querySelector('#zk-search-input')).not.toBeNull();
-    expect(root.querySelectorAll('.zk-row').length).toBe(zeroKeyTools.length);
+    // Cards are lazy-loaded: first page shows PAGE_SIZE cards
+    const cards = root.querySelectorAll('.zk2-card');
+    expect(cards.length).toBe(Math.min(PAGE_SIZE, zeroKeyTools.length));
   });
 
   it('searches across names, categories, badges, and use cases', () => {
@@ -74,22 +77,24 @@ describe('zero-key panel rendering', () => {
     input.dispatchEvent(new Event('input', { bubbles: true }));
 
     // Flush debounce
-    vi.advanceTimersByTime(100);
+    vi.advanceTimersByTime(150);
 
     expect(root.textContent).toContain('Supabase');
     expect(root.textContent).toContain('Neon');
-    expect(root.querySelectorAll('.zk-row').length).toBeGreaterThan(0);
+    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
   });
 
   it('filters by life context without breaking results', () => {
     const root = renderPanel();
-    const developerFilter = Array.from(root.querySelectorAll('button')).find((btn) =>
-      (btn.textContent || '').includes('Developer')
+    // Look for filter buttons (they have .zk2-filter-chip class)
+    const developerFilter = Array.from(root.querySelectorAll('.zk2-filter-chip')).find((btn) =>
+      (btn.textContent || '').toLowerCase().includes('dev')
     ) as HTMLButtonElement;
 
+    expect(developerFilter, 'Developer filter chip should exist').toBeTruthy();
     developerFilter.click();
 
-    expect(root.querySelectorAll('.zk-row').length).toBeGreaterThan(0);
+    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
   });
 
   it('shows clear empty state for impossible searches', () => {
@@ -100,19 +105,301 @@ describe('zero-key panel rendering', () => {
     input.dispatchEvent(new Event('input', { bubbles: true }));
 
     // Flush debounce
-    vi.advanceTimersByTime(100);
+    vi.advanceTimersByTime(150);
 
-    expect(root.textContent).toContain('No matches');
-    expect(root.querySelectorAll('.zk-row').length).toBe(0);
+    expect(root.textContent).toContain('No tools match');
+    expect(root.querySelectorAll('.zk2-card').length).toBe(0);
   });
 
-  it('fires open callback when a tool button is clicked', () => {
+  it('fires open callback when a tool CTA link is clicked', () => {
     const onToolOpen = vi.fn();
     const root = renderPanel('en', onToolOpen);
-    const openBtn = root.querySelector('.zk-btn-open') as HTMLButtonElement;
+    const openBtn = root.querySelector('.zk2-card-cta') as HTMLAnchorElement;
 
+    expect(openBtn).not.toBeNull();
     openBtn.click();
 
     expect(onToolOpen).toHaveBeenCalledTimes(1);
+  });
+
+  it('hero search input syncs with panel search and scrolls to tools', () => {
+    // Create hero search input and tools section in DOM
+    const heroInput = document.createElement('input');
+    heroInput.id = 'hero-search';
+    heroInput.type = 'text';
+    document.body.appendChild(heroInput);
+
+    const toolsSection = document.createElement('section');
+    toolsSection.id = 'tools';
+    document.body.appendChild(toolsSection);
+
+    const root = renderPanel();
+
+    // Type in hero search
+    heroInput.value = 'Docker';
+    heroInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+    // Flush debounce
+    vi.advanceTimersByTime(150);
+
+    // Panel search should sync
+    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    expect(panelInput.value).toBe('Docker');
+
+    // Should show filtered results
+    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
+  });
+
+  it('hero search Enter key focuses panel search and scrolls', () => {
+    const heroInput = document.createElement('input');
+    heroInput.id = 'hero-search';
+    heroInput.type = 'text';
+    document.body.appendChild(heroInput);
+
+    const toolsSection = document.createElement('section');
+    toolsSection.id = 'tools';
+    document.body.appendChild(toolsSection);
+
+    const root = renderPanel();
+    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+
+    // Press Enter in hero search
+    heroInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+
+    // Panel search should be focused
+    expect(document.activeElement).toBe(panelInput);
+  });
+
+  it('hero search Escape key clears search', () => {
+    const heroInput = document.createElement('input');
+    heroInput.id = 'hero-search';
+    heroInput.type = 'text';
+    heroInput.value = 'test';
+    document.body.appendChild(heroInput);
+
+    const root = renderPanel();
+
+    // Press Escape in hero search
+    heroInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+
+    // Hero input should be cleared
+    expect(heroInput.value).toBe('');
+
+    // Panel should show all tools
+    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
+  });
+
+  it('panel search Escape key clears search', () => {
+    const root = renderPanel();
+    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+
+    // Type something
+    panelInput.value = 'Redis';
+    panelInput.dispatchEvent(new Event('input', { bubbles: true }));
+    vi.advanceTimersByTime(150);
+
+    // Press Escape
+    panelInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+
+    // Should be cleared
+    expect(panelInput.value).toBe('');
+
+    // Should show all tools
+    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
+  });
+
+  it('load more button shows additional tools', () => {
+    const root = renderPanel();
+
+    // Initial count should be PAGE_SIZE
+    const initialCards = root.querySelectorAll('.zk2-card');
+    expect(initialCards.length).toBe(Math.min(PAGE_SIZE, zeroKeyTools.length));
+
+    // Find and click load more button
+    const loadMoreBtn = root.querySelector('.zk2-load-more') as HTMLButtonElement;
+    if (loadMoreBtn) {
+      loadMoreBtn.click();
+
+      // Should now show more cards
+      const afterCards = root.querySelectorAll('.zk2-card');
+      expect(afterCards.length).toBeGreaterThan(initialCards.length);
+    }
+  });
+
+  it('Ctrl+K focuses and selects panel search input', () => {
+    const root = renderPanel();
+    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+
+    // Press Ctrl+K
+    document.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'k',
+        ctrlKey: true,
+        bubbles: true,
+      })
+    );
+
+    // Should be focused and selected
+    expect(document.activeElement).toBe(panelInput);
+  });
+
+  it('clear filters button resets all filters and search', () => {
+    const root = renderPanel();
+    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+
+    // Apply a search that returns no results
+    panelInput.value = 'zzzz-no-such-tool';
+    panelInput.dispatchEvent(new Event('input', { bubbles: true }));
+    vi.advanceTimersByTime(150);
+
+    // Should show empty state
+    expect(root.querySelector('.zk2-empty')).not.toBeNull();
+
+    // Find and click clear filters button
+    const clearBtn = root.querySelector('.zk2-empty-clear') as HTMLButtonElement;
+    expect(clearBtn).not.toBeNull();
+    clearBtn.click();
+
+    // Should reset search and show all tools
+    expect(panelInput.value).toBe('');
+    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
+  });
+
+  it('shows active category in stats bar when filtering by category', () => {
+    const root = renderPanel();
+
+    // Click on a category in sidebar (skip first one which is "All")
+    const categoryBtns = root.querySelectorAll('.zk2-cat-item') as NodeListOf<HTMLButtonElement>;
+    expect(categoryBtns.length).toBeGreaterThan(1);
+
+    // Click second category (first is "All")
+    categoryBtns[1].click();
+
+    // Should show category label in stats bar
+    const statsCategory = root.querySelector('.zk2-stats-category');
+    expect(statsCategory).not.toBeNull();
+    expect(statsCategory?.textContent).toBeTruthy();
+  });
+
+  it('clicking "All" category resets category filter', () => {
+    const root = renderPanel();
+
+    // First click on a specific category
+    const categoryBtns = root.querySelectorAll('.zk2-cat-item') as NodeListOf<HTMLButtonElement>;
+    categoryBtns[1].click();
+
+    // Should show category in stats
+    expect(root.querySelector('.zk2-stats-category')).not.toBeNull();
+
+    // Now click "All" (first button)
+    categoryBtns[0].click();
+
+    // Should not show category in stats anymore
+    expect(root.querySelector('.zk2-stats-category')).toBeNull();
+  });
+
+  it('clicking active life filter removes it (toggle behavior)', () => {
+    const root = renderPanel();
+
+    // Find and click a life filter
+    const filterChip = root.querySelector('.zk2-filter-chip') as HTMLButtonElement;
+    expect(filterChip).not.toBeNull();
+
+    // Click to activate
+    filterChip.click();
+
+    // After click, panel re-renders, so find the new chip
+    const activeChip = root.querySelector('.zk2-filter-chip.active') as HTMLButtonElement;
+    expect(activeChip).not.toBeNull();
+    expect(activeChip.classList.contains('active')).toBe(true);
+
+    // Click again to deactivate
+    activeChip.click();
+
+    // After second click, should not have active class
+    const deactivatedChip = root.querySelector('.zk2-filter-chip') as HTMLButtonElement;
+    expect(deactivatedChip.classList.contains('active')).toBe(false);
+  });
+
+  it('report button opens GitHub issue URL', () => {
+    const root = renderPanel();
+    const mockOpen = vi.fn();
+    window.open = mockOpen;
+
+    // Find report button
+    const reportBtn = root.querySelector('.zk2-card-report') as HTMLButtonElement;
+    expect(reportBtn).not.toBeNull();
+
+    // Click report button
+    reportBtn.click();
+
+    // Should open GitHub issue URL
+    expect(mockOpen).toHaveBeenCalledWith(
+      expect.stringContaining('github.com/banal-ai/banal/issues/new'),
+      '_blank',
+      'noopener,noreferrer'
+    );
+  });
+
+  it('renders stats bar in Japanese when lang is ja', () => {
+    const root = renderPanel('ja');
+
+    // Should show Japanese stats text
+    const statsBar = root.querySelector('.zk2-stats-bar');
+    expect(statsBar).not.toBeNull();
+    expect(statsBar?.textContent).toContain('件'); // Japanese counter for items
+  });
+
+  it('filters by open-source access type', () => {
+    const root = renderPanel();
+
+    // Find and click open-source filter
+    const filterChips = root.querySelectorAll('.zk2-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const openSourceFilter = Array.from(filterChips).find((chip) =>
+      chip.textContent?.toLowerCase().includes('open source')
+    );
+
+    expect(openSourceFilter).toBeDefined();
+    openSourceFilter!.click();
+
+    // Should show filtered results
+    const cards = root.querySelectorAll('.zk2-card');
+    expect(cards.length).toBeGreaterThan(0);
+  });
+
+  it('filters by offline capability', () => {
+    const root = renderPanel();
+
+    // Find and click offline filter
+    const filterChips = root.querySelectorAll('.zk2-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const offlineFilter = Array.from(filterChips).find((chip) =>
+      chip.textContent?.toLowerCase().includes('offline')
+    );
+
+    expect(offlineFilter).toBeDefined();
+    offlineFilter!.click();
+
+    // Should show filtered results
+    const cards = root.querySelectorAll('.zk2-card');
+    expect(cards.length).toBeGreaterThan(0);
+  });
+
+  it('syncs panel search to hero search when hero input exists', () => {
+    // Create hero search input
+    const heroInput = document.createElement('input');
+    heroInput.id = 'hero-search';
+    heroInput.type = 'text';
+    document.body.appendChild(heroInput);
+
+    const root = renderPanel();
+    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+
+    // Type in panel search
+    panelInput.value = 'Docker';
+    panelInput.dispatchEvent(new Event('input', { bubbles: true }));
+    vi.advanceTimersByTime(150);
+
+    // Hero input should sync
+    expect(heroInput.value).toBe('Docker');
   });
 });

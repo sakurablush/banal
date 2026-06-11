@@ -216,6 +216,96 @@ describe('SuperpowersLibrary — EN/JA parity validator', () => {
     const real = SuperpowersLibrary.validateParity();
     expect(real.valid).toBe(true);
   });
+
+  it('catches missing title.en', () => {
+    const original = TEMPLATES['job-gaps-as-strengths'].title.en;
+    // @ts-expect-error - intentionally setting to undefined for test
+    TEMPLATES['job-gaps-as-strengths'].title.en = undefined;
+
+    const result = SuperpowersLibrary.validateParity();
+    expect(result.valid).toBe(false);
+    expect(result.issues).toContain('job-gaps-as-strengths: missing or invalid title.en');
+
+    TEMPLATES['job-gaps-as-strengths'].title.en = original;
+  });
+
+  it('catches missing description.ja', () => {
+    const original = TEMPLATES['zero-budget-learning'].description.ja;
+    // @ts-expect-error - intentionally setting to undefined for test
+    TEMPLATES['zero-budget-learning'].description.ja = undefined;
+
+    const result = SuperpowersLibrary.validateParity();
+    expect(result.valid).toBe(false);
+    expect(result.issues).toContain('zero-budget-learning: missing or invalid description.ja');
+
+    TEMPLATES['zero-budget-learning'].description.ja = original;
+  });
+
+  it('catches missing template.en', () => {
+    const original = TEMPLATES['micro-hustles'].template.en;
+    // @ts-expect-error - intentionally setting to undefined for test
+    TEMPLATES['micro-hustles'].template.en = undefined;
+
+    const result = SuperpowersLibrary.validateParity();
+    expect(result.valid).toBe(false);
+    expect(result.issues).toContain('micro-hustles: missing or invalid template.en');
+
+    TEMPLATES['micro-hustles'].template.en = original;
+  });
+
+  it('catches placeholder count mismatch', () => {
+    const originalEn = TEMPLATES['bureaucracy-letters'].template.en;
+    // Add extra placeholder to EN only
+    TEMPLATES['bureaucracy-letters'].template.en = originalEn + ' {{extraPlaceholder}}';
+
+    const result = SuperpowersLibrary.validateParity();
+    expect(result.valid).toBe(false);
+    expect(
+      result.issues.some((issue) =>
+        issue.includes('bureaucracy-letters: placeholder count mismatch')
+      )
+    ).toBe(true);
+
+    TEMPLATES['bureaucracy-letters'].template.en = originalEn;
+  });
+
+  it('catches placeholder present in en but missing in ja', () => {
+    const originalEn = TEMPLATES['form-decoder'].template.en;
+
+    // Replace a placeholder in EN with different name, keep JA the same
+    const enVars = extractTemplateVariables(originalEn);
+    if (enVars.length > 0) {
+      const varToChange = enVars[0];
+      TEMPLATES['form-decoder'].template.en = originalEn.replace(
+        `{{${varToChange}}}`,
+        `{{${varToChange}Modified}}`
+      );
+
+      const result = SuperpowersLibrary.validateParity();
+      expect(result.valid).toBe(false);
+      expect(
+        result.issues.some(
+          (issue) =>
+            issue.includes('form-decoder: placeholder') &&
+            issue.includes('present in en but missing in ja')
+        )
+      ).toBe(true);
+
+      TEMPLATES['form-decoder'].template.en = originalEn;
+    }
+  });
+
+  it('catches invalid title type (not string)', () => {
+    const original = TEMPLATES['grounding-low-energy'].title.en;
+    // @ts-expect-error - intentionally setting to number for test
+    TEMPLATES['grounding-low-energy'].title.en = 123;
+
+    const result = SuperpowersLibrary.validateParity();
+    expect(result.valid).toBe(false);
+    expect(result.issues).toContain('grounding-low-energy: missing or invalid title.en');
+
+    TEMPLATES['grounding-low-energy'].title.en = original;
+  });
 });
 
 describe('singleton export', () => {

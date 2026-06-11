@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { initDirectory } from '../src/directory';
 import { zeroKeyTools } from '../src/data/zero-key-tools';
 
+const PAGE_SIZE = 24; // matches lazy-load page size in panel
+
 function makeDirectoryDOM() {
   document.body.innerHTML = `
     <div id="lang-en" class="active"></div>
@@ -38,7 +40,9 @@ describe('directory module initialization & behavior', () => {
     initDirectory();
 
     const root = document.getElementById('zero-key-directory-root')!;
-    expect(root.querySelectorAll('.zk-row').length).toBe(zeroKeyTools.length);
+    // v2 uses card grid with lazy loading (PAGE_SIZE per page)
+    const cards = root.querySelectorAll('.zk2-card');
+    expect(cards.length).toBe(Math.min(PAGE_SIZE, zeroKeyTools.length));
 
     // Verify total count badges are updated
     const badges = document.querySelectorAll('.tool-count-badge');
@@ -78,13 +82,34 @@ describe('directory module initialization & behavior', () => {
     initDirectory();
 
     const root = document.getElementById('zero-key-directory-root')!;
-    const firstCount = root.querySelectorAll('.zk-row').length;
-    expect(firstCount).toBe(zeroKeyTools.length);
+    const firstCount = root.querySelectorAll('.zk2-card').length;
+    expect(firstCount).toBe(Math.min(PAGE_SIZE, zeroKeyTools.length));
 
     // Re-render after language change
     window.dispatchEvent(new CustomEvent('banal:language-changed', { detail: { lang: 'ja' } }));
 
-    // After re-render all tools are still rendered
-    expect(root.querySelectorAll('.zk-row').length).toBe(zeroKeyTools.length);
+    // After re-render all tools are still rendered (first page)
+    expect(root.querySelectorAll('.zk2-card').length).toBe(
+      Math.min(PAGE_SIZE, zeroKeyTools.length)
+    );
+  });
+
+  it('displays error message when renderZeroKeyPowerPanel throws', async () => {
+    // Import the module to spy on
+    const zeroKeyPanel = await import('../src/zero-key-panel');
+
+    // Spy on renderZeroKeyPowerPanel and make it throw
+    const spy = vi.spyOn(zeroKeyPanel, 'renderZeroKeyPowerPanel').mockImplementation(() => {
+      throw new Error('Render failed');
+    });
+
+    initDirectory();
+
+    const root = document.getElementById('zero-key-directory-root')!;
+    expect(root.innerHTML).toContain('Unable to load tools');
+    expect(root.innerHTML).toContain('Please refresh the page');
+
+    // Restore the spy
+    spy.mockRestore();
   });
 });

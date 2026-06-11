@@ -2,7 +2,7 @@
  * Comprehensive tests for Banal i18n (EN source of truth + full manual JA).
  * 100% coverage target. Pure functions + DOM side-effects.
  */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { translations, t, getCurrentLang, setLang, applyTranslations, initI18n } from '../src/i18n';
 
 describe('i18n translations object', () => {
@@ -43,6 +43,32 @@ describe('t() helper', () => {
   it('supports deeply nested keys', () => {
     expect(t('en', 'manifesto.values.0.title')).toBe('Stupidly simple');
     expect(t('ja', 'manifesto.values.2.desc')).toContain('GitHub Pages');
+  });
+
+  it('handles nested object structure (legacy traversal)', () => {
+    // Temporarily add a nested structure to test legacy traversal
+    const originalTest = (translations.en as any)['test'];
+    (translations.en as any)['test'] = {
+      nested: {
+        deep: {
+          key: 'Nested value',
+        },
+      },
+    };
+
+    expect(t('en', 'test.nested.deep.key')).toBe('Nested value');
+
+    // Restore
+    if (originalTest !== undefined) {
+      (translations.en as any)['test'] = originalTest;
+    } else {
+      delete (translations.en as any)['test'];
+    }
+  });
+
+  it('returns undefined for incomplete nested path', () => {
+    // Test path that doesn't exist in nested structure
+    expect(t('en', 'nonexistent.deep.path')).toBe('nonexistent.deep.path');
   });
 });
 
@@ -123,6 +149,39 @@ describe('applyTranslations (DOM)', () => {
     expect(jaBtn.classList.contains('active')).toBe(true);
     expect(jaBtn.getAttribute('aria-pressed')).toBe('true');
   });
+
+  it('updates placeholder for data-i18n-placeholder elements', () => {
+    document.body.innerHTML += `
+      <input data-i18n-placeholder="search.placeholder" />
+    `;
+
+    applyTranslations('ja');
+
+    const input = document.querySelector('[data-i18n-placeholder]') as HTMLInputElement;
+    expect(input.placeholder).toContain('200以上の無料AIツールを検索');
+  });
+
+  it('updates aria-label for data-i18n-aria-label elements', () => {
+    document.body.innerHTML += `
+      <button data-i18n-aria-label="nav.language">Language</button>
+    `;
+
+    applyTranslations('ja');
+
+    const btn = document.querySelector('[data-i18n-aria-label]') as HTMLButtonElement;
+    expect(btn.getAttribute('aria-label')).toBe('言語');
+  });
+
+  it('updates meta description tag content', () => {
+    document.head.innerHTML = `
+      <meta name="description" content="Old description" />
+    `;
+
+    applyTranslations('ja');
+
+    const metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement;
+    expect(metaDesc.content).toContain('Banal');
+  });
 });
 
 describe('initI18n (wires buttons + initial apply)', () => {
@@ -151,6 +210,26 @@ describe('initI18n (wires buttons + initial apply)', () => {
     expect(localStorage.getItem('banal-lang')).toBe('ja');
     const el = document.querySelector('[data-i18n="hero.title"]')!;
     expect(el.innerHTML).toContain('機械の中の幽霊');
+  });
+
+  it('animates button on language switch (celebration)', () => {
+    initI18n();
+
+    const jaBtn = document.getElementById('lang-ja') as HTMLButtonElement;
+
+    // Mock animate function
+    const animateMock = vi.fn().mockReturnValue({ cancel: vi.fn() });
+    jaBtn.animate = animateMock;
+
+    jaBtn.click();
+
+    // Verify animate was called with celebration keyframes
+    expect(animateMock).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ transform: expect.stringContaining('scale') }),
+      ]),
+      expect.objectContaining({ duration: 220, easing: 'ease-out' })
+    );
   });
 
   it('does not re-apply if already on that language (no-op click)', () => {
