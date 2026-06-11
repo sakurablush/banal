@@ -68,43 +68,15 @@ export const PLAYGROUND_PROVIDERS: PlaygroundProvider[] = [
     outputFormat: 'text',
     category: 'chat',
   },
-  {
-    id: 'pollinations-text',
-    name: 'Pollinations Text',
-    description: 'Free text generation API. No key required. May be rate-limited.',
-    icon: '🌱',
-    color: '#4ade80',
-    rateLimit: 'Free, rate-limited',
-    requiresKey: false,
-    endpoint: 'https://text.pollinations.ai/',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    bodyTemplate: (input: string) => ({
-      messages: [{ role: 'user', content: input }],
-      model: 'openai',
-      temperature: 0.7,
-    }),
-    inputPlaceholder: 'Free text generation — no API key needed (may be rate-limited)',
-    outputFormat: 'text',
-    category: 'chat',
-  },
-  {
-    id: 'pollinations-image',
-    name: 'Pollinations Image',
-    description: 'Free image generation. Describe what you want to see.',
-    icon: '🎨',
-    color: '#a855f7',
-    rateLimit: 'Free, generous',
-    requiresKey: false,
-    endpoint: 'https://image.pollinations.ai/prompt/',
-    method: 'GET',
-    bodyTemplate: (_input: string) => ({}),
-    inputPlaceholder: 'Describe an image (e.g. "a cyberpunk cat in neon Tokyo")',
-    outputFormat: 'text',
-    category: 'image',
-  },
+  // Pollinations Text removed (2026-06-11): Now requires Cloudflare Turnstile (CAPTCHA)
+  // for anonymous requests, so it's no longer truly "no key required".
+  // See: https://pollinations.ai - they changed policy in March 2025.
+  
+  // Pollinations Image removed (2026-06-11): Same provider as Text, likely to have
+  // similar Turnstile requirements or rate limiting issues. For transparency and
+  // reliability, removing both to avoid user confusion.
+  // See: https://pollinations.ai - they changed policy in March 2025.
+  
   {
     id: 'ovh-anon',
     name: 'OVHcloud AI (Anonymous)',
