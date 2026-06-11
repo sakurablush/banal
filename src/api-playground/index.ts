@@ -114,9 +114,10 @@ export function renderPlayground({ lang, container }: PlaygroundOptions): void {
         </div>
         <div class="pg-meta">
           <span class="pg-limit">${provider.rateLimit}</span>
-          ${provider.requiresKey
-            ? `<a href="${provider.keyUrl}" target="_blank" rel="noopener" class="pg-key-link">${copy.requiresKey} ↗</a>`
-            : `<span class="pg-free">${copy.noKey}</span>`
+          ${
+            provider.requiresKey
+              ? `<a href="${provider.keyUrl}" target="_blank" rel="noopener" class="pg-key-link">${copy.requiresKey} ↗</a>`
+              : `<span class="pg-free">${copy.noKey}</span>`
           }
         </div>
         <div class="pg-form">

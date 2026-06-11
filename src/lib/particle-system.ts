@@ -16,8 +16,8 @@ export type ParticleColor = {
 const PALETTE: ParticleColor[] = [
   { r: 168, g: 85, b: 247, a: 0.35 }, // violet
   { r: 217, g: 70, b: 239, a: 0.25 }, // fuchsia
-  { r: 34, g: 211, b: 238, a: 0.2 },  // cyan
-  { r: 245, g: 158, b: 11, a: 0.2 },  // amber
+  { r: 34, g: 211, b: 238, a: 0.2 }, // cyan
+  { r: 245, g: 158, b: 11, a: 0.2 }, // amber
   { r: 255, g: 255, b: 255, a: 0.15 }, // white
 ];
 
@@ -47,6 +47,8 @@ export class ParticleSystem {
   private rafId: number | null = null;
   private lastFrame = 0;
   private frameInterval = 1000 / 30; // 30fps throttle
+  private observer: IntersectionObserver | null = null;
+  private isVisible = true;
 
   constructor(options: ParticleSystemOptions = {}) {
     this.canvas = options.canvas || document.createElement('canvas');
@@ -82,6 +84,23 @@ export class ParticleSystem {
     const target = typeof el === 'string' ? document.querySelector(el) : el;
     if (!target) return;
     target.appendChild(this.canvas);
+
+    // Set up Intersection Observer to pause when not visible
+    if ('IntersectionObserver' in window) {
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          this.isVisible = entries[0].isIntersecting;
+          if (this.isVisible && !reducedMotion.matches) {
+            this.start();
+          } else {
+            this.stop();
+          }
+        },
+        { threshold: 0.1 }
+      );
+      this.observer.observe(this.canvas);
+    }
+
     if (!reducedMotion.matches) this.start();
   }
 
@@ -109,6 +128,10 @@ export class ParticleSystem {
     this.stop();
     this.canvas.remove();
     window.removeEventListener('resize', this.resize);
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = null;
+    }
   }
 
   private resize = (): void => {

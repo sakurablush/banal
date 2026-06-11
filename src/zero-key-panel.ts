@@ -1,58 +1,85 @@
 /**
- * Zero-Key Panel — search-first, keyboard-first, no-bullshit directory.
- * Uses fuse-search for instant fuzzy matching.
+ * Zero-Key Panel v2 — Masterpiece Redesign
+ * Card-based grid layout, category sidebar, working search, lazy loading.
+ * Inspired by Raycast Store / Product Hunt / Notion Template Gallery.
  */
 
 import { type Lang } from './i18n';
 import {
   categoryLabels,
   zeroKeyTools,
+  type ZeroKeyCategory,
   type ZeroKeyTool,
 } from './data/zero-key-tools';
 import { type SearchResult, searchTools } from './fuse-search';
 
+// ─── Category Icons ──────────────────────────────────────────────────────────
+
+const categoryIcons: Record<ZeroKeyCategory, string> = {
+  'ai-assistants': '\u{1F4AC}',
+  'ai-image': '\u{1F3A8}',
+  'ai-video': '\u{1F3AC}',
+  'ai-audio': '\u{1F3B5}',
+  'ai-writing': '\u{270D}\uFE0F',
+  'ai-search': '\u{1F50D}',
+  'ai-pdf': '\u{1F4C4}',
+  'ai-presentation': '\u{1F4CA}',
+  'ai-math': '\u{1F9EE}',
+  'coding-devtools': '\u{1F4BB}',
+  'docs-knowledge': '\u{1F4DA}',
+  'public-data': '\u{1F5C4}\uFE0F',
+  'design-media': '\u{1F58C}\uFE0F',
+  'backend-infra': '\u{2601}\uFE0F',
+  'automation-ops': '\u{2699}\uFE0F',
+  'security-privacy': '\u{1F512}',
+  productivity: '\u{1F4CB}',
+  'learning-career': '\u{1F393}',
+};
+
+// ─── Copy / i18n ─────────────────────────────────────────────────────────────
+
 const COPY = {
   en: {
     title: '200+ Free AI Tools',
-    intro: 'Chat, image, video, audio, coding, PDF, research. Every tool tested. No login. No card.',
-    searchPlaceholder: 'Search tools… (Ctrl+K to focus)',
-    clearFilters: 'Clear',
+    searchPlaceholder: 'Search tools\u2026 (Ctrl+K to focus)',
+    clearFilters: 'Clear all filters',
     open: 'Open',
     docs: 'Docs',
-    noMatches: 'No matches. Try different keywords.',
-    note: 'Prioritizes no-card access, OSS, public APIs.',
-    warning: 'Shared/public devices: Clear ALL data after use. Never embed private API keys in public code.',
-    result: (count: number, _label: string) => `${count} tools`,
+    noMatchesTitle: 'No tools match',
+    noMatchesSuggestion: 'Try: chat, image, PDF, coding',
+    showing: (visible: number, total: number) => `Showing ${visible} of ${total} tools`,
+    loadMore: 'Load more tools',
+    allCategory: 'All Tools',
   },
   ja: {
-    title: '200+ 無料AIツール',
-    intro: 'チャット、画像、動画、音声、coding、PDF。全ツール動作確認済み。ログイン不要。',
-    searchPlaceholder: '検索… (Ctrl+K)',
-    clearFilters: 'クリア',
-    open: '開く',
-    docs: 'ドキュメント',
-    noMatches: '一致なし。別のキーワードで。',
-    note: 'カード不要・OSS・公開APIを優先。',
-    warning: '共有PC使用後は全クリア。APIキーを公開コードに埋め込まないでください。',
-    result: (count: number, _label: string) => `${count}件`,
+    title: '200+ \u7121\u6599AI\u30C4\u30FC\u30EB',
+    searchPlaceholder: '\u691C\u7D22\u2026 (Ctrl+K)',
+    clearFilters: '\u30D5\u30A3\u30EB\u30BF\u30FC\u30AF\u30EA\u30A2',
+    open: '\u958B\u304F',
+    docs: '\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8',
+    noMatchesTitle: '\u4E00\u81F4\u306A\u3057',
+    noMatchesSuggestion: 'chat, image, PDF, coding \u3067\u691C\u7D22',
+    showing: (visible: number, total: number) => `${visible} / ${total}\u4EF6`,
+    loadMore: '\u3082\u3063\u3068\u8AAD\u307F\u8FBC\u3080',
+    allCategory: '\u5168\u30C4\u30FC\u30EB',
   },
 } satisfies Record<
   Lang,
   {
     title: string;
-    intro: string;
     searchPlaceholder: string;
     clearFilters: string;
     open: string;
     docs: string;
-    noMatches: string;
-    note: string;
-    warning: string;
-    result: (count: number, label: string) => string;
+    noMatchesTitle: string;
+    noMatchesSuggestion: string;
+    showing: (visible: number, total: number) => string;
+    loadMore: string;
+    allCategory: string;
   }
 >;
 
-const activeLifeFilters: Set<string> = new Set();
+// ─── Life Filters ────────────────────────────────────────────────────────────
 
 interface LifeFilterDefinition {
   id: string;
@@ -60,12 +87,81 @@ interface LifeFilterDefinition {
   predicate: (tool: ZeroKeyTool, haystack: string) => boolean;
 }
 
+const activeLifeFilters: Set<string> = new Set();
+
+function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
+  const e = (en: string, ja: string) => (lang === 'ja' ? ja : en);
+  return [
+    {
+      id: 'no-signup',
+      label: e('No signup', '\u30A2\u30AB\u30A6\u30F3\u30C8\u4E0D\u8981'),
+      predicate: (tool, h) =>
+        tool.access === 'no-login' ||
+        tool.access === 'public-api' ||
+        /no signup|no login|no account|anonymous/i.test(h),
+    },
+    {
+      id: 'open-source',
+      label: e('Open source', '\u30AA\u30FC\u30D7\u30F3\u30BD\u30FC\u30B9'),
+      predicate: (tool) => tool.access === 'open-source' || tool.access === 'self-host',
+    },
+    {
+      id: 'offline',
+      label: e('Works offline', '\u30AA\u30D5\u30E9\u30A4\u30F3\u5BFE\u5FDC'),
+      predicate: (tool, h) =>
+        tool.access === 'open-source' ||
+        tool.surface === 'cli' ||
+        /local|offline|desktop|self-host|WebGPU/i.test(h),
+    },
+    {
+      id: 'developer',
+      label: e('For devs', '\u958B\u767A\u8005\u5411\u3051'),
+      predicate: (tool, h) =>
+        tool.surface !== 'web' ||
+        tool.category === 'coding-devtools' ||
+        /developer|coding|api|cli|git|database|deploy/i.test(h),
+    },
+  ];
+}
+
+// ─── State ───────────────────────────────────────────────────────────────────
+
 export interface ZeroKeyPanelOptions {
   lang: Lang;
   onToolOpen?: () => void;
 }
 
-const MAX_VISIBLE_BADGES = 4;
+const PAGE_SIZE = 24;
+const DEBOUNCE_MS = 100;
+const MAX_RESULTS = 300;
+
+interface PanelState {
+  lang: Lang;
+  allTools: ZeroKeyTool[];
+  results: SearchResult[];
+  query: string;
+  activeCategory: ZeroKeyCategory | null;
+  visibleCount: number;
+  onToolOpen?: () => void;
+  container: HTMLElement | null;
+}
+
+const state: PanelState = {
+  lang: 'en',
+  allTools: zeroKeyTools,
+  results: [],
+  query: '',
+  activeCategory: null,
+  visibleCount: PAGE_SIZE,
+  onToolOpen: undefined,
+  container: null,
+};
+
+let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+let heroAbortController: AbortController | null = null;
+let globalKeyboardAttached = false;
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function create<K extends keyof HTMLElementTagNameMap>(
   tag: K,
@@ -75,92 +171,6 @@ function create<K extends keyof HTMLElementTagNameMap>(
   if (className) el.className = className;
   return el;
 }
-
-function appendText<K extends keyof HTMLElementTagNameMap>(
-  parent: HTMLElement,
-  tag: K,
-  className: string,
-  text: string
-): HTMLElementTagNameMap[K] {
-  const el = create(tag, className);
-  el.textContent = text;
-  parent.appendChild(el);
-  return el;
-}
-
-function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
-  const e = (en: string, ja: string) => (lang === 'ja' ? ja : en);
-  return [
-    {
-      id: 'privacy',
-      label: e('Private / shared device', '共有デバイスでプライベート'),
-      predicate: (tool, h) =>
-        tool.category === 'security-privacy' ||
-        /private|privacy|encrypted|local|self-host|no signup|password|secret|shared/i.test(h),
-    },
-    {
-      id: 'bureaucracy',
-      label: e('Bureaucracy, letters, housing', '行政・手紙・役所・住宅'),
-      predicate: (_tool, h) =>
-        /letter|office|form|appeal|housing|landlord|bureaucracy|government|civic|public|docs|translate|weather|map|library/i.test(h),
-    },
-    {
-      id: 'visual',
-      label: e('Needs images / visuals', '画像・ビジュアルが必要'),
-      predicate: (tool, h) =>
-        tool.category === 'design-media' ||
-        /image|visual|diagram|design|photo|media|video|audio|whiteboard|PSD/i.test(h),
-    },
-    {
-      id: 'lowenergy',
-      label: e('Low energy / 2am', '低エネルギー・夜中2時'),
-      predicate: (tool, h) =>
-        tool.surface === 'web' &&
-        /no signup|simple|instant|browser|private|chat|notes|translate|docs|learning|quick/i.test(h),
-    },
-    {
-      id: 'unlimited',
-      label: e('Truly unlimited / generous', '本当に無制限'),
-      predicate: (tool, h) =>
-        tool.access === 'open-source' ||
-        tool.access === 'self-host' ||
-        /no key|no signup|self-host|open-source|local|generous/i.test(h),
-    },
-    {
-      id: 'developer',
-      label: e('Developer / API / CLI', '開発者・API・CLI'),
-      predicate: (tool, h) =>
-        tool.surface !== 'web' ||
-        tool.category === 'coding-devtools' ||
-        /developer|coding|api|cli|git|postgres|deploy|test|json|database/i.test(h),
-    },
-  ];
-}
-
-// ─── Search state ────────────────────────────
-
-const MAX_RESULTS = 200;
-const DEBOUNCE_MS = 60;
-
-interface PanelState {
-  lang: Lang;
-  allTools: ZeroKeyTool[];
-  results: SearchResult[];
-  selectedIndex: number;
-  query: string;
-  onToolOpen?: () => void;
-}
-
-const panelState: PanelState = {
-  lang: 'en',
-  allTools: zeroKeyTools,
-  results: [],
-  selectedIndex: 0,
-  query: '',
-  onToolOpen: undefined,
-};
-
-let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
 function buildHaystack(tool: ZeroKeyTool): string {
   return [
@@ -177,33 +187,51 @@ function buildHaystack(tool: ZeroKeyTool): string {
   ].join(' ');
 }
 
+function getCategoryCounts(): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const tool of state.allTools) {
+    counts[tool.category] = (counts[tool.category] || 0) + 1;
+  }
+  return counts;
+}
+
+// ─── Search & Filter Logic ───────────────────────────────────────────────────
+
 function applyLifeFilters(results: SearchResult[]): SearchResult[] {
   if (activeLifeFilters.size === 0) return results;
+  const filters = getLifeFilters(state.lang);
+  const activeFilterDefs = filters.filter((f) => activeLifeFilters.has(f.id));
+  if (activeFilterDefs.length === 0) return results;
   return results.filter(({ tool }) => {
     const haystack = buildHaystack(tool).toLowerCase();
-    for (const filterId of activeLifeFilters) {
-      const def = getLifeFilters(panelState.lang).find((c) => c.id === filterId);
-      if (def && !def.predicate(tool, haystack)) return false;
+    for (const def of activeFilterDefs) {
+      if (!def.predicate(tool, haystack)) return false;
     }
     return true;
   });
 }
 
+function applyCategoryFilter(results: SearchResult[]): SearchResult[] {
+  if (!state.activeCategory) return results;
+  return results.filter(({ tool }) => tool.category === state.activeCategory);
+}
+
 function performSearch(query: string): void {
-  panelState.query = query;
+  state.query = query;
+  state.visibleCount = PAGE_SIZE;
 
   let results: SearchResult[];
   if (!query.trim()) {
-    results = panelState.allTools.map((tool) => ({ tool, score: 0, matches: {} }));
+    results = state.allTools.map((tool) => ({ tool, score: 0, matches: {} }));
   } else {
-    results = searchTools(panelState.allTools, query, MAX_RESULTS);
+    results = searchTools(state.allTools, query, MAX_RESULTS);
   }
 
+  results = applyCategoryFilter(results);
   results = applyLifeFilters(results);
-  panelState.results = results;
-  panelState.selectedIndex = results.length > 0 ? 0 : -1;
+  state.results = results;
 
-  renderResultsList();
+  renderContent();
 }
 
 function debouncedSearch(query: string): void {
@@ -211,179 +239,292 @@ function debouncedSearch(query: string): void {
   debounceTimer = setTimeout(() => performSearch(query), DEBOUNCE_MS);
 }
 
-function highlightMatch(text: string, query: string): string {
-  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return text.replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+// ─── Sync hero search ↔ panel search ────────────────────────────────────────
+
+function syncSearchInputs(value: string, source: 'hero' | 'panel'): void {
+  const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
+  const panelInput = document.getElementById('zk-search-input') as HTMLInputElement | null;
+
+  if (source === 'hero' && panelInput && panelInput.value !== value) {
+    panelInput.value = value;
+  }
+  if (source === 'panel' && heroInput && heroInput.value !== value) {
+    heroInput.value = value;
+  }
 }
 
-// ─── Render ──────────────────────────────────
+// ─── Render: Category Sidebar ────────────────────────────────────────────────
 
-function renderResultsList(): void {
-  const root = document.getElementById('zero-key-directory-root');
-  if (!root) return;
-  root.innerHTML = '';
+function renderCategorySidebar(): HTMLElement {
+  const sidebar = create('aside', 'zk2-sidebar');
+  const counts = getCategoryCounts();
+  const copy = COPY[state.lang];
 
-  const results = panelState.results;
+  // "All" item
+  const allItem = create('button', `zk2-cat-item${!state.activeCategory ? ' active' : ''}`);
+  allItem.type = 'button';
+  allItem.innerHTML = `<span class="zk2-cat-label">${copy.allCategory}</span><span class="zk2-cat-count">${state.allTools.length}</span>`;
+  allItem.addEventListener('click', () => {
+    state.activeCategory = null;
+    performSearch(state.query);
+    updateSidebarActive();
+  });
+  sidebar.appendChild(allItem);
 
-  // Stats bar
-  const stats = create('div', 'zk-stats');
-  appendText(stats, 'span', 'zk-stats-count', `${results.length} tools`);
-  if (activeLifeFilters.size > 0) {
-    appendText(stats, 'span', 'zk-stats-filters', `${activeLifeFilters.size} filters active`);
+  // Category items
+  const categories = Object.keys(categoryLabels) as ZeroKeyCategory[];
+  for (const cat of categories) {
+    const count = counts[cat] || 0;
+    if (count === 0) continue;
+
+    const item = create('button', `zk2-cat-item${state.activeCategory === cat ? ' active' : ''}`);
+    item.type = 'button';
+    item.dataset.category = cat;
+    item.innerHTML = `<span class="zk2-cat-icon">${categoryIcons[cat]}</span><span class="zk2-cat-label">${categoryLabels[cat].split(' ').slice(0, 3).join(' ')}</span><span class="zk2-cat-count">${count}</span>`;
+    item.addEventListener('click', () => {
+      state.activeCategory = state.activeCategory === cat ? null : cat;
+      performSearch(state.query);
+      updateSidebarActive();
+    });
+    sidebar.appendChild(item);
   }
-  root.appendChild(stats);
 
-  // Life filters row
-  const filtersRow = create('div', 'zk-filters');
-  const filters = getLifeFilters(panelState.lang);
-  filters.forEach((def) => {
-    const chip = create('button');
+  return sidebar;
+}
+
+function updateSidebarActive(): void {
+  const container = state.container;
+  if (!container) return;
+  const items = container.querySelectorAll('.zk2-cat-item');
+  items.forEach((item, index) => {
+    if (index === 0) {
+      item.classList.toggle('active', !state.activeCategory);
+    } else {
+      const cat = (item as HTMLElement).dataset.category;
+      item.classList.toggle('active', cat === state.activeCategory);
+    }
+  });
+}
+
+// ─── Render: Quick Filters ───────────────────────────────────────────────────
+
+function renderQuickFilters(): HTMLElement {
+  const row = create('div', 'zk2-filters-row');
+  const filters = getLifeFilters(state.lang);
+
+  for (const def of filters) {
+    const chip = create(
+      'button',
+      `zk2-filter-chip${activeLifeFilters.has(def.id) ? ' active' : ''}`
+    );
     chip.type = 'button';
     chip.textContent = def.label;
-    chip.className = `zk-chip${activeLifeFilters.has(def.id) ? ' active' : ''}`;
     chip.addEventListener('click', () => {
       if (activeLifeFilters.has(def.id)) {
         activeLifeFilters.delete(def.id);
       } else {
         activeLifeFilters.add(def.id);
       }
-      performSearch(panelState.query);
+      performSearch(state.query);
     });
-    filtersRow.appendChild(chip);
-  });
-  root.appendChild(filtersRow);
-
-  // Results
-  if (results.length === 0) {
-    const empty = create('div', 'zk-empty');
-    empty.textContent = COPY[panelState.lang].noMatches;
-    root.appendChild(empty);
-    return;
+    row.appendChild(chip);
   }
-
-  const list = create('div', 'zk-list');
-  results.forEach((result, index) => {
-    const row = buildToolRow(result, index === panelState.selectedIndex);
-    list.appendChild(row);
-  });
-  root.appendChild(list);
-}
-
-function buildToolRow(result: SearchResult, isSelected: boolean): HTMLElement {
-  const { tool, matches } = result;
-  const row = create('div', `zk-row${isSelected ? ' selected' : ''}`);
-
-  // Name
-  const nameEl = create('span', 'zk-row-name');
-  if (matches.name && panelState.query.trim()) {
-    nameEl.innerHTML = highlightMatch(tool.name, panelState.query.trim());
-  } else {
-    nameEl.textContent = tool.name;
-  }
-  row.appendChild(nameEl);
-
-  // Badges
-  const badgesWrap = create('div', 'zk-row-badges');
-  tool.badges.slice(0, MAX_VISIBLE_BADGES).forEach((b: string) => {
-    const badgeEl = create('span', 'zk-badge');
-    badgeEl.textContent = b;
-    badgesWrap.appendChild(badgeEl);
-  });
-  row.appendChild(badgesWrap);
-
-  // Surface
-  const surf = create('span', `zk-surf zk-surf-${tool.surface}`);
-  surf.textContent = tool.surface.toUpperCase();
-  row.appendChild(surf);
-
-  // Actions
-  const actions = create('div', 'zk-row-actions');
-
-  if (tool.caveat) {
-    const caveat = create('span', 'zk-caveat');
-    caveat.title = tool.caveat;
-    caveat.textContent = '⚠';
-    actions.appendChild(caveat);
-  }
-
-  const btn = create('button');
-  btn.type = 'button';
-  btn.className = 'zk-btn-open';
-  btn.textContent = tool.surface === 'cli' ? COPY[panelState.lang].docs : COPY[panelState.lang].open;
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    panelState.onToolOpen?.();
-    window.open(tool.url, '_blank', 'noopener,noreferrer');
-  });
-  actions.appendChild(btn);
-
-  row.appendChild(actions);
-  row.addEventListener('click', () => {
-    panelState.onToolOpen?.();
-    window.open(tool.url, '_blank', 'noopener,noreferrer');
-  });
 
   return row;
 }
 
-// ─── Keyboard nav ────────────────────────────
+// ─── Render: Tool Card ───────────────────────────────────────────────────────
 
-function handleKeyboard(e: KeyboardEvent): void {
-  const list = document.querySelector('.zk-list');
-  if (!list) return;
-  const rows = list.querySelectorAll('.zk-row');
-  if (rows.length === 0) return;
+function renderToolCard(result: SearchResult): HTMLElement {
+  const { tool } = result;
+  const copy = COPY[state.lang];
 
-  const len = panelState.results.length;
+  const card = create('article', 'zk2-card');
 
-  switch (e.key) {
-    case 'ArrowDown':
-      e.preventDefault();
-      panelState.selectedIndex = (panelState.selectedIndex + 1) % len;
-      syncSelection(rows);
-      break;
-    case 'ArrowUp':
-      e.preventDefault();
-      panelState.selectedIndex = (panelState.selectedIndex - 1 + len) % len;
-      syncSelection(rows);
-      break;
-    case 'Enter': {
-      e.preventDefault();
-      const sel = panelState.results[panelState.selectedIndex];
-      if (sel) {
-        panelState.onToolOpen?.();
-        window.open(sel.tool.url, '_blank', 'noopener,noreferrer');
-      }
-      break;
+  // Header: icon + surface badge
+  const header = create('div', 'zk2-card-header');
+  const icon = create('span', 'zk2-card-icon');
+  icon.textContent = categoryIcons[tool.category];
+  header.appendChild(icon);
+
+  const surface = create('span', `zk2-card-surface zk2-surface-${tool.surface}`);
+  surface.textContent = tool.surface.toUpperCase();
+  header.appendChild(surface);
+  card.appendChild(header);
+
+  // Name
+  const name = create('h3', 'zk2-card-name');
+  name.textContent = tool.name;
+  card.appendChild(name);
+
+  // Description (bestFor)
+  const desc = create('p', 'zk2-card-desc');
+  desc.textContent = tool.bestFor.length > 90 ? tool.bestFor.slice(0, 87) + '\u2026' : tool.bestFor;
+  card.appendChild(desc);
+
+  // Badges
+  if (tool.badges.length > 0) {
+    const badgesWrap = create('div', 'zk2-card-badges');
+    for (const b of tool.badges.slice(0, 3)) {
+      const badge = create('span', 'zk2-badge');
+      badge.textContent = b;
+      badgesWrap.appendChild(badge);
     }
-    case 'Escape': {
-      e.preventDefault();
-      const input = document.getElementById('zk-search-input') as HTMLInputElement | null;
-      if (input) {
-        input.value = '';
-        performSearch('');
-      }
-      break;
+    card.appendChild(badgesWrap);
+  }
+
+  // Footer: caveat + open button
+  const footer = create('div', 'zk2-card-footer');
+
+  if (tool.caveat) {
+    const caveat = create('span', 'zk2-card-caveat');
+    caveat.textContent = '\u26A0\uFE0F ' + tool.caveat;
+    caveat.title = tool.caveat;
+    footer.appendChild(caveat);
+  }
+
+  const btn = create('a', 'zk2-card-cta');
+  btn.href = tool.url;
+  btn.target = '_blank';
+  btn.rel = 'noopener noreferrer';
+  btn.textContent = (tool.surface === 'cli' ? copy.docs : copy.open) + ' \u2192';
+  btn.addEventListener('click', () => {
+    state.onToolOpen?.();
+  });
+  footer.appendChild(btn);
+
+  const reportBtn = create('button', 'zk2-card-report');
+  reportBtn.type = 'button';
+  reportBtn.textContent = state.lang === 'ja' ? '\u5831\u544a' : 'Report';
+  reportBtn.title =
+    state.lang === 'ja'
+      ? '\u3053\u306e\u30C4\u30FC\u30EB\u3092\u5831\u544a'
+      : 'Report this tool as broken';
+  reportBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const issueUrl = `https://github.com/banal-ai/banal/issues/new?title=Broken+tool:+${encodeURIComponent(tool.name)}&body=Tool:+${encodeURIComponent(tool.name)}%0AURL:+${encodeURIComponent(tool.url)}%0A%0AProblem:`;
+    window.open(issueUrl, '_blank', 'noopener,noreferrer');
+  });
+  footer.appendChild(reportBtn);
+
+  card.appendChild(footer);
+
+  return card;
+}
+
+// ─── Render: Empty State ─────────────────────────────────────────────────────
+
+function renderEmptyState(): HTMLElement {
+  const copy = COPY[state.lang];
+  const empty = create('div', 'zk2-empty');
+
+  const iconEl = create('div', 'zk2-empty-icon');
+  iconEl.textContent = '\u{1F50D}';
+  empty.appendChild(iconEl);
+
+  const titleEl = create('h3', 'zk2-empty-title');
+  titleEl.textContent = `${copy.noMatchesTitle} "${state.query || ''}"`;
+  empty.appendChild(titleEl);
+
+  const hintEl = create('p', 'zk2-empty-hint');
+  hintEl.textContent = copy.noMatchesSuggestion;
+  empty.appendChild(hintEl);
+
+  const clearBtn = create('button', 'zk2-empty-clear');
+  clearBtn.type = 'button';
+  clearBtn.textContent = copy.clearFilters;
+  empty.appendChild(clearBtn);
+
+  clearBtn.addEventListener('click', () => {
+    state.query = '';
+    state.activeCategory = null;
+    activeLifeFilters.clear();
+    const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
+    const panelInput = document.getElementById('zk-search-input') as HTMLInputElement | null;
+    if (heroInput) heroInput.value = '';
+    if (panelInput) panelInput.value = '';
+    performSearch('');
+  });
+  return empty;
+}
+
+// ─── Render: Main Content (grid + load more) ────────────────────────────────
+
+function renderContent(): void {
+  const container = state.container;
+  if (!container) return;
+
+  // Keep sidebar and top bar, replace content area
+  const contentArea = container.querySelector('.zk2-content') as HTMLElement | null;
+  if (!contentArea) return;
+
+  contentArea.innerHTML = '';
+
+  const copy = COPY[state.lang];
+  const results = state.results;
+  const visible = results.slice(0, state.visibleCount);
+
+  // Filters row
+  const filtersRow = renderQuickFilters();
+  contentArea.appendChild(filtersRow);
+
+  // Stats bar
+  const statsBar = create('div', 'zk2-stats-bar');
+  statsBar.textContent = copy.showing(visible.length, results.length);
+  if (state.activeCategory) {
+    const catLabel = create('span', 'zk2-stats-category');
+    catLabel.textContent = ` \u2022 ${categoryIcons[state.activeCategory]} ${categoryLabels[state.activeCategory]}`;
+    statsBar.appendChild(catLabel);
+  }
+  contentArea.appendChild(statsBar);
+
+  // Empty state
+  if (results.length === 0) {
+    contentArea.appendChild(renderEmptyState());
+    return;
+  }
+
+  // Grid
+  const grid = create('div', 'zk2-grid');
+  visible.forEach((result, i) => {
+    const card = renderToolCard(result);
+    card.style.animationDelay = `${Math.min(i * 20, 400)}ms`;
+    grid.appendChild(card);
+  });
+  contentArea.appendChild(grid);
+
+  // Load more
+  if (visible.length < results.length) {
+    const loadMoreWrap = create('div', 'zk2-load-more-wrap');
+    const loadMoreBtn = create('button', 'zk2-load-more');
+    loadMoreBtn.type = 'button';
+    loadMoreBtn.textContent = copy.loadMore;
+    loadMoreBtn.addEventListener('click', () => {
+      state.visibleCount += PAGE_SIZE;
+      renderContent();
+    });
+    loadMoreWrap.appendChild(loadMoreBtn);
+    contentArea.appendChild(loadMoreWrap);
+  }
+
+  // Update sidebar active states
+  updateSidebarActive();
+}
+
+// ─── Keyboard Navigation ─────────────────────────────────────────────────────
+
+function handleGlobalKeyboard(e: KeyboardEvent): void {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    const input = document.getElementById('zk-search-input') as HTMLInputElement | null;
+    if (input) {
+      input.focus();
+      input.select();
     }
-    case 'k':
-      if ((e.ctrlKey || e.metaKey) && panelState.lang) {
-        e.preventDefault();
-        (document.getElementById('zk-search-input') as HTMLInputElement | null)?.focus();
-      }
-      break;
   }
 }
 
-function syncSelection(rows: NodeListOf<Element>): void {
-  rows.forEach((row, i) => {
-    row.classList.toggle('selected', i === panelState.selectedIndex);
-    if (i === panelState.selectedIndex) {
-      row.scrollIntoView({ block: 'nearest' });
-    }
-  });
-}
-
-// ─── Public API ──────────────────────────────
+// ─── Public API ──────────────────────────────────────────────────────────────
 
 export function renderZeroKeyPowerPanel(
   container: HTMLElement,
@@ -391,96 +532,124 @@ export function renderZeroKeyPowerPanel(
 ): void {
   const { lang, onToolOpen } = options;
 
-  panelState.lang = lang;
-  panelState.onToolOpen = onToolOpen;
-  panelState.query = '';
-  panelState.selectedIndex = 0;
-  panelState.results = zeroKeyTools.map((tool) => ({ tool, score: 0, matches: {} }));
+  // Abort previous hero listeners to prevent accumulation on re-render
+  if (heroAbortController) {
+    heroAbortController.abort();
+  }
+  heroAbortController = new AbortController();
+  const { signal } = heroAbortController;
+
+  // Reset all state including life filters
+  activeLifeFilters.clear();
+  state.lang = lang;
+  state.onToolOpen = onToolOpen;
+  state.query = '';
+  state.activeCategory = null;
+  state.visibleCount = PAGE_SIZE;
+  state.results = zeroKeyTools.map((tool) => ({ tool, score: 0, matches: {} }));
+  state.container = container;
 
   container.innerHTML = '';
+  container.className = 'zk2-panel';
 
-  // Skeleton loading for perceived performance
-  const skeletonWrap = create('div', 'skeleton-wrap');
-  for (let i = 0; i < 8; i++) {
-    const row = create('div', 'skeleton-row');
-    const nameBar = create('div', 'skeleton-bar medium');
-    const badgesBar = create('div', 'skeleton-bar short');
-    const surfacePill = create('div', 'skeleton-pill');
-    row.appendChild(nameBar);
-    row.appendChild(badgesBar);
-    row.appendChild(surfacePill);
-    skeletonWrap.appendChild(row);
-  }
-  container.appendChild(skeletonWrap);
+  // Panel search bar
+  const searchWrap = create('div', 'zk2-search-wrap');
+  const searchIcon = create('span', 'zk2-search-icon');
+  searchIcon.textContent = '\u2315';
+  searchWrap.appendChild(searchIcon);
 
-  // Real content swapped in next frame (feels instant but polished)
-  requestAnimationFrame(() => {
-    skeletonWrap.remove();
-    renderResultsList();
+  const searchInput = create('input');
+  searchInput.type = 'text';
+  searchInput.id = 'zk-search-input';
+  searchInput.className = 'zk2-search-input';
+  searchInput.placeholder = COPY[lang].searchPlaceholder;
+  searchInput.autocomplete = 'off';
+  searchInput.spellcheck = false;
+
+  searchInput.addEventListener('input', () => {
+    syncSearchInputs(searchInput.value, 'panel');
+    debouncedSearch(searchInput.value);
   });
-
-  // Header
-  const header = create('div', 'zk-header');
-  appendText(header, 'h3', 'zk-title', COPY[lang].title);
-  appendText(header, 'span', 'zk-count', `${zeroKeyTools.length} tools`);
-  container.appendChild(header);
-
-  // Search
-  const searchWrap = create('div', 'zk-search-wrap');
-  const icon = create('span', 'zk-search-icon');
-  icon.textContent = '⌕';
-  searchWrap.appendChild(icon);
-
-  const input = create('input');
-  input.type = 'text';
-  input.id = 'zk-search-input';
-  input.className = 'zk-search-input';
-  input.placeholder = COPY[lang].searchPlaceholder;
-  input.autocomplete = 'off';
-  input.spellcheck = false;
-
-  input.addEventListener('input', () => debouncedSearch(input.value));
-  input.addEventListener('keydown', handleKeyboard);
-  searchWrap.appendChild(input);
+  searchWrap.appendChild(searchInput);
   container.appendChild(searchWrap);
 
-  const resultsRoot = create('div');
-  resultsRoot.id = 'zero-key-directory-root';
-  container.appendChild(resultsRoot);
+  // Main layout: sidebar + content
+  const layout = create('div', 'zk2-layout');
 
-  // Initial render
-  renderResultsList();
+  // Sidebar
+  const sidebar = renderCategorySidebar();
+  layout.appendChild(sidebar);
 
-  // Life filter chips
-  const filtersBlock = create('div', 'zk-filters-block');
-  const filters = getLifeFilters(lang);
-  filters.forEach((def) => {
-    const chip = create('button');
-    chip.type = 'button';
-    chip.className = `zk-chip${activeLifeFilters.has(def.id) ? ' active' : ''}`;
-    chip.textContent = def.label;
-    chip.addEventListener('click', () => {
-      activeLifeFilters.has(def.id) ? activeLifeFilters.delete(def.id) : activeLifeFilters.add(def.id);
-      performSearch(panelState.query);
-    });
-    filtersBlock.appendChild(chip);
-  });
-  container.appendChild(filtersBlock);
+  // Content area
+  const content = create('div', 'zk2-content');
+  layout.appendChild(content);
 
-  // Global Ctrl+K
-  const shortcutHandler = (e: KeyboardEvent) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault();
-      input.focus();
-      input.select();
+  container.appendChild(layout);
+
+  // Wire hero search (with AbortController to prevent listener accumulation)
+  const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
+  if (heroInput) {
+    heroInput.addEventListener(
+      'input',
+      () => {
+        syncSearchInputs(heroInput.value, 'hero');
+        debouncedSearch(heroInput.value);
+
+        // Scroll to tools section when user starts typing in hero
+        if (heroInput.value.trim()) {
+          const toolsSection = document.getElementById('tools');
+          if (toolsSection) {
+            toolsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      },
+      { signal }
+    );
+
+    // Enter on hero → focus panel search
+    heroInput.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          searchInput.focus();
+          const toolsSection = document.getElementById('tools');
+          if (toolsSection) {
+            toolsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+        if (e.key === 'Escape') {
+          heroInput.value = '';
+          syncSearchInputs('', 'hero');
+          performSearch('');
+        }
+      },
+      { signal }
+    );
+  }
+
+  // Panel search keyboard
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      searchInput.value = '';
+      syncSearchInputs('', 'panel');
+      performSearch('');
     }
-  };
-  document.addEventListener('keydown', shortcutHandler);
-  container.dataset.shortcutHandler = 'true';
+  });
+
+  // Global Ctrl+K (only attach once — addEventListener deduplicates same fn reference)
+  if (!globalKeyboardAttached) {
+    document.addEventListener('keydown', handleGlobalKeyboard);
+    globalKeyboardAttached = true;
+  }
+
+  // Initial render (use performSearch to apply any state correctly)
+  performSearch(state.query);
 }
 
 export function resetZeroKeyPanelFiltersForTests(): void {
   activeLifeFilters.clear();
-  panelState.query = '';
-  panelState.selectedIndex = 0;
+  state.query = '';
+  state.activeCategory = null;
+  state.visibleCount = PAGE_SIZE;
 }

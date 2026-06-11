@@ -77,6 +77,7 @@ export class BanalProviderError extends Error {
   readonly provider?: Provider;
   readonly model?: string;
   readonly rateLimit?: RateLimitInfo;
+  readonly cause?: Error;
 
   /**
    * Construct a typed Banal error. Message is for .message (debug), friendlyMessage is the one shown to humans.
@@ -90,15 +91,17 @@ export class BanalProviderError extends Error {
       provider?: Provider;
       model?: string;
       rateLimit?: RateLimitInfo;
+      cause?: Error;
     }
   ) {
-    super(message);
+    super(message, opts.cause ? { cause: opts.cause } : undefined);
     this.name = 'BanalProviderError';
     this.code = opts.code;
     if (opts.friendlyMessage !== undefined) this.friendlyMessage = opts.friendlyMessage;
     if (opts.provider !== undefined) this.provider = opts.provider;
     if (opts.model !== undefined) this.model = opts.model;
     if (opts.rateLimit !== undefined) this.rateLimit = opts.rateLimit;
+    if (opts.cause !== undefined) this.cause = opts.cause;
   }
 }
 
@@ -515,6 +518,7 @@ export async function sendFreeMessage(
     }
 
     const originalMessage = err instanceof Error ? err.message : String(err);
+    const originalError = err instanceof Error ? err : undefined;
     // Network / CORS / generic / unexpected — always warm, never blaming. This is the soul of the project.
     throw new BanalProviderError(
       `Free path hiccup: ${originalMessage || 'unknown'}. This is common with shared free endpoints. ` +
@@ -525,6 +529,7 @@ export async function sendFreeMessage(
         friendlyMessage:
           `Free path hiccup: ${originalMessage || 'unknown'}. This is common with shared free endpoints. ` +
           'Add another free key (Groq or Gemini recommended) or wait 30s. You are still in control.',
+        cause: originalError,
       }
     );
   }

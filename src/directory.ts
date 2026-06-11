@@ -12,15 +12,27 @@ export function initDirectory(): void {
   if (!root) return;
 
   const render = (lang = getCurrentLang()) => {
-    renderZeroKeyPowerPanel(root, {
-      lang,
-      onToolOpen: () => {
-        // Safe tracking or custom callback if needed
-      },
-    });
+    try {
+      renderZeroKeyPowerPanel(root, {
+        lang,
+        onToolOpen: () => {
+          // Safe tracking or custom callback if needed
+        },
+      });
 
-    // Update dynamic tool counts
-    updateToolCounts();
+      // Update dynamic tool counts
+      updateToolCounts();
+    } catch (error) {
+      console.error('Failed to render tools directory:', error);
+      root.innerHTML = `
+        <div class="text-center py-16 text-white/60">
+          <div class="inline-block px-8 py-4 rounded-2xl glass-card">
+            <p class="text-lg mb-2">⚠️ Unable to load tools</p>
+            <p class="text-sm">Please refresh the page or try again later.</p>
+          </div>
+        </div>
+      `;
+    }
   };
 
   // Initial render
