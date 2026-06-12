@@ -40,6 +40,32 @@ describe('zero-key tools data', () => {
     }
   });
 
+  it('includes verified free-token and Kilo AI tooling', () => {
+    const byId = Object.fromEntries(zeroKeyTools.map((tool) => [tool.id, tool]));
+
+    expect(byId['kilo-ai']).toMatchObject({
+      name: 'Kilo AI',
+      url: 'https://kilo.ai/',
+      category: 'ai-agents',
+    });
+    expect(byId['kilo-gateway']).toMatchObject({
+      surface: 'api',
+      category: 'dev-coding',
+    });
+    expect(byId['google-gemini-api']).toMatchObject({
+      surface: 'api',
+      category: 'dev-coding',
+    });
+    expect(byId['groq-api']).toMatchObject({
+      surface: 'api',
+      category: 'ai-chat',
+    });
+    expect(byId['openrouter-free']).toMatchObject({
+      surface: 'api',
+      category: 'ai-chat',
+    });
+  });
+
   it('keeps free web, free API, and free CLI as first-class sections', () => {
     const counts = REQUIRED_SURFACES.map(
       (surface) => zeroKeyTools.filter((tool) => tool.surface === surface).length

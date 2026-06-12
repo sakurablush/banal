@@ -2145,9 +2145,96 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     category: 'ai-chat',
     access: 'public-api',
     requiresSignup: false,
-    badges: ['many models', 'no key', 'serverless'],
-    bestFor: 'Running 200,000+ models via API without managing infrastructure.',
-    qualityNote: 'Generous free tier with thousands of open models ready to call.',
+    badges: ['many models', 'serverless', 'open weights'],
+    bestFor: 'Calling thousands of open models without managing your own inference server.',
+    qualityNote:
+      'The broadest open-model catalog on a hosted API. Free inference is useful for experiments, demos, and low-volume prototypes.',
+    caveat:
+      'Free endpoints share capacity and can sleep or rate-limit; production workloads need paid endpoints or self-hosting.',
+    lastVerified: '2026-06-12',
+  },
+  {
+    id: 'kilo-ai',
+    name: 'Kilo AI',
+    url: 'https://kilo.ai/',
+    surface: 'web',
+    category: 'ai-agents',
+    access: 'free-tier',
+    requiresSignup: false,
+    badges: ['Auto Free', 'kilo-auto/free', '200 req/hour', 'gateway'],
+    bestFor:
+      'Starting with Kilo Code and Kilo Gateway, then choosing free, BYOK, or paid model routing.',
+    qualityNote:
+      'Kilo AI is the product hub for Kilo Code and Kilo Gateway; it documents Auto Free routes and no-credit usage paths.',
+    caveat:
+      'Free model routes are rate-limited and may log prompts/outputs depending on the upstream provider; avoid sensitive data.',
+    lastVerified: '2026-06-12',
+  },
+  {
+    id: 'kilo-gateway',
+    name: 'Kilo Gateway',
+    url: 'https://kilo.ai/gateway',
+    surface: 'api',
+    category: 'dev-coding',
+    access: 'free-tier',
+    requiresSignup: false,
+    badges: ['500+ models', 'OpenAI-compatible', 'BYOK', 'Auto Free'],
+    bestFor:
+      'Routing app and agent requests through 500+ models with free routes, BYOK, or local inference.',
+    qualityNote:
+      'Kilo Gateway centralizes inference across many providers and exposes free model routes such as kilo-auto/free.',
+    caveat:
+      'Anonymous free routes are rate-limited; some free providers may log data, so use caution with confidential code.',
+    lastVerified: '2026-06-12',
+  },
+  {
+    id: 'openrouter-free',
+    name: 'OpenRouter Free Models',
+    url: 'https://openrouter.ai/collections/free-models',
+    surface: 'api',
+    category: 'ai-chat',
+    access: 'free-tier',
+    requiresSignup: true,
+    badges: ['28+ free models', '20 RPM', ':free routes', 'BYOK'],
+    bestFor: 'Choosing from many free model variants through one OpenAI-compatible API key.',
+    qualityNote:
+      'OpenRouter keeps a curated free-model catalog and an openrouter/free router for experiments, coding, and chat.',
+    caveat:
+      'Free variants are capped per minute/day and the roster rotates; check each model page before relying on it.',
+    lastVerified: '2026-06-12',
+  },
+  {
+    id: 'groq-api',
+    name: 'Groq API',
+    url: 'https://console.groq.com/',
+    surface: 'api',
+    category: 'ai-chat',
+    access: 'free-tier',
+    requiresSignup: true,
+    badges: ['ultra-fast', '6K TPM', '14.4K req/day', 'OpenAI-compatible'],
+    bestFor: 'Fast API inference for Llama, Qwen, GPT-OSS, and other open models.',
+    qualityNote:
+      'Groq publishes concrete free limits by model and is one of the fastest hosted paths for open-weight inference.',
+    caveat:
+      'Free limits are low enough for prototypes but not high-volume production; quotas vary by model and organization.',
+    lastVerified: '2026-06-12',
+  },
+  {
+    id: 'free-the-ai',
+    name: 'FreeTheAi',
+    url: 'https://freetheai.xyz/',
+    surface: 'api',
+    category: 'ai-chat',
+    access: 'free-key',
+    requiresSignup: true,
+    badges: ['50+ models', 'OpenAI-compatible', 'no billing', '~250/day'],
+    bestFor:
+      'A free OpenAI-compatible API gateway for chat, tools, streaming, and image endpoints.',
+    qualityNote:
+      'FreeTheAi aggregates many models behind one key with no credit card or billing setup, useful for hobby apps.',
+    caveat:
+      'Requires Discord/key signup and has daily success caps; availability and model quality can change quickly.',
+    lastVerified: '2026-06-12',
   },
   {
     id: 'glhf-gg',
@@ -2181,9 +2268,13 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     category: 'ai-chat',
     access: 'free-tier',
     requiresSignup: true,
-    badges: ['ultra-fast', 'Llama', 'free tier'],
-    bestFor: 'Blazingly fast LLM inference with free cloud access.',
-    qualityNote: 'Custom hardware offers one of the fastest free inference tiers.',
+    badges: ['ultra-fast', '1M tokens/day', 'OpenAI-compatible'],
+    bestFor: 'Very fast API inference with a large daily token budget for prototypes and demos.',
+    qualityNote:
+      'Cerebras publishes a free tier around 1M tokens/day and 14,400 requests/day for selected models, with OpenAI-compatible API access.',
+    caveat:
+      'Requires account. Free tier context and model selection are limited; verify current quotas before production use.',
+    lastVerified: '2026-06-12',
   },
   {
     id: 'fal-ai',
@@ -3129,14 +3220,31 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     url: 'https://aistudio.google.com/',
     surface: 'web',
     category: 'ai-coding',
-    access: 'no-login',
-    requiresSignup: false,
-    badges: ['Web UI', 'Gemini', 'prototyping', 'completely free'],
-    bestFor: 'Prototyping with Gemini models. Completely free in all regions.',
+    access: 'free-tier',
+    requiresSignup: true,
+    badges: ['Web UI', 'Gemini API', '1M context', '250K TPM'],
+    bestFor: 'Prototyping with Gemini models and getting a free API key for long-context apps.',
     qualityNote:
-      'Google-backed. Completely free in all available regions. Great for testing and prototyping.',
-    caveat: 'Rate limits apply, but generous for testing. Not intended for production use.',
-    lastVerified: '2026-06-11',
+      'Google-backed workspace with free Gemini API quotas; Flash models can use very large context and token-per-minute allowances.',
+    caveat:
+      'Requires Google account. Free-tier prompts may be used to improve Google services; check data controls before sensitive work.',
+    lastVerified: '2026-06-12',
+  },
+  {
+    id: 'google-gemini-api',
+    name: 'Google Gemini API',
+    url: 'https://ai.google.dev/',
+    surface: 'api',
+    category: 'dev-coding',
+    access: 'free-tier',
+    requiresSignup: true,
+    badges: ['Gemini Flash', '1M context', '250K TPM', 'OpenAI-compatible'],
+    bestFor: 'High-volume prototyping with long context and generous free token-per-minute quotas.',
+    qualityNote:
+      'Google AI Studio/Gemini API exposes free-tier Gemini models with large context windows and strong multimodal support.',
+    caveat:
+      'Requires Google account/project. Free usage may be used to improve Google services and rate limits vary by model.',
+    lastVerified: '2026-06-12',
   },
   // ──────────────────────────────────────────────────────────────────────────
   // INTERNATIONAL VERIFIED TOOLS (2026)
@@ -3468,12 +3576,13 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     category: 'ai-agents',
     access: 'open-source',
     requiresSignup: false,
-    badges: ['500+ models', 'zero markup', 'multiple modes', 'Apache-2.0'],
-    bestFor: '500+ models, multiple agent modes, no vendor lock-in, zero markup.',
+    badges: ['500+ models', 'Auto Free', 'zero markup', 'Apache-2.0'],
+    bestFor:
+      'VS Code, JetBrains, and CLI coding agent with open-source workflow and free model routing.',
     qualityNote:
-      'Apache-2.0, actively maintained. 500+ models at exact provider rates, no credit system.',
-    caveat: 'BYOK - you pay for API calls, but zero markup. Works in VS Code, JetBrains, and CLI.',
-    lastVerified: '2026-06-11',
+      'Apache-2.0 coding agent that can use Kilo Gateway free models, BYOK, local models, or paid providers with zero markup.',
+    caveat: 'Auto Free is rate-limited; BYOK/paid providers cost money outside Kilo.',
+    lastVerified: '2026-06-12',
   },
   // ──────────────────────────────────────────────────────────────────────────
   // AI AGENT PLATFORMS (Specialized Frameworks)
