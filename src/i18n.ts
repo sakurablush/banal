@@ -163,7 +163,7 @@ export const translations: Record<Lang, Translations> = {
     'section.articles.desc': 'Honest writing for people who need this. No social media circus.',
     'section.limitations.eyebrow': 'TRANSPARENCY',
     'section.limitations.title': 'Honest Limitations',
-    'section.limitations.desc': "We will not lie to you. Here's what \"free\" really means.",
+    'section.limitations.desc': 'We will not lie to you. Here\'s what "free" really means.',
     'limitations.0.title': '"Free" means different things',
     'limitations.0.desc':
       'Some tools are truly free (no key, no limits). Others require a free API key (no credit card). Others have rate limits or daily quotas. We mark every tool clearly.',
@@ -186,7 +186,7 @@ export const translations: Record<Lang, Translations> = {
     'mission.title1': 'AI is the new literacy.',
     'mission.title2': 'Everyone deserves access.',
     'mission.desc':
-      "The best AI capabilities are locked behind $20/month subscriptions. That's $240/year that separates those who can think with AI from those who can't. <span class=\"text-white/70\">We refuse this.</span>",
+      'The best AI capabilities are locked behind $20/month subscriptions. That\'s $240/year that separates those who can think with AI from those who can\'t. <span class="text-white/70">We refuse this.</span>',
     'mission.0.title': 'Transparent access',
     'mission.0.desc': "We clearly mark which tools need signup and which don't. No surprises.",
     'mission.1.title': 'Honestly curated',
@@ -348,7 +348,8 @@ export const translations: Record<Lang, Translations> = {
     'hero.title2': '透明。誠実。フォーク可能。',
     'hero.subtitle':
       '227以上のツール。128のAI + 99の開発者ツール。チャット、画像、動画、コード、PDF、バックエンド、自動化。<span class="text-white/70">すべて認証済み。</span><span class="text-white/40">無料アクセス。</span>',
-    'hero.disclaimer': '一部のツールは無料サインアップが必要です（クレジットカード不要）。すべて明確に記載しています。',
+    'hero.disclaimer':
+      '一部のツールは無料サインアップが必要です（クレジットカード不要）。すべて明確に記載しています。',
     'stats.tools': 'ツール',
     'stats.logins': 'ログイン',
     'stats.freedom': '自由',
@@ -376,7 +377,8 @@ export const translations: Record<Lang, Translations> = {
     'section.playground.eyebrow': 'APIプレイグラウンド',
     'section.playground.title1': '自分で試そう。',
     'section.playground.title2': '無料API、サインアップ不要。',
-    'section.playground.desc': 'ブラウザで直接無料AI APIをテスト。アカウント不要。クレジットカード不要。クリックしてテスト。',
+    'section.playground.desc':
+      'ブラウザで直接無料AI APIをテスト。アカウント不要。クレジットカード不要。クリックしてテスト。',
     'section.articles.eyebrow': '記事',
     'section.articles.title1': 'リアルなストーリー。',
     'section.articles.title2': '無駄なし。',
@@ -408,9 +410,11 @@ export const translations: Record<Lang, Translations> = {
     'mission.desc':
       '最高のAI能力は$20/月のサブスクリプションの背後にロックされている。それはAIと共に考える者とそうでない者を分ける$240/年だ。<span class="text-white/70">私たちはこれを拒否する。</span>',
     'mission.0.title': '透明なアクセス',
-    'mission.0.desc': 'どのツールがサインアップが必要で、どれが不要か明確に記載している。サプライズなし。',
+    'mission.0.desc':
+      'どのツールがサインアップが必要で、どれが不要か明確に記載している。サプライズなし。',
     'mission.1.title': '誠実なキュレーション',
-    'mission.1.desc': '本当の制限、本当の注意書き。誇張なし。アフィリエイトリンクなし。アスタリスクを印刷する。',
+    'mission.1.desc':
+      '本当の制限、本当の注意書き。誇張なし。アフィリエイトリンクなし。アスタリスクを印刷する。',
     'mission.2.title': '永遠にフォーク可能',
     'mission.2.desc': 'オープンソース。クローン。ホスト。MITライセンス。千のコピー。',
     'footer.tagline': 'Banal — AIツールディレクトリ。透明。誠実。フォーク可能。',

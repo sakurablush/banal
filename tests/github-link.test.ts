@@ -8,16 +8,14 @@ describe('GitHub report link regression tests', () => {
     const html = fs.readFileSync(indexPath, 'utf-8');
 
     // Find the "Report it on GitHub" link
-    const reportLinkMatch = html.match(
-      /Found outdated information\?\s*<a[^>]*href="([^"]+)"[^>]*>/
-    ) || html.match(/href="([^"]*github\.com\/sakurablush\/banal\/issues\/new[^"]*)"/);
+    const reportLinkMatch =
+      html.match(/Found outdated information\?\s*<a[^>]*href="([^"]+)"[^>]*>/) ||
+      html.match(/href="([^"]*github\.com\/sakurablush\/banal\/issues\/new[^"]*)"/);
 
     expect(reportLinkMatch).toBeTruthy();
 
     const href = reportLinkMatch?.[1] || reportLinkMatch?.[0];
-    const finalHref = href?.includes('href=') 
-      ? href.match(/href="([^"]+)"/)?.[1] || href
-      : href;
+    const finalHref = href?.includes('href=') ? href.match(/href="([^"]+)"/)?.[1] || href : href;
 
     expect(finalHref).toContain('github.com/sakurablush/banal/issues/new');
     expect(finalHref).not.toContain('github.com"'); // Just the bare domain

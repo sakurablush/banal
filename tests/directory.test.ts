@@ -175,9 +175,12 @@ describe('multi-panel independent state', () => {
 
     // Dev panel search should NOT be affected (it has its own state)
     // The Dev panel shouldn't show any AI chat tools
-    const devVisibleTools = Array.from(devRoot.querySelectorAll('.zk2-card h3'))
-      .map((h) => h.textContent?.toLowerCase() || '');
-    const hasAIMatchingTools = devVisibleTools.some((t) => t.includes('chatgpt') || t.includes('gpt'));
+    const devVisibleTools = Array.from(devRoot.querySelectorAll('.zk2-card h3')).map(
+      (h) => h.textContent?.toLowerCase() || ''
+    );
+    const hasAIMatchingTools = devVisibleTools.some(
+      (t) => t.includes('chatgpt') || t.includes('gpt')
+    );
     expect(hasAIMatchingTools).toBe(false);
   });
 

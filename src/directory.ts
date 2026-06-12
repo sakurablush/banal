@@ -1,4 +1,8 @@
-import { renderZeroKeyPowerPanel, type ZeroKeyPanelApi, type ZeroKeyCategory } from './zero-key-panel';
+import {
+  renderZeroKeyPowerPanel,
+  type ZeroKeyPanelApi,
+  type ZeroKeyCategory,
+} from './zero-key-panel';
 import { getCurrentLang } from './i18n';
 import { zeroKeyTools } from './data/zero-key-tools';
 
