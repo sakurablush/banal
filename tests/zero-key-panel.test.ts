@@ -333,9 +333,9 @@ describe('zero-key panel rendering', () => {
     // Click report button
     reportBtn.click();
 
-    // Should open GitHub issue URL
+    // Should open GitHub issue URL with correct repo
     expect(mockOpen).toHaveBeenCalledWith(
-      expect.stringContaining('github.com/banal-ai/banal/issues/new'),
+      expect.stringContaining('github.com/sakurablush/banal/issues/new'),
       '_blank',
       'noopener,noreferrer'
     );

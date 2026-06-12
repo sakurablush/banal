@@ -1,9 +1,14 @@
 /**
- * Free Models Module — renders cards for AI providers offering free API keys.
+ * Free Models Module — renders two sections:
+ *   1. "Free API Keys" - providers offering free hosted API access
+ *   2. "Open Source Models" - models to download and run locally
  *
- * This module displays a curated list of AI providers that offer free tiers
- * with generous limits. Each card includes provider information, limits,
- * and links to get free API keys.
+ * Section 1 (Free API Keys) displays a curated list of AI providers that offer
+ * free hosted tiers with generous limits. Each card includes provider information,
+ * limits, and links to get free API keys.
+ *
+ * Section 2 (Open Source Models) shows real open-weight models that can be
+ * downloaded and run locally with no API keys and no rate limits.
  */
 
 interface FreeModelProvider {
@@ -16,6 +21,17 @@ interface FreeModelProvider {
   getKeyUrl: string;
   termsUrl: string;
   description: string;
+}
+
+interface OpenSourceModel {
+  id: string;
+  name: string;
+  family: string;
+  sizes: string;
+  license: string;
+  vram: string;
+  links: { platform: string; url: string }[];
+  bestFor: string;
 }
 
 const providers: FreeModelProvider[] = [
@@ -109,11 +125,106 @@ const providers: FreeModelProvider[] = [
   },
 ];
 
+const openSourceModels: OpenSourceModel[] = [
+  {
+    id: 'llama-3.3',
+    name: 'Llama 3.3',
+    family: 'Meta',
+    sizes: '8B, 70B, 405B',
+    license: 'Apache 2.0',
+    vram: '8B: ~16GB | 70B: ~140GB | 405B: ~800GB',
+    links: [
+      { platform: 'HF', url: 'https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct' },
+      { platform: 'Ollama', url: 'https://ollama.com/search?q=llama+3.3' },
+    ],
+    bestFor: 'General-purpose, multilingual, coding, reasoning',
+  },
+  {
+    id: 'qwen-2.5',
+    name: 'Qwen 2.5',
+    family: 'Alibaba',
+    sizes: '0.6B, 1.5B, 3B, 7B, 14B, 32B, 72B, 110B, 235B, 397B',
+    license: 'Apache 2.0',
+    vram: '0.6B: ~2GB | 72B: ~140GB | 397B: ~800GB',
+    links: [
+      { platform: 'HF', url: 'https://huggingface.co/Qwen/Qwen2.5-72B-Instruct' },
+      { platform: 'Ollama', url: 'https://ollama.com/search?q=qwen+2.5' },
+    ],
+    bestFor: 'Multilingual, coding, math, long context',
+  },
+  {
+    id: 'glm-4',
+    name: 'GLM-4',
+    family: 'Zhipu AI',
+    sizes: '9B, 33B',
+    license: 'MIT / Apache 2.0',
+    vram: '9B: ~18GB | 33B: ~66GB',
+    links: [
+      { platform: 'HF', url: 'https://huggingface.co/THUDM/glm-4-9b-chat' },
+      { platform: 'ModelScope', url: 'https://modelscope.cn/models/ZhipuAI/glm-4-9b-chat' },
+    ],
+    bestFor: 'Multilingual, Chinese-English, reasoning',
+  },
+  {
+    id: 'mistral',
+    name: 'Mistral / Mixtral',
+    family: 'Mistral AI',
+    sizes: '7B, 8x7B, 8x22B',
+    license: 'Apache 2.0',
+    vram: '7B: ~14GB | 8x7B: ~90GB | 8x22B: ~280GB',
+    links: [
+      { platform: 'HF', url: 'https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3' },
+      { platform: 'Ollama', url: 'https://ollama.com/search?q=mistral' },
+    ],
+    bestFor: 'Fast, efficient, multilingual, coding',
+  },
+  {
+    id: 'gemma-2',
+    name: 'Gemma 2',
+    family: 'Google',
+    sizes: '2B, 9B, 27B',
+    license: 'Apache 2.0',
+    vram: '2B: ~4GB | 9B: ~18GB | 27B: ~54GB',
+    links: [
+      { platform: 'HF', url: 'https://huggingface.co/google/gemma-2-9b-it' },
+      { platform: 'Ollama', url: 'https://ollama.com/search?q=gemma' },
+    ],
+    bestFor: 'Lightweight, efficient, safe, Google ecosystem',
+  },
+  {
+    id: 'deepseek',
+    name: 'DeepSeek V3 / R1',
+    family: 'DeepSeek',
+    sizes: 'V3: 671B (37B active), R1: 671B (37B active)',
+    license: 'MIT',
+    vram: '37B activated: ~75GB (quantized)',
+    links: [
+      { platform: 'HF', url: 'https://huggingface.co/deepseek-ai/DeepSeek-R1' },
+      { platform: 'Ollama', url: 'https://ollama.com/search?q=deepseek' },
+    ],
+    bestFor: 'Reasoning, coding, math, chain-of-thought',
+  },
+];
+
 /**
  * Initialize the free models section.
  * Renders provider cards into the #free-models-root container.
+ * Also renders open source models into #open-source-models-root if present.
  */
 export function initFreeModels(): void {
+  renderApiKeysSection();
+
+  // Open Source Models section (if container exists)
+  const osRoot = document.getElementById('open-source-models-root');
+  if (osRoot) {
+    renderOpenSourceModels(osRoot);
+  }
+}
+
+/**
+ * Render the "Free API Keys" section with hosted providers.
+ */
+function renderApiKeysSection(): void {
   const root = document.getElementById('free-models-root');
   if (!root) {
     console.warn('Free models root not found');
@@ -131,6 +242,94 @@ export function initFreeModels(): void {
   });
 
   root.appendChild(grid);
+}
+
+/**
+ * Render the "Open Source Models" section with downloadable models.
+ */
+export function renderOpenSourceModels(container: HTMLElement): void {
+  container.innerHTML = '';
+
+  const tableWrap = document.createElement('div');
+  tableWrap.className = 'overflow-x-auto';
+
+  const table = document.createElement('table');
+  table.className = 'w-full text-sm text-left';
+
+  // Header
+  const thead = document.createElement('thead');
+  thead.className = 'text-xs text-white/40 uppercase border-b border-white/10';
+  thead.innerHTML = `
+    <tr>
+      <th class="px-4 py-3">Model</th>
+      <th class="px-4 py-3">Sizes</th>
+      <th class="px-4 py-3">License</th>
+      <th class="px-4 py-3">VRAM (min)</th>
+      <th class="px-4 py-3">Best For</th>
+      <th class="px-4 py-3">Download</th>
+    </tr>
+  `;
+  table.appendChild(thead);
+
+  // Body
+  const tbody = document.createElement('tbody');
+  openSourceModels.forEach((model) => {
+    const tr = document.createElement('tr');
+    tr.className = 'border-b border-white/5 hover:bg-white/5 transition-colors';
+
+    // Model name + family
+    const nameTd = document.createElement('td');
+    nameTd.className = 'px-4 py-3 font-medium text-white';
+    nameTd.innerHTML = `<div>${model.name}</div><div class="text-xs text-white/40">${model.family}</div>`;
+    tr.appendChild(nameTd);
+
+    // Sizes
+    const sizesTd = document.createElement('td');
+    sizesTd.className = 'px-4 py-3 text-white/70';
+    sizesTd.textContent = model.sizes;
+    tr.appendChild(sizesTd);
+
+    // License
+    const licenseTd = document.createElement('td');
+    licenseTd.className = 'px-4 py-3';
+    const licenseSpan = document.createElement('span');
+    licenseSpan.className = 'px-2 py-1 rounded text-xs bg-green-500/20 text-green-400';
+    licenseSpan.textContent = model.license;
+    licenseTd.appendChild(licenseSpan);
+    tr.appendChild(licenseTd);
+
+    // VRAM
+    const vramTd = document.createElement('td');
+    vramTd.className = 'px-4 py-3 text-white/60 text-xs';
+    vramTd.textContent = model.vram;
+    tr.appendChild(vramTd);
+
+    // Best For
+    const bestForTd = document.createElement('td');
+    bestForTd.className = 'px-4 py-3 text-white/60 text-xs max-w-[200px]';
+    bestForTd.textContent = model.bestFor;
+    tr.appendChild(bestForTd);
+
+    // Download links
+    const linksTd = document.createElement('td');
+    linksTd.className = 'px-4 py-3';
+    model.links.forEach((link) => {
+      const a = document.createElement('a');
+      a.href = link.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.className = 'text-xs text-violet-400 hover:text-violet-300 mr-2';
+      a.textContent = link.platform;
+      linksTd.appendChild(a);
+    });
+    tr.appendChild(linksTd);
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  tableWrap.appendChild(table);
+  container.appendChild(tableWrap);
 }
 
 /**

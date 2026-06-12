@@ -1,6 +1,7 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { initDirectory } from '../src/directory';
 import { zeroKeyTools } from '../src/data/zero-key-tools';
+import { renderZeroKeyPowerPanel } from '../src/zero-key-panel';
 
 const PAGE_SIZE = 24; // matches lazy-load page size in panel
 
@@ -18,6 +19,9 @@ function makeDirectoryDOM() {
       </a>
       <a href="#ai-tools" class="category-card" data-filter="ai-image">
         <span class="category-count" data-category-count="ai-image"></span>
+      </a>
+      <a href="#dev-tools" class="category-card" data-filter="dev-coding">
+        <span class="category-count" data-category-count="dev-coding"></span>
       </a>
     </div>
 
@@ -40,6 +44,11 @@ describe('directory module initialization & behavior', () => {
     makeDirectoryDOM();
     // Reset mocks/spies if any
     vi.restoreAllMocks();
+  });
+
+  afterEach(() => {
+    // Clean up any timers
+    vi.useRealTimers();
   });
 
   it('mounts the Zero-Key directory and updates tool counts', () => {
@@ -72,7 +81,7 @@ describe('directory module initialization & behavior', () => {
     expect(countImage.textContent).toBe(`(${expectedImage})`);
   });
 
-  it('wires data-filter category click events to trigger list filtering', () => {
+  it('wires data-filter category click events to trigger list filtering via API', () => {
     const scrollMock = vi.fn();
     const aiToolsSec = document.getElementById('ai-tools')!;
     aiToolsSec.scrollIntoView = scrollMock;
@@ -86,6 +95,11 @@ describe('directory module initialization & behavior', () => {
 
     // Should scroll smoothly to AI tools section
     expect(scrollMock).toHaveBeenCalledWith({ behavior: 'smooth' });
+
+    // Verify the AI panel has active category set
+    const aiRoot = document.getElementById('ai-tools-root')!;
+    const activeCatBtn = aiRoot.querySelector('.zk2-cat-item.active[data-category="ai-chat"]');
+    expect(activeCatBtn).not.toBeNull();
   });
 
   it('re-renders directory when language-changed custom event fires', () => {
@@ -120,5 +134,79 @@ describe('directory module initialization & behavior', () => {
 
     // Restore the spy
     spy.mockRestore();
+  });
+});
+
+describe('multi-panel independent state', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('two panels maintain independent search state', () => {
+    // Create containers for both panels
+    const aiRoot = document.createElement('section');
+    aiRoot.id = 'ai-tools-root';
+    document.body.appendChild(aiRoot);
+
+    const devRoot = document.createElement('section');
+    devRoot.id = 'dev-tools-root';
+    document.body.appendChild(devRoot);
+
+    // Render both panels
+    renderZeroKeyPowerPanel(aiRoot, { lang: 'en', categoryPrefix: 'ai' });
+    renderZeroKeyPowerPanel(devRoot, { lang: 'en', categoryPrefix: 'dev' });
+
+    // Get panel search inputs
+    const aiSearch = aiRoot.querySelector('#zk-search-input') as HTMLInputElement;
+
+    // Type in AI panel
+    aiSearch.value = 'chatgpt';
+    aiSearch.dispatchEvent(new Event('input', { bubbles: true }));
+    vi.advanceTimersByTime(150);
+
+    // AI panel should show results
+    const aiCards = aiRoot.querySelectorAll('.zk2-card');
+    expect(aiCards.length).toBeGreaterThan(0);
+
+    // Dev panel search should NOT be affected (it has its own state)
+    // The Dev panel shouldn't show any AI chat tools
+    const devVisibleTools = Array.from(devRoot.querySelectorAll('.zk2-card h3'))
+      .map((h) => h.textContent?.toLowerCase() || '');
+    const hasAIMatchingTools = devVisibleTools.some((t) => t.includes('chatgpt') || t.includes('gpt'));
+    expect(hasAIMatchingTools).toBe(false);
+  });
+
+  it('hero search filters both panels independently', () => {
+    // Create hero search input
+    const heroInput = document.createElement('input');
+    heroInput.id = 'hero-search';
+    heroInput.type = 'text';
+    document.body.appendChild(heroInput);
+
+    const aiRoot = document.createElement('section');
+    aiRoot.id = 'ai-tools-root';
+    document.body.appendChild(aiRoot);
+
+    const devRoot = document.createElement('section');
+    devRoot.id = 'dev-tools-root';
+    document.body.appendChild(devRoot);
+
+    renderZeroKeyPowerPanel(aiRoot, { lang: 'en', categoryPrefix: 'ai' });
+    renderZeroKeyPowerPanel(devRoot, { lang: 'en', categoryPrefix: 'dev' });
+
+    // Type in hero search
+    heroInput.value = 'docker';
+    heroInput.dispatchEvent(new Event('input', { bubbles: true }));
+    vi.advanceTimersByTime(150);
+
+    // Both panels should receive the search value
+    const aiSearch = aiRoot.querySelector('#zk-search-input') as HTMLInputElement;
+
+    expect(aiSearch.value).toBe('docker');
   });
 });

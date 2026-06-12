@@ -85,6 +85,7 @@ describe('fuse-search', () => {
           bestFor: 'testing purposes',
           qualityNote: 'test note',
           caveat: undefined,
+          requiresSignup: true,
         },
         {
           id: 'test-2',
@@ -97,6 +98,7 @@ describe('fuse-search', () => {
           bestFor: 'test in description',
           qualityNote: 'test note',
           caveat: undefined,
+          requiresSignup: true,
         },
       ];
 

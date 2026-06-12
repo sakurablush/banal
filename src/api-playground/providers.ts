@@ -80,10 +80,10 @@ export const PLAYGROUND_PROVIDERS: PlaygroundProvider[] = [
   {
     id: 'ovh-anon',
     name: 'OVHcloud AI (Anonymous)',
-    description: 'Free LLM inference. No key required. EU-hosted. Very rate-limited (2 RPM).',
+    description: 'Free LLM inference. No key required. EU-hosted. Very rate-limited (2 RPM per IP per model).',
     icon: '🇪🇺',
     color: '#3b82f6',
-    rateLimit: '2 req/min per IP',
+    rateLimit: '2 req/min per IP per model',
     requiresKey: false,
     endpoint: 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions',
     method: 'POST',

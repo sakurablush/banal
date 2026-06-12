@@ -41,19 +41,25 @@
           BANAL
         </a>
         <div class="hidden sm:flex gap-6 text-sm">
-          <a href="#ai-tools" class="text-white/60 hover:text-white transition-colors">AI Tools</a>
-          <a href="#dev-tools" class="text-white/60 hover:text-white transition-colors">Dev Tools</a>
-          <a href="#free-models" class="text-white/60 hover:text-white transition-colors">Free Models</a>
+          <a href="#ai-tools" class="text-white/60 hover:text-white transition-colors" data-i18n="nav.aiTools">AI Tools</a>
+          <a href="#dev-tools" class="text-white/60 hover:text-white transition-colors" data-i18n="nav.devTools">Dev Tools</a>
           <a href="#prompt-templates" class="text-white/60 hover:text-white transition-colors"
-            >Prompt Templates</a
+            data-i18n="nav.promptTemplates">Prompt Templates</a
           >
           <a href="#playground" class="text-white/60 hover:text-white transition-colors"
-            >API Playground</a
+            data-i18n="nav.playground">API Playground</a
           >
-          <a href="#articles" class="text-white/60 hover:text-white transition-colors">Articles</a>
-          <button id="open-chat-modal" class="text-white/60 hover:text-white transition-colors">Chat</button>
+          <a href="#articles" class="text-white/60 hover:text-white transition-colors" data-i18n="nav.articles">Articles</a>
         </div>
         <div class="flex items-center gap-3">
+          <button
+            id="theme-toggle"
+            class="theme-toggle-btn"
+            title="Toggle light/dark mode"
+            aria-label="Toggle light/dark mode"
+          >
+            <span id="theme-icon">🌙</span>
+          </button>
           <button
             id="lang-toggle"
             class="text-xs text-white/50 hover:text-white border border-white/10 px-2 py-1 rounded transition-colors"
@@ -62,26 +68,15 @@
           >
             EN/JA
           </button>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener"
-            class="text-white/50 hover:text-white transition-colors text-sm"
-            aria-label="View source code on GitHub (opens in new tab)"
-          >
-            GitHub
-          </a>
         </div>
       </nav>
       <!-- Mobile nav (hamburger not needed — just show all links stacked) -->
       <div class="sm:hidden border-t border-white/5 px-4 py-2 flex gap-4 text-xs overflow-x-auto">
-        <a href="#ai-tools" class="text-white/60 hover:text-white whitespace-nowrap">AI Tools</a>
-        <a href="#dev-tools" class="text-white/60 hover:text-white whitespace-nowrap">Dev Tools</a>
-        <a href="#free-models" class="text-white/60 hover:text-white whitespace-nowrap">Free Models</a>
-        <a href="#prompt-templates" class="text-white/60 hover:text-white whitespace-nowrap">Prompt Templates</a>
-        <a href="#playground" class="text-white/60 hover:text-white whitespace-nowrap">APIs</a>
-        <a href="#articles" class="text-white/60 hover:text-white whitespace-nowrap">Articles</a>
-        <button id="open-chat-modal-mobile" class="text-white/60 hover:text-white whitespace-nowrap">Chat</button>
+        <a href="#ai-tools" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.aiTools">AI Tools</a>
+        <a href="#dev-tools" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.devTools">Dev Tools</a>
+        <a href="#prompt-templates" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.promptTemplates">Prompt Templates</a>
+        <a href="#playground" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.playground">APIs</a>
+        <a href="#articles" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.articles">Articles</a>
       </div>
     </header>
 
@@ -94,22 +89,24 @@
       <section class="hero-section relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 text-center relative z-10">
           <div class="mb-4">
-            <span class="eyebrow-void inline-block">⚡ VERIFIED FREE AI DIRECTORY</span>
+            <span class="eyebrow-void inline-block" data-i18n="hero.eyebrow">⚡ VERIFIED FREE AI DIRECTORY</span>
           </div>
 
           <h1
             class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.95] mb-4"
           >
-            <span class="gradient-neon glitch-hover">AI tools you can use.</span>
+            <span class="gradient-neon glitch-hover" data-i18n="hero.title1">AI tools directory.</span>
             <br />
-            <span class="text-white/90 glitch-hover">No payment required.</span>
+            <span class="text-white/90 glitch-hover" data-i18n="hero.title2">Transparent. Honest. Forkable.</span>
           </h1>
 
-          <p class="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p class="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-6 leading-relaxed" data-i18n="hero.subtitle">
             227+ tools. 128 AI + 99 developer tools. Chat, image, video, code, PDF, backend, automation.
             <span class="text-white/70">All verified.</span>
             <span class="text-white/40">Free access.</span>
-            No login. No card. No install.
+          </p>
+          <p class="text-sm text-white/30 max-w-xl mx-auto mb-2" data-i18n="hero.disclaimer">
+            Some tools require free signup (no credit card). We mark everything clearly.
           </p>
 
           <!-- GIANT SEARCH -->
@@ -129,20 +126,20 @@
           <div class="stats-void">
             <div class="stat-void">
               <div class="stat-number-void" id="stat-tools">227+</div>
-              <div class="stat-label-void">Tools</div>
-            </div>
-            <div class="stat-void">
-              <div class="stat-number-void">0</div>
-              <div class="stat-label-void">Logins</div>
-            </div>
-            <div class="stat-void">
-              <div class="stat-number-void">∞</div>
-              <div class="stat-label-void">Freedom</div>
-            </div>
-            <div class="stat-void">
-              <div class="stat-number-void">100%</div>
-              <div class="stat-label-void">Free Access</div>
-            </div>
+            <div class="stat-label-void" data-i18n="stats.tools">Tools</div>
+          </div>
+          <div class="stat-void">
+            <div class="stat-number-void">0</div>
+            <div class="stat-label-void" data-i18n="stats.logins">Logins</div>
+          </div>
+          <div class="stat-void">
+            <div class="stat-number-void">∞</div>
+            <div class="stat-label-void" data-i18n="stats.freedom">Freedom</div>
+          </div>
+          <div class="stat-void">
+            <div class="stat-number-void">100%</div>
+            <div class="stat-label-void" data-i18n="stats.freeAccess">Free Access</div>
+          </div>
           </div>
         </div>
       </section>
@@ -150,12 +147,12 @@
       <!-- AI TOOLS DIRECTORY -->
       <section id="ai-tools" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div class="text-center mb-12">
-          <div class="eyebrow-void">🤖 AI TOOLS</div>
+          <div class="eyebrow-void" data-i18n="section.aiTools.eyebrow">🤖 AI TOOLS</div>
           <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
-            <span class="gradient-neon">128+ AI tools.</span>
-            <span class="text-white/80">Zero gatekeeping.</span>
+            <span class="gradient-neon" data-i18n="section.aiTools.title1">128+ AI tools.</span>
+            <span class="text-white/80" data-i18n="section.aiTools.title2">Zero gatekeeping.</span>
           </h2>
-          <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base">
+          <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base" data-i18n="section.aiTools.desc">
             Free AI-powered tools for chat, image, video, code, PDF, and research.
             <span class="text-white/50">All verified. All free.</span>
           </p>
@@ -173,12 +170,12 @@
       <!-- DEV TOOLS DIRECTORY -->
       <section id="dev-tools" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 border-t border-white/5">
         <div class="text-center mb-12">
-          <div class="eyebrow-void">💻 DEVELOPER TOOLS</div>
+          <div class="eyebrow-void" data-i18n="section.devTools.eyebrow">💻 DEVELOPER TOOLS</div>
           <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
-            <span class="gradient-neon">99+ dev tools.</span>
-            <span class="text-white/80">Open source & free.</span>
+            <span class="gradient-neon" data-i18n="section.devTools.title1">99+ dev tools.</span>
+            <span class="text-white/80" data-i18n="section.devTools.title2">Open source & free.</span>
           </h2>
-          <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base">
+          <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base" data-i18n="section.devTools.desc">
             Free tools for coding, backend, automation, security, and learning.
             <span class="text-white/50">No hype. No affiliate links.</span>
           </p>
@@ -193,31 +190,6 @@
         </div>
       </section>
 
-      <!-- FREE AI MODELS -->
-      <section
-        id="free-models"
-        class="py-8 sm:py-12 border-t border-white/5 bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
-      >
-        <div class="max-w-7xl mx-auto px-4 sm:px-6">
-          <div class="text-center mb-10">
-            <div class="eyebrow-void">FREE AI MODELS</div>
-            <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
-              <span class="gradient-neon">Real AI.</span>
-              <span class="text-white/80">Zero cost.</span>
-            </h2>
-            <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base">
-              These providers offer free API keys with generous limits.
-              <span class="text-white/50">No credit card required.</span>
-            </p>
-          </div>
-          <div id="free-models-root">
-            <div class="text-center py-12 text-white/20 text-sm">
-              <div class="inline-block px-6 py-3 rounded-xl glass-card">Loading free models...</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <!-- PROMPT TEMPLATES -->
       <section
         id="prompt-templates"
@@ -225,12 +197,12 @@
       >
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
           <div class="text-center mb-12">
-            <div class="eyebrow-void">9 PROMPT TEMPLATES</div>
+            <div class="eyebrow-void" data-i18n="section.promptTemplates.eyebrow">9 PROMPT TEMPLATES</div>
             <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
-              <span class="gradient-neon">Prompt templates.</span>
-              <span class="text-white/80">Copy & paste.</span>
+              <span class="gradient-neon" data-i18n="section.promptTemplates.title1">Prompt templates.</span>
+              <span class="text-white/80" data-i18n="section.promptTemplates.title2">Copy & paste.</span>
             </h2>
-            <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base">
+            <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base" data-i18n="section.promptTemplates.desc">
               9 powerful prompt templates for real-life situations. Copy them, fill in your details,
               paste into any free AI chatbot.
               <span class="text-white/50">No account needed.</span>
@@ -252,12 +224,12 @@
       >
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
           <div class="text-center mb-10">
-            <div class="eyebrow-void">API PLAYGROUND</div>
+            <div class="eyebrow-void" data-i18n="section.playground.eyebrow">API PLAYGROUND</div>
             <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">
-              <span class="gradient-neon">Try it yourself.</span>
-              <span class="text-white/80">Free APIs, no signup.</span>
+              <span class="gradient-neon" data-i18n="section.playground.title1">Try it yourself.</span>
+              <span class="text-white/80" data-i18n="section.playground.title2">Free APIs, no signup.</span>
             </h2>
-            <p class="text-white/40 max-w-lg mx-auto text-sm">
+            <p class="text-white/40 max-w-lg mx-auto text-sm" data-i18n="section.playground.desc">
               Test free AI APIs directly in your browser. No account. No credit card. Just click and
               test.
             </p>
@@ -280,12 +252,12 @@
       >
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
           <div class="text-center mb-12">
-            <div class="eyebrow-void">ARTICLES</div>
+            <div class="eyebrow-void" data-i18n="section.articles.eyebrow">ARTICLES</div>
             <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">
-              <span class="gradient-neon">Real stories.</span>
-              <span class="text-white/80">No fluff.</span>
+              <span class="gradient-neon" data-i18n="section.articles.title1">Real stories.</span>
+              <span class="text-white/80" data-i18n="section.articles.title2">No fluff.</span>
             </h2>
-            <p class="text-white/40 max-w-md mx-auto text-sm">
+            <p class="text-white/40 max-w-md mx-auto text-sm" data-i18n="section.articles.desc">
               Honest writing for people who need this. No social media circus.
             </p>
           </div>
@@ -335,11 +307,11 @@
       <section class="py-10 sm:py-14 border-t border-white/5">
         <div class="max-w-5xl mx-auto px-4 sm:px-6">
           <div class="text-center mb-10">
-            <div class="eyebrow-void">TRANSPARENCY</div>
+            <div class="eyebrow-void" data-i18n="section.limitations.eyebrow">TRANSPARENCY</div>
             <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">
-              <span class="gradient-neon">Honest Limitations</span>
+              <span class="gradient-neon" data-i18n="section.limitations.title">Honest Limitations</span>
             </h2>
-            <p class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base">
+            <p class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base" data-i18n="section.limitations.desc">
               We will not lie to you. Here's what "free" really means.
             </p>
           </div>
@@ -347,8 +319,8 @@
           <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <div class="glass-card p-6">
               <div class="text-2xl mb-3">🔍</div>
-              <h3 class="text-white font-semibold mb-2">"Free" means different things</h3>
-              <p class="text-white/40 text-sm leading-relaxed">
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.0.title">"Free" means different things</h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.0.desc">
                 Some tools are truly free (no key, no limits). Others require a free API key (no credit card). 
                 Others have rate limits or daily quotas. We mark every tool clearly.
               </p>
@@ -356,8 +328,8 @@
 
             <div class="glass-card p-6">
               <div class="text-2xl mb-3">🤖</div>
-              <h3 class="text-white font-semibold mb-2">AI tools are not magic</h3>
-              <p class="text-white/40 text-sm leading-relaxed">
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.1.title">AI tools are not magic</h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.1.desc">
                 They can hallucinate, give wrong answers, or refuse legitimate requests. 
                 Always verify important information. Never trust AI blindly.
               </p>
@@ -365,8 +337,8 @@
 
             <div class="glass-card p-6">
               <div class="text-2xl mb-3">⏱️</div>
-              <h3 class="text-white font-semibold mb-2">Rate limits are real</h3>
-              <p class="text-white/40 text-sm leading-relaxed">
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.2.title">Rate limits are real</h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.2.desc">
                 Free tiers exist to share resources. If you hit a limit, wait or try another tool. 
                 This protects the free service for everyone.
               </p>
@@ -374,8 +346,8 @@
 
             <div class="glass-card p-6">
               <div class="text-2xl mb-3">🔒</div>
-              <h3 class="text-white font-semibold mb-2">Privacy matters</h3>
-              <p class="text-white/40 text-sm leading-relaxed">
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.3.title">Privacy matters</h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.3.desc">
                 Do not treat any hosted AI as confidential legal, medical, or financial counsel. 
                 Your prompts may be logged or used for training.
               </p>
@@ -383,8 +355,8 @@
 
             <div class="glass-card p-6">
               <div class="text-2xl mb-3">🔄</div>
-              <h3 class="text-white font-semibold mb-2">Tools change</h3>
-              <p class="text-white/40 text-sm leading-relaxed">
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.4.title">Tools change</h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.4.desc">
                 Free tiers can be reduced or removed. We verify regularly, but always test yourself. 
                 If something breaks, let us know on GitHub.
               </p>
@@ -392,8 +364,8 @@
 
             <div class="glass-card p-6">
               <div class="text-2xl mb-3">✅</div>
-              <h3 class="text-white font-semibold mb-2">We mark everything</h3>
-              <p class="text-white/40 text-sm leading-relaxed">
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.5.title">We mark everything</h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.5.desc">
                 Every tool has its access type and limitations clearly marked. 
                 You know what to expect before you click. No surprises.
               </p>
@@ -403,7 +375,12 @@
           <div class="mt-8 text-center">
             <p class="text-white/50 text-sm">
               Found outdated information? 
-              <a href="https://github.com" target="_blank" rel="noopener" class="text-violet-400 hover:text-violet-300 underline">
+              <a
+                href="https://github.com/sakurablush/banal/issues/new?title=Outdated%20information&body=URL%3A%0A%0AWhat%20is%20outdated%3F%0A%0ASuggested%20fix%3A"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-violet-400 hover:text-violet-300 underline"
+              >
                 Report it on GitHub →
               </a>
             </p>
@@ -414,37 +391,38 @@
       <!-- MISSION -->
       <section class="py-10 sm:py-14">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <div class="eyebrow-void">WHY WE EXIST</div>
+          <div class="eyebrow-void" data-i18n="mission.eyebrow">WHY WE EXIST</div>
           <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-8">
-            <span class="gradient-neon">AI is the new literacy.</span>
+            <span class="gradient-neon" data-i18n="mission.title1">AI is the new literacy.</span>
             <br />
-            <span class="text-white/90">Everyone deserves access.</span>
+            <span class="text-white/90" data-i18n="mission.title2">Everyone deserves access.</span>
           </h2>
-          <p class="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed mb-12">
+          <p class="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed mb-12" data-i18n="mission.desc">
             The best AI capabilities are locked behind $20/month subscriptions. That's $240/year
             that separates those who can think with AI from those who can't.
             <span class="text-white/70">We refuse this.</span>
           </p>
 
           <div class="grid sm:grid-cols-3 gap-5">
-            <div class="glass-card p-7 text-left">
-              <div class="text-violet-400 font-bold text-sm mb-2 tracking-wide">01</div>
-              <div class="text-white font-semibold mb-1">No gatekeeping</div>
-              <div class="text-white/40 text-sm">
-                Every tool works without signup. We tell you if it needs an account.
-              </div>
+          <div class="glass-card p-7 text-left">
+            <div class="text-cyan-400 font-bold text-sm mb-2 tracking-wide">01</div>
+            <div class="text-white font-semibold mb-1" data-i18n="mission.0.title">Transparent access</div>
+            <div class="text-white/40 text-sm" data-i18n="mission.0.desc">
+              We clearly mark which tools need signup and which don't.
+              No surprises.
             </div>
+          </div>
             <div class="glass-card p-7 text-left">
               <div class="text-fuchsia-400 font-bold text-sm mb-2 tracking-wide">02</div>
-              <div class="text-white font-semibold mb-1">Honestly curated</div>
-              <div class="text-white/40 text-sm">
+              <div class="text-white font-semibold mb-1" data-i18n="mission.1.title">Honestly curated</div>
+              <div class="text-white/40 text-sm" data-i18n="mission.1.desc">
                 Real limits, real caveats. No hype. No affiliate links. We print the asterisks.
               </div>
             </div>
             <div class="glass-card p-7 text-left">
               <div class="text-cyan-400 font-bold text-sm mb-2 tracking-wide">03</div>
-              <div class="text-white font-semibold mb-1">Forkable forever</div>
-              <div class="text-white/40 text-sm">
+              <div class="text-white font-semibold mb-1" data-i18n="mission.2.title">Forkable forever</div>
+              <div class="text-white/40 text-sm" data-i18n="mission.2.desc">
                 Open source. Clone it. Host it. MIT licensed. A thousand copies.
               </div>
             </div>
@@ -452,27 +430,52 @@
         </div>
       </section>
 
-      <!-- FORK -->
+      <!-- FORK & CONTRIBUTE -->
       <section class="py-10 sm:py-14 border-t border-white/5">
         <div class="max-w-5xl mx-auto px-4 sm:px-6">
-          <div class="max-w-2xl">
-            <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-5">
+          <div class="text-center mb-10">
+            <div class="eyebrow-void">FORK & CONTRIBUTE</div>
+            <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
               <span class="gradient-neon">Fork it.</span>
               <span class="text-white/90">Host it. Own it.</span>
             </h2>
-            <p class="text-white/50 mb-8 text-lg">
-              Static site. One folder. Clone. Push to GitHub Pages or Cloudflare. Your community
-              gets their own copy. <span class="text-white/70">Forever free.</span>
+            <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base">
+              This directory is open source. Fork it. Improve it. Make it yours.
             </p>
           </div>
 
-          <div
-            class="glass-card p-6 sm:p-8 font-mono text-sm text-white/70 border border-white/10 rounded-2xl"
-          >
-            <pre class="overflow-x-auto"><code>git clone &lt;your-fork&gt;
-cd banal-ai
+          <div class="max-w-2xl mx-auto">
+            <div class="glass-card p-6 sm:p-8 text-white/70 mb-6">
+              <p class="mb-4">
+                Banal is MIT licensed. You can:
+              </p>
+              <ul class="list-disc list-inside space-y-2 text-white/60 text-sm sm:text-base">
+                <li>Fork the repo and customize for your community</li>
+                <li>Add new tools (especially local/regional ones)</li>
+                <li>Translate to your language</li>
+                <li>Host your own instance</li>
+              </ul>
+              <p class="mt-4 text-white/40 text-sm">
+                If you improve it, consider contributing back via PR.
+                But you don't have to — that's the beauty of MIT license.
+              </p>
+            </div>
+
+            <div class="glass-card p-6 sm:p-8 font-mono text-sm text-white/70 border border-white/10 rounded-2xl">
+              <pre class="overflow-x-auto"><code>git clone https://github.com/sakurablush/banal.git
+cd banal
 npm install
 npm run build</code></pre>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 mt-8 text-center">
+              <a href="https://github.com/sakurablush/banal" target="_blank" rel="noopener" class="cta-neon flex-1">
+                View on GitHub →
+              </a>
+              <a href="https://github.com/sakurablush/banal/issues" target="_blank" rel="noopener" class="cta-neon flex-1" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                Report Issue →
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -482,27 +485,14 @@ npm run build</code></pre>
       <div
         class="max-w-5xl mx-auto px-4 sm:px-6 text-xs text-white/25 flex flex-col sm:flex-row gap-y-2 items-center justify-between"
       >
-        <div>Banal — AI tools for everyone. No login. No credit card.</div>
+        <div data-i18n="footer.tagline">Banal — AI tools directory. Transparent. Honest. Forkable.</div>
         <div class="flex gap-5">
-          <a href="https://github.com" class="hover:text-white transition-colors">GitHub</a>
-          <a href="#tools" class="hover:text-white transition-colors">Tools</a>
-          <span>MIT License</span>
+          <a href="https://github.com/sakurablush/banal" target="_blank" rel="noopener" class="hover:text-white transition-colors" data-i18n="footer.github">GitHub</a>
+          <a href="https://github.com/sakurablush/banal/issues" target="_blank" rel="noopener" class="hover:text-white transition-colors" data-i18n="footer.report">Report Issue</a>
+          <span data-i18n="footer.license">MIT License</span>
         </div>
       </div>
     </footer>
-
-    <!-- Chat Modal -->
-    <div id="chat-modal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm">
-      <div class="absolute inset-4 sm:inset-8 lg:inset-16 bg-[#06060b] rounded-2xl border border-white/10 overflow-hidden flex flex-col">
-        <div class="flex items-center justify-between p-4 border-b border-white/10">
-          <h3 class="text-xl font-bold">Chat with AI</h3>
-          <button id="close-chat-modal" class="text-white/60 hover:text-white text-2xl">×</button>
-        </div>
-        <div id="chat-modal-content" class="flex-1 overflow-hidden">
-          <!-- Chat UI will be rendered here -->
-        </div>
-      </div>
-    </div>
 
     <script type="module" src="/src/main.ts"></script>
   </body>

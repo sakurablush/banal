@@ -11,6 +11,7 @@ import {
   type ZeroKeyCategory,
   type ZeroKeyTool,
 } from './data/zero-key-tools';
+export type { ZeroKeyCategory };
 import { type SearchResult, searchTools } from './fuse-search';
 
 // ─── Category Icons ──────────────────────────────────────────────────────────
@@ -37,6 +38,7 @@ const categoryIcons: Record<ZeroKeyCategory, string> = {
   'ai-math': '\u{1F9EE}',
   'ai-coding': '\u{1F916}',
   'ai-agents': '\u{1F916}',
+  'ai-open-source': '\u{1F9E0}',
   // Developer categories
   'dev-coding': '\u{1F4BB}',
   'dev-docs': '\u{1F4DA}',
@@ -100,27 +102,27 @@ interface LifeFilterDefinition {
   predicate: (tool: ZeroKeyTool, haystack: string) => boolean;
 }
 
-const activeLifeFilters: Set<string> = new Set();
-
 function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
   const e = (en: string, ja: string) => (lang === 'ja' ? ja : en);
   return [
     {
       id: 'no-signup',
-      label: e('No signup', '\u30A2\u30AB\u30A6\u30F3\u30C8\u4E0D\u8981'),
-      predicate: (tool, h) =>
-        tool.access === 'no-login' ||
-        tool.access === 'public-api' ||
-        /no signup|no login|no account|anonymous/i.test(h),
+      label: e('No Signup', 'アカウント不要'),
+      predicate: (tool) => tool.requiresSignup === false,
+    },
+    {
+      id: 'free-signup-ok',
+      label: e('Free Signup OK', '無料サインアップ可'),
+      predicate: (tool) => tool.requiresSignup === true,
     },
     {
       id: 'open-source',
-      label: e('Open source', '\u30AA\u30FC\u30D7\u30F3\u30BD\u30FC\u30B9'),
+      label: e('Open source', 'オープンソース'),
       predicate: (tool) => tool.access === 'open-source' || tool.access === 'self-host',
     },
     {
       id: 'offline',
-      label: e('Works offline', '\u30AA\u30D5\u30E9\u30A4\u30F3\u5BFE\u5FDC'),
+      label: e('Works offline', 'オフライン対応'),
       predicate: (tool, h) =>
         tool.access === 'open-source' ||
         tool.surface === 'cli' ||
@@ -128,7 +130,7 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
     },
     {
       id: 'developer',
-      label: e('For devs', '\u958B\u767A\u8005\u5411\u3051'),
+      label: e('For devs', '開発者向け'),
       predicate: (tool, h) =>
         tool.surface !== 'web' ||
         tool.category === 'dev-coding' ||
@@ -145,6 +147,13 @@ export interface ZeroKeyPanelOptions {
   categoryPrefix?: 'ai' | 'dev'; // Filter tools by category prefix
 }
 
+export interface ZeroKeyPanelApi {
+  search: (query: string) => void;
+  setCategory: (category: ZeroKeyCategory | null) => void;
+  reset: () => void;
+  destroy: () => void;
+}
+
 const PAGE_SIZE = 24;
 const DEBOUNCE_MS = 100;
 const MAX_RESULTS = 300;
@@ -159,22 +168,16 @@ interface PanelState {
   onToolOpen?: () => void;
   container: HTMLElement | null;
   categoryPrefix?: 'ai' | 'dev';
+  lifeFilters: Set<string>;
+  debounceTimer: ReturnType<typeof setTimeout> | null;
+  heroAbortController: AbortController;
+  pendingScrollToTools?: boolean;
 }
 
-const state: PanelState = {
-  lang: 'en',
-  allTools: zeroKeyTools,
-  results: [],
-  query: '',
-  activeCategory: null,
-  visibleCount: PAGE_SIZE,
-  onToolOpen: undefined,
-  container: null,
-  categoryPrefix: undefined,
-};
+// Per-panel state storage using WeakMap
+const panelStateMap = new WeakMap<HTMLElement, PanelState>();
 
-let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-let heroAbortController: AbortController | null = null;
+// Global keyboard handler flag (shared across all panels)
 let globalKeyboardAttached = false;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -203,7 +206,32 @@ function buildHaystack(tool: ZeroKeyTool): string {
   ].join(' ');
 }
 
-function getCategoryCounts(): Record<string, number> {
+function getState(container: HTMLElement): PanelState {
+  let state = panelStateMap.get(container);
+  if (!state) {
+    state = {
+      lang: 'en',
+      allTools: [],
+      results: [],
+      query: '',
+      activeCategory: null,
+      visibleCount: PAGE_SIZE,
+      lifeFilters: new Set(),
+      debounceTimer: null,
+      heroAbortController: new AbortController(),
+      container: null,
+    };
+    panelStateMap.set(container, state);
+  }
+  return state;
+}
+
+// The panel's search input is identified by data-panel-search on its container
+function getPanelSearchInput(container: HTMLElement): HTMLInputElement | null {
+  return container.querySelector(`.zk2-search-input`) as HTMLInputElement | null;
+}
+
+function getCategoryCounts(state: PanelState): Record<string, number> {
   const counts: Record<string, number> = {};
   const tools = state.categoryPrefix
     ? state.allTools.filter((t) => matchesCategoryPrefix(t.category, state.categoryPrefix!))
@@ -216,10 +244,10 @@ function getCategoryCounts(): Record<string, number> {
 
 // ─── Search & Filter Logic ───────────────────────────────────────────────────
 
-function applyLifeFilters(results: SearchResult[]): SearchResult[] {
-  if (activeLifeFilters.size === 0) return results;
+function applyLifeFilters(state: PanelState, results: SearchResult[]): SearchResult[] {
+  if (state.lifeFilters.size === 0) return results;
   const filters = getLifeFilters(state.lang);
-  const activeFilterDefs = filters.filter((f) => activeLifeFilters.has(f.id));
+  const activeFilterDefs = filters.filter((f) => state.lifeFilters.has(f.id));
   if (activeFilterDefs.length === 0) return results;
   return results.filter(({ tool }) => {
     const haystack = buildHaystack(tool).toLowerCase();
@@ -230,13 +258,13 @@ function applyLifeFilters(results: SearchResult[]): SearchResult[] {
   });
 }
 
-function applyCategoryFilter(results: SearchResult[]): SearchResult[] {
+function applyCategoryFilter(state: PanelState, results: SearchResult[]): SearchResult[] {
   if (!state.activeCategory) return results;
   return results.filter(({ tool }) => tool.category === state.activeCategory);
 }
 
-function performSearch(query: string): void {
-  state.query = query;
+function performSearch(state: PanelState): void {
+  const query = state.query;
   state.visibleCount = PAGE_SIZE;
 
   // Filter tools by category prefix if specified
@@ -251,23 +279,24 @@ function performSearch(query: string): void {
     results = searchTools(filteredTools, query, MAX_RESULTS);
   }
 
-  results = applyCategoryFilter(results);
-  results = applyLifeFilters(results);
+  results = applyCategoryFilter(state, results);
+  results = applyLifeFilters(state, results);
   state.results = results;
 
-  renderContent();
+  renderContent(state);
 }
 
-function debouncedSearch(query: string): void {
-  if (debounceTimer) clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => performSearch(query), DEBOUNCE_MS);
+function debouncedSearch(state: PanelState, query: string): void {
+  if (state.debounceTimer) clearTimeout(state.debounceTimer);
+  state.query = query;
+  state.debounceTimer = setTimeout(() => performSearch(state), DEBOUNCE_MS);
 }
 
 // ─── Sync hero search ↔ panel search ────────────────────────────────────────
 
-function syncSearchInputs(value: string, source: 'hero' | 'panel'): void {
+function syncSearchInputs(container: HTMLElement, value: string, source: 'hero' | 'panel'): void {
   const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
-  const panelInput = document.getElementById('zk-search-input') as HTMLInputElement | null;
+  const panelInput = getPanelSearchInput(container);
 
   if (source === 'hero' && panelInput && panelInput.value !== value) {
     panelInput.value = value;
@@ -279,9 +308,9 @@ function syncSearchInputs(value: string, source: 'hero' | 'panel'): void {
 
 // ─── Render: Category Sidebar ────────────────────────────────────────────────
 
-function renderCategorySidebar(): HTMLElement {
+function renderCategorySidebar(state: PanelState): HTMLElement {
   const sidebar = create('aside', 'zk2-sidebar');
-  const counts = getCategoryCounts();
+  const counts = getCategoryCounts(state);
   const copy = COPY[state.lang];
 
   // Filter categories by prefix if specified
@@ -299,8 +328,8 @@ function renderCategorySidebar(): HTMLElement {
   allItem.innerHTML = `<span class="zk2-cat-label">${copy.allCategory}</span><span class="zk2-cat-count">${totalTools}</span>`;
   allItem.addEventListener('click', () => {
     state.activeCategory = null;
-    performSearch(state.query);
-    updateSidebarActive();
+    performSearch(state);
+    updateSidebarActive(state);
   });
   sidebar.appendChild(allItem);
 
@@ -315,8 +344,8 @@ function renderCategorySidebar(): HTMLElement {
     item.innerHTML = `<span class="zk2-cat-icon">${categoryIcons[cat]}</span><span class="zk2-cat-label">${categoryLabels[cat]}</span><span class="zk2-cat-count">${count}</span>`;
     item.addEventListener('click', () => {
       state.activeCategory = state.activeCategory === cat ? null : cat;
-      performSearch(state.query);
-      updateSidebarActive();
+      performSearch(state);
+      updateSidebarActive(state);
     });
     sidebar.appendChild(item);
   }
@@ -324,7 +353,7 @@ function renderCategorySidebar(): HTMLElement {
   return sidebar;
 }
 
-function updateSidebarActive(): void {
+function updateSidebarActive(state: PanelState): void {
   const container = state.container;
   if (!container) return;
   const items = container.querySelectorAll('.zk2-cat-item');
@@ -340,24 +369,24 @@ function updateSidebarActive(): void {
 
 // ─── Render: Quick Filters ───────────────────────────────────────────────────
 
-function renderQuickFilters(): HTMLElement {
+function renderQuickFilters(state: PanelState): HTMLElement {
   const row = create('div', 'zk2-filters-row');
   const filters = getLifeFilters(state.lang);
 
   for (const def of filters) {
     const chip = create(
       'button',
-      `zk2-filter-chip${activeLifeFilters.has(def.id) ? ' active' : ''}`
+      `zk2-filter-chip${state.lifeFilters.has(def.id) ? ' active' : ''}`
     );
     chip.type = 'button';
     chip.textContent = def.label;
     chip.addEventListener('click', () => {
-      if (activeLifeFilters.has(def.id)) {
-        activeLifeFilters.delete(def.id);
+      if (state.lifeFilters.has(def.id)) {
+        state.lifeFilters.delete(def.id);
       } else {
-        activeLifeFilters.add(def.id);
+        state.lifeFilters.add(def.id);
       }
-      performSearch(state.query);
+      performSearch(state);
     });
     row.appendChild(chip);
   }
@@ -367,7 +396,7 @@ function renderQuickFilters(): HTMLElement {
 
 // ─── Render: Tool Card ───────────────────────────────────────────────────────
 
-function renderToolCard(result: SearchResult): HTMLElement {
+function renderToolCard(state: PanelState, result: SearchResult): HTMLElement {
   const { tool } = result;
   const copy = COPY[state.lang];
 
@@ -393,14 +422,14 @@ function renderToolCard(result: SearchResult): HTMLElement {
   typeBadge.textContent = isAI ? '🤖 AI' : '💻 Dev';
   accessBadges.appendChild(typeBadge);
 
-  // Access type badge
-  if (tool.access === 'no-login' || tool.access === 'public-api') {
+  // Access type badge - use requiresSignup field for transparency
+  if (tool.requiresSignup === false) {
     const accessBadge = create('span', 'zk2-access-badge zk2-access-no-key');
-    accessBadge.textContent = '🆓 No Key';
+    accessBadge.textContent = '🔓 No Signup';
     accessBadges.appendChild(accessBadge);
-  } else if (tool.access === 'free-key' || tool.access === 'free-tier') {
+  } else if (tool.requiresSignup === true) {
     const accessBadge = create('span', 'zk2-access-badge zk2-access-free-key');
-    accessBadge.textContent = '🔑 Free Key';
+    accessBadge.textContent = '🔑 Free Signup';
     accessBadges.appendChild(accessBadge);
   }
 
@@ -444,6 +473,11 @@ function renderToolCard(result: SearchResult): HTMLElement {
     footer.appendChild(caveat);
   }
 
+  // URL (truncated)
+  const urlEl = create('span', 'zk2-card-url');
+  urlEl.textContent = tool.url.length > 40 ? tool.url.slice(0, 37) + '...' : tool.url;
+  footer.appendChild(urlEl);
+
   const btn = create('a', 'zk2-card-cta');
   btn.href = tool.url;
   btn.target = '_blank';
@@ -463,7 +497,7 @@ function renderToolCard(result: SearchResult): HTMLElement {
       : 'Report this tool as broken';
   reportBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    const issueUrl = `https://github.com/banal-ai/banal/issues/new?title=Broken+tool:+${encodeURIComponent(tool.name)}&body=Tool:+${encodeURIComponent(tool.name)}%0AURL:+${encodeURIComponent(tool.url)}%0A%0AProblem:`;
+    const issueUrl = `https://github.com/sakurablush/banal/issues/new?title=Broken+tool:+${encodeURIComponent(tool.name)}&body=Tool:+${encodeURIComponent(tool.name)}%0AURL:+${encodeURIComponent(tool.url)}%0A%0AProblem:`;
     window.open(issueUrl, '_blank', 'noopener,noreferrer');
   });
   footer.appendChild(reportBtn);
@@ -475,7 +509,7 @@ function renderToolCard(result: SearchResult): HTMLElement {
 
 // ─── Render: Empty State ─────────────────────────────────────────────────────
 
-function renderEmptyState(): HTMLElement {
+function renderEmptyState(state: PanelState): HTMLElement {
   const copy = COPY[state.lang];
   const empty = create('div', 'zk2-empty');
 
@@ -499,19 +533,19 @@ function renderEmptyState(): HTMLElement {
   clearBtn.addEventListener('click', () => {
     state.query = '';
     state.activeCategory = null;
-    activeLifeFilters.clear();
+    state.lifeFilters.clear();
     const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
-    const panelInput = document.getElementById('zk-search-input') as HTMLInputElement | null;
+    const panelInput = getPanelSearchInput(state.container!);
     if (heroInput) heroInput.value = '';
     if (panelInput) panelInput.value = '';
-    performSearch('');
+    performSearch(state);
   });
   return empty;
 }
 
 // ─── Render: Main Content (grid + load more) ────────────────────────────────
 
-function renderContent(): void {
+function renderContent(state: PanelState): void {
   const container = state.container;
   if (!container) return;
 
@@ -526,7 +560,7 @@ function renderContent(): void {
   const visible = results.slice(0, state.visibleCount);
 
   // Filters row
-  const filtersRow = renderQuickFilters();
+  const filtersRow = renderQuickFilters(state);
   contentArea.appendChild(filtersRow);
 
   // Stats bar
@@ -541,14 +575,14 @@ function renderContent(): void {
 
   // Empty state
   if (results.length === 0) {
-    contentArea.appendChild(renderEmptyState());
+    contentArea.appendChild(renderEmptyState(state));
     return;
   }
 
   // Grid
   const grid = create('div', 'zk2-grid');
   visible.forEach((result, i) => {
-    const card = renderToolCard(result);
+    const card = renderToolCard(state, result);
     card.style.animationDelay = `${Math.min(i * 20, 400)}ms`;
     grid.appendChild(card);
   });
@@ -562,14 +596,14 @@ function renderContent(): void {
     loadMoreBtn.textContent = copy.loadMore;
     loadMoreBtn.addEventListener('click', () => {
       state.visibleCount += PAGE_SIZE;
-      renderContent();
+      renderContent(state);
     });
     loadMoreWrap.appendChild(loadMoreBtn);
     contentArea.appendChild(loadMoreWrap);
   }
 
   // Update sidebar active states
-  updateSidebarActive();
+  updateSidebarActive(state);
 }
 
 // ─── Keyboard Navigation ─────────────────────────────────────────────────────
@@ -577,7 +611,8 @@ function renderContent(): void {
 function handleGlobalKeyboard(e: KeyboardEvent): void {
   if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
     e.preventDefault();
-    const input = document.getElementById('zk-search-input') as HTMLInputElement | null;
+    // Focus the first panel search input we find
+    const input = document.querySelector('.zk2-search-input') as HTMLInputElement | null;
     if (input) {
       input.focus();
       input.select();
@@ -590,24 +625,23 @@ function handleGlobalKeyboard(e: KeyboardEvent): void {
 export function renderZeroKeyPowerPanel(
   container: HTMLElement,
   options: ZeroKeyPanelOptions
-): void {
+): ZeroKeyPanelApi {
   const { lang, onToolOpen, categoryPrefix } = options;
+  const state = getState(container);
 
-  // Abort previous hero listeners to prevent accumulation on re-render
-  if (heroAbortController) {
-    heroAbortController.abort();
-  }
-  heroAbortController = new AbortController();
-  const { signal } = heroAbortController;
+  // Abort any previous hero listeners for this panel and create new controller
+  state.heroAbortController.abort();
+  state.heroAbortController = new AbortController();
+  const { signal } = state.heroAbortController;
 
-  // Reset all state including life filters
-  activeLifeFilters.clear();
+  // Initialize/reset state
   state.lang = lang;
   state.onToolOpen = onToolOpen;
   state.categoryPrefix = categoryPrefix;
   state.query = '';
   state.activeCategory = null;
   state.visibleCount = PAGE_SIZE;
+  state.lifeFilters = new Set();
 
   // Filter tools by category prefix if specified
   const filteredTools = categoryPrefix
@@ -635,8 +669,8 @@ export function renderZeroKeyPowerPanel(
   searchInput.spellcheck = false;
 
   searchInput.addEventListener('input', () => {
-    syncSearchInputs(searchInput.value, 'panel');
-    debouncedSearch(searchInput.value);
+    syncSearchInputs(container, searchInput.value, 'panel');
+    debouncedSearch(state, searchInput.value);
   });
   searchWrap.appendChild(searchInput);
   container.appendChild(searchWrap);
@@ -645,7 +679,7 @@ export function renderZeroKeyPowerPanel(
   const layout = create('div', 'zk2-layout');
 
   // Sidebar
-  const sidebar = renderCategorySidebar();
+  const sidebar = renderCategorySidebar(state);
   layout.appendChild(sidebar);
 
   // Content area
@@ -654,22 +688,14 @@ export function renderZeroKeyPowerPanel(
 
   container.appendChild(layout);
 
-  // Wire hero search (with AbortController to prevent listener accumulation)
+  // Wire hero search (each panel gets its own listener)
   const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
   if (heroInput) {
     heroInput.addEventListener(
       'input',
       () => {
-        syncSearchInputs(heroInput.value, 'hero');
-        debouncedSearch(heroInput.value);
-
-        // Scroll to tools section when user starts typing in hero
-        if (heroInput.value.trim()) {
-          const toolsSection = document.getElementById('tools');
-          if (toolsSection) {
-            toolsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }
+        syncSearchInputs(container, heroInput.value, 'hero');
+        debouncedSearch(state, heroInput.value);
       },
       { signal }
     );
@@ -681,15 +707,13 @@ export function renderZeroKeyPowerPanel(
         if (e.key === 'Enter') {
           e.preventDefault();
           searchInput.focus();
-          const toolsSection = document.getElementById('tools');
-          if (toolsSection) {
-            toolsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
         }
         if (e.key === 'Escape') {
+          state.query = '';
+          state.activeCategory = null;
           heroInput.value = '';
-          syncSearchInputs('', 'hero');
-          performSearch('');
+          syncSearchInputs(container, '', 'hero');
+          performSearch(state);
         }
       },
       { signal }
@@ -699,25 +723,53 @@ export function renderZeroKeyPowerPanel(
   // Panel search keyboard
   searchInput.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+      state.query = '';
+      state.activeCategory = null;
       searchInput.value = '';
-      syncSearchInputs('', 'panel');
-      performSearch('');
+      syncSearchInputs(container, '', 'panel');
+      performSearch(state);
     }
   });
 
-  // Global Ctrl+K (only attach once — addEventListener deduplicates same fn reference)
+  // Global Ctrl+K (attach once)
   if (!globalKeyboardAttached) {
     document.addEventListener('keydown', handleGlobalKeyboard);
     globalKeyboardAttached = true;
   }
 
-  // Initial render (use performSearch to apply any state correctly)
-  performSearch(state.query);
+  // Initial render
+  performSearch(state);
+
+  return {
+    search: (query: string) => {
+      state.query = query;
+      performSearch(state);
+    },
+    setCategory: (category: ZeroKeyCategory | null) => {
+      state.activeCategory = category;
+      performSearch(state);
+      updateSidebarActive(state);
+    },
+    reset: () => {
+      state.query = '';
+      state.activeCategory = null;
+      state.lifeFilters.clear();
+      const panelInput = getPanelSearchInput(container);
+      if (panelInput) panelInput.value = '';
+      performSearch(state);
+    },
+    destroy: () => {
+      state.heroAbortController.abort();
+      state.lifeFilters.clear();
+      if (state.debounceTimer) {
+        clearTimeout(state.debounceTimer);
+        state.debounceTimer = null;
+      }
+    },
+  };
 }
 
 export function resetZeroKeyPanelFiltersForTests(): void {
-  activeLifeFilters.clear();
-  state.query = '';
-  state.activeCategory = null;
-  state.visibleCount = PAGE_SIZE;
+  // Note: Per-panel state is not cleared here for backward compatibility with tests
+  // that call renderZeroKeyPowerPanel directly. Each panel manages its own state.
 }

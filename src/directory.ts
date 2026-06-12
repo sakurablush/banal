@@ -1,4 +1,4 @@
-import { renderZeroKeyPowerPanel } from './zero-key-panel';
+import { renderZeroKeyPowerPanel, type ZeroKeyPanelApi, type ZeroKeyCategory } from './zero-key-panel';
 import { getCurrentLang } from './i18n';
 import { zeroKeyTools } from './data/zero-key-tools';
 
@@ -11,11 +11,15 @@ export function initDirectory(): void {
   const aiRoot = document.getElementById('ai-tools-root');
   const devRoot = document.getElementById('dev-tools-root');
 
+  // Store panel APIs for category quick-nav
+  let aiPanelApi: ZeroKeyPanelApi | null = null;
+  let devPanelApi: ZeroKeyPanelApi | null = null;
+
   const render = (lang = getCurrentLang()) => {
     // Render AI Tools section
     if (aiRoot) {
       try {
-        renderZeroKeyPowerPanel(aiRoot, {
+        aiPanelApi = renderZeroKeyPowerPanel(aiRoot, {
           lang,
           categoryPrefix: 'ai',
           onToolOpen: () => {
@@ -37,13 +41,14 @@ export function initDirectory(): void {
             </div>
           </div>
         `;
+        aiPanelApi = null;
       }
     }
 
     // Render Developer Tools section
     if (devRoot) {
       try {
-        renderZeroKeyPowerPanel(devRoot, {
+        devPanelApi = renderZeroKeyPowerPanel(devRoot, {
           lang,
           categoryPrefix: 'dev',
           onToolOpen: () => {
@@ -65,6 +70,7 @@ export function initDirectory(): void {
             </div>
           </div>
         `;
+        devPanelApi = null;
       }
     }
 
@@ -79,6 +85,9 @@ export function initDirectory(): void {
   window.addEventListener('banal:language-changed', (e: Event) => {
     const nextLang = (e as CustomEvent).detail?.lang || getCurrentLang();
     render(nextLang);
+    // APIs are reassigned on re-render
+    aiPanelApi = null;
+    devPanelApi = null;
   });
 
   // Wire up category quick nav links to filter the list
@@ -92,11 +101,15 @@ export function initDirectory(): void {
       const targetSection = cat.startsWith('ai-') ? 'ai-tools' : 'dev-tools';
       const targetRoot = document.getElementById(`${targetSection}-root`);
 
-      // Find the search input in the rendered panel and set its value
-      const searchInput = targetRoot?.querySelector('input[type="text"]') as HTMLInputElement;
-      if (searchInput) {
-        searchInput.value = cat;
-        searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+      // Use panel API to set category directly (preferred method)
+      if (cat.startsWith('ai-')) {
+        if (aiPanelApi && targetRoot) {
+          aiPanelApi.setCategory(cat as ZeroKeyCategory);
+        }
+      } else if (cat.startsWith('dev-')) {
+        if (devPanelApi && targetRoot) {
+          devPanelApi.setCategory(cat as ZeroKeyCategory);
+        }
       }
 
       // Smooth scroll to the appropriate section
@@ -106,6 +119,12 @@ export function initDirectory(): void {
       }
     });
   });
+}
+
+export function getPanelApis(): { ai: ZeroKeyPanelApi | null; dev: ZeroKeyPanelApi | null } {
+  // This is a convenience function for testing
+  // In production, the APIs are managed internally by initDirectory
+  return { ai: null, dev: null };
 }
 
 /**

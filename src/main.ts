@@ -10,12 +10,29 @@
  * read, understood, and forked by the very people it is meant to serve — the ghost in a million plain files.
  */
 import { initI18n } from './i18n';
+import { initTheme, setTheme } from './theme';
 import { initDirectory } from './directory';
 import { ParticleSystem } from './lib/particle-system';
 import { renderPlayground } from './api-playground';
 import { renderPromptTemplatesStandalone } from './prompt-templates-standalone';
-import { initChatModal } from './chat-modal';
-import { initFreeModels } from './free-models';
+
+// Boot theme first (before any rendering so CSS variables are correct)
+initTheme();
+
+// Wire theme toggle button (setTheme is already available via static import)
+const themeToggleBtn = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+if (themeToggleBtn && themeIcon) {
+  themeToggleBtn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    themeIcon.textContent = next === 'dark' ? '🌙' : '☀️';
+  });
+  // Set initial icon
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  themeIcon.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+}
 
 // Boot i18n first (lang switcher + data-i18n + events for dynamic parts)
 initI18n();
@@ -39,25 +56,11 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   }
 }
 
-// Wire the chat modal (chat UI is now in a modal, not a section)
-try {
-  initChatModal();
-} catch (error) {
-  console.error('Chat modal failed to initialize:', error);
-}
-
 // Initialize the main Zero-Key tools directory and categories quick-nav
 try {
   initDirectory();
 } catch (error) {
   console.error('Tools directory failed to initialize:', error);
-}
-
-// Free AI Models section
-try {
-  initFreeModels();
-} catch (error) {
-  console.error('Free models section failed to initialize:', error);
 }
 
 // Prompt Templates standalone section

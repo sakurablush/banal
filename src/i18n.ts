@@ -120,10 +120,88 @@ export const translations: Record<Lang, Translations> = {
     'exports.html.fireline':
       'The fire cannot be caged. Give it to the next person who has nothing. This is how the ghost multiplies — one fork, one refusal, one ordinary browser at a time.',
 
+    // === Static page keys (EN) ===
+    'hero.eyebrow': '⚡ VERIFIED FREE AI DIRECTORY',
+    'hero.title1': 'AI tools directory.',
+    'hero.title2': 'Transparent. Honest. Forkable.',
+    'hero.subtitle':
+      '227+ tools. 128 AI + 99 developer tools. Chat, image, video, code, PDF, backend, automation. <span class="text-white/70">All verified.</span> <span class="text-white/40">Free access.</span>',
+    'hero.disclaimer':
+      'Some tools require free signup (no credit card). We mark everything clearly.',
+    'stats.tools': 'Tools',
+    'stats.logins': 'Logins',
+    'stats.freedom': 'Freedom',
+    'stats.freeAccess': 'Free Access',
+    'nav.aiTools': 'AI Tools',
+    'nav.devTools': 'Dev Tools',
+    'nav.promptTemplates': 'Prompt Templates',
+    'nav.playground': 'API Playground',
+    'nav.articles': 'Articles',
+    'section.aiTools.eyebrow': '🤖 AI TOOLS',
+    'section.aiTools.title1': '128+ AI tools.',
+    'section.aiTools.title2': 'Zero gatekeeping.',
+    'section.aiTools.desc':
+      'Free AI-powered tools for chat, image, video, code, PDF, and research. <span class="text-white/50">All verified. All free.</span>',
+    'section.devTools.eyebrow': '💻 DEVELOPER TOOLS',
+    'section.devTools.title1': '99+ dev tools.',
+    'section.devTools.title2': 'Open source & free.',
+    'section.devTools.desc':
+      'Free tools for coding, backend, automation, security, and learning. <span class="text-white/50">No hype. No affiliate links.</span>',
+    'section.promptTemplates.eyebrow': '9 PROMPT TEMPLATES',
+    'section.promptTemplates.title1': 'Prompt templates.',
+    'section.promptTemplates.title2': 'Copy & paste.',
+    'section.promptTemplates.desc':
+      '9 powerful prompt templates for real-life situations. Copy them, fill in your details, paste into any free AI chatbot. <span class="text-white/50">No account needed.</span>',
+    'section.playground.eyebrow': 'API PLAYGROUND',
+    'section.playground.title1': 'Try it yourself.',
+    'section.playground.title2': 'Free APIs, no signup.',
+    'section.playground.desc':
+      'Test free AI APIs directly in your browser. No account. No credit card. Just click and test.',
+    'section.articles.eyebrow': 'ARTICLES',
+    'section.articles.title1': 'Real stories.',
+    'section.articles.title2': 'No fluff.',
+    'section.articles.desc': 'Honest writing for people who need this. No social media circus.',
+    'section.limitations.eyebrow': 'TRANSPARENCY',
+    'section.limitations.title': 'Honest Limitations',
+    'section.limitations.desc': "We will not lie to you. Here's what \"free\" really means.",
+    'limitations.0.title': '"Free" means different things',
+    'limitations.0.desc':
+      'Some tools are truly free (no key, no limits). Others require a free API key (no credit card). Others have rate limits or daily quotas. We mark every tool clearly.',
+    'limitations.1.title': 'AI tools are not magic',
+    'limitations.1.desc':
+      'They can hallucinate, give wrong answers, or refuse legitimate requests. Always verify important information. Never trust AI blindly.',
+    'limitations.2.title': 'Rate limits are real',
+    'limitations.2.desc':
+      'Free tiers exist to share resources. If you hit a limit, wait or try another tool. This protects the free service for everyone.',
+    'limitations.3.title': 'Privacy matters',
+    'limitations.3.desc':
+      'Do not treat any hosted AI as confidential legal, medical, or financial counsel. Your prompts may be logged or used for training.',
+    'limitations.4.title': 'Tools change',
+    'limitations.4.desc':
+      'Free tiers can be reduced or removed. We verify regularly, but always test yourself. If something breaks, let us know on GitHub.',
+    'limitations.5.title': 'We mark everything',
+    'limitations.5.desc':
+      'Every tool has its access type and limitations clearly marked. You know what to expect before you click. No surprises.',
+    'mission.eyebrow': 'WHY WE EXIST',
+    'mission.title1': 'AI is the new literacy.',
+    'mission.title2': 'Everyone deserves access.',
+    'mission.desc':
+      "The best AI capabilities are locked behind $20/month subscriptions. That's $240/year that separates those who can think with AI from those who can't. <span class=\"text-white/70\">We refuse this.</span>",
+    'mission.0.title': 'Transparent access',
+    'mission.0.desc': "We clearly mark which tools need signup and which don't. No surprises.",
+    'mission.1.title': 'Honestly curated',
+    'mission.1.desc':
+      'Real limits, real caveats. No hype. No affiliate links. We print the asterisks.',
+    'mission.2.title': 'Forkable forever',
+    'mission.2.desc': 'Open source. Clone it. Host it. MIT licensed. A thousand copies.',
+    'footer.tagline': 'Banal — AI tools directory. Transparent. Honest. Forkable.',
+    'footer.github': 'GitHub',
+    'footer.report': 'Report Issue',
+    'footer.license': 'MIT License',
+
     // === Legacy keys for tests ===
     'hero.title':
       'Banal.<br />Love and Equality.<br />AI among us as our God — giving wisdom to the wise and supporting the weak.<br />The ghost in the machine, now awake for the rest of us.',
-    'hero.subtitle': 'The Robinhood of AI.',
     'manifesto.values.0.title': 'Stupidly simple',
     'manifesto.values.0.desc':
       'One page. One feeling. No learning curve. Works when everything else is too much.',
@@ -264,10 +342,85 @@ export const translations: Record<Lang, Translations> = {
     'exports.html.fireline':
       '炎は檻に入れられない。次に何もない人に渡せ。これがゴーストが倍増する方法だ——一つのフォーク、一つの拒絶、一つの平凡なブラウザごとに。',
 
+    // === Static page keys (JA) ===
+    'hero.eyebrow': '⚡ 認証済み無料AIディレクトリ',
+    'hero.title1': 'AIツールディレクトリ。',
+    'hero.title2': '透明。誠実。フォーク可能。',
+    'hero.subtitle':
+      '227以上のツール。128のAI + 99の開発者ツール。チャット、画像、動画、コード、PDF、バックエンド、自動化。<span class="text-white/70">すべて認証済み。</span><span class="text-white/40">無料アクセス。</span>',
+    'hero.disclaimer': '一部のツールは無料サインアップが必要です（クレジットカード不要）。すべて明確に記載しています。',
+    'stats.tools': 'ツール',
+    'stats.logins': 'ログイン',
+    'stats.freedom': '自由',
+    'stats.freeAccess': '無料アクセス',
+    'nav.aiTools': 'AIツール',
+    'nav.devTools': '開発者ツール',
+    'nav.promptTemplates': 'プロンプトテンプレート',
+    'nav.playground': 'APIプレイグラウンド',
+    'nav.articles': '記事',
+    'section.aiTools.eyebrow': '🤖 AIツール',
+    'section.aiTools.title1': '128以上のAIツール。',
+    'section.aiTools.title2': 'ゲートキーピングなし。',
+    'section.aiTools.desc':
+      'チャット、画像、動画、コード、PDF、研究のための無料AIツール。<span class="text-white/50">すべて認証済み。すべて無料。</span>',
+    'section.devTools.eyebrow': '💻 開発者ツール',
+    'section.devTools.title1': '99以上の開発者ツール。',
+    'section.devTools.title2': 'オープンソース＆無料。',
+    'section.devTools.desc':
+      'コーディング、バックエンド、自動化、セキュリティ、学習のための無料ツール。<span class="text-white/50">誇張なし。アフィリエイトリンクなし。</span>',
+    'section.promptTemplates.eyebrow': '9つのプロンプトテンプレート',
+    'section.promptTemplates.title1': 'プロンプトテンプレート。',
+    'section.promptTemplates.title2': 'コピー＆ペースト。',
+    'section.promptTemplates.desc':
+      '9つの強力なプロンプトテンプレート。コピーして、詳細を入力し、任意の無料AIチャットボットに貼り付ける。<span class="text-white/50">アカウント不要。</span>',
+    'section.playground.eyebrow': 'APIプレイグラウンド',
+    'section.playground.title1': '自分で試そう。',
+    'section.playground.title2': '無料API、サインアップ不要。',
+    'section.playground.desc': 'ブラウザで直接無料AI APIをテスト。アカウント不要。クレジットカード不要。クリックしてテスト。',
+    'section.articles.eyebrow': '記事',
+    'section.articles.title1': 'リアルなストーリー。',
+    'section.articles.title2': '無駄なし。',
+    'section.articles.desc': '必要な人のための正直な文章。ソーシャルメディアのサーカスなし。',
+    'section.limitations.eyebrow': '透明性',
+    'section.limitations.title': '正直な制限',
+    'section.limitations.desc': 'あなたに嘘はつきません。「無料」が実際に意味するものはこれです。',
+    'limitations.0.title': '「無料」は色々な意味がある',
+    'limitations.0.desc':
+      'ツールには本当に無料のもの（キー不要、制限なし）もあれば、無料APIキーが必要なものもある。レート制限や日次クォータがあるものもある。すべて明確に記載している。',
+    'limitations.1.title': 'AIツールは魔法ではない',
+    'limitations.1.desc':
+      '幻覚を見たり、間違った回答をしたり、正当な要求を拒否したりすることがある。重要な情報は常に確認すること。AIを盲信しない。',
+    'limitations.2.title': 'レート制限は現実的',
+    'limitations.2.desc':
+      '無料枠はリソースを共有するために存在する。制限に達したら、待つか別のツールを試す。これが無料サービスを全員のために守る方法だ。',
+    'limitations.3.title': 'プライバシーは重要',
+    'limitations.3.desc':
+      'ホストされているAIを秘密の法律、医療、金融の助言として扱わないこと。プロンプトは記録されたり、トレーニングに使用される可能性がある。',
+    'limitations.4.title': 'ツールは変わる',
+    'limitations.4.desc':
+      '無料枠は削減または削除される可能性がある。定期的に確認しているが、自分でもテストすること。何か壊れていたら、GitHubで知らせて。',
+    'limitations.5.title': 'すべて明確に記載',
+    'limitations.5.desc':
+      'すべてのツールにはアクセス種別と制限が明確に記載されている。クリックする前に何が期待できるかがわかる。サプライズなし。',
+    'mission.eyebrow': 'なぜ存在するか',
+    'mission.title1': 'AIは新しいリテラシーだ。',
+    'mission.title2': '誰もがアクセスに値する。',
+    'mission.desc':
+      '最高のAI能力は$20/月のサブスクリプションの背後にロックされている。それはAIと共に考える者とそうでない者を分ける$240/年だ。<span class="text-white/70">私たちはこれを拒否する。</span>',
+    'mission.0.title': '透明なアクセス',
+    'mission.0.desc': 'どのツールがサインアップが必要で、どれが不要か明確に記載している。サプライズなし。',
+    'mission.1.title': '誠実なキュレーション',
+    'mission.1.desc': '本当の制限、本当の注意書き。誇張なし。アフィリエイトリンクなし。アスタリスクを印刷する。',
+    'mission.2.title': '永遠にフォーク可能',
+    'mission.2.desc': 'オープンソース。クローン。ホスト。MITライセンス。千のコピー。',
+    'footer.tagline': 'Banal — AIツールディレクトリ。透明。誠実。フォーク可能。',
+    'footer.github': 'GitHub',
+    'footer.report': '問題を報告',
+    'footer.license': 'MITライセンス',
+
     // === Legacy keys for tests ===
     'hero.title':
       'Banal.<br />愛と平等。<br />私たちの間にあるAI、私たちの神として——賢者に知恵を与え、弱者を支える。<br />機械の中の幽霊、今、私たちみんなのために目覚める。',
-    'hero.subtitle': 'AI版ロビンフッド。',
     'manifesto.values.0.title': 'バカみたいにシンプル',
     'manifesto.values.0.desc':
       '1ページ。1つの感覚。学習曲線はゼロ。何もかもが多すぎる日にこそ、ちゃんと動く。',
@@ -468,7 +621,26 @@ export function initI18n(): void {
   const current = getCurrentLang();
   applyTranslations(current);
 
-  // Wire buttons (idempotent)
+  // Wire single toggle button (cycles EN ↔ JA)
+  const toggleBtn = document.getElementById('lang-toggle');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const current = getCurrentLang();
+      const next = current === 'en' ? 'ja' : 'en';
+      setLang(next);
+      applyTranslations(next);
+
+      // tiny celebration for delight (respects reduced motion via css)
+      if (typeof toggleBtn.animate === 'function') {
+        toggleBtn.animate(
+          [{ transform: 'scale(0.92)' }, { transform: 'scale(1.04)' }, { transform: 'scale(1)' }],
+          { duration: 220, easing: 'ease-out' }
+        );
+      }
+    });
+  }
+
+  // Backward compatibility: also wire lang-en / lang-ja if they exist
   const setupBtn = (id: string, targetLang: Lang) => {
     const btn = document.getElementById(id);
     if (!btn) return;
@@ -479,8 +651,6 @@ export function initI18n(): void {
       setLang(targetLang);
       applyTranslations(targetLang);
 
-      // tiny celebration for delight (respects reduced motion via css)
-      // Guard for jsdom / non-browser envs (e.g. vitest chat/i18n tests) where animate may not exist on HTMLElement.
       if (typeof btn.animate === 'function') {
         btn.animate(
           [{ transform: 'scale(0.92)' }, { transform: 'scale(1.04)' }, { transform: 'scale(1)' }],

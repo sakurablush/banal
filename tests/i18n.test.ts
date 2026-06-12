@@ -19,11 +19,15 @@ describe('i18n translations object', () => {
 
 describe('t() helper', () => {
   it('returns english for valid key', () => {
-    expect(t('en', 'hero.subtitle')).toBe('The Robinhood of AI.');
+    expect(t('en', 'hero.subtitle')).toBe(
+      '227+ tools. 128 AI + 99 developer tools. Chat, image, video, code, PDF, backend, automation. <span class="text-white/70">All verified.</span> <span class="text-white/40">Free access.</span>'
+    );
   });
 
   it('returns japanese for valid key', () => {
-    expect(t('ja', 'hero.subtitle')).toBe('AI版ロビンフッド。');
+    expect(t('ja', 'hero.subtitle')).toBe(
+      '227以上のツール。128のAI + 99の開発者ツール。チャット、画像、動画、コード、PDF、バックエンド、自動化。<span class="text-white/70">すべて認証済み。</span><span class="text-white/40">無料アクセス。</span>'
+    );
   });
 
   it('falls back to english when japanese key missing (future-proof)', () => {
@@ -31,7 +35,9 @@ describe('t() helper', () => {
     const original = translations.ja['hero.subtitle'];
     // @ts-ignore - intentional mutation for fallback test
     delete (translations.ja as any)['hero.subtitle'];
-    expect(t('ja', 'hero.subtitle')).toBe('The Robinhood of AI.');
+    expect(t('ja', 'hero.subtitle')).toBe(
+      '227+ tools. 128 AI + 99 developer tools. Chat, image, video, code, PDF, backend, automation. <span class="text-white/70">All verified.</span> <span class="text-white/40">Free access.</span>'
+    );
     // restore
     (translations.ja as any)['hero.subtitle'] = original;
   });
@@ -124,7 +130,9 @@ describe('applyTranslations (DOM)', () => {
     applyTranslations('ja');
 
     const subtitle = document.querySelector('[data-i18n="hero.subtitle"]')!;
-    expect(subtitle.innerHTML).toBe('AI版ロビンフッド。');
+    expect(subtitle.innerHTML).toBe(
+      '227以上のツール。128のAI + 99の開発者ツール。チャット、画像、動画、コード、PDF、バックエンド、自動化。<span class="text-white/70">すべて認証済み。</span><span class="text-white/40">無料アクセス。</span>'
+    );
 
     const title = document.querySelector('[data-i18n="manifesto.values.0.title"]')!;
     expect(title.textContent).toBe('バカみたいにシンプル');
