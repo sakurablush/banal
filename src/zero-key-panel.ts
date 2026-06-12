@@ -475,7 +475,9 @@ function renderToolCard(state: PanelState, result: SearchResult): HTMLElement {
 
   // URL (truncated)
   const urlEl = create('span', 'zk2-card-url');
-  urlEl.textContent = tool.url.length > 40 ? tool.url.slice(0, 37) + '...' : tool.url;
+  const rawUrl = tool.url;
+  urlEl.textContent = rawUrl.length > 40 ? rawUrl.slice(0, 37) + '...' : rawUrl;
+  urlEl.title = rawUrl;
   footer.appendChild(urlEl);
 
   const btn = create('a', 'zk2-card-cta');

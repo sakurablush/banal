@@ -14,10 +14,7 @@
  * - Mobile-first (sticky copy button)
  */
 
-import {
-  PromptTemplatesLibrary,
-  type Locale,
-} from './lib/prompt-templates';
+import { PromptTemplatesLibrary, type Locale, type PromptTemplate } from './lib/prompt-templates';
 
 const STORAGE_PREFIX = 'banal-pt-';
 
@@ -51,14 +48,19 @@ const PROMPT_CATEGORY_MAP: Record<string, string> = {
   'en-ja-cultural-bridge': 'communication',
 };
 
-function getPromptsForCategory(categoryId: string, allPrompts: Array<{ id: string; title: string; description: string; template: string }>): Array<{ id: string; title: string; description: string; template: string }> {
+function getPromptsForCategory(
+  categoryId: string,
+  allPrompts: Array<{ id: string; title: string; description: string; template: string }>
+): Array<{ id: string; title: string; description: string; template: string }> {
   if (categoryId === 'all') {
     return allPrompts;
   }
   return allPrompts.filter((pt) => PROMPT_CATEGORY_MAP[pt.id] === categoryId);
 }
 
-function getCategoryCounts(allPrompts: Array<{ id: string; title: string; description: string; template: string }>): Record<string, number> {
+function getCategoryCounts(
+  allPrompts: Array<{ id: string; title: string; description: string; template: string }>
+): Record<string, number> {
   const counts: Record<string, number> = { all: allPrompts.length };
   for (const pt of allPrompts) {
     const cat = PROMPT_CATEGORY_MAP[pt.id] || 'all';
@@ -72,9 +74,17 @@ function getCategoryCounts(allPrompts: Array<{ id: string; title: string; descri
 interface PromptTemplatesViewState {
   selectedCategory: string;
   selectedPromptId: string | null;
+  prompts: PromptTemplate[];
+  lib: PromptTemplatesLibrary;
   valuesByTemplate: Record<string, Record<string, string>>;
   lang: Locale;
   container: HTMLElement;
+  keyboardCleanup: (() => void) | null;
+  languageCleanup: (() => void) | null;
+}
+
+interface PromptTemplatesContainer extends HTMLElement {
+  __ptCleanup?: () => void;
 }
 
 // ─── LocalStorage Helpers ──────────────────────────────────────────────────────
@@ -113,29 +123,32 @@ export function renderPromptTemplatesStandalone(options: {
   lang: Locale;
 }): void {
   const { container, lang } = options;
-  const state: PromptTemplatesViewState = {
-    selectedCategory: 'all',
-    selectedPromptId: null,
-    valuesByTemplate: {},
-    lang,
-    container,
-  };
 
   try {
     const lib = new PromptTemplatesLibrary(lang);
-    const allPrompts = lib.getAll();
+    const prompts = lib.getAll();
+    const state: PromptTemplatesViewState = {
+      selectedCategory: 'all',
+      selectedPromptId: null,
+      prompts,
+      lib,
+      valuesByTemplate: {},
+      lang,
+      container,
+      keyboardCleanup: null,
+      languageCleanup: null,
+    };
 
     // Initialize saved values for all prompts
-    for (const pt of allPrompts) {
+    for (const pt of prompts) {
       state.valuesByTemplate[pt.id] = getSavedValues(pt.id, lang);
     }
 
+    const typedContainer = container as PromptTemplatesContainer;
+    typedContainer.__ptCleanup?.();
+
     container.innerHTML = '';
     container.className = 'pt-directory-shell';
-
-    // Store prompts and lib in closure for re-render
-    (state as any)._prompts = allPrompts;
-    (state as any)._lib = lib;
 
     // Render the directory layout
     renderDirectoryLayout(state);
@@ -166,8 +179,7 @@ function renderDirectoryLayout(state: PromptTemplatesViewState): void {
   state.container.appendChild(list);
 
   // Prompt window (right side or inline)
-  const lib = (state as any)._lib;
-  const window = createPromptWindow(state, lib);
+  const window = createPromptWindow(state, state.lib);
   state.container.appendChild(window);
 }
 
@@ -175,7 +187,7 @@ function createCategoryRail(state: PromptTemplatesViewState): HTMLElement {
   const rail = document.createElement('aside');
   rail.className = 'pt-category-rail';
 
-  const prompts = (state as any)._prompts;
+  const prompts = state.prompts;
   const counts = getCategoryCounts(prompts);
 
   for (const cat of PROMPT_CATEGORIES) {
@@ -205,13 +217,18 @@ function createPromptList(state: PromptTemplatesViewState): HTMLElement {
   const list = document.createElement('div');
   list.className = 'pt-prompt-list';
 
-  const prompts = (state as any)._prompts;
-  const filteredPrompts = getPromptsForCategory(state.selectedCategory, prompts);
+  const filteredPrompts = getPromptsForCategory(state.selectedCategory, state.prompts);
 
   for (const pt of filteredPrompts) {
     const card = document.createElement('article');
     card.className = `pt-prompt-card${state.selectedPromptId === pt.id ? ' active' : ''}`;
     card.dataset.promptId = pt.id;
+    card.tabIndex = 0;
+    card.role = 'button';
+    card.setAttribute(
+      'aria-label',
+      state.lang === 'ja' ? `${pt.title}のテンプレートを開く` : `Open ${pt.title} template`
+    );
 
     // Title
     const title = document.createElement('h3');
@@ -234,6 +251,20 @@ function createPromptList(state: PromptTemplatesViewState): HTMLElement {
       card.appendChild(varsInfo);
     }
 
+    card.addEventListener('click', () => {
+      state.selectedPromptId = pt.id;
+      reRenderDirectory(state);
+    });
+
+    card.addEventListener('keydown', (e) => {
+      if (e.target !== card) return;
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        state.selectedPromptId = pt.id;
+        reRenderDirectory(state);
+      }
+    });
+
     // Action buttons
     const actions = document.createElement('div');
     actions.className = 'pt-prompt-actions';
@@ -242,7 +273,8 @@ function createPromptList(state: PromptTemplatesViewState): HTMLElement {
     fillBtn.type = 'button';
     fillBtn.className = 'sp-btn sp-btn-secondary';
     fillBtn.textContent = state.lang === 'ja' ? '入力してコピー' : 'Fill & Copy';
-    fillBtn.addEventListener('click', () => {
+    fillBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       state.selectedPromptId = pt.id;
       reRenderDirectory(state);
     });
@@ -255,11 +287,16 @@ function createPromptList(state: PromptTemplatesViewState): HTMLElement {
   return list;
 }
 
-function createPromptWindow(state: PromptTemplatesViewState, lib: PromptTemplatesLibrary): HTMLElement {
+function createPromptWindow(
+  state: PromptTemplatesViewState,
+  lib: PromptTemplatesLibrary
+): HTMLElement {
   const window = document.createElement('div');
   window.className = 'pt-prompt-window';
 
   if (!state.selectedPromptId) {
+    cleanupKeyboardShortcut(state);
+
     // Empty state - show placeholder
     const empty = document.createElement('div');
     empty.className = 'pt-window-empty';
@@ -271,8 +308,7 @@ function createPromptWindow(state: PromptTemplatesViewState, lib: PromptTemplate
     return window;
   }
 
-  const prompts = (state as any)._prompts;
-  const pt = prompts.find((p: { id: string }) => p.id === state.selectedPromptId);
+  const pt = state.prompts.find((p) => p.id === state.selectedPromptId);
   if (!pt) return window;
 
   // Window header
@@ -336,7 +372,7 @@ function createPromptWindow(state: PromptTemplatesViewState, lib: PromptTemplate
       let input: HTMLInputElement | HTMLTextAreaElement;
       if (isLong) {
         input = document.createElement('textarea');
-        (input as HTMLTextAreaElement).rows = 3;
+        (input as HTMLTextAreaElement).rows = 2;
       } else {
         input = document.createElement('input');
         input.type = 'text';
@@ -360,7 +396,6 @@ function createPromptWindow(state: PromptTemplatesViewState, lib: PromptTemplate
       field.appendChild(input);
       formFields[varName] = input;
       form.appendChild(field);
-
     }
 
     formWrap.appendChild(form);
@@ -421,11 +456,14 @@ function createPromptWindow(state: PromptTemplatesViewState, lib: PromptTemplate
     window.appendChild(formWrap);
 
     // Keyboard shortcuts
+    cleanupKeyboardShortcut(state);
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        e.preventDefault();
+        cleanupKeyboardShortcut(state);
         state.selectedPromptId = null;
         reRenderDirectory(state);
-        document.removeEventListener('keydown', handleKeydown);
+        return;
       }
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
@@ -433,6 +471,7 @@ function createPromptWindow(state: PromptTemplatesViewState, lib: PromptTemplate
       }
     };
     document.addEventListener('keydown', handleKeydown);
+    state.keyboardCleanup = () => document.removeEventListener('keydown', handleKeydown);
 
     // Focus first input
     const firstInput = form.querySelector('input, textarea') as HTMLElement | null;
@@ -465,9 +504,21 @@ function createPromptWindow(state: PromptTemplatesViewState, lib: PromptTemplate
   return window;
 }
 
+function cleanupKeyboardShortcut(state: PromptTemplatesViewState): void {
+  state.keyboardCleanup?.();
+  state.keyboardCleanup = null;
+}
+
+function cleanupLanguageListener(state: PromptTemplatesViewState): void {
+  state.languageCleanup?.();
+  state.languageCleanup = null;
+}
+
 function reRenderDirectory(state: PromptTemplatesViewState): void {
   const container = state.container;
   if (!container) return;
+
+  cleanupKeyboardShortcut(state);
 
   // Re-render layout
   container.innerHTML = '';
@@ -475,22 +526,23 @@ function reRenderDirectory(state: PromptTemplatesViewState): void {
   container.appendChild(rail);
   const list = createPromptList(state);
   container.appendChild(list);
-  const lib = (state as any)._lib;
-  const window = createPromptWindow(state, lib);
+  const window = createPromptWindow(state, state.lib);
   container.appendChild(window);
 }
 
 // ─── Language Change Listener ─────────────────────────────────────────────────
 
 function listenForLanguageChanges(state: PromptTemplatesViewState): void {
+  cleanupLanguageListener(state);
+
   const handler = (e: Event) => {
     const nextLang = (e as CustomEvent).detail?.lang || getCurrentLang();
     state.lang = nextLang;
+    state.lib.setLocale(nextLang);
+    state.prompts = state.lib.getAll();
 
     // Re-initialize saved values with new language
-    const lib = (state as any)._lib;
-    const prompts = lib.getAll();
-    for (const pt of prompts) {
+    for (const pt of state.prompts) {
       state.valuesByTemplate[pt.id] = getSavedValues(pt.id, nextLang);
     }
 
@@ -498,8 +550,10 @@ function listenForLanguageChanges(state: PromptTemplatesViewState): void {
   };
 
   window.addEventListener('banal:language-changed', handler);
-  (state.container as any).__ptCleanup = () => {
-    window.removeEventListener('banal:language-changed', handler);
+  state.languageCleanup = () => window.removeEventListener('banal:language-changed', handler);
+  (state.container as PromptTemplatesContainer).__ptCleanup = () => {
+    cleanupLanguageListener(state);
+    cleanupKeyboardShortcut(state);
   };
 }
 
