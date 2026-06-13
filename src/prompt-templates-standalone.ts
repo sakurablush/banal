@@ -1,17 +1,17 @@
 /**
- * Standalone Prompt Templates UI — Directory-Style Layout
+ * Standalone Prompt Templates UI — Horizontal Scroller Redesign
  *
- * Renders 9 prompt templates in a Directory-style layout:
- * - Category rail/sidebar with counts
- * - Prompt list inside selected category
- * - Right-side/in-line prompt window for the selected prompt
+ * Renders 9 prompt templates in a horizontal scroll layout (Android app drawer style):
+ * - All templates visible in a horizontal scroll container
+ * - Clicking a card opens the form in an overlay modal
+ * - Keyboard navigation with ← → arrows
+ * - Quick filter chips for categories
  *
  * Features preserved from original:
  * - Auto-save to localStorage per template
  * - Keyboard shortcuts: Ctrl/Cmd+Enter to copy, Esc to close form
  * - Toast notification on copy
  * - Preview mode
- * - Mobile-first (sticky copy button)
  */
 
 import { PromptTemplatesLibrary, type Locale, type PromptTemplate } from './lib/prompt-templates';
@@ -24,15 +24,16 @@ interface PromptCategory {
   id: string;
   labelEn: string;
   labelJa: string;
+  icon: string;
 }
 
 const PROMPT_CATEGORIES: PromptCategory[] = [
-  { id: 'all', labelEn: 'All prompts', labelJa: 'すべてのテンプレート' },
-  { id: 'career-money', labelEn: 'Career & Money', labelJa: '仕事・お金' },
-  { id: 'learning-growth', labelEn: 'Learning & Growth', labelJa: '学び・成長' },
-  { id: 'health-grounding', labelEn: 'Health & Grounding', labelJa: 'こころ・グラウンディング' },
-  { id: 'paperwork-rights', labelEn: 'Paperwork & Rights', labelJa: '手続き・権利' },
-  { id: 'communication', labelEn: 'Communication', labelJa: 'コミュニケーション' },
+  { id: 'all', labelEn: 'All', labelJa: 'すべて', icon: '' },
+  { id: 'career-money', labelEn: 'Career & Money', labelJa: '仕事・お金', icon: '\u{1F4B0}' },
+  { id: 'learning-growth', labelEn: 'Learning', labelJa: '学び', icon: '\u{1F393}' },
+  { id: 'health-grounding', labelEn: 'Grounding', labelJa: 'グラウンディング', icon: '\u{1F914}' },
+  { id: 'paperwork-rights', labelEn: 'Paperwork', labelJa: '手続き', icon: '\u{1F4DC}' },
+  { id: 'communication', labelEn: 'Communication', labelJa: 'コミュニケーション', icon: '\u{1F4AC}' },
 ];
 
 // Map prompt IDs to categories
@@ -50,8 +51,8 @@ const PROMPT_CATEGORY_MAP: Record<string, string> = {
 
 function getPromptsForCategory(
   categoryId: string,
-  allPrompts: Array<{ id: string; title: string; description: string; template: string }>
-): Array<{ id: string; title: string; description: string; template: string }> {
+  allPrompts: PromptTemplate[]
+): PromptTemplate[] {
   if (categoryId === 'all') {
     return allPrompts;
   }
@@ -59,7 +60,7 @@ function getPromptsForCategory(
 }
 
 function getCategoryCounts(
-  allPrompts: Array<{ id: string; title: string; description: string; template: string }>
+  allPrompts: PromptTemplate[]
 ): Record<string, number> {
   const counts: Record<string, number> = { all: allPrompts.length };
   for (const pt of allPrompts) {
@@ -81,6 +82,7 @@ interface PromptTemplatesViewState {
   container: HTMLElement;
   keyboardCleanup: (() => void) | null;
   languageCleanup: (() => void) | null;
+  modalCleanup: (() => void) | null;
 }
 
 interface PromptTemplatesContainer extends HTMLElement {
@@ -137,6 +139,7 @@ export function renderPromptTemplatesStandalone(options: {
       container,
       keyboardCleanup: null,
       languageCleanup: null,
+      modalCleanup: null,
     };
 
     // Initialize saved values for all prompts
@@ -148,10 +151,10 @@ export function renderPromptTemplatesStandalone(options: {
     typedContainer.__ptCleanup?.();
 
     container.innerHTML = '';
-    container.className = 'pt-directory-shell';
+    container.className = 'pt-horizontal-shell';
 
-    // Render the directory layout
-    renderDirectoryLayout(state);
+    // Render the horizontal layout
+    renderHorizontalLayout(state);
 
     // Listen for language changes
     listenForLanguageChanges(state);
@@ -167,151 +170,142 @@ export function renderPromptTemplatesStandalone(options: {
   }
 }
 
-// ─── Directory Layout ────────────────────────────────────────────────────────
+// ─── Horizontal Layout ────────────────────────────────────────────────────────
 
-function renderDirectoryLayout(state: PromptTemplatesViewState): void {
-  // Category rail (sidebar)
-  const rail = createCategoryRail(state);
-  state.container.appendChild(rail);
+function renderHorizontalLayout(state: PromptTemplatesViewState): void {
+  // Quick filters row
+  const filtersRow = createQuickFilters(state);
+  state.container.appendChild(filtersRow);
 
-  // Prompt list
-  const list = createPromptList(state);
-  state.container.appendChild(list);
-
-  // Prompt window (right side or inline)
-  const window = createPromptWindow(state, state.lib);
-  state.container.appendChild(window);
+  // Horizontal scroll container for prompt cards
+  const scrollContainer = createPromptScrollContainer(state);
+  state.container.appendChild(scrollContainer);
 }
 
-function createCategoryRail(state: PromptTemplatesViewState): HTMLElement {
-  const rail = document.createElement('aside');
-  rail.className = 'pt-category-rail';
+function createQuickFilters(state: PromptTemplatesViewState): HTMLElement {
+  const row = document.createElement('div');
+  row.className = 'quick-filters-row';
 
-  const prompts = state.prompts;
-  const counts = getCategoryCounts(prompts);
+  const counts = getCategoryCounts(state.prompts);
+  const filters = PROMPT_CATEGORIES;
 
-  for (const cat of PROMPT_CATEGORIES) {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = `pt-category-button${state.selectedCategory === cat.id ? ' active' : ''}`;
-    btn.dataset.category = cat.id;
+  for (const cat of filters) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = `quick-filter-chip${state.selectedCategory === cat.id ? ' active' : ''}`;
+    chip.dataset.category = cat.id;
     const label = state.lang === 'ja' ? cat.labelJa : cat.labelEn;
     const count = counts[cat.id] || 0;
-    btn.innerHTML = `
-      <span class="pt-cat-label">${label}</span>
-      <span class="pt-cat-count">${count}</span>
-    `;
-    btn.addEventListener('click', () => {
+    chip.innerHTML = `<span class="filter-icon">${cat.icon}</span> <span class="filter-label">${label}</span> <span class="filter-count">(${count})</span>`;
+    chip.addEventListener('click', () => {
       state.selectedCategory = cat.id;
-      // Clear selected prompt when switching categories
-      state.selectedPromptId = null;
-      reRenderDirectory(state);
+      reRenderHorizontal(state);
     });
-    rail.appendChild(btn);
+    row.appendChild(chip);
   }
 
-  return rail;
+  return row;
 }
 
-function createPromptList(state: PromptTemplatesViewState): HTMLElement {
-  const list = document.createElement('div');
-  list.className = 'pt-prompt-list';
+function createPromptScrollContainer(state: PromptTemplatesViewState): HTMLElement {
+  const scroll = document.createElement('div');
+  scroll.className = 'prompts-horizontal-scroll';
 
   const filteredPrompts = getPromptsForCategory(state.selectedCategory, state.prompts);
 
   for (const pt of filteredPrompts) {
-    const card = document.createElement('article');
-    card.className = `pt-prompt-card${state.selectedPromptId === pt.id ? ' active' : ''}`;
-    card.dataset.promptId = pt.id;
-    card.tabIndex = 0;
-    card.role = 'button';
-    card.setAttribute(
-      'aria-label',
-      state.lang === 'ja' ? `${pt.title}のテンプレートを開く` : `Open ${pt.title} template`
-    );
-
-    // Title
-    const title = document.createElement('h3');
-    title.className = 'pt-prompt-title';
-    title.textContent = pt.title;
-    card.appendChild(title);
-
-    // Description
-    const desc = document.createElement('p');
-    desc.className = 'pt-prompt-desc';
-    desc.textContent = pt.description;
-    card.appendChild(desc);
-
-    // Field count
-    const fieldCount = extractTemplateVariables(pt.template).length;
-    if (fieldCount > 0) {
-      const varsInfo = document.createElement('div');
-      varsInfo.className = 'sp-card-vars';
-      varsInfo.innerHTML = `<span class="sp-vars-label">${state.lang === 'ja' ? '入力項目:' : 'Fields:'}</span> ${fieldCount}`;
-      card.appendChild(varsInfo);
-    }
-
-    card.addEventListener('click', () => {
-      state.selectedPromptId = pt.id;
-      reRenderDirectory(state);
-    });
-
-    card.addEventListener('keydown', (e) => {
-      if (e.target !== card) return;
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        state.selectedPromptId = pt.id;
-        reRenderDirectory(state);
-      }
-    });
-
-    // Action buttons
-    const actions = document.createElement('div');
-    actions.className = 'pt-prompt-actions';
-
-    const fillBtn = document.createElement('button');
-    fillBtn.type = 'button';
-    fillBtn.className = 'sp-btn sp-btn-secondary';
-    fillBtn.textContent = state.lang === 'ja' ? '入力してコピー' : 'Fill & Copy';
-    fillBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      state.selectedPromptId = pt.id;
-      reRenderDirectory(state);
-    });
-    actions.appendChild(fillBtn);
-
-    card.appendChild(actions);
-    list.appendChild(card);
+    const card = createHorizontalPromptCard(state, pt);
+    scroll.appendChild(card);
   }
 
-  return list;
+  return scroll;
 }
 
-function createPromptWindow(
-  state: PromptTemplatesViewState,
-  lib: PromptTemplatesLibrary
-): HTMLElement {
-  const window = document.createElement('div');
-  window.className = 'pt-prompt-window';
+function createHorizontalPromptCard(state: PromptTemplatesViewState, pt: PromptTemplate): HTMLElement {
+  const card = document.createElement('article');
+  card.className = 'prompt-card-horizontal';
+  card.dataset.promptId = pt.id;
+  card.tabIndex = 0;
+  card.role = 'button';
+  card.setAttribute(
+    'aria-label',
+    state.lang === 'ja' ? `${pt.title}のテンプレートを開く` : `Open ${pt.title} template`
+  );
 
-  if (!state.selectedPromptId) {
-    cleanupKeyboardShortcut(state);
+  // Category icon badge
+  const cat = PROMPT_CATEGORY_MAP[pt.id] || 'all';
+  const catData = PROMPT_CATEGORIES.find((c) => c.id === cat);
+  const iconBadge = document.createElement('div');
+  iconBadge.className = 'prompt-card-icon';
+  iconBadge.textContent = catData?.icon || '\u{1F4AC}';
+  card.appendChild(iconBadge);
 
-    // Empty state - show placeholder
-    const empty = document.createElement('div');
-    empty.className = 'pt-window-empty';
-    empty.innerHTML = `
-      <div class="pt-empty-icon">\u{1F4AC}</div>
-      <p class="pt-empty-text">${state.lang === 'ja' ? 'テンプレートを選択してください' : 'Select a template to get started'}</p>
-    `;
-    window.appendChild(empty);
-    return window;
-  }
+  // Category label
+  const categoryLabel = document.createElement('div');
+  categoryLabel.className = 'pt-prompt-category';
+  categoryLabel.textContent = catData ? (state.lang === 'ja' ? catData.labelJa : catData.labelEn) : '';
+  card.appendChild(categoryLabel);
 
-  const pt = state.prompts.find((p) => p.id === state.selectedPromptId);
-  if (!pt) return window;
+  // Title
+  const title = document.createElement('h3');
+  title.className = 'pt-prompt-title';
+  title.textContent = pt.title;
+  card.appendChild(title);
 
-  // Window header
+  // Description
+  const desc = document.createElement('p');
+  desc.className = 'pt-prompt-desc';
+  desc.textContent = pt.description;
+  card.appendChild(desc);
+
+  // Actions
+  const actions = document.createElement('div');
+  actions.className = 'prompt-card-actions';
+
+  const fillBtn = document.createElement('button');
+  fillBtn.type = 'button';
+  fillBtn.className = 'sp-btn sp-btn-secondary';
+  fillBtn.textContent = state.lang === 'ja' ? '入力してコピー' : 'Fill & Copy';
+  fillBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openPromptModal(state, pt);
+  });
+  actions.appendChild(fillBtn);
+
+  card.appendChild(actions);
+
+  // Click on card opens modal
+  card.addEventListener('click', () => {
+    openPromptModal(state, pt);
+  });
+
+  // Keyboard access
+  card.addEventListener('keydown', (e) => {
+    if (e.target !== card) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openPromptModal(state, pt);
+    }
+  });
+
+  return card;
+}
+
+// ─── Modal Overlay ────────────────────────────────────────────────────────────
+
+function openPromptModal(state: PromptTemplatesViewState, pt: PromptTemplate): void {
+  // Close any existing modal
+  closePromptModal(state);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'pt-modal-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+
+  const modalContent = document.createElement('div');
+  modalContent.className = 'pt-modal-content';
+
+  // Header
   const header = document.createElement('div');
   header.className = 'pt-window-header';
 
@@ -327,17 +321,16 @@ function createPromptWindow(
   closeBtn.title = state.lang === 'ja' ? '閉じる' : 'Close';
   closeBtn.setAttribute('aria-label', state.lang === 'ja' ? '閉じる' : 'Close');
   closeBtn.addEventListener('click', () => {
-    state.selectedPromptId = null;
-    reRenderDirectory(state);
+    closePromptModal(state);
   });
   header.appendChild(closeBtn);
-  window.appendChild(header);
+  modalContent.appendChild(header);
 
   // Description
   const desc = document.createElement('p');
   desc.className = 'pt-window-desc';
   desc.textContent = pt.description;
-  window.appendChild(desc);
+  modalContent.appendChild(desc);
 
   // Form fields
   const variables = extractTemplateVariables(pt.template);
@@ -419,7 +412,7 @@ function createPromptWindow(
       for (const [key, input] of Object.entries(formFields)) {
         values[key] = input.value || `[${key}]`;
       }
-      const filled = lib.fill(pt.id, values);
+      const filled = state.lib.fill(pt.id, values);
       previewArea.textContent = filled;
       previewArea.style.display = 'block';
       previewArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -435,7 +428,7 @@ function createPromptWindow(
       for (const [key, input] of Object.entries(formFields)) {
         values[key] = input.value || `[${key}]`;
       }
-      const filled = lib.fill(pt.id, values);
+      const filled = state.lib.fill(pt.id, values);
 
       try {
         await navigator.clipboard.writeText(filled);
@@ -447,22 +440,19 @@ function createPromptWindow(
         }, 2000);
       } catch (error) {
         console.error('Failed to copy:', error);
-        alert(state.lang === 'ja' ? 'コピーに失敗しました' : 'Failed to copy to clipboard');
+        showToast(state.lang === 'ja' ? 'コピーに失敗しました' : 'Failed to copy to clipboard');
       }
     });
     actions.appendChild(copyFilledBtn);
 
     formWrap.appendChild(actions);
-    window.appendChild(formWrap);
+    modalContent.appendChild(formWrap);
 
     // Keyboard shortcuts
-    cleanupKeyboardShortcut(state);
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
-        cleanupKeyboardShortcut(state);
-        state.selectedPromptId = null;
-        reRenderDirectory(state);
+        closePromptModal(state);
         return;
       }
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
@@ -495,13 +485,39 @@ function createPromptWindow(
         }, 2000);
       } catch (error) {
         console.error('Failed to copy:', error);
-        alert(state.lang === 'ja' ? 'コピーに失敗しました' : 'Failed to copy to clipboard');
+        showToast(state.lang === 'ja' ? 'コピーに失敗しました' : 'Failed to copy to clipboard');
       }
     });
-    window.appendChild(copyBtn);
+    modalContent.appendChild(copyBtn);
   }
 
-  return window;
+  overlay.appendChild(modalContent);
+  document.body.appendChild(overlay);
+
+  // Click outside to close
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      closePromptModal(state);
+    }
+  });
+
+  state.modalCleanup = () => {
+    if (overlay.parentNode) {
+      overlay.parentNode.removeChild(overlay);
+    }
+  };
+}
+
+function closePromptModal(state: PromptTemplatesViewState): void {
+  // Remove overlay from DOM
+  const overlay = document.querySelector('.pt-modal-overlay');
+  if (overlay && overlay.parentNode) {
+    overlay.parentNode.removeChild(overlay);
+  }
+  state.modalCleanup?.();
+  state.modalCleanup = null;
+  state.keyboardCleanup?.();
+  state.keyboardCleanup = null;
 }
 
 function cleanupKeyboardShortcut(state: PromptTemplatesViewState): void {
@@ -514,20 +530,16 @@ function cleanupLanguageListener(state: PromptTemplatesViewState): void {
   state.languageCleanup = null;
 }
 
-function reRenderDirectory(state: PromptTemplatesViewState): void {
+function reRenderHorizontal(state: PromptTemplatesViewState): void {
   const container = state.container;
   if (!container) return;
 
-  cleanupKeyboardShortcut(state);
-
-  // Re-render layout
+  // Clear and re-render
   container.innerHTML = '';
-  const rail = createCategoryRail(state);
-  container.appendChild(rail);
-  const list = createPromptList(state);
-  container.appendChild(list);
-  const window = createPromptWindow(state, state.lib);
-  container.appendChild(window);
+  const filtersRow = createQuickFilters(state);
+  container.appendChild(filtersRow);
+  const scrollContainer = createPromptScrollContainer(state);
+  container.appendChild(scrollContainer);
 }
 
 // ─── Language Change Listener ─────────────────────────────────────────────────
@@ -546,7 +558,7 @@ function listenForLanguageChanges(state: PromptTemplatesViewState): void {
       state.valuesByTemplate[pt.id] = getSavedValues(pt.id, nextLang);
     }
 
-    reRenderDirectory(state);
+    reRenderHorizontal(state);
   };
 
   window.addEventListener('banal:language-changed', handler);
@@ -554,6 +566,7 @@ function listenForLanguageChanges(state: PromptTemplatesViewState): void {
   (state.container as PromptTemplatesContainer).__ptCleanup = () => {
     cleanupLanguageListener(state);
     cleanupKeyboardShortcut(state);
+    closePromptModal(state);
   };
 }
 

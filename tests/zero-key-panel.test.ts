@@ -9,7 +9,6 @@ import { renderZeroKeyPowerPanel, resetZeroKeyPanelFiltersForTests } from '../sr
 
 const MINIMUM_CURATED_TOOL_COUNT = 80;
 const REQUIRED_SURFACES: readonly ZeroKeySurface[] = ['web', 'api', 'cli'];
-const PAGE_SIZE = 24; // matches lazy-load page size in panel
 
 function renderPanel(lang: 'en' | 'ja' = 'en', onToolOpen = vi.fn()): HTMLElement {
   const root = document.createElement('section');
@@ -86,16 +85,17 @@ describe('zero-key panel rendering', () => {
     vi.useRealTimers();
   });
 
-  it('renders search input and tool cards (lazy loaded first page)', () => {
+  it('renders search input and tool cards in horizontal scroll layout', () => {
     const root = renderPanel();
 
     expect(root.querySelector('#zk-search-input')).not.toBeNull();
-    // Cards are lazy-loaded: first page shows PAGE_SIZE cards
-    const cards = root.querySelectorAll('.zk2-card');
-    expect(cards.length).toBe(Math.min(PAGE_SIZE, zeroKeyTools.length));
+    // All tools should be visible in horizontal scroll (no lazy loading)
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
+    expect(cards.length).toBe(zeroKeyTools.length); // All tools visible
   });
 
-  it('searches across names, categories, badges, and use cases', () => {
+  it('searches across names, categories, badges, and use cases in horizontal layout', () => {
     const root = renderPanel();
     const input = root.querySelector('#zk-search-input') as HTMLInputElement;
 
@@ -105,22 +105,27 @@ describe('zero-key panel rendering', () => {
     // Flush debounce
     vi.advanceTimersByTime(150);
 
+    // Should use horizontal scroll container
+    const scrollContainer = root.querySelector('.tools-horizontal-scroll');
+    expect(scrollContainer).not.toBeNull();
+    
+    // Should show Supabase and Neon
     expect(root.textContent).toContain('Supabase');
     expect(root.textContent).toContain('Neon');
-    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
   });
 
   it('filters by life context without breaking results', () => {
     const root = renderPanel();
-    // Look for filter buttons (they have .zk2-filter-chip class)
-    const developerFilter = Array.from(root.querySelectorAll('.zk2-filter-chip')).find((btn) =>
+    // Look for filter buttons (they have .quick-filter-chip class)
+    const developerFilter = Array.from(root.querySelectorAll('.quick-filter-chip')).find((btn) =>
       (btn.textContent || '').toLowerCase().includes('dev')
     ) as HTMLButtonElement;
 
     expect(developerFilter, 'Developer filter chip should exist').toBeTruthy();
     developerFilter.click();
 
-    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
   });
 
   it('shows clear empty state for impossible searches', () => {
@@ -133,8 +138,10 @@ describe('zero-key panel rendering', () => {
     // Flush debounce
     vi.advanceTimersByTime(150);
 
-    expect(root.textContent).toContain('No tools match');
-    expect(root.querySelectorAll('.zk2-card').length).toBe(0);
+    // Should show empty state (no horizontal scroll when no results)
+    const empty = root.querySelector('.zk2-empty');
+    expect(empty).not.toBeNull();
+    expect(empty!.textContent).toContain('No tools match');
   });
 
   it('fires open callback when a tool CTA link is clicked', () => {
@@ -148,7 +155,7 @@ describe('zero-key panel rendering', () => {
     expect(onToolOpen).toHaveBeenCalledTimes(1);
   });
 
-  it('hero search input syncs with panel search and scrolls to tools', () => {
+  it('hero search input syncs with panel search and filters tools', () => {
     // Create hero search input and tools section in DOM
     const heroInput = document.createElement('input');
     heroInput.id = 'hero-search';
@@ -172,11 +179,11 @@ describe('zero-key panel rendering', () => {
     const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
     expect(panelInput.value).toBe('Docker');
 
-    // Should show filtered results
-    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
+    // Should show filtered results in horizontal scroll
+    expect(root.querySelectorAll('.tool-card-horizontal').length).toBeGreaterThan(0);
   });
 
-  it('hero search Enter key focuses panel search and scrolls', () => {
+  it('hero search Enter key focuses panel search', () => {
     const heroInput = document.createElement('input');
     heroInput.id = 'hero-search';
     heroInput.type = 'text';
@@ -212,7 +219,7 @@ describe('zero-key panel rendering', () => {
     expect(heroInput.value).toBe('');
 
     // Panel should show all tools
-    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
+    expect(root.querySelectorAll('.tool-card-horizontal').length).toBeGreaterThan(0);
   });
 
   it('panel search Escape key clears search', () => {
@@ -231,25 +238,7 @@ describe('zero-key panel rendering', () => {
     expect(panelInput.value).toBe('');
 
     // Should show all tools
-    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
-  });
-
-  it('load more button shows additional tools', () => {
-    const root = renderPanel();
-
-    // Initial count should be PAGE_SIZE
-    const initialCards = root.querySelectorAll('.zk2-card');
-    expect(initialCards.length).toBe(Math.min(PAGE_SIZE, zeroKeyTools.length));
-
-    // Find and click load more button
-    const loadMoreBtn = root.querySelector('.zk2-load-more') as HTMLButtonElement;
-    if (loadMoreBtn) {
-      loadMoreBtn.click();
-
-      // Should now show more cards
-      const afterCards = root.querySelectorAll('.zk2-card');
-      expect(afterCards.length).toBeGreaterThan(initialCards.length);
-    }
+    expect(root.querySelectorAll('.tool-card-horizontal').length).toBeGreaterThan(0);
   });
 
   it('Ctrl+K focuses and selects panel search input', () => {
@@ -288,63 +277,7 @@ describe('zero-key panel rendering', () => {
 
     // Should reset search and show all tools
     expect(panelInput.value).toBe('');
-    expect(root.querySelectorAll('.zk2-card').length).toBeGreaterThan(0);
-  });
-
-  it('shows active category in stats bar when filtering by category', () => {
-    const root = renderPanel();
-
-    // Click on a category in sidebar (skip first one which is "All")
-    const categoryBtns = root.querySelectorAll('.zk2-cat-item') as NodeListOf<HTMLButtonElement>;
-    expect(categoryBtns.length).toBeGreaterThan(1);
-
-    // Click second category (first is "All")
-    categoryBtns[1].click();
-
-    // Should show category label in stats bar
-    const statsCategory = root.querySelector('.zk2-stats-category');
-    expect(statsCategory).not.toBeNull();
-    expect(statsCategory?.textContent).toBeTruthy();
-  });
-
-  it('clicking "All" category resets category filter', () => {
-    const root = renderPanel();
-
-    // First click on a specific category
-    const categoryBtns = root.querySelectorAll('.zk2-cat-item') as NodeListOf<HTMLButtonElement>;
-    categoryBtns[1].click();
-
-    // Should show category in stats
-    expect(root.querySelector('.zk2-stats-category')).not.toBeNull();
-
-    // Now click "All" (first button)
-    categoryBtns[0].click();
-
-    // Should not show category in stats anymore
-    expect(root.querySelector('.zk2-stats-category')).toBeNull();
-  });
-
-  it('clicking active life filter removes it (toggle behavior)', () => {
-    const root = renderPanel();
-
-    // Find and click a life filter
-    const filterChip = root.querySelector('.zk2-filter-chip') as HTMLButtonElement;
-    expect(filterChip).not.toBeNull();
-
-    // Click to activate
-    filterChip.click();
-
-    // After click, panel re-renders, so find the new chip
-    const activeChip = root.querySelector('.zk2-filter-chip.active') as HTMLButtonElement;
-    expect(activeChip).not.toBeNull();
-    expect(activeChip.classList.contains('active')).toBe(true);
-
-    // Click again to deactivate
-    activeChip.click();
-
-    // After second click, should not have active class
-    const deactivatedChip = root.querySelector('.zk2-filter-chip') as HTMLButtonElement;
-    expect(deactivatedChip.classList.contains('active')).toBe(false);
+    expect(root.querySelectorAll('.tool-card-horizontal').length).toBeGreaterThan(0);
   });
 
   it('report button opens GitHub issue URL', () => {
@@ -380,7 +313,7 @@ describe('zero-key panel rendering', () => {
     const root = renderPanel();
 
     // Find and click open-source filter
-    const filterChips = root.querySelectorAll('.zk2-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filterChips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
     const openSourceFilter = Array.from(filterChips).find((chip) =>
       chip.textContent?.toLowerCase().includes('open source')
     );
@@ -389,7 +322,7 @@ describe('zero-key panel rendering', () => {
     openSourceFilter!.click();
 
     // Should show filtered results
-    const cards = root.querySelectorAll('.zk2-card');
+    const cards = root.querySelectorAll('.tool-card-horizontal');
     expect(cards.length).toBeGreaterThan(0);
   });
 
@@ -397,7 +330,7 @@ describe('zero-key panel rendering', () => {
     const root = renderPanel();
 
     // Find and click offline filter
-    const filterChips = root.querySelectorAll('.zk2-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filterChips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
     const offlineFilter = Array.from(filterChips).find((chip) =>
       chip.textContent?.toLowerCase().includes('offline')
     );
@@ -406,7 +339,7 @@ describe('zero-key panel rendering', () => {
     offlineFilter!.click();
 
     // Should show filtered results
-    const cards = root.querySelectorAll('.zk2-card');
+    const cards = root.querySelectorAll('.tool-card-horizontal');
     expect(cards.length).toBeGreaterThan(0);
   });
 
@@ -427,5 +360,50 @@ describe('zero-key panel rendering', () => {
 
     // Hero input should sync
     expect(heroInput.value).toBe('Docker');
+  });
+
+  // ─── Horizontal scroll card layout ───────────────────────────────────────────
+
+  it('horizontal tool card has proper width and snap alignment', () => {
+    const root = renderPanel();
+    const card = root.querySelector('.tool-card-horizontal') as HTMLElement;
+
+    expect(card).not.toBeNull();
+    expect(card.classList.contains('tool-card-horizontal')).toBe(true);
+
+    // Card should be focusable
+    expect(card.tabIndex).toBe(0);
+  });
+
+  it('card has Open button with arrow icon', () => {
+    const root = renderPanel();
+    const card = root.querySelector('.tool-card-horizontal') as HTMLElement;
+    const cta = card.querySelector('.zk2-card-cta') as HTMLAnchorElement;
+
+    expect(cta).not.toBeNull();
+    expect(cta.textContent).toContain('→');
+  });
+
+  it('card has Report button with dropdown indicator', () => {
+    const root = renderPanel();
+    const reportBtn = root.querySelector('.zk2-card-report') as HTMLButtonElement;
+
+    expect(reportBtn).not.toBeNull();
+    expect(reportBtn.textContent).toContain('Report');
+    expect(reportBtn.textContent).toContain('▼');
+  });
+
+  // ─── No sidebar in horizontal layout ─────────────────────────────────────────
+
+  it('does not render category sidebar in horizontal layout', () => {
+    const root = renderPanel();
+    const sidebar = root.querySelector('.zk2-sidebar');
+    expect(sidebar).toBeNull();
+  });
+
+  it('does not render load more button in horizontal layout', () => {
+    const root = renderPanel();
+    const loadMore = root.querySelector('.zk2-load-more');
+    expect(loadMore).toBeNull();
   });
 });

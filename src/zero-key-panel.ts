@@ -1,7 +1,8 @@
 /**
- * Zero-Key Panel v2 — Masterpiece Redesign
- * Card-based grid layout, category sidebar, working search, lazy loading.
- * Inspired by Raycast Store / Product Hunt / Notion Template Gallery.
+ * Zero-Key Panel — Horizontal Scroller Redesign
+ * Android app drawer style: horizontal scroll with snapping cards.
+ * All tools visible at once, no lazy loading.
+ * Includes quick filter chips and new button design (Open → + Report ▼ dropdown).
  */
 
 import { type Lang } from './i18n';
@@ -60,10 +61,10 @@ const COPY = {
     clearFilters: 'Clear all filters',
     open: 'Open',
     docs: 'Docs',
+    report: 'Report',
     noMatchesTitle: 'No tools match',
     noMatchesSuggestion: 'Try: chat, image, PDF, coding',
     showing: (visible: number, total: number) => `Showing ${visible} of ${total} tools`,
-    loadMore: 'Load more tools',
     allCategory: 'All Tools',
   },
   ja: {
@@ -72,10 +73,10 @@ const COPY = {
     clearFilters: '\u30D5\u30A3\u30EB\u30BF\u30FC\u30AF\u30EA\u30A2',
     open: '\u958B\u304F',
     docs: '\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8',
+    report: '\u5831\u544A',
     noMatchesTitle: '\u4E00\u81F4\u306A\u3057',
     noMatchesSuggestion: 'chat, image, PDF, coding \u3067\u691C\u7D22',
     showing: (visible: number, total: number) => `${visible} / ${total}\u4EF6`,
-    loadMore: '\u3082\u3063\u3068\u8AAD\u307F\u8FBC\u3080',
     allCategory: '\u5168\u30C4\u30FC\u30EB',
   },
 } satisfies Record<
@@ -86,10 +87,10 @@ const COPY = {
     clearFilters: string;
     open: string;
     docs: string;
+    report: string;
     noMatchesTitle: string;
     noMatchesSuggestion: string;
     showing: (visible: number, total: number) => string;
-    loadMore: string;
     allCategory: string;
   }
 >;
@@ -144,7 +145,7 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
 export interface ZeroKeyPanelOptions {
   lang: Lang;
   onToolOpen?: () => void;
-  categoryPrefix?: 'ai' | 'dev'; // Filter tools by category prefix
+  categoryPrefix?: 'ai' | 'dev';
 }
 
 export interface ZeroKeyPanelApi {
@@ -154,7 +155,6 @@ export interface ZeroKeyPanelApi {
   destroy: () => void;
 }
 
-const PAGE_SIZE = 24;
 const DEBOUNCE_MS = 100;
 const MAX_RESULTS = 300;
 
@@ -164,14 +164,12 @@ interface PanelState {
   results: SearchResult[];
   query: string;
   activeCategory: ZeroKeyCategory | null;
-  visibleCount: number;
   onToolOpen?: () => void;
   container: HTMLElement | null;
   categoryPrefix?: 'ai' | 'dev';
   lifeFilters: Set<string>;
   debounceTimer: ReturnType<typeof setTimeout> | null;
   heroAbortController: AbortController;
-  pendingScrollToTools?: boolean;
 }
 
 // Per-panel state storage using WeakMap
@@ -215,7 +213,6 @@ function getState(container: HTMLElement): PanelState {
       results: [],
       query: '',
       activeCategory: null,
-      visibleCount: PAGE_SIZE,
       lifeFilters: new Set(),
       debounceTimer: null,
       heroAbortController: new AbortController(),
@@ -229,17 +226,6 @@ function getState(container: HTMLElement): PanelState {
 // The panel's search input is identified by data-panel-search on its container
 function getPanelSearchInput(container: HTMLElement): HTMLInputElement | null {
   return container.querySelector(`.zk2-search-input`) as HTMLInputElement | null;
-}
-
-function getCategoryCounts(state: PanelState): Record<string, number> {
-  const counts: Record<string, number> = {};
-  const tools = state.categoryPrefix
-    ? state.allTools.filter((t) => matchesCategoryPrefix(t.category, state.categoryPrefix!))
-    : state.allTools;
-  for (const tool of tools) {
-    counts[tool.category] = (counts[tool.category] || 0) + 1;
-  }
-  return counts;
 }
 
 // ─── Search & Filter Logic ───────────────────────────────────────────────────
@@ -265,7 +251,6 @@ function applyCategoryFilter(state: PanelState, results: SearchResult[]): Search
 
 function performSearch(state: PanelState): void {
   const query = state.query;
-  state.visibleCount = PAGE_SIZE;
 
   // Filter tools by category prefix if specified
   const filteredTools = state.categoryPrefix
@@ -306,77 +291,16 @@ function syncSearchInputs(container: HTMLElement, value: string, source: 'hero' 
   }
 }
 
-// ─── Render: Category Sidebar ────────────────────────────────────────────────
-
-function renderCategorySidebar(state: PanelState): HTMLElement {
-  const sidebar = create('aside', 'zk2-sidebar');
-  const counts = getCategoryCounts(state);
-  const copy = COPY[state.lang];
-
-  // Filter categories by prefix if specified
-  const allCategories = Object.keys(categoryLabels) as ZeroKeyCategory[];
-  const categories = state.categoryPrefix
-    ? allCategories.filter((cat) => matchesCategoryPrefix(cat, state.categoryPrefix!))
-    : allCategories;
-
-  // "All" item
-  const allItem = create('button', `zk2-cat-item${!state.activeCategory ? ' active' : ''}`);
-  allItem.type = 'button';
-  const totalTools = state.categoryPrefix
-    ? state.allTools.filter((t) => matchesCategoryPrefix(t.category, state.categoryPrefix!)).length
-    : state.allTools.length;
-  allItem.innerHTML = `<span class="zk2-cat-label">${copy.allCategory}</span><span class="zk2-cat-count">${totalTools}</span>`;
-  allItem.addEventListener('click', () => {
-    state.activeCategory = null;
-    performSearch(state);
-    updateSidebarActive(state);
-  });
-  sidebar.appendChild(allItem);
-
-  // Category items
-  for (const cat of categories) {
-    const count = counts[cat] || 0;
-    if (count === 0) continue;
-
-    const item = create('button', `zk2-cat-item${state.activeCategory === cat ? ' active' : ''}`);
-    item.type = 'button';
-    item.dataset.category = cat;
-    item.innerHTML = `<span class="zk2-cat-icon">${categoryIcons[cat]}</span><span class="zk2-cat-label">${categoryLabels[cat]}</span><span class="zk2-cat-count">${count}</span>`;
-    item.addEventListener('click', () => {
-      state.activeCategory = state.activeCategory === cat ? null : cat;
-      performSearch(state);
-      updateSidebarActive(state);
-    });
-    sidebar.appendChild(item);
-  }
-
-  return sidebar;
-}
-
-function updateSidebarActive(state: PanelState): void {
-  const container = state.container;
-  if (!container) return;
-  const items = container.querySelectorAll('.zk2-cat-item');
-  items.forEach((item, index) => {
-    if (index === 0) {
-      item.classList.toggle('active', !state.activeCategory);
-    } else {
-      const cat = (item as HTMLElement).dataset.category;
-      item.classList.toggle('active', cat === state.activeCategory);
-    }
-  });
-}
-
 // ─── Render: Quick Filters ───────────────────────────────────────────────────
 
 function renderQuickFilters(state: PanelState): HTMLElement {
-  const row = create('div', 'zk2-filters-row');
+  const row = create('div', 'quick-filters-row');
   const filters = getLifeFilters(state.lang);
 
   for (const def of filters) {
     const chip = create(
       'button',
-      `zk2-filter-chip${state.lifeFilters.has(def.id) ? ' active' : ''}`
+      `quick-filter-chip${state.lifeFilters.has(def.id) ? ' active' : ''}`
     );
     chip.type = 'button';
     chip.textContent = def.label;
@@ -394,13 +318,14 @@ function renderQuickFilters(state: PanelState): HTMLElement {
   return row;
 }
 
-// ─── Render: Tool Card ───────────────────────────────────────────────────────
+// ─── Render: Horizontal Tool Card ───────────────────────────────────────────
 
-function renderToolCard(state: PanelState, result: SearchResult): HTMLElement {
+function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTMLElement {
   const { tool } = result;
   const copy = COPY[state.lang];
 
-  const card = create('article', 'zk2-card');
+  const card = create('article', 'tool-card-horizontal');
+  card.tabIndex = 0; // Make cards focusable for keyboard navigation
 
   // Header: icon + surface badge
   const header = create('div', 'zk2-card-header');
@@ -463,7 +388,7 @@ function renderToolCard(state: PanelState, result: SearchResult): HTMLElement {
     card.appendChild(badgesWrap);
   }
 
-  // Footer: caveat + open button
+  // Footer: caveat + open button + report dropdown
   const footer = create('div', 'zk2-card-footer');
 
   if (tool.caveat) {
@@ -490,12 +415,13 @@ function renderToolCard(state: PanelState, result: SearchResult): HTMLElement {
   });
   footer.appendChild(btn);
 
+  // Report button with dropdown
   const reportBtn = create('button', 'zk2-card-report');
   reportBtn.type = 'button';
-  reportBtn.textContent = state.lang === 'ja' ? '\u5831\u544a' : 'Report';
+  reportBtn.innerHTML = `<span class="report-text">${state.lang === 'ja' ? '\u5831\u544A' : 'Report'} ▼</span>`;
   reportBtn.title =
     state.lang === 'ja'
-      ? '\u3053\u306e\u30C4\u30FC\u30EB\u3092\u5831\u544a'
+      ? '\u3053\u306e\u30C4\u30FC\u30EB\u3092\u5831\u544A'
       : 'Report this tool as broken';
   reportBtn.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -545,29 +471,28 @@ function renderEmptyState(state: PanelState): HTMLElement {
   return empty;
 }
 
-// ─── Render: Main Content (grid + load more) ────────────────────────────────
+// ─── Render: Main Content (horizontal scroll) ─────────────────────────────
 
 function renderContent(state: PanelState): void {
   const container = state.container;
   if (!container) return;
 
-  // Keep sidebar and top bar, replace content area
-  const contentArea = container.querySelector('.zk2-content') as HTMLElement | null;
+  // Clear content area (keep search bar)
+  const contentArea = container.querySelector('.zk2-horizontal-content') as HTMLElement | null;
   if (!contentArea) return;
 
   contentArea.innerHTML = '';
 
   const copy = COPY[state.lang];
   const results = state.results;
-  const visible = results.slice(0, state.visibleCount);
 
-  // Filters row
+  // Quick filters row
   const filtersRow = renderQuickFilters(state);
   contentArea.appendChild(filtersRow);
 
   // Stats bar
   const statsBar = create('div', 'zk2-stats-bar');
-  statsBar.textContent = copy.showing(visible.length, results.length);
+  statsBar.textContent = copy.showing(results.length, results.length);
   if (state.activeCategory) {
     const catLabel = create('span', 'zk2-stats-category');
     catLabel.textContent = ` \u2022 ${categoryIcons[state.activeCategory]} ${categoryLabels[state.activeCategory]}`;
@@ -581,31 +506,14 @@ function renderContent(state: PanelState): void {
     return;
   }
 
-  // Grid
-  const grid = create('div', 'zk2-grid');
-  visible.forEach((result, i) => {
-    const card = renderToolCard(state, result);
+  // Horizontal scroll container
+  const scrollContainer = create('div', 'tools-horizontal-scroll');
+  results.forEach((result, i) => {
+    const card = renderHorizontalToolCard(state, result);
     card.style.animationDelay = `${Math.min(i * 20, 400)}ms`;
-    grid.appendChild(card);
+    scrollContainer.appendChild(card);
   });
-  contentArea.appendChild(grid);
-
-  // Load more
-  if (visible.length < results.length) {
-    const loadMoreWrap = create('div', 'zk2-load-more-wrap');
-    const loadMoreBtn = create('button', 'zk2-load-more');
-    loadMoreBtn.type = 'button';
-    loadMoreBtn.textContent = copy.loadMore;
-    loadMoreBtn.addEventListener('click', () => {
-      state.visibleCount += PAGE_SIZE;
-      renderContent(state);
-    });
-    loadMoreWrap.appendChild(loadMoreBtn);
-    contentArea.appendChild(loadMoreWrap);
-  }
-
-  // Update sidebar active states
-  updateSidebarActive(state);
+  contentArea.appendChild(scrollContainer);
 }
 
 // ─── Keyboard Navigation ─────────────────────────────────────────────────────
@@ -642,7 +550,6 @@ export function renderZeroKeyPowerPanel(
   state.categoryPrefix = categoryPrefix;
   state.query = '';
   state.activeCategory = null;
-  state.visibleCount = PAGE_SIZE;
   state.lifeFilters = new Set();
 
   // Filter tools by category prefix if specified
@@ -677,18 +584,9 @@ export function renderZeroKeyPowerPanel(
   searchWrap.appendChild(searchInput);
   container.appendChild(searchWrap);
 
-  // Main layout: sidebar + content
-  const layout = create('div', 'zk2-layout');
-
-  // Sidebar
-  const sidebar = renderCategorySidebar(state);
-  layout.appendChild(sidebar);
-
-  // Content area
-  const content = create('div', 'zk2-content');
-  layout.appendChild(content);
-
-  container.appendChild(layout);
+  // Horizontal content area
+  const content = create('div', 'zk2-horizontal-content');
+  container.appendChild(content);
 
   // Wire hero search (each panel gets its own listener)
   const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
@@ -750,7 +648,6 @@ export function renderZeroKeyPowerPanel(
     setCategory: (category: ZeroKeyCategory | null) => {
       state.activeCategory = category;
       performSearch(state);
-      updateSidebarActive(state);
     },
     reset: () => {
       state.query = '';

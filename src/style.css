@@ -4973,3 +4973,435 @@ img {
     position: static;
   }
 }
+
+/* ============================================================
+   HORIZONTAL SCROLL CONTAINERS — Android app drawer style
+   ============================================================ */
+
+/* ============================================================
+   HORIZONTAL SCROLL CONTAINERS — Android app drawer style with grid fallback
+   ============================================================ */
+
+/* Tools horizontal scroll container - grid on larger screens, scroll on smaller */
+.tools-horizontal-scroll {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 16px 0;
+  position: relative;
+}
+
+/* On large screens, limit to 3-4 rows */
+@media (min-width: 1200px) {
+  .tools-horizontal-scroll {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: minmax(280px, auto);
+  }
+}
+
+/* On medium screens, 2 columns */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .tools-horizontal-scroll {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Horizontal tool card - responsive width */
+.tool-card-horizontal {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.65rem, 1.6vw, 0.9rem);
+  padding: var(--card-pad);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+  animation: zk2CardAppear 0.35s ease forwards;
+  opacity: 0;
+}
+
+/* For smaller screens, use horizontal scroll */
+@media (max-width: 767px) {
+  .tools-horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
+    grid-template-columns: none;
+  }
+
+  .tools-horizontal-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .tools-horizontal-scroll::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.3);
+    border-radius: 3px;
+  }
+
+  .tool-card-horizontal {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+  }
+
+  /* Fade edges for horizontal scroll on mobile */
+  .tools-horizontal-scroll::before,
+  .tools-horizontal-scroll::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .tools-horizontal-scroll::before {
+    left: 0;
+    background: linear-gradient(to right, var(--void) 0%, transparent 100%);
+  }
+
+  .tools-horizontal-scroll::after {
+    right: 0;
+    background: linear-gradient(to left, var(--void) 0%, transparent 100%);
+  }
+}
+
+.tool-card-horizontal:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(168, 85, 247, 0.3);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 20px 60px -20px rgba(124, 58, 237, 0.3),
+    0 0 0 1px rgba(168, 85, 247, 0.1);
+}
+
+.tool-card-horizontal .zk2-card-cta {
+  margin-right: 8px;
+}
+
+/* Prompts horizontal scroll container - grid with fallback */
+.prompts-horizontal-scroll {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  padding: 24px 0;
+  position: relative;
+}
+
+/* On large screens, limit to 3 rows */
+@media (min-width: 1024px) {
+  .prompts-horizontal-scroll {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* For smaller screens, use horizontal scroll */
+@media (max-width: 1023px) {
+  .prompts-horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
+    grid-template-columns: none;
+  }
+
+  .prompts-horizontal-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .prompts-horizontal-scroll::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.3);
+    border-radius: 3px;
+  }
+
+  .prompt-card-horizontal {
+    flex: 0 0 300px;
+    scroll-snap-align: start;
+  }
+
+  /* Fade edges for horizontal scroll on mobile */
+  .prompts-horizontal-scroll::before,
+  .prompts-horizontal-scroll::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .prompts-horizontal-scroll::before {
+    left: 0;
+    background: linear-gradient(to right, var(--void-light) 0%, transparent 100%);
+  }
+
+  .prompts-horizontal-scroll::after {
+    right: 0;
+    background: linear-gradient(to left, var(--void-light) 0%, transparent 100%);
+  }
+}
+
+/* Prompt card base styles (used in both grid and flex modes) */
+.prompt-card-horizontal {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.1rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.prompt-card-horizontal:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(168, 85, 247, 0.3);
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Prompt category icon badge */
+.prompt-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(124, 58, 237, 0.15);
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Prompt title in horizontal card */
+.prompt-card-horizontal .pt-prompt-title {
+  font-size: 1rem;
+  margin-bottom: 0.125rem;
+}
+
+/* Prompt description in horizontal card */
+.prompt-card-horizontal .pt-prompt-desc {
+  font-size: 0.8rem;
+  flex-grow: 1;
+  margin-bottom: 0.5rem;
+}
+
+/* Horizontal prompt card actions */
+.prompt-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+/* Modal overlay for prompt forms */
+.pt-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(6, 10, 18, 0.92);
+  backdrop-filter: blur(12px);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  opacity: 0;
+  animation: ptModalFadeIn 0.25s ease forwards;
+}
+
+@keyframes ptModalFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.pt-modal-content {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.pt-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s;
+}
+
+.pt-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Quick filter chips row */
+.quick-filters-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0 12px;
+  margin-bottom: 0.5rem;
+}
+
+.quick-filter-chip {
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-filter-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(168, 85, 247, 0.3);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.quick-filter-chip.active {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: rgba(168, 85, 247, 0.5);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Light mode overrides for horizontal scroll components */
+[data-theme="light"] .tool-card-horizontal {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .tool-card-horizontal:hover {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+[data-theme="light"] .prompt-card-horizontal {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .prompt-card-horizontal:hover {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+[data-theme="light"] .quick-filter-chip {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(31, 41, 55, 0.7);
+}
+
+[data-theme="light"] .quick-filter-chip:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #1f2937;
+}
+
+[data-theme="light"] .quick-filter-chip.active {
+  background: rgba(124, 58, 237, 0.12);
+  color: #1f2937;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .tool-card-horizontal {
+    flex: 0 0 280px;
+  }
+
+  .prompt-card-horizontal {
+    flex: 0 0 300px;
+  }
+
+  .pt-modal-content {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+}
+
+/* Prompt card category label */
+.pt-prompt-category {
+  font-size: 0.7rem;
+  color: var(--neon-violet);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+[data-theme="light"] .pt-prompt-category {
+  color: #7c3aed;
+}
+
+/* Prompt card icon badge */
+.prompt-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: rgba(124, 58, 237, 0.12);
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+}
+
+/* Horizontal prompt card actions */
+.prompt-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+/* Horizontal shell container */
+.pt-horizontal-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+/* Filter chip icon and count */
+.filter-icon {
+  margin-right: 0.25rem;
+}
+
+.filter-count {
+  margin-left: 0.25rem;
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+/* Remove old directory shell styles (no longer needed) but keep for backward compatibility */
+.pt-directory-shell {
+  display: none;
+}
