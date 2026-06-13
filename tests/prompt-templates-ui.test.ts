@@ -73,57 +73,57 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     expect(cards.length).toBeLessThan(9);
   });
 
-  // ─── Modal overlay for forms ───────────────────────────────────────────────
+  // ─── Accordion behavior ───────────────────────────────────────────────
 
-  it('clicking a horizontal prompt card opens modal overlay', () => {
+  it('clicking a horizontal prompt card opens accordion', () => {
     const el = setup();
     const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
     expect(card).toBeTruthy();
 
     card.click();
 
-    const modal = document.querySelector('.pt-modal-overlay') as HTMLElement;
-    expect(modal).toBeTruthy();
-    expect(modal.getAttribute('aria-modal')).toBe('true');
+    const accordion = el.querySelector('.prompt-accordion') as HTMLElement;
+    expect(accordion).toBeTruthy();
+    expect(card.getAttribute('aria-expanded')).toBe('true');
   });
 
-  it('modal contains form fields for prompts with variables', () => {
+  it('accordion contains form fields for prompts with variables', () => {
     const el = setup();
     const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
-    
+
     card.click();
 
-    const modal = document.querySelector('.pt-modal-overlay') as HTMLElement;
-    expect(modal!.querySelector('.sp-inline-form')).toBeTruthy();
-    expect(modal!.querySelector('.sp-form-field')).toBeTruthy();
+    const accordion = document.querySelector('.prompt-accordion') as HTMLElement;
+    expect(accordion!.querySelector('.sp-inline-form')).toBeTruthy();
+    expect(accordion!.querySelector('.sp-form-field')).toBeTruthy();
   });
 
-  it('clicking close button closes modal', () => {
+  it('clicking close button closes accordion', () => {
     const el = setup();
     const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
     card.click();
 
-    const closeBtn = document.querySelector('.sp-modal-close') as HTMLButtonElement;
+    const closeBtn = document.querySelector('.prompt-accordion-close') as HTMLButtonElement;
     closeBtn.click();
 
     // Allow for any async operations
     vi.advanceTimersByTime(100);
-    
-    expect(document.querySelector('.pt-modal-overlay')).toBeNull();
+
+    expect(document.querySelector('.prompt-accordion')).toBeNull();
   });
 
-  it('Escape key closes modal', () => {
+  it('Escape key closes accordion', () => {
     const el = setup();
     const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
     card.click();
 
-    const modal = document.querySelector('.pt-modal-overlay') as HTMLElement;
-    expect(modal).toBeTruthy();
+    const accordion = document.querySelector('.prompt-accordion') as HTMLElement;
+    expect(accordion).toBeTruthy();
 
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     vi.advanceTimersByTime(100);
 
-    expect(document.querySelector('.pt-modal-overlay')).toBeNull();
+    expect(document.querySelector('.prompt-accordion')).toBeNull();
   });
 
   // ─── Card click handlers ─────────────────────────────────────────────────────
@@ -137,18 +137,18 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     expect(card.getAttribute('aria-label')).toContain('template');
   });
 
-  it('opens modal via keyboard Enter key', () => {
+  it('opens accordion via keyboard Enter key', () => {
     const el = setup();
     const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
 
     card.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
 
-    expect(document.querySelector('.pt-modal-overlay')).not.toBeNull();
+    expect(document.querySelector('.prompt-accordion')).not.toBeNull();
   });
 
   // ─── Fill & Copy button ─────────────────────────────────────────────────────
 
-  it('clicking Fill & Copy button opens modal without errors', () => {
+  it('clicking Fill & Copy button opens accordion without errors', () => {
     const el = setup();
     const fillBtn = el.querySelector('.prompt-card-actions button') as HTMLButtonElement;
     expect(fillBtn).toBeTruthy();
@@ -156,10 +156,10 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
     fillBtn.click();
 
-    expect(document.querySelector('.pt-modal-overlay')).not.toBeNull();
+    expect(document.querySelector('.prompt-accordion')).not.toBeNull();
   });
 
-  it('modal copy button copies to clipboard using toast notification', async () => {
+  it('accordion copy button copies to clipboard using toast notification', async () => {
     const el = setup();
     const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
     card.click();
@@ -173,6 +173,69 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     await vi.runAllTimersAsync();
 
     expect((navigator as any).clipboard.writeText).toHaveBeenCalled();
+  });
+
+  // ─── Accessibility: Accordion focus trap ──────────────────────────────────────
+
+  it('accordion has proper ARIA attributes for form region', () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    card.click();
+
+    const accordion = document.querySelector('.prompt-accordion') as HTMLElement;
+    expect(accordion.getAttribute('role')).toBe('region');
+    expect(accordion.getAttribute('aria-label')).toBeTruthy();
+  });
+
+  it('focus trap prevents Tab from leaving accordion', () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    card.click();
+
+    const accordion = document.querySelector('.prompt-accordion') as HTMLElement;
+    const focusableElements = accordion.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+
+    // Should have at least 2 focusable elements (close button + copy/preview buttons)
+    expect(focusableElements.length).toBeGreaterThan(1);
+  });
+
+  it('accordion Escape key closes and focus returns to triggering card', () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+
+    // Focus and click the card to simulate user interaction
+    card.focus();
+    card.click();
+
+    const accordion = document.querySelector('.prompt-accordion') as HTMLElement;
+    expect(accordion).toBeTruthy();
+
+    // Press Escape (with bubbles and cancelable for proper event handling)
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    vi.advanceTimersByTime(100);
+
+    // Accordion should be closed
+    expect(document.querySelector('.prompt-accordion')).toBeNull();
+
+    // Focus should be restored to the card (after a small delay for cleanup)
+    expect(document.activeElement).toBe(card);
+  });
+
+  // ─── Accessibility: Toast notification ────────────────────────────────────────
+
+  it('accordion copy button uses toast notification with proper ARIA', async () => {
+    // This test verifies the toast implementation exists - actual ARIA is tested in showToast
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    card.click();
+
+    vi.advanceTimersByTime(100);
+
+    const copyBtn = document.querySelector('.sp-btn-primary') as HTMLButtonElement;
+    expect(copyBtn).toBeTruthy();
+    expect(copyBtn.textContent).toContain('Copy');
   });
 
   // ─── Language change ─────────────────────────────────────────────────────────

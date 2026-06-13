@@ -1336,6 +1336,19 @@ details[open] .tool-arrow-void {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+
+  /* Hide particles canvas completely in reduced motion */
+  #particle-canvas {
+    display: none !important;
+  }
+
+  /* Disable scroll indicator animations */
+  .tools-horizontal-scroll::before,
+  .tools-horizontal-scroll::after,
+  .prompts-horizontal-scroll::before,
+  .prompts-horizontal-scroll::after {
+    animation: none !important;
+  }
 }
 
 /* === FOCUS VOID === */
@@ -1345,6 +1358,19 @@ input:focus-visible {
   outline: 2px solid rgba(168, 85, 247, 0.5);
   outline-offset: 4px;
   border-radius: 8px;
+}
+
+/* Focus styles for horizontal scroll cards and quick filter chips */
+.tool-card-horizontal:focus-visible,
+.prompt-card-horizontal:focus-visible {
+  outline: 3px solid rgba(168, 85, 247, 0.8);
+  outline-offset: 2px;
+  border-radius: 20px;
+}
+
+.quick-filter-chip:focus-visible {
+  outline: 2px solid var(--neon-violet);
+  outline-offset: 2px;
 }
 
 ::selection {
@@ -2108,92 +2134,6 @@ img {
   font-weight: 700;
 }
 
-/* Card Footer */
-.zk2-card-footer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-top: auto;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.zk2-card-caveat {
-  font-size: 0.78rem;
-  color: rgba(253, 224, 71, 0.95);
-  overflow: visible;
-  text-overflow: clip;
-  white-space: normal;
-  max-width: 100%;
-  opacity: 1;
-  line-height: 1.45;
-  background: rgba(245, 158, 11, 0.07);
-  border: 1px solid rgba(245, 158, 11, 0.18);
-  border-radius: 10px;
-  padding: 7px 10px;
-}
-
-.zk2-card-url {
-  font-size: 0.68rem;
-  color: rgba(255, 255, 255, 0.42);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 220px;
-  text-decoration: none;
-  flex-shrink: 1;
-}
-
-[data-theme="light"] .zk2-card-url {
-  color: rgba(0, 0, 0, 0.4);
-}
-
-.zk2-card-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 36px;
-  padding: 0 14px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.95), rgba(217, 70, 239, 0.95));
-  color: #fff;
-  font-weight: 800;
-  font-size: 0.82rem;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.zk2-card-cta:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 25px -8px rgba(124, 58, 237, 0.5);
-  background: linear-gradient(135deg, rgba(124, 58, 237, 1), rgba(217, 70, 239, 1));
-}
-
-.zk2-card-report {
-  height: 36px;
-  padding: 0 12px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.62);
-  font-weight: 700;
-  font-size: 0.78rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.zk2-card-report:hover {
-  background: rgba(249, 115, 22, 0.08);
-  border-color: rgba(249, 115, 22, 0.25);
-  color: #fed7aa;
-}
-
 /* Load More */
 .zk2-load-more-wrap {
   display: flex;
@@ -2794,35 +2734,9 @@ img {
   padding-right: 4px;
 }
 
-.pt-prompt-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 1.1rem 1.35rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  transition: all 0.25s ease;
-  backdrop-filter: blur(10px);
-  cursor: pointer;
-  flex-shrink: 0;
-  min-height: 0;
-}
-
-.pt-prompt-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(168, 85, 247, 0.3);
-  transform: translateY(-2px);
-}
-
-.pt-prompt-card:focus-visible {
-  outline: 2px solid rgba(196, 181, 253, 0.9);
-  outline-offset: 2px;
-}
-
-.pt-prompt-card.active {
-  border-color: rgba(168, 85, 247, 0.6);
-  background: rgba(124, 58, 237, 0.1);
+.sp-inline-form-fields {
+   gap: 0.5rem;
+   margin-bottom: 0.75rem;
 }
 
 .pt-prompt-title {
@@ -2840,103 +2754,94 @@ img {
   flex-grow: 1;
 }
 
-.pt-prompt-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: auto;
-}
-
-.pt-prompt-window {
-  flex: 1;
-  min-width: 0;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  padding: 1.35rem;
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-/* Compact form within prompt window to fit 500px max-height */
-.pt-prompt-window .sp-inline-form {
-  margin-top: 0.75rem;
-  padding: 0.85rem;
-  gap: 0.6rem;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(168, 85, 247, 0.2);
-}
-
-.pt-prompt-window .sp-inline-form-title {
+/* Prompt category label in horizontal card */
+.pt-prompt-category {
   font-size: 0.75rem;
-  margin-bottom: 0.5rem;
-  text-transform: none;
-  letter-spacing: 0;
-  color: rgba(196, 181, 253, 0.8);
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.125rem;
 }
 
-.pt-prompt-window .sp-inline-form-fields {
+/* Inline form styles (used by prompt accordion) */
+.sp-inline-form {
+  margin-top: 0.75rem;
+}
+
+.sp-inline-form-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(196, 181, 253, 0.9);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sp-inline-form-fields {
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
 }
 
-.pt-prompt-window .sp-form-field label {
+.sp-form-field label {
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.7);
 }
 
-.pt-prompt-window .sp-preview-area {
+.sp-preview-area {
   margin: 0.5rem 0 0.75rem;
   padding: 0.75rem;
   font-size: 0.8rem;
 }
 
-.pt-prompt-window .sp-btn {
+.sp-btn {
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
   border-radius: 8px;
-}
-
-.pt-window-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.pt-window-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.95);
-  margin: 0;
-}
-
-.pt-window-desc {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-}
-
-.pt-window-empty {
-  display: flex;
-  flex-direction: column;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 3rem 1rem;
-  text-align: center;
 }
 
-.pt-empty-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+.sp-btn-primary {
+  background: var(--neon-violet);
+  color: #fff;
+  border: 1px solid var(--neon-violet);
 }
 
-.pt-empty-text {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.95rem;
+.sp-btn-primary:hover {
+  background: #7c3aed;
+  border-color: #7c3aed;
+}
+
+.sp-btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sp-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sp-btn-ghost {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sp-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.sp-inline-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
 }
 
 /* Mobile: Stack layout */
@@ -2967,10 +2872,6 @@ img {
     max-height: 400px;
     flex-direction: column;
   }
-
-  .pt-prompt-window {
-    max-height: 400px;
-  }
 }
 
 /* Light mode adjustments */
@@ -2987,15 +2888,6 @@ img {
 [data-theme="light"] .pt-category-button.active {
   background: rgba(124, 58, 237, 0.15);
   color: #1a1a2e;
-}
-
-[data-theme="light"] .pt-prompt-card {
-  background: rgba(0, 0, 0, 0.02);
-  border-color: rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .pt-prompt-card.active {
-  background: rgba(124, 58, 237, 0.08);
 }
 
 /* ============================================================
@@ -3544,6 +3436,19 @@ img {
   color: var(--light-text-muted) !important;
 }
 
+/* Focus styles in light mode */
+[data-theme="light"] .tool-card-horizontal:focus-visible,
+[data-theme="light"] .prompt-card-horizontal:focus-visible {
+  outline: 3px solid rgba(124, 58, 237, 0.8);
+  outline-offset: 2px;
+  border-radius: 20px;
+}
+
+[data-theme="light"] .quick-filter-chip:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
 [data-theme="light"] .zk2-card-report:hover {
   background: #fff7ed !important;
   border-color: #fdba74 !important;
@@ -3714,39 +3619,12 @@ img {
   color: var(--light-violet) !important;
 }
 
-[data-theme="light"] .pt-prompt-card {
-  background: var(--light-card-solid) !important;
-  border-color: var(--light-border) !important;
-}
-
-[data-theme="light"] .pt-prompt-card:hover {
-  background: var(--light-hover) !important;
-  border-color: var(--light-active-border) !important;
-}
-
-[data-theme="light"] .pt-prompt-card.active {
-  background: var(--light-active-bg) !important;
-  border-color: var(--light-active-border) !important;
-}
-
-[data-theme="light"] .pt-prompt-title,
-[data-theme="light"] .pt-window-title {
+[data-theme="light"] .pt-prompt-title {
   color: var(--light-text) !important;
 }
 
-[data-theme="light"] .pt-prompt-desc,
-[data-theme="light"] .pt-window-desc,
-[data-theme="light"] .pt-empty-text {
+[data-theme="light"] .pt-prompt-desc {
   color: var(--light-text-muted) !important;
-}
-
-[data-theme="light"] .pt-prompt-window {
-  background: var(--light-card-solid) !important;
-  border-color: var(--light-border) !important;
-}
-
-[data-theme="light"] .pt-window-header {
-  border-color: var(--light-border) !important;
 }
 
 /* Superpowers / inline forms. */
@@ -4975,180 +4853,52 @@ img {
 }
 
 /* ============================================================
-   HORIZONTAL SCROLL CONTAINERS — Android app drawer style
-   ============================================================ */
+    HORIZONTAL SCROLL CONTAINERS — Vertical scroll with visible rows
+    Container shows ~2-3 visible rows, vertical scrollbar for more
+    ============================================================ */
 
-/* ============================================================
-   HORIZONTAL SCROLL CONTAINERS — Android app drawer style with grid fallback
-   ============================================================ */
-
-/* Tools horizontal scroll container - grid on larger screens, scroll on smaller */
+/* Tools scroll container - shows 2-3 rows, vertical scroll */
 .tools-horizontal-scroll {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, 280px);
   gap: 16px;
   padding: 16px 0;
-  position: relative;
+  max-height: 420px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
 }
 
-/* On large screens, limit to 3-4 rows */
-@media (min-width: 1200px) {
-  .tools-horizontal-scroll {
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: minmax(280px, auto);
-  }
+.tools-horizontal-scroll::-webkit-scrollbar {
+  width: 6px;
 }
 
-/* On medium screens, 2 columns */
-@media (min-width: 768px) and (max-width: 1199px) {
-  .tools-horizontal-scroll {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.tools-horizontal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 3px;
 }
 
-/* Horizontal tool card - responsive width */
-.tool-card-horizontal {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(0.65rem, 1.6vw, 0.9rem);
-  padding: var(--card-pad);
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 18px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  position: relative;
-  overflow: hidden;
-  animation: zk2CardAppear 0.35s ease forwards;
-  opacity: 0;
-}
-
-/* For smaller screens, use horizontal scroll */
-@media (max-width: 767px) {
-  .tools-horizontal-scroll {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
-    grid-template-columns: none;
-  }
-
-  .tools-horizontal-scroll::-webkit-scrollbar {
-    height: 6px;
-  }
-
-  .tools-horizontal-scroll::-webkit-scrollbar-thumb {
-    background: rgba(168, 85, 247, 0.3);
-    border-radius: 3px;
-  }
-
-  .tool-card-horizontal {
-    flex: 0 0 280px;
-    scroll-snap-align: start;
-  }
-
-  /* Fade edges for horizontal scroll on mobile */
-  .tools-horizontal-scroll::before,
-  .tools-horizontal-scroll::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 40px;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .tools-horizontal-scroll::before {
-    left: 0;
-    background: linear-gradient(to right, var(--void) 0%, transparent 100%);
-  }
-
-  .tools-horizontal-scroll::after {
-    right: 0;
-    background: linear-gradient(to left, var(--void) 0%, transparent 100%);
-  }
-}
-
-.tool-card-horizontal:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(168, 85, 247, 0.3);
-  transform: translateY(-3px) scale(1.02);
-  box-shadow:
-    0 20px 60px -20px rgba(124, 58, 237, 0.3),
-    0 0 0 1px rgba(168, 85, 247, 0.1);
-}
-
-.tool-card-horizontal .zk2-card-cta {
-  margin-right: 8px;
-}
-
-/* Prompts horizontal scroll container - grid with fallback */
+/* Prompts scroll container - shows ~2 rows */
 .prompts-horizontal-scroll {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, 300px);
   gap: 24px;
   padding: 24px 0;
-  position: relative;
+  max-height: 340px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
 }
 
-/* On large screens, limit to 3 rows */
-@media (min-width: 1024px) {
-  .prompts-horizontal-scroll {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.prompts-horizontal-scroll::-webkit-scrollbar {
+  width: 6px;
 }
 
-/* For smaller screens, use horizontal scroll */
-@media (max-width: 1023px) {
-  .prompts-horizontal-scroll {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
-    grid-template-columns: none;
-  }
-
-  .prompts-horizontal-scroll::-webkit-scrollbar {
-    height: 6px;
-  }
-
-  .prompts-horizontal-scroll::-webkit-scrollbar-thumb {
-    background: rgba(168, 85, 247, 0.3);
-    border-radius: 3px;
-  }
-
-  .prompt-card-horizontal {
-    flex: 0 0 300px;
-    scroll-snap-align: start;
-  }
-
-  /* Fade edges for horizontal scroll on mobile */
-  .prompts-horizontal-scroll::before,
-  .prompts-horizontal-scroll::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 40px;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .prompts-horizontal-scroll::before {
-    left: 0;
-    background: linear-gradient(to right, var(--void-light) 0%, transparent 100%);
-  }
-
-  .prompts-horizontal-scroll::after {
-    right: 0;
-    background: linear-gradient(to left, var(--void-light) 0%, transparent 100%);
-  }
+.prompts-horizontal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 3px;
 }
 
 /* Prompt card base styles (used in both grid and flex modes) */
@@ -5332,54 +5082,231 @@ img {
   color: #1f2937;
 }
 
-/* Mobile responsive adjustments */
-@media (max-width: 768px) {
-  .tool-card-horizontal {
-    flex: 0 0 280px;
-  }
-
-  .prompt-card-horizontal {
-    flex: 0 0 300px;
-  }
-
-  .pt-modal-content {
-    padding: 1.5rem;
-    margin: 1rem;
-  }
+/* Light mode accordion close button */
+[data-theme="light"] .prompt-accordion-close {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(31, 41, 55, 0.7);
 }
 
-/* Prompt card category label */
-.pt-prompt-category {
-  font-size: 0.7rem;
-  color: var(--neon-violet);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+[data-theme="light"] .prompt-accordion-close:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: #1f2937;
+}
+
+/* Tool Card Horizontal - Modern Square Tile Design */
+.tool-card-horizontal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  width: 280px;
+  min-height: 160px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-card-horizontal:hover {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(168, 85, 247, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -10px rgba(124, 58, 237, 0.2);
+}
+
+.tool-card-horizontal:focus-visible {
+  outline: 2px solid rgba(168, 85, 247, 0.6);
+  outline-offset: 2px;
+}
+
+/* Tool Card Header */
+.zk2-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 0.25rem;
 }
 
-[data-theme="light"] .pt-prompt-category {
-  color: #7c3aed;
+.zk2-card-icon {
+  font-size: 1.5rem;
+  line-height: 1;
 }
 
-/* Prompt card icon badge */
-.prompt-card-icon {
-  display: inline-flex;
+/* Surface badge */
+.zk2-card-surface {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+/* Tool Name */
+.zk2-card-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Description */
+.zk2-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-subtle);
+  line-height: 1.4;
+  margin: 0;
+  flex-grow: 1;
+}
+
+/* Badges */
+.zk2-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 0.25rem;
+}
+
+.zk2-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(124, 58, 237, 0.1);
+  color: #c4b5fd;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+/* Access Badges */
+.zk2-card-access-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 0.25rem;
+}
+
+.zk2-access-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+.zk2-access-ai {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c4b5fd;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+.zk2-access-dev {
+  background: rgba(59, 130, 246, 0.12);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.zk2-access-no-key {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.zk2-access-free-key {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.zk2-access-rate-limited {
+  background: rgba(249, 115, 22, 0.12);
+  color: #fdba74;
+  border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+/* Footer */
+.zk2-card-footer {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
+  margin-top: 0.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Footer button spacing - report on left, cta on right */
+.zk2-card-footer {
+  justify-content: space-between;
+}
+
+.zk2-card-footer .zk2-card-report {
+  margin-right: auto;
+}
+
+.zk2-card-footer .zk2-card-cta {
+  margin-left: auto;
+}
+
+/* Prompt Accordion - slide-down form under card */
+.prompt-accordion {
+  margin-top: 0.75rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 14px;
+  animation: slideDown 0.25s ease;
+}
+
+.prompt-accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.prompt-accordion-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+/* Accordion close button */
+.prompt-accordion-close {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   width: 28px;
   height: 28px;
-  border-radius: 7px;
-  background: rgba(124, 58, 237, 0.12);
-  font-size: 0.9rem;
-  margin-bottom: 0.35rem;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Horizontal prompt card actions */
-.prompt-card-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: auto;
+.prompt-accordion-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.prompt-accordion-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .prompt-accordion-content {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Horizontal shell container */
@@ -5404,4 +5331,17 @@ img {
 /* Remove old directory shell styles (no longer needed) but keep for backward compatibility */
 .pt-directory-shell {
   display: none;
+}
+
+/* Touch target sizes for mobile accessibility (minimum 44px) */
+@media (max-width: 767px) {
+  .quick-filter-chip {
+    min-height: 44px;
+    padding: 8px 16px;
+  }
+
+  .zk2-card-cta,
+  .zk2-card-report {
+    min-height: 44px;
+  }
 }

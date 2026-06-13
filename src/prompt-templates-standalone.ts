@@ -3,7 +3,7 @@
  *
  * Renders 9 prompt templates in a horizontal scroll layout (Android app drawer style):
  * - All templates visible in a horizontal scroll container
- * - Clicking a card opens the form in an overlay modal
+ * - Clicking a card opens the form in an accordion slide-down under the card
  * - Keyboard navigation with ← → arrows
  * - Quick filter chips for categories
  *
@@ -82,7 +82,7 @@ interface PromptTemplatesViewState {
   container: HTMLElement;
   keyboardCleanup: (() => void) | null;
   languageCleanup: (() => void) | null;
-  modalCleanup: (() => void) | null;
+  accordionCleanup: (() => void) | null;
 }
 
 interface PromptTemplatesContainer extends HTMLElement {
@@ -139,7 +139,7 @@ export function renderPromptTemplatesStandalone(options: {
       container,
       keyboardCleanup: null,
       languageCleanup: null,
-      modalCleanup: null,
+      accordionCleanup: null,
     };
 
     // Initialize saved values for all prompts
@@ -197,6 +197,7 @@ function createQuickFilters(state: PromptTemplatesViewState): HTMLElement {
     const label = state.lang === 'ja' ? cat.labelJa : cat.labelEn;
     const count = counts[cat.id] || 0;
     chip.innerHTML = `<span class="filter-icon">${cat.icon}</span> <span class="filter-label">${label}</span> <span class="filter-count">(${count})</span>`;
+    chip.setAttribute('aria-label', state.lang === 'ja' ? `${label}でフィルター` : `Filter by ${label}`);
     chip.addEventListener('click', () => {
       state.selectedCategory = cat.id;
       reRenderHorizontal(state);
@@ -258,7 +259,7 @@ function createHorizontalPromptCard(state: PromptTemplatesViewState, pt: PromptT
   desc.textContent = pt.description;
   card.appendChild(desc);
 
-  // Actions
+// Actions
   const actions = document.createElement('div');
   actions.className = 'prompt-card-actions';
 
@@ -268,15 +269,15 @@ function createHorizontalPromptCard(state: PromptTemplatesViewState, pt: PromptT
   fillBtn.textContent = state.lang === 'ja' ? '入力してコピー' : 'Fill & Copy';
   fillBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    openPromptModal(state, pt);
+    openPromptAccordion(state, pt, card);
   });
   actions.appendChild(fillBtn);
 
   card.appendChild(actions);
 
-  // Click on card opens modal
+  // Click on card opens accordion
   card.addEventListener('click', () => {
-    openPromptModal(state, pt);
+    openPromptAccordion(state, pt, card);
   });
 
   // Keyboard access
@@ -284,64 +285,105 @@ function createHorizontalPromptCard(state: PromptTemplatesViewState, pt: PromptT
     if (e.target !== card) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      openPromptModal(state, pt);
+      openPromptAccordion(state, pt, card);
     }
   });
 
   return card;
 }
 
-// ─── Modal Overlay ────────────────────────────────────────────────────────────
+// ─── Accordion State ────────────────────────────────────────────────────────────
 
-function openPromptModal(state: PromptTemplatesViewState, pt: PromptTemplate): void {
-  // Close any existing modal
-  closePromptModal(state);
+// Track the element that opened the accordion for focus restoration
+let lastFocusedElement: HTMLElement | null = null;
+// Track currently open accordion to close it when another opens
+let openAccordion: { state: PromptTemplatesViewState; card: HTMLElement; accordion: HTMLElement } | null = null;
 
-  const overlay = document.createElement('div');
-  overlay.className = 'pt-modal-overlay';
-  overlay.setAttribute('role', 'dialog');
-  overlay.setAttribute('aria-modal', 'true');
+function closeAccordion(state: PromptTemplatesViewState, card: HTMLElement, accordion: HTMLElement): void {
+  accordion.remove();
+  card.setAttribute('aria-expanded', 'false');
+  card.classList.remove('expanded');
+  openAccordion = null;
 
-  const modalContent = document.createElement('div');
-  modalContent.className = 'pt-modal-content';
+  // Restore focus to the triggering card
+  if (lastFocusedElement && document.contains(lastFocusedElement)) {
+    lastFocusedElement.focus();
+  }
+  lastFocusedElement = null;
+}
 
-  // Header
+function escapeHandler(e: KeyboardEvent): void {
+  if (e.key === 'Escape' && openAccordion) {
+    e.preventDefault();
+    closeAccordion(openAccordion.state, openAccordion.card, openAccordion.accordion);
+  }
+}
+
+function trapFocus(element: HTMLElement): () => void {
+  const focusable = element.querySelectorAll<HTMLElement>(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  const handleTab = (e: KeyboardEvent) => {
+    if (e.key !== 'Tab') return;
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last?.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first?.focus();
+    }
+  };
+
+  element.addEventListener('keydown', handleTab);
+  return () => element.removeEventListener('keydown', handleTab);
+}
+
+function createPromptAccordion(state: PromptTemplatesViewState, pt: PromptTemplate, card: HTMLElement): HTMLElement {
+  const accordion = document.createElement('div');
+  accordion.className = 'prompt-accordion';
+  accordion.setAttribute('role', 'region');
+  accordion.setAttribute('aria-label', state.lang === 'ja' ? `${pt.title}の入力フォーム` : `${pt.title} form`);
+
+  // Header with title and close button
   const header = document.createElement('div');
-  header.className = 'pt-window-header';
+  header.className = 'prompt-accordion-header';
 
   const title = document.createElement('h3');
-  title.className = 'pt-window-title';
+  title.className = 'prompt-accordion-title';
   title.textContent = pt.title;
   header.appendChild(title);
 
   const closeBtn = document.createElement('button');
   closeBtn.type = 'button';
-  closeBtn.className = 'sp-modal-close';
+  closeBtn.className = 'prompt-accordion-close';
   closeBtn.innerHTML = '&times;';
-  closeBtn.title = state.lang === 'ja' ? '閉じる' : 'Close';
   closeBtn.setAttribute('aria-label', state.lang === 'ja' ? '閉じる' : 'Close');
   closeBtn.addEventListener('click', () => {
-    closePromptModal(state);
+    closeAccordion(state, card, accordion);
   });
   header.appendChild(closeBtn);
-  modalContent.appendChild(header);
+  accordion.appendChild(header);
 
-  // Description
-  const desc = document.createElement('p');
-  desc.className = 'pt-window-desc';
-  desc.textContent = pt.description;
-  modalContent.appendChild(desc);
+  // Content area with two-column layout
+  const content = document.createElement('div');
+  content.className = 'prompt-accordion-content';
+  accordion.appendChild(content);
 
-  // Form fields
+  // Form fields (left column)
   const variables = extractTemplateVariables(pt.template);
+
   if (variables.length > 0) {
-    const formWrap = document.createElement('div');
-    formWrap.className = 'sp-inline-form';
+    const formColumn = document.createElement('div');
+    formColumn.className = 'sp-inline-form';
 
     const formTitle = document.createElement('div');
     formTitle.className = 'sp-inline-form-title';
     formTitle.textContent = state.lang === 'ja' ? `「${pt.title}」を入力` : `Fill: ${pt.title}`;
-    formWrap.appendChild(formTitle);
+    formColumn.appendChild(formTitle);
 
     const form = document.createElement('form');
     form.className = 'sp-inline-form-fields';
@@ -391,17 +433,18 @@ function openPromptModal(state: PromptTemplatesViewState, pt: PromptTemplate): v
       form.appendChild(field);
     }
 
-    formWrap.appendChild(form);
+    formColumn.appendChild(form);
 
-    // Preview area
+    // Preview area (below form in left column)
     const previewArea = document.createElement('div');
     previewArea.className = 'sp-preview-area';
     previewArea.style.display = 'none';
-    formWrap.appendChild(previewArea);
+    formColumn.appendChild(previewArea);
+    content.appendChild(formColumn);
 
-    // Actions
-    const actions = document.createElement('div');
-    actions.className = 'sp-inline-actions';
+    // Actions column (right side)
+    const actionsColumn = document.createElement('div');
+    actionsColumn.className = 'sp-inline-actions';
 
     const previewBtn = document.createElement('button');
     previewBtn.type = 'button';
@@ -417,7 +460,7 @@ function openPromptModal(state: PromptTemplatesViewState, pt: PromptTemplate): v
       previewArea.style.display = 'block';
       previewArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
-    actions.appendChild(previewBtn);
+    actionsColumn.appendChild(previewBtn);
 
     const copyFilledBtn = document.createElement('button');
     copyFilledBtn.type = 'button';
@@ -443,25 +486,9 @@ function openPromptModal(state: PromptTemplatesViewState, pt: PromptTemplate): v
         showToast(state.lang === 'ja' ? 'コピーに失敗しました' : 'Failed to copy to clipboard');
       }
     });
-    actions.appendChild(copyFilledBtn);
+    actionsColumn.appendChild(copyFilledBtn);
 
-    formWrap.appendChild(actions);
-    modalContent.appendChild(formWrap);
-
-    // Keyboard shortcuts
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        closePromptModal(state);
-        return;
-      }
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        e.preventDefault();
-        copyFilledBtn.click();
-      }
-    };
-    document.addEventListener('keydown', handleKeydown);
-    state.keyboardCleanup = () => document.removeEventListener('keydown', handleKeydown);
+    content.appendChild(actionsColumn);
 
     // Focus first input
     const firstInput = form.querySelector('input, textarea') as HTMLElement | null;
@@ -488,36 +515,64 @@ function openPromptModal(state: PromptTemplatesViewState, pt: PromptTemplate): v
         showToast(state.lang === 'ja' ? 'コピーに失敗しました' : 'Failed to copy to clipboard');
       }
     });
-    modalContent.appendChild(copyBtn);
+    accordion.appendChild(copyBtn);
   }
 
-  overlay.appendChild(modalContent);
-  document.body.appendChild(overlay);
+  // Attach focus trap to accordion
+  trapFocus(accordion);
 
-  // Click outside to close
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-      closePromptModal(state);
-    }
-  });
-
-  state.modalCleanup = () => {
-    if (overlay.parentNode) {
-      overlay.parentNode.removeChild(overlay);
-    }
-  };
+  // Return accordion element to be inserted
+  return accordion;
 }
 
-function closePromptModal(state: PromptTemplatesViewState): void {
-  // Remove overlay from DOM
-  const overlay = document.querySelector('.pt-modal-overlay');
-  if (overlay && overlay.parentNode) {
-    overlay.parentNode.removeChild(overlay);
+function openPromptAccordion(state: PromptTemplatesViewState, pt: PromptTemplate, card: HTMLElement): void {
+  // Close any existing accordion first
+  if (openAccordion && openAccordion.card !== card) {
+    closeAccordion(openAccordion.state, openAccordion.card, openAccordion.accordion);
   }
-  state.modalCleanup?.();
-  state.modalCleanup = null;
-  state.keyboardCleanup?.();
-  state.keyboardCleanup = null;
+
+  // If clicking the same card that's already open, close it
+  if (openAccordion && openAccordion.card === card) {
+    const accordion = card.nextElementSibling as HTMLElement;
+    if (accordion && accordion.classList.contains('prompt-accordion')) {
+      closeAccordion(state, card, accordion);
+    }
+    return;
+  }
+
+  // Store the triggering element for focus restoration
+  lastFocusedElement = document.activeElement as HTMLElement;
+
+  const accordion = createPromptAccordion(state, pt, card);
+  card.parentNode!.insertBefore(accordion, card.nextSibling);
+
+  // Set up Escape handler
+  document.removeEventListener('keydown', escapeHandler);
+  document.addEventListener('keydown', escapeHandler);
+
+  // Store reference
+  openAccordion = { state, card, accordion };
+  card.setAttribute('aria-expanded', 'true');
+  card.classList.add('expanded');
+}
+
+function closePromptAccordion(state: PromptTemplatesViewState): void {
+  // Close any open accordion
+  const accordions = document.querySelectorAll('.prompt-accordion');
+  accordions.forEach((accordion) => {
+    accordion.remove();
+  });
+
+  // Remove expanded state from all cards
+  const cards = document.querySelectorAll('.prompt-card-horizontal');
+  cards.forEach((card) => {
+    card.setAttribute('aria-expanded', 'false');
+    card.classList.remove('expanded');
+  });
+
+  openAccordion = null;
+  lastFocusedElement = null;
+  document.removeEventListener('keydown', escapeHandler);
 }
 
 function cleanupKeyboardShortcut(state: PromptTemplatesViewState): void {
@@ -566,7 +621,7 @@ function listenForLanguageChanges(state: PromptTemplatesViewState): void {
   (state.container as PromptTemplatesContainer).__ptCleanup = () => {
     cleanupLanguageListener(state);
     cleanupKeyboardShortcut(state);
-    closePromptModal(state);
+    closePromptAccordion(state);
   };
 }
 
