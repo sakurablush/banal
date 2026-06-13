@@ -319,9 +319,9 @@ title.textContent = pt.title;
 // Track the element that opened the accordion for focus restoration
 let lastFocusedElement: HTMLElement | null = null;
 // Track currently open accordion to close it when another opens
-let openAccordion: { state: PromptTemplatesViewState; card: HTMLElement; accordion: HTMLElement; focusCleanup?: () => void } | null = null;
+let openAccordion: { card: HTMLElement; accordion: HTMLElement; focusCleanup?: () => void } | null = null;
 
-function closeAccordion(state: PromptTemplatesViewState, card: HTMLElement, accordion: HTMLElement, focusCleanup?: () => void): void {
+function closeAccordion(card: HTMLElement, accordion: HTMLElement, focusCleanup?: () => void): void {
   accordion.remove();
   card.setAttribute('aria-expanded', 'false');
   card.classList.remove('expanded');
@@ -340,7 +340,7 @@ function closeAccordion(state: PromptTemplatesViewState, card: HTMLElement, acco
 function escapeHandler(e: KeyboardEvent): void {
   if (e.key === 'Escape' && openAccordion) {
     e.preventDefault();
-    closeAccordion(openAccordion.state, openAccordion.card, openAccordion.accordion, openAccordion.focusCleanup);
+    closeAccordion(openAccordion.card, openAccordion.accordion, openAccordion.focusCleanup);
   }
 }
 
@@ -392,7 +392,7 @@ function createPromptAccordion(state: PromptTemplatesViewState, pt: PromptTempla
   closeBtn.appendChild(closeIcon);
   closeBtn.setAttribute('aria-label', state.lang === 'ja' ? '閉じる' : 'Close');
   closeBtn.addEventListener('click', () => {
-    closeAccordion(state, card, accordion);
+    closeAccordion(card, accordion, focusCleanup);
   });
   header.appendChild(closeBtn);
   accordion.appendChild(header);
@@ -557,14 +557,14 @@ function createPromptAccordion(state: PromptTemplatesViewState, pt: PromptTempla
 function openPromptAccordion(state: PromptTemplatesViewState, pt: PromptTemplate, card: HTMLElement): void {
   // Close any existing accordion first
   if (openAccordion && openAccordion.card !== card) {
-    closeAccordion(openAccordion.state, openAccordion.card, openAccordion.accordion, openAccordion.focusCleanup);
+    closeAccordion(openAccordion.card, openAccordion.accordion, openAccordion.focusCleanup);
   }
 
   // If clicking the same card that's already open, close it
   if (openAccordion && openAccordion.card === card) {
     const accordion = card.nextElementSibling as HTMLElement;
     if (accordion && accordion.classList.contains('prompt-accordion')) {
-      closeAccordion(state, card, accordion, openAccordion.focusCleanup);
+      closeAccordion(card, accordion, openAccordion.focusCleanup);
     }
     return;
   }
@@ -580,12 +580,12 @@ function openPromptAccordion(state: PromptTemplatesViewState, pt: PromptTemplate
   document.addEventListener('keydown', escapeHandler);
 
   // Store reference with focusCleanup for proper cleanup
-  openAccordion = { state, card, accordion, focusCleanup };
+  openAccordion = { card, accordion, focusCleanup };
   card.setAttribute('aria-expanded', 'true');
   card.classList.add('expanded');
 }
 
-function closePromptAccordion(state: PromptTemplatesViewState): void {
+function closePromptAccordion(): void {
   // Clean up focus trap if any accordion is open
   if (openAccordion?.focusCleanup) {
     openAccordion.focusCleanup();
@@ -655,7 +655,7 @@ function listenForLanguageChanges(state: PromptTemplatesViewState): void {
   (state.container as PromptTemplatesContainer).__ptCleanup = () => {
     cleanupLanguageListener(state);
     cleanupKeyboardShortcut(state);
-    closePromptAccordion(state);
+    closePromptAccordion();
   };
 }
 

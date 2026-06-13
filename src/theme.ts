@@ -30,6 +30,17 @@ export function getPreferredTheme(): ThemeMode {
 export function setTheme(theme: ThemeMode): void {
   if (typeof document === 'undefined') return;
   document.documentElement.setAttribute('data-theme', theme);
+
+  // Toggle icon visibility (moon = dark mode, sun = light mode)
+  const moonIcon = document.querySelector('.theme-icon-moon');
+  const sunIcon = document.querySelector('.theme-icon-sun');
+  if (moonIcon) {
+    moonIcon.setAttribute('style', theme === 'dark' ? '' : 'display:none;opacity:0');
+  }
+  if (sunIcon) {
+    sunIcon.setAttribute('style', theme === 'dark' ? 'display:none;opacity:0' : '');
+  }
+
   try {
     localStorage.setItem(STORAGE_KEY, theme);
   } catch {
