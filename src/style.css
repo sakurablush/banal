@@ -3,11 +3,13 @@
 @tailwind utilities;
 
 /* ============================================================
-   BANAL AI â€” COMPLETE VISUAL REDESIGN
+   BANAL AI — COMPLETE VISUAL REDESIGN
    Neon particles + glassmorphism + broken-through-the-wall feel
+   WCAG AA compliant color system with semantic tokens
    ============================================================ */
 
 :root {
+  /* === Base Colors (Dark Mode) === */
   --void: #06060b;
   --void-light: #0c0c16;
   --glass-bg: rgba(255, 255, 255, 0.02);
@@ -16,25 +18,31 @@
   --section-pad-x: clamp(1rem, 4vw, 4rem);
   --module-gap: clamp(1rem, 2.5vw, 1.75rem);
   --card-pad: clamp(1rem, 2vw, 1.35rem);
+  --text-primary: rgba(255, 255, 255, 0.9);
   --text-muted: rgba(255, 255, 255, 0.62);
   --text-subtle: rgba(255, 255, 255, 0.48);
+  --border: rgba(255, 255, 255, 0.08);
   --neon-violet: #a855f7;
   --neon-fuchsia: #d946ef;
   --neon-cyan: #22d3ee;
   --neon-amber: #f59e0b;
   --glow-violet: rgba(168, 85, 247, 0.35);
   --glow-fuchsia: rgba(217, 70, 239, 0.25);
+  color-scheme: dark;
 }
 
-/* Light mode overrides — only activated when data-theme="light" is set on <html> */
+/* Light mode overrides — WCAG AA compliant, warm neutral background */
 [data-theme="light"] {
-  --void: #f8f9fc;
-  --void-light: #ffffff;
+  /* Warm neutral background - not harsh white */
+  --void: #F4F6F8;
+  --void-light: #F9FAFB;
   --glass-bg: rgba(255, 255, 255, 0.6);
   --glass-border: rgba(0, 0, 0, 0.08);
   --glass-hover: rgba(0, 0, 0, 0.04);
+  --text-primary: #111827;
   --text-muted: rgba(31, 41, 55, 0.72);
   --text-subtle: rgba(31, 41, 55, 0.58);
+  --border: rgba(0, 0, 0, 0.08);
   --neon-violet: #7c3aed;
   --neon-fuchsia: #c026d3;
   --neon-cyan: #0891b2;
@@ -50,61 +58,35 @@
 }
 
 [data-theme="light"] header {
-  background: rgba(248, 249, 252, 0.92) !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(244, 246, 248, 0.92) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 /* Comprehensive text contrast overrides for light mode */
-[data-theme="light"] .text-white,
-[data-theme="light"] .text-white\/90,
-[data-theme="light"] .text-white\/80,
-[data-theme="light"] .text-white\/70,
-[data-theme="light"] .text-white\/60,
-[data-theme="light"] .text-white\/50,
-[data-theme="light"] .text-white\/40,
-[data-theme="light"] .text-white\/30,
-[data-theme="light"] .text-white\/25,
-[data-theme="light"] .text-white\/20,
-[data-theme="light"] .text-white\/15,
-[data-theme="light"] .text-white\/10,
-[data-theme="light"] .text-white\/5 {
-  color: #1f2937 !important;
+[data-theme="light"] .text-white {
+  color: #111827 !important;
 }
 [data-theme="light"] .text-white\/90 {
   color: #1f2937 !important;
 }
-[data-theme="light"] .text-white\/80 {
+[data-theme="light"] .text-white\/80,
+[data-theme="light"] .text-white\/70 {
   color: #374151 !important;
 }
-[data-theme="light"] .text-white\/70 {
-  color: #4b5563 !important;
-}
-[data-theme="light"] .text-white\/60 {
+[data-theme="light"] .text-white\/60,
+[data-theme="light"] .text-white\/50 {
   color: #6b7280 !important;
 }
-[data-theme="light"] .text-white\/50 {
-  color: #9ca3af !important;
-}
-[data-theme="light"] .text-white\/40 {
-  color: #9ca3af !important;
-}
-[data-theme="light"] .text-white\/30 {
-  color: #d1d5db !important;
-}
+[data-theme="light"] .text-white\/40,
+[data-theme="light"] .text-white\/30,
 [data-theme="light"] .text-white\/25 {
-  color: #d1d5db !important;
+  color: #9ca3af !important;
 }
-[data-theme="light"] .text-white\/20 {
-  color: #e5e7eb !important;
-}
-[data-theme="light"] .text-white\/15 {
-  color: #f3f4f6 !important;
-}
-[data-theme="light"] .text-white\/10 {
-  color: #f3f4f6 !important;
-}
+[data-theme="light"] .text-white\/20,
+[data-theme="light"] .text-white\/15,
+[data-theme="light"] .text-white\/10,
 [data-theme="light"] .text-white\/5 {
-  color: #f9fafb !important;
+  color: #d1d5db !important;
 }
 
 /* Gradient text in light mode — darker gradient for readability */
@@ -1347,7 +1329,7 @@ details[open] .tool-arrow-void {
   .tools-horizontal-scroll::after,
   .prompts-horizontal-scroll::before,
   .prompts-horizontal-scroll::after {
-    animation: none !important;
+    opacity: 0.5 !important;
   }
 }
 
@@ -2904,7 +2886,7 @@ img {
   --light-border: #e5e7eb;
   --light-border-strong: #d1d5db;
   --light-card: rgba(255, 255, 255, 0.82);
-  --light-card-solid: #ffffff;
+  --light-card-solid: #F9FAFB;
   --light-hover: #f9fafb;
   --light-hover-strong: #f3f4f6;
   --light-active-bg: #ede9fe;
@@ -3059,12 +3041,12 @@ img {
 
 /* Global page shells, glass, stats, header, and hero. */
 [data-theme="light"] body {
-  background: #f8f9fc !important;
+  background: #F4F6F8 !important;
   color: var(--light-text) !important;
 }
 
 [data-theme="light"] .void-bg {
-  background: #f8f9fc !important;
+  background: #F4F6F8 !important;
 }
 
 [data-theme="light"] header {
@@ -3439,13 +3421,28 @@ img {
 /* Focus styles in light mode */
 [data-theme="light"] .tool-card-horizontal:focus-visible,
 [data-theme="light"] .prompt-card-horizontal:focus-visible {
-  outline: 3px solid rgba(124, 58, 237, 0.8);
+  outline: 3px solid var(--light-violet);
   outline-offset: 2px;
   border-radius: 20px;
 }
 
-[data-theme="light"] .quick-filter-chip:focus-visible {
-  outline: 2px solid #7c3aed;
+[data-theme="light"] .quick-filter-chip:focus-visible,
+[data-theme="light"] .zk2-filter-chip:focus-visible {
+  outline: 2px solid var(--light-violet);
+  outline-offset: 2px;
+}
+
+/* Focus styles in dark mode */
+.tool-card-horizontal:focus-visible,
+.prompt-card-horizontal:focus-visible {
+  outline: 3px solid var(--neon-violet);
+  outline-offset: 2px;
+  border-radius: 20px;
+}
+
+.quick-filter-chip:focus-visible,
+.zk2-filter-chip:focus-visible {
+  outline: 2px solid var(--neon-violet);
   outline-offset: 2px;
 }
 
@@ -4855,6 +4852,7 @@ img {
 /* ============================================================
     HORIZONTAL SCROLL CONTAINERS — Vertical scroll with visible rows
     Container shows ~2-3 visible rows, vertical scrollbar for more
+    Header padding prevents overflow cropping during scroll
     ============================================================ */
 
 /* Tools scroll container - shows 2-3 rows, vertical scroll */
@@ -4862,12 +4860,27 @@ img {
   display: grid;
   grid-template-columns: repeat(auto-fill, 280px);
   gap: 16px;
-  padding: 16px 0;
+  padding: 24px 0 16px;
   max-height: 420px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
+  /* Padding-top prevents header cropping during scroll */
+  scroll-padding-top: 60px;
+}
+
+/* Scrollbar indicator fade - subtle top gradient to hint at more content */
+.tools-horizontal-scroll::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: linear-gradient(to bottom, rgba(6, 10, 18, 0.8), transparent);
+  pointer-events: none;
+  z-index: 10;
 }
 
 .tools-horizontal-scroll::-webkit-scrollbar {
@@ -4890,6 +4903,20 @@ img {
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
+  scroll-padding-top: 60px;
+}
+
+/* Scrollbar indicator fade for prompts */
+.prompts-horizontal-scroll::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: linear-gradient(to bottom, var(--void), transparent);
+  pointer-events: none;
+  z-index: 10;
 }
 
 .prompts-horizontal-scroll::-webkit-scrollbar {
@@ -5048,51 +5075,72 @@ img {
 
 /* Light mode overrides for horizontal scroll components */
 [data-theme="light"] .tool-card-horizontal {
-  background: rgba(0, 0, 0, 0.02);
-  border-color: rgba(0, 0, 0, 0.08);
+  background: var(--light-card);
+  border-color: var(--light-border);
 }
 
 [data-theme="light"] .tool-card-horizontal:hover {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: rgba(124, 58, 237, 0.3);
+  background: var(--light-card-solid);
+  border-color: var(--light-active-border);
 }
 
 [data-theme="light"] .prompt-card-horizontal {
-  background: rgba(0, 0, 0, 0.02);
-  border-color: rgba(0, 0, 0, 0.06);
+  background: var(--light-card);
+  border-color: var(--light-border);
 }
 
 [data-theme="light"] .prompt-card-horizontal:hover {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: rgba(124, 58, 237, 0.3);
+  background: var(--light-card-solid);
+  border-color: var(--light-active-border);
 }
 
 [data-theme="light"] .quick-filter-chip {
-  background: rgba(0, 0, 0, 0.03);
-  border-color: rgba(0, 0, 0, 0.08);
-  color: rgba(31, 41, 55, 0.7);
+  background: var(--light-hover);
+  border-color: var(--light-border);
+  color: var(--light-text-muted);
 }
 
 [data-theme="light"] .quick-filter-chip:hover {
-  background: rgba(0, 0, 0, 0.06);
-  color: #1f2937;
+  background: var(--light-hover-strong);
+  color: var(--light-text);
 }
 
 [data-theme="light"] .quick-filter-chip.active {
-  background: rgba(124, 58, 237, 0.12);
-  color: #1f2937;
+  background: var(--light-active-bg);
+  color: var(--light-violet);
+}
+
+[data-theme="light"] .tools-horizontal-scroll,
+[data-theme="light"] .prompts-horizontal-scroll {
+  scrollbar-color: var(--light-active-border) transparent;
+}
+
+[data-theme="light"] .tools-horizontal-scroll::before {
+  background: linear-gradient(to bottom, rgba(244, 246, 248, 0.95), transparent);
+}
+
+[data-theme="light"] .prompts-horizontal-scroll::before {
+  background: linear-gradient(to bottom, rgba(244, 246, 248, 0.95), transparent);
+}
+
+[data-theme="light"] .tools-horizontal-scroll::-webkit-scrollbar-thumb {
+  background: var(--light-active-border);
+}
+
+[data-theme="light"] .prompts-horizontal-scroll::-webkit-scrollbar-thumb {
+  background: var(--light-active-border);
 }
 
 /* Light mode accordion close button */
 [data-theme="light"] .prompt-accordion-close {
-  background: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.1);
-  color: rgba(31, 41, 55, 0.7);
+  background: var(--light-hover);
+  border-color: var(--light-border);
+  color: var(--light-text-muted);
 }
 
 [data-theme="light"] .prompt-accordion-close:hover {
-  background: rgba(0, 0, 0, 0.08);
-  color: #1f2937;
+  background: var(--light-hover-strong);
+  color: var(--light-text);
 }
 
 /* Tool Card Horizontal - Modern Square Tile Design */
@@ -5121,9 +5169,10 @@ img {
 }
 
 .tool-card-horizontal:focus-visible {
-  outline: 2px solid rgba(168, 85, 247, 0.6);
-  outline-offset: 2px;
-}
+   outline: 2px solid var(--neon-violet);
+   outline-offset: 2px;
+   border-radius: 16px;
+ }
 
 /* Tool Card Header */
 .zk2-card-header {
