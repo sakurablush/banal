@@ -268,6 +268,7 @@ function performSearch(state: PanelState): void {
   results = applyLifeFilters(state, results);
   state.results = results;
 
+  updateSidebarActiveState(state);
   renderContent(state);
 }
 
@@ -304,6 +305,7 @@ function renderQuickFilters(state: PanelState): HTMLElement {
     );
     chip.type = 'button';
     chip.textContent = def.label;
+    chip.setAttribute('aria-label', state.lang === 'ja' ? `${def.label}でフィルター` : `Filter by ${def.label}`);
     chip.addEventListener('click', () => {
       if (state.lifeFilters.has(def.id)) {
         state.lifeFilters.delete(def.id);
@@ -372,6 +374,16 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
   name.textContent = tool.name;
   card.appendChild(name);
 
+  // URL (full width under name, before description)
+  const urlEl = create('a', 'zk2-card-url');
+  const rawUrl = tool.url;
+  urlEl.href = rawUrl;
+  urlEl.target = '_blank';
+  urlEl.rel = 'noopener noreferrer';
+  urlEl.textContent = rawUrl.length > 40 ? rawUrl.slice(0, 37) + '...' : rawUrl;
+  urlEl.title = rawUrl;
+  card.appendChild(urlEl);
+
   // Description (bestFor)
   const desc = create('p', 'zk2-card-desc');
   desc.textContent = tool.bestFor.length > 90 ? tool.bestFor.slice(0, 87) + '\u2026' : tool.bestFor;
@@ -388,32 +400,16 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
     card.appendChild(badgesWrap);
   }
 
-  // Footer: caveat + open button + report dropdown
-  const footer = create('div', 'zk2-card-footer');
-
+  // Caveat (full width as yellow bar, before footer)
   if (tool.caveat) {
-    const caveat = create('span', 'zk2-card-caveat');
+    const caveat = create('div', 'zk2-card-caveat');
     caveat.textContent = '\u26A0\uFE0F ' + tool.caveat;
     caveat.title = tool.caveat;
-    footer.appendChild(caveat);
+    card.appendChild(caveat);
   }
 
-  // URL (truncated)
-  const urlEl = create('span', 'zk2-card-url');
-  const rawUrl = tool.url;
-  urlEl.textContent = rawUrl.length > 40 ? rawUrl.slice(0, 37) + '...' : rawUrl;
-  urlEl.title = rawUrl;
-  footer.appendChild(urlEl);
-
-  const btn = create('a', 'zk2-card-cta');
-  btn.href = tool.url;
-  btn.target = '_blank';
-  btn.rel = 'noopener noreferrer';
-  btn.textContent = (tool.surface === 'cli' ? copy.docs : copy.open) + ' \u2192';
-  btn.addEventListener('click', () => {
-    state.onToolOpen?.();
-  });
-  footer.appendChild(btn);
+  // Footer: Report button (left) | Open button (right)
+  const footer = create('div', 'zk2-card-footer');
 
   // Report button with dropdown
   const reportBtn = create('button', 'zk2-card-report');
@@ -423,12 +419,35 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
     state.lang === 'ja'
       ? '\u3053\u306e\u30C4\u30FC\u30EB\u3092\u5831\u544A'
       : 'Report this tool as broken';
+  reportBtn.setAttribute(
+    'aria-label',
+    state.lang === 'ja'
+      ? `${tool.name}のリンクを報告: ${tool.name}`
+      : `Report broken link: ${tool.name}`
+  );
   reportBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     const issueUrl = `https://github.com/sakurablush/banal/issues/new?title=Broken+tool:+${encodeURIComponent(tool.name)}&body=Tool:+${encodeURIComponent(tool.name)}%0AURL:+${encodeURIComponent(tool.url)}%0A%0AProblem:`;
     window.open(issueUrl, '_blank', 'noopener,noreferrer');
   });
   footer.appendChild(reportBtn);
+
+  // Open button (CTA)
+  const btn = create('a', 'zk2-card-cta');
+  btn.href = tool.url;
+  btn.target = '_blank';
+  btn.rel = 'noopener noreferrer';
+  btn.textContent = (tool.surface === 'cli' ? copy.docs : copy.open) + ' \u2192';
+  btn.setAttribute(
+    'aria-label',
+    state.lang === 'ja'
+      ? `${tool.surface === 'cli' ? copy.docs : copy.open}: ${tool.name}`
+      : `${tool.surface === 'cli' ? copy.docs : copy.open} ${tool.name}`
+  );
+  btn.addEventListener('click', () => {
+    state.onToolOpen?.();
+  });
+  footer.appendChild(btn);
 
   card.appendChild(footer);
 
@@ -471,6 +490,61 @@ function renderEmptyState(state: PanelState): HTMLElement {
   return empty;
 }
 
+// ─── Render: Sidebar Categories ─────────────────────────────────────────────
+
+function renderSidebar(state: PanelState): HTMLElement {
+  const sidebar = create('div', 'zk2-sidebar');
+
+  // Get unique categories from tools
+  const categories = Array.from(new Set(state.allTools.map((t) => t.category)))
+    .sort()
+    .filter((cat): cat is ZeroKeyCategory => !!categoryLabels[cat as ZeroKeyCategory]);
+
+  // All category button
+  const allBtn = create('button', `zk2-cat-item${state.activeCategory === null ? ' active' : ''}`);
+  allBtn.type = 'button';
+  allBtn.innerHTML = `<span class="zk2-cat-icon">📦</span> <span class="zk2-cat-label">${COPY[state.lang].allCategory}</span> <span class="zk2-cat-count">${state.allTools.length}</span>`;
+  allBtn.dataset.category = 'all';
+  allBtn.addEventListener('click', () => {
+    state.activeCategory = null;
+    updateSidebarActiveState(state);
+    performSearch(state);
+  });
+  sidebar.appendChild(allBtn);
+
+  // Individual category buttons
+  for (const cat of categories) {
+    const toolCount = state.allTools.filter((t) => t.category === cat).length;
+    const btn = create('button', `zk2-cat-item${state.activeCategory === cat ? ' active' : ''}`);
+    btn.type = 'button';
+    btn.innerHTML = `<span class="zk2-cat-icon">${categoryIcons[cat]}</span> <span class="zk2-cat-label">${categoryLabels[cat]}</span> <span class="zk2-cat-count">${toolCount}</span>`;
+    btn.dataset.category = cat;
+    btn.addEventListener('click', () => {
+      state.activeCategory = cat;
+      updateSidebarActiveState(state);
+      performSearch(state);
+    });
+    sidebar.appendChild(btn);
+  }
+
+  return sidebar;
+}
+
+// Update active state on sidebar buttons
+function updateSidebarActiveState(state: PanelState): void {
+  const container = state.container;
+  if (!container) return;
+
+  const sidebar = container.querySelector('.zk2-sidebar');
+  if (!sidebar) return;
+
+  const buttons = sidebar.querySelectorAll('.zk2-cat-item');
+  buttons.forEach((btn) => {
+    const cat = (btn as HTMLElement).dataset.category;
+    btn.classList.toggle('active', cat === 'all' ? state.activeCategory === null : cat === state.activeCategory);
+  });
+}
+
 // ─── Render: Main Content (horizontal scroll) ─────────────────────────────
 
 function renderContent(state: PanelState): void {
@@ -490,8 +564,10 @@ function renderContent(state: PanelState): void {
   const filtersRow = renderQuickFilters(state);
   contentArea.appendChild(filtersRow);
 
-  // Stats bar
+  // Stats bar with aria-live for screen reader announcements
   const statsBar = create('div', 'zk2-stats-bar');
+  statsBar.setAttribute('aria-live', 'polite');
+  statsBar.setAttribute('aria-atomic', 'true');
   statsBar.textContent = copy.showing(results.length, results.length);
   if (state.activeCategory) {
     const catLabel = create('span', 'zk2-stats-category');
@@ -506,7 +582,7 @@ function renderContent(state: PanelState): void {
     return;
   }
 
-  // Horizontal scroll container
+  // Scroll container
   const scrollContainer = create('div', 'tools-horizontal-scroll');
   results.forEach((result, i) => {
     const card = renderHorizontalToolCard(state, result);
@@ -584,9 +660,17 @@ export function renderZeroKeyPowerPanel(
   searchWrap.appendChild(searchInput);
   container.appendChild(searchWrap);
 
+  // Layout wrapper with sidebar
+  const layout = create('div', 'zk2-layout');
+  container.appendChild(layout);
+
+  // Sidebar with categories
+  const sidebar = renderSidebar(state);
+  layout.appendChild(sidebar);
+
   // Horizontal content area
   const content = create('div', 'zk2-horizontal-content');
-  container.appendChild(content);
+  layout.appendChild(content);
 
   // Wire hero search (each panel gets its own listener)
   const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;

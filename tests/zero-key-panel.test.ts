@@ -362,7 +362,7 @@ describe('zero-key panel rendering', () => {
     expect(heroInput.value).toBe('Docker');
   });
 
-  // ─── Horizontal scroll card layout ───────────────────────────────────────────
+// ─── Horizontal scroll card layout ───────────────────────────────────────────
 
   it('horizontal tool card has proper width and snap alignment', () => {
     const root = renderPanel();
@@ -375,13 +375,46 @@ describe('zero-key panel rendering', () => {
     expect(card.tabIndex).toBe(0);
   });
 
+  it('horizontal tool card has URL element positioned under name', () => {
+    const root = renderPanel();
+    const card = root.querySelector('.tool-card-horizontal') as HTMLElement;
+    const urlEl = card.querySelector('.zk2-card-url') as HTMLAnchorElement;
+
+    expect(urlEl).not.toBeNull();
+    expect(urlEl.tagName.toLowerCase()).toBe('a');
+    expect(urlEl.href).toContain('duck.ai');
+    // URL should be before description but after name
+    const name = card.querySelector('.zk2-card-name');
+    const desc = card.querySelector('.zk2-card-desc');
+    const nameIndex = Array.from(card.children).indexOf(name!);
+    const urlIndex = Array.from(card.children).indexOf(urlEl);
+    const descIndex = Array.from(card.children).indexOf(desc!);
+    expect(urlIndex).toBeGreaterThan(nameIndex);
+    expect(urlIndex).toBeLessThan(descIndex);
+  });
+
+  it('horizontal tool card has caveat displayed full-width before footer', () => {
+    const root = renderPanel();
+    const card = root.querySelector('.tool-card-horizontal') as HTMLElement;
+    const caveat = card.querySelector('.zk2-card-caveat') as HTMLElement;
+
+    // Find a tool with a caveat - let's check if it exists
+    if (caveat) {
+      // Caveat should be before footer
+      const footer = card.querySelector('.zk2-card-footer');
+      const caveatIndex = Array.from(card.children).indexOf(caveat);
+      const footerIndex = Array.from(card.children).indexOf(footer!);
+      expect(caveatIndex).toBeLessThan(footerIndex);
+    }
+  });
+
   it('card has Open button with arrow icon', () => {
     const root = renderPanel();
     const card = root.querySelector('.tool-card-horizontal') as HTMLElement;
     const cta = card.querySelector('.zk2-card-cta') as HTMLAnchorElement;
 
     expect(cta).not.toBeNull();
-    expect(cta.textContent).toContain('→');
+    expect(cta.textContent).toContain('\u2192');
   });
 
   it('card has Report button with dropdown indicator', () => {
@@ -390,20 +423,82 @@ describe('zero-key panel rendering', () => {
 
     expect(reportBtn).not.toBeNull();
     expect(reportBtn.textContent).toContain('Report');
-    expect(reportBtn.textContent).toContain('▼');
+    expect(reportBtn.textContent).toContain('\u25BC');
   });
 
-  // ─── No sidebar in horizontal layout ─────────────────────────────────────────
+  it('footer has Report button on left and Open button on right', () => {
+    const root = renderPanel();
+    const footer = root.querySelector('.zk2-card-footer') as HTMLElement;
+    const reportBtn = footer!.querySelector('.zk2-card-report');
+    const cta = footer!.querySelector('.zk2-card-cta');
 
-  it('does not render category sidebar in horizontal layout', () => {
+    expect(footer).not.toBeNull();
+    expect(reportBtn).not.toBeNull();
+    expect(cta).not.toBeNull();
+    expect(footer!.children[0]).toBe(reportBtn);
+    expect(footer!.children[footer!.children.length - 1]).toBe(cta);
+  });
+
+// ─── Sidebar layout ────────────────────────────────────────────────────────────
+
+  it('renders category sidebar', () => {
     const root = renderPanel();
     const sidebar = root.querySelector('.zk2-sidebar');
-    expect(sidebar).toBeNull();
+    expect(sidebar).not.toBeNull();
+    expect(sidebar!.querySelectorAll('.zk2-cat-item').length).toBeGreaterThan(5);
   });
 
   it('does not render load more button in horizontal layout', () => {
     const root = renderPanel();
     const loadMore = root.querySelector('.zk2-load-more');
     expect(loadMore).toBeNull();
+  });
+
+  // ─── Accessibility: ARIA labels on buttons ─────────────────────────────────────
+
+  it('CTA button has aria-label with tool name', () => {
+    const root = renderPanel();
+    const card = root.querySelector('.tool-card-horizontal') as HTMLElement;
+    const cta = card.querySelector('.zk2-card-cta') as HTMLAnchorElement;
+
+    expect(cta).not.toBeNull();
+    expect(cta.hasAttribute('aria-label')).toBe(true);
+    expect(cta.getAttribute('aria-label')).toContain('Open');
+    expect(cta.getAttribute('aria-label')).toContain('Duck.ai'); // Should contain tool name
+  });
+
+  it('Report button has aria-label with tool name', () => {
+    const root = renderPanel();
+    const reportBtn = root.querySelector('.zk2-card-report') as HTMLButtonElement;
+
+    expect(reportBtn).not.toBeNull();
+    expect(reportBtn.hasAttribute('aria-label')).toBe(true);
+    expect(reportBtn.getAttribute('aria-label')).toContain('Report');
+    expect(reportBtn.getAttribute('aria-label')).toContain('Duck.ai'); // Should contain tool name
+  });
+
+  // ─── Accessibility: Stats bar aria-live ───────────────────────────────────────
+
+  it('stats bar has aria-live attribute for screen readers', () => {
+    const root = renderPanel();
+    const statsBar = root.querySelector('.zk2-stats-bar') as HTMLElement;
+
+    expect(statsBar).not.toBeNull();
+    expect(statsBar.getAttribute('aria-live')).toBe('polite');
+    expect(statsBar.getAttribute('aria-atomic')).toBe('true');
+  });
+
+  // ─── Accessibility: Quick filter chips ─────────────────────────────────────────
+
+  it('quick filter chips have aria-label attributes', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+
+    expect(chips.length).toBeGreaterThan(0);
+
+    // Each chip should have an aria-label
+    for (const chip of chips) {
+      expect(chip.hasAttribute('aria-label')).toBe(true);
+    }
   });
 });
