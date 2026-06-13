@@ -5021,12 +5021,13 @@ img {
 
 .quick-filter-chip {
   flex: 0 0 auto;
-  padding: 6px 12px;
+  padding: 10px 16px;
+  min-height: 44px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 500;
   white-space: nowrap;
   cursor: pointer;
@@ -5280,16 +5281,20 @@ img {
 .prompt-accordion-close {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  font-size: 1.25rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  font-size: 1.5rem;
   cursor: pointer;
   color: rgba(255, 255, 255, 0.7);
   transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.prompt-accordion-close .close-icon {
+  line-height: 1;
 }
 
 .prompt-accordion-close:hover {

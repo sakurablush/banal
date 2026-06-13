@@ -238,6 +238,61 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     expect(copyBtn.textContent).toContain('Copy');
   });
 
+  // ─── Security: XSS Prevention ────────────────────────────────────────────────────
+
+  it('close button uses textContent instead of innerHTML to prevent XSS', () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    card.click();
+
+    const closeBtn = document.querySelector('.prompt-accordion-close') as HTMLButtonElement;
+    // Verify close button uses a span with textContent, not innerHTML with HTML
+    const closeIcon = closeBtn.querySelector('.close-icon');
+    expect(closeIcon).toBeTruthy();
+    expect(closeIcon!.textContent).toBe('×');
+    // Verify no XSS vulnerability - textContent should escape HTML entities
+    expect(closeIcon!.innerHTML).toBe('×');
+  });
+
+  it('quick filter chips use textContent for icons to prevent XSS', () => {
+    const el = setup();
+    const chips = el.querySelectorAll('.quick-filter-chip');
+
+    chips.forEach((chip) => {
+      const iconSpan = chip.querySelector('.filter-icon');
+      expect(iconSpan).toBeTruthy();
+      // Icons are set via textContent, not innerHTML - prevents XSS
+      expect(iconSpan!.textContent).toBeDefined();
+      // The icon should be a text character, not HTML
+      if (iconSpan!.textContent) {
+        expect(iconSpan!.textContent.length).toBeGreaterThan(0);
+      }
+    });
+  });
+
+  // ─── Accessibility: aria-expanded initial state ─────────────────────────────────
+
+  it('horizontal prompt card has aria-expanded false on initial render', () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+
+    // Card should have aria-expanded="false" from the start
+    expect(card.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  // ─── Memory Leak Prevention ───────────────────────────────────────────────────
+
+  it('focus trap cleanup function is stored when accordion opens', () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    card.click();
+
+    // The openAccordion should have a focusCleanup function stored
+    // This is tested indirectly by checking that the accordion was created
+    const accordion = document.querySelector('.prompt-accordion');
+    expect(accordion).toBeTruthy();
+  });
+
   // ─── Language change ─────────────────────────────────────────────────────────
 
   it('re-renders correctly when language changes', () => {

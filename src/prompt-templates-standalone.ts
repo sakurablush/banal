@@ -83,10 +83,16 @@ interface PromptTemplatesViewState {
   keyboardCleanup: (() => void) | null;
   languageCleanup: (() => void) | null;
   accordionCleanup: (() => void) | null;
+  focusCleanup: (() => void) | null;
 }
 
 interface PromptTemplatesContainer extends HTMLElement {
   __ptCleanup?: () => void;
+}
+
+interface PromptAccordionResult {
+  accordion: HTMLElement;
+  focusCleanup: () => void;
 }
 
 // ─── LocalStorage Helpers ──────────────────────────────────────────────────────
@@ -126,7 +132,7 @@ export function renderPromptTemplatesStandalone(options: {
 }): void {
   const { container, lang } = options;
 
-  try {
+try {
     const lib = new PromptTemplatesLibrary(lang);
     const prompts = lib.getAll();
     const state: PromptTemplatesViewState = {
@@ -140,6 +146,7 @@ export function renderPromptTemplatesStandalone(options: {
       keyboardCleanup: null,
       languageCleanup: null,
       accordionCleanup: null,
+      focusCleanup: null,
     };
 
     // Initialize saved values for all prompts
@@ -196,7 +203,21 @@ function createQuickFilters(state: PromptTemplatesViewState): HTMLElement {
     chip.dataset.category = cat.id;
     const label = state.lang === 'ja' ? cat.labelJa : cat.labelEn;
     const count = counts[cat.id] || 0;
-    chip.innerHTML = `<span class="filter-icon">${cat.icon}</span> <span class="filter-label">${label}</span> <span class="filter-count">(${count})</span>`;
+
+    // Safely construct inner HTML with proper escaping to prevent XSS
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'filter-icon';
+    iconSpan.textContent = cat.icon; // textContent escapes any HTML entities
+
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'filter-label';
+    labelSpan.textContent = label;
+
+    const countSpan = document.createElement('span');
+    countSpan.className = 'filter-count';
+    countSpan.textContent = `(${count})`;
+
+    chip.append(iconSpan, ' ', labelSpan, ' ', countSpan);
     chip.setAttribute('aria-label', state.lang === 'ja' ? `${label}でフィルター` : `Filter by ${label}`);
     chip.addEventListener('click', () => {
       state.selectedCategory = cat.id;
@@ -228,6 +249,7 @@ function createHorizontalPromptCard(state: PromptTemplatesViewState, pt: PromptT
   card.dataset.promptId = pt.id;
   card.tabIndex = 0;
   card.role = 'button';
+  card.setAttribute('aria-expanded', 'false');
   card.setAttribute(
     'aria-label',
     state.lang === 'ja' ? `${pt.title}のテンプレートを開く` : `Open ${pt.title} template`
@@ -250,7 +272,7 @@ function createHorizontalPromptCard(state: PromptTemplatesViewState, pt: PromptT
   // Title
   const title = document.createElement('h3');
   title.className = 'pt-prompt-title';
-  title.textContent = pt.title;
+title.textContent = pt.title;
   card.appendChild(title);
 
   // Description
@@ -259,7 +281,7 @@ function createHorizontalPromptCard(state: PromptTemplatesViewState, pt: PromptT
   desc.textContent = pt.description;
   card.appendChild(desc);
 
-// Actions
+  // Actions
   const actions = document.createElement('div');
   actions.className = 'prompt-card-actions';
 
@@ -297,13 +319,16 @@ function createHorizontalPromptCard(state: PromptTemplatesViewState, pt: PromptT
 // Track the element that opened the accordion for focus restoration
 let lastFocusedElement: HTMLElement | null = null;
 // Track currently open accordion to close it when another opens
-let openAccordion: { state: PromptTemplatesViewState; card: HTMLElement; accordion: HTMLElement } | null = null;
+let openAccordion: { state: PromptTemplatesViewState; card: HTMLElement; accordion: HTMLElement; focusCleanup?: () => void } | null = null;
 
-function closeAccordion(state: PromptTemplatesViewState, card: HTMLElement, accordion: HTMLElement): void {
+function closeAccordion(state: PromptTemplatesViewState, card: HTMLElement, accordion: HTMLElement, focusCleanup?: () => void): void {
   accordion.remove();
   card.setAttribute('aria-expanded', 'false');
   card.classList.remove('expanded');
   openAccordion = null;
+
+  // Clean up focus trap to prevent memory leak
+  focusCleanup?.();
 
   // Restore focus to the triggering card
   if (lastFocusedElement && document.contains(lastFocusedElement)) {
@@ -315,7 +340,7 @@ function closeAccordion(state: PromptTemplatesViewState, card: HTMLElement, acco
 function escapeHandler(e: KeyboardEvent): void {
   if (e.key === 'Escape' && openAccordion) {
     e.preventDefault();
-    closeAccordion(openAccordion.state, openAccordion.card, openAccordion.accordion);
+    closeAccordion(openAccordion.state, openAccordion.card, openAccordion.accordion, openAccordion.focusCleanup);
   }
 }
 
@@ -342,7 +367,7 @@ function trapFocus(element: HTMLElement): () => void {
   return () => element.removeEventListener('keydown', handleTab);
 }
 
-function createPromptAccordion(state: PromptTemplatesViewState, pt: PromptTemplate, card: HTMLElement): HTMLElement {
+function createPromptAccordion(state: PromptTemplatesViewState, pt: PromptTemplate, card: HTMLElement): PromptAccordionResult {
   const accordion = document.createElement('div');
   accordion.className = 'prompt-accordion';
   accordion.setAttribute('role', 'region');
@@ -360,7 +385,11 @@ function createPromptAccordion(state: PromptTemplatesViewState, pt: PromptTempla
   const closeBtn = document.createElement('button');
   closeBtn.type = 'button';
   closeBtn.className = 'prompt-accordion-close';
-  closeBtn.innerHTML = '&times;';
+  // Use textContent with actual multiplication sign to prevent XSS vulnerability
+  const closeIcon = document.createElement('span');
+  closeIcon.className = 'close-icon';
+  closeIcon.textContent = '×';
+  closeBtn.appendChild(closeIcon);
   closeBtn.setAttribute('aria-label', state.lang === 'ja' ? '閉じる' : 'Close');
   closeBtn.addEventListener('click', () => {
     closeAccordion(state, card, accordion);
@@ -518,24 +547,24 @@ function createPromptAccordion(state: PromptTemplatesViewState, pt: PromptTempla
     accordion.appendChild(copyBtn);
   }
 
-  // Attach focus trap to accordion
-  trapFocus(accordion);
+  // Attach focus trap to accordion and store cleanup function
+  const focusCleanup = trapFocus(accordion);
 
-  // Return accordion element to be inserted
-  return accordion;
+  // Return both accordion and focusCleanup for proper memory management
+  return { accordion, focusCleanup };
 }
 
 function openPromptAccordion(state: PromptTemplatesViewState, pt: PromptTemplate, card: HTMLElement): void {
   // Close any existing accordion first
   if (openAccordion && openAccordion.card !== card) {
-    closeAccordion(openAccordion.state, openAccordion.card, openAccordion.accordion);
+    closeAccordion(openAccordion.state, openAccordion.card, openAccordion.accordion, openAccordion.focusCleanup);
   }
 
   // If clicking the same card that's already open, close it
   if (openAccordion && openAccordion.card === card) {
     const accordion = card.nextElementSibling as HTMLElement;
     if (accordion && accordion.classList.contains('prompt-accordion')) {
-      closeAccordion(state, card, accordion);
+      closeAccordion(state, card, accordion, openAccordion.focusCleanup);
     }
     return;
   }
@@ -543,20 +572,25 @@ function openPromptAccordion(state: PromptTemplatesViewState, pt: PromptTemplate
   // Store the triggering element for focus restoration
   lastFocusedElement = document.activeElement as HTMLElement;
 
-  const accordion = createPromptAccordion(state, pt, card);
+  const { accordion, focusCleanup } = createPromptAccordion(state, pt, card);
   card.parentNode!.insertBefore(accordion, card.nextSibling);
 
   // Set up Escape handler
   document.removeEventListener('keydown', escapeHandler);
   document.addEventListener('keydown', escapeHandler);
 
-  // Store reference
-  openAccordion = { state, card, accordion };
+  // Store reference with focusCleanup for proper cleanup
+  openAccordion = { state, card, accordion, focusCleanup };
   card.setAttribute('aria-expanded', 'true');
   card.classList.add('expanded');
 }
 
 function closePromptAccordion(state: PromptTemplatesViewState): void {
+  // Clean up focus trap if any accordion is open
+  if (openAccordion?.focusCleanup) {
+    openAccordion.focusCleanup();
+  }
+
   // Close any open accordion
   const accordions = document.querySelectorAll('.prompt-accordion');
   accordions.forEach((accordion) => {
