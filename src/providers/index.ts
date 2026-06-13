@@ -188,6 +188,13 @@ export function getDefaultModel(provider: Provider): string {
   }
 }
 
+function hfRawFallback(data: unknown): string {
+  const hfRaw = Array.isArray(data)
+    ? (data as any)[0]?.generated_text
+    : (data as Record<string, unknown> | undefined)?.generated_text;
+  return (hfRaw || '').trim();
+}
+
 /** Pick the smartest free path based on what keys the user has stored (or per-call). */
 export function pickBestFreeProvider(
   preferred?: ProviderOrAuto,
@@ -393,21 +400,19 @@ export async function sendFreeMessage(
           ?.trim() ||
         '(Free path returned empty this time — shared tiers do that. Rephrase or try again in a breath.)';
     } else if (provider === 'hf') {
-      // HF Inference API (text generation)
-      const url = `https://api-inference.huggingface.co/models/${model}`;
-      const prompt =
-        messages
-          .map((m) => (m.role === 'system' ? `System: ${m.content}` : `${m.role}: ${m.content}`))
-          .join('\n') + '\nassistant:';
-      const res = await fetch(url, {
+      // HF Inference Providers — OpenAI-compatible router. This reuses the existing
+      // `hf` key stored under banal-api-keys-v1 by both chat and playground.
+      const res = await fetch('https://router.huggingface.co/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${key}`,
         },
         body: JSON.stringify({
-          inputs: prompt,
-          parameters: { max_new_tokens: 600, temperature: 0.7, return_full_text: false },
+          model,
+          messages: messages.map((m) => ({ role: m.role, content: m.content })),
+          temperature: 0.7,
+          max_tokens: 600,
         }),
         signal,
       });
@@ -415,8 +420,8 @@ export async function sendFreeMessage(
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const errText = data?.error || JSON.stringify(data);
-        const rl = detectRateLimit(res, String(errText));
+        const errText = data?.error?.message || JSON.stringify(data);
+        const rl = detectRateLimit(res, errText);
         if (rl.isRateLimited) {
           throw new BanalProviderError(rl.friendlyMessage, {
             code: 'RATE_LIMIT',
@@ -432,9 +437,9 @@ export async function sendFreeMessage(
             'Free path hiccup on this provider (rare for the shared tiers). Try again or add/switch a free key in settings — still zero cost.',
         });
       }
-      const hfRaw = Array.isArray(data) ? data[0]?.generated_text : data?.generated_text;
       text =
-        (hfRaw || '').trim() ||
+        data.choices?.[0]?.message?.content?.trim() ||
+        (hfRawFallback(data) || '') ||
         '(Free path returned empty this time — shared tiers do that. Rephrase or try again in a breath.)';
     } else if (provider === 'ovh-anon') {
       // True zero-key public API: OVHcloud AI Endpoints anonymous tier (no signup, no key, OpenAI compatible).
