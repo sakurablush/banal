@@ -3338,6 +3338,7 @@
   inset: 0;
   background: rgba(6, 6, 11, 0.95);
   border: 2px solid rgba(168, 85, 247, 0.3);
+  border-radius: 16px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -3755,15 +3756,16 @@
 .tools-horizontal-scroll {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  grid-auto-flow: dense;
   gap: 16px;
-  padding: 24px 0 16px;
+  padding: 24px 0 16px 24px;
+  padding-right: 8px;
   max-height: 420px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
   scroll-padding-top: 60px;
+  align-items: start;
 }
 
 /* Scrollbar indicator fade - subtle top gradient to hint at more content */
@@ -4071,8 +4073,7 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
-  width: 280px;
-  min-height: 160px;
+  min-height: 180px;
   position: relative;
   overflow: hidden;
 }
@@ -4094,8 +4095,8 @@
 .zk2-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 0.25rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }
 
 .zk2-card-icon {
@@ -4141,10 +4142,10 @@
 /* Access Badges */
 .zk2-card-access-badges {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 0.25rem;
+  margin-top: 0.125rem;
 }
 
 .zk2-access-badge {

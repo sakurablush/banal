@@ -124,7 +124,7 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
     },
     {
       id: 'offline',
-      label: e('Works offline', 'オフライン対応'),
+      label: e('Offline', 'オフライン'),
       predicate: (tool, h) =>
         tool.access === 'open-source' ||
         tool.surface === 'cli' ||
@@ -138,7 +138,7 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
         tool.category === 'dev-coding' ||
         /developer|coding|api|cli|git|database|deploy/i.test(h),
     },
-    // New filters for 2026 redesign
+    // New filters for 2026 redesign - Zero Budget Developer focus
     {
       id: 'cli',
       label: e('CLI', 'CLI'),
@@ -150,8 +150,13 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
       predicate: (tool) => tool.surface === 'web',
     },
     {
+      id: 'api',
+      label: e('API', 'API'),
+      predicate: (tool) => tool.surface === 'api',
+    },
+    {
       id: 'self-host',
-      label: e('Self-hostable', 'セルフホスト'),
+      label: e('Self-host', 'セルフホスト'),
       predicate: (tool) => tool.access === 'self-host' || tool.access === 'open-source',
     },
     {
@@ -160,9 +165,19 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
       predicate: (tool) => tool.access === 'open-source' || tool.access === 'no-login' || tool.requiresSignup === false,
     },
     {
+      id: 'free-api',
+      label: e('Free API', '無料API'),
+      predicate: (tool) => tool.access === 'public-api' || tool.access === 'open-source',
+    },
+    {
       id: 'high-context',
       label: e('1M+ Context', '長文対応'),
       predicate: (_tool, h) => /1M|256K|400K/.test(h),
+    },
+    {
+      id: 'local-first',
+      label: e('Local First', 'ローカル優先'),
+      predicate: (tool) => tool.access === 'open-source' && tool.surface === 'cli',
     },
   ];
 }
