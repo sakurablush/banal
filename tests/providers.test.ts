@@ -25,7 +25,7 @@ import {
 const originalFetch = global.fetch;
 
 beforeEach(() => {
-  localStorage.clear();
+  sessionStorage.clear();
   vi.clearAllMocks();
   // @ts-ignore - test mock of global
   global.fetch = vi.fn();
@@ -86,7 +86,7 @@ describe('BanalProviderError', () => {
   });
 });
 
-describe('providers — key management (localStorage only, never sent anywhere)', () => {
+describe('providers — key management (sessionStorage only, never sent anywhere)', () => {
   it('stores, retrieves, and clears keys per provider', () => {
     storeApiKey('groq', 'gsk_test_123');
     expect(getStoredApiKey('groq')).toBe('gsk_test_123');
@@ -124,18 +124,18 @@ describe('providers — key management (localStorage only, never sent anywhere)'
     expect(getStoredApiKey('groq')).toBeNull();
   });
 
-  it('survives localStorage parse errors (private mode etc)', () => {
+  it('survives sessionStorage parse errors (private mode etc)', () => {
     // simulate bad data
-    localStorage.setItem('banal-api-keys-v1', '{bad json');
+    sessionStorage.setItem('banal-api-keys-v1', '{bad json');
     expect(getStoredApiKey('groq')).toBeNull();
     storeApiKey('groq', 'ok-key');
     expect(getStoredApiKey('groq')).toBe('ok-key');
   });
 
-  it('handles localStorage being undefined', () => {
-    const originalLocalStorage = global.localStorage;
-    // @ts-ignore - simulate environment without localStorage
-    delete global.localStorage;
+  it('handles sessionStorage being undefined', () => {
+    const originalLocalStorage = global.sessionStorage;
+    // @ts-ignore - simulate environment without sessionStorage
+    delete global.sessionStorage;
 
     // Should not throw
     storeApiKey('groq', 'test-key');
@@ -144,7 +144,7 @@ describe('providers — key management (localStorage only, never sent anywhere)'
     clearApiKey('groq');
 
     // Restore
-    global.localStorage = originalLocalStorage;
+    global.sessionStorage = originalLocalStorage;
   });
 });
 

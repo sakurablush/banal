@@ -1,10 +1,11 @@
 /**
  * Theme management — light/dark mode with system detection + manual override.
  *
- * Why this exists:
- * - Users have a right to read Banal without burning retinas at 2 AM.
- * - System preference is the default (respects OS-level choice).
- * - Manual override is persisted in localStorage so returning users keep their pick.
+ * Why sessionStorage instead of localStorage:
+ * - Users may be on shared/library computers where localStorage persists forever
+ * - Session-based storage automatically cleans up when tab closes
+ * - Still respects manual override within session for usability
+ * - Theme preference is UI state, not sensitive data — XSS risk is acceptable trade-off
  */
 
 export type ThemeMode = 'light' | 'dark';
@@ -13,7 +14,7 @@ const STORAGE_KEY = 'banal-theme';
 
 export function getStoredTheme(): ThemeMode | null {
   if (typeof window === 'undefined') return null;
-  const stored = localStorage.getItem(STORAGE_KEY);
+  const stored = sessionStorage.getItem(STORAGE_KEY);
   if (stored === 'light' || stored === 'dark') return stored;
   return null;
 }
@@ -42,9 +43,9 @@ export function setTheme(theme: ThemeMode): void {
   }
 
   try {
-    localStorage.setItem(STORAGE_KEY, theme);
+    sessionStorage.setItem(STORAGE_KEY, theme);
   } catch {
-    // localStorage may be unavailable (private mode, SSR)
+    // sessionStorage may be unavailable (private mode, SSR)
   }
 }
 
@@ -57,7 +58,7 @@ export function initTheme(): void {
   // Listen for system changes only when user has NOT manually overridden
   const mq = window.matchMedia('(prefers-color-scheme: dark)');
   const handler = (e: MediaQueryListEvent) => {
-    if (!localStorage.getItem(STORAGE_KEY)) {
+    if (!sessionStorage.getItem(STORAGE_KEY)) {
       setTheme(e.matches ? 'dark' : 'light');
     }
   };

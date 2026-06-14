@@ -32,7 +32,7 @@ export interface ChatMessage {
 export interface SendOptions {
   /** 'auto' (smart default) or explicit provider. */
   provider?: ProviderOrAuto;
-  /** Optional per-call override; falls back to stored keys in localStorage. */
+  /** Optional per-call override; falls back to stored keys in sessionStorage. */
   apiKey?: string;
   /** Optional model override. */
   model?: string;
@@ -110,9 +110,9 @@ const STORAGE_KEY = 'banal-api-keys-v1';
 type StoredKeys = Partial<Record<Provider, string>>;
 
 function loadKeys(): StoredKeys {
-  if (typeof localStorage === 'undefined') return {};
+  if (typeof sessionStorage === 'undefined') return {};
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = sessionStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : {};
   } catch {
     return {};
@@ -120,9 +120,9 @@ function loadKeys(): StoredKeys {
 }
 
 function saveKeys(keys: StoredKeys): void {
-  if (typeof localStorage === 'undefined') return;
+  if (typeof sessionStorage === 'undefined') return;
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(keys));
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(keys));
   } catch {
     // quota or private mode — graceful, user can paste key per session
   }
