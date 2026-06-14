@@ -1919,15 +1919,6 @@
   color: var(--text-primary);
 }
 
-[data-theme='light'] .hero-section::before {
-  background: radial-gradient(
-    circle,
-    rgba(124, 58, 237, 0.08) 0%,
-    rgba(217, 70, 239, 0.03) 35%,
-    transparent 72%
-  ) !important;
-}
-
 [data-theme='light'] .eyebrow-void {
   color: var(--light-violet) !important;
   text-shadow: none !important;
@@ -1979,14 +1970,6 @@
   background: rgba(255, 255, 255, 0.72) !important;
   border-color: var(--light-border) !important;
   color: var(--light-text-muted) !important;
-}
-
-[data-theme='light'] .category-pill-void::before {
-  background: radial-gradient(
-    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(124, 58, 237, 0.08) 0%,
-    transparent 72%
-  ) !important;
 }
 
 [data-theme='light'] .category-pill-void:hover {
