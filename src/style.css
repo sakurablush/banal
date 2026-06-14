@@ -1800,25 +1800,8 @@
 /* Base styles for hero section and key components (used in HTML) */
 .hero-section {
   position: relative;
-  padding: 4rem 0;
+  padding: clamp(2rem, 6vw, 3rem) 0;
   background: var(--void);
-}
-
-.hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(
-    circle at 50% 0%,
-    var(--glow-violet),
-    var(--glow-fuchsia),
-    transparent 70%
-  );
-  pointer-events: none;
-  z-index: 0;
 }
 
 .gradient-neon {
