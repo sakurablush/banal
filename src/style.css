@@ -463,6 +463,16 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
+.btn-header.active {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: rgba(168, 85, 247, 0.5);
+  color: var(--neon-violet);
+}
+
+.btn-header:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 [data-theme="light"] .btn-header {
   background: rgba(0, 0, 0, 0.05);
   border-color: rgba(0, 0, 0, 0.1);
