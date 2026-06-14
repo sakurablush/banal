@@ -21,6 +21,8 @@ interface FreeModelProvider {
   getKeyUrl: string;
   termsUrl: string;
   description: string;
+  lastVerified?: string; // ISO date when limits/situation last verified
+  keyVisibilityNote?: string; // Security note about key handling (e.g., Gemini puts key in URL)
 }
 
 interface OpenSourceModel {
@@ -45,6 +47,7 @@ const providers: FreeModelProvider[] = [
     getKeyUrl: 'https://oai.endpoints.kepler.ai.cloud.ovh.net',
     termsUrl: 'https://www.ovhcloud.com/en/terms-and-conditions/',
     description: 'Truly anonymous API - no signup, no key needed. Perfect for quick tests.',
+    lastVerified: '2025-05-10',
   },
   {
     id: 'groq',
@@ -56,6 +59,7 @@ const providers: FreeModelProvider[] = [
     getKeyUrl: 'https://console.groq.com/keys',
     termsUrl: 'https://console.groq.com/docs/rate-limits',
     description: 'Fastest inference available. Excellent for real-time applications.',
+    lastVerified: '2025-05-28',
   },
   {
     id: 'gemini',
@@ -67,6 +71,8 @@ const providers: FreeModelProvider[] = [
     getKeyUrl: 'https://aistudio.google.com/app/apikey',
     termsUrl: 'https://ai.google.dev/gemini-api/docs/rate-limits',
     description: 'High-quality models from Google. Great for complex tasks.',
+    lastVerified: '2025-06-01',
+    keyVisibilityNote: 'Gemini puts your key in the URL query string (?key=...). More visible in browser history/proxies than header auth. Consider Groq for better privacy on shared devices.',
   },
   {
     id: 'hf',
@@ -78,6 +84,7 @@ const providers: FreeModelProvider[] = [
     getKeyUrl: 'https://huggingface.co/settings/tokens',
     termsUrl: 'https://huggingface.co/pricing',
     description: 'Access to thousands of open-source models. Great for experimentation.',
+    lastVerified: '2025-06-08',
   },
   {
     id: 'mistral',
@@ -89,6 +96,7 @@ const providers: FreeModelProvider[] = [
     getKeyUrl: 'https://console.mistral.ai/',
     termsUrl: 'https://docs.mistral.ai/getting-started/pricing/',
     description: 'European AI leader. Excellent for coding and multilingual tasks.',
+    lastVerified: '2025-05-15',
   },
   {
     id: 'deepseek',
@@ -100,6 +108,7 @@ const providers: FreeModelProvider[] = [
     getKeyUrl: 'https://platform.deepseek.com/',
     termsUrl: 'https://api-docs.deepseek.com/',
     description: 'Excellent reasoning capabilities. Very affordable after free credits.',
+    lastVerified: '2025-05-20',
   },
   {
     id: 'together',
@@ -111,6 +120,7 @@ const providers: FreeModelProvider[] = [
     getKeyUrl: 'https://api.together.xyz/',
     termsUrl: 'https://docs.together.ai/docs/pricing',
     description: 'Access to largest open-source models. Great for high-quality outputs.',
+    lastVerified: '2025-04-22',
   },
   {
     id: 'fireworks',
@@ -122,6 +132,7 @@ const providers: FreeModelProvider[] = [
     getKeyUrl: 'https://fireworks.ai/',
     termsUrl: 'https://docs.fireworks.ai/getting-started/pricing',
     description: 'Fast and reliable inference platform. Good for production use.',
+    lastVerified: '2025-04-25',
   },
 ];
 
@@ -402,6 +413,22 @@ function createProviderCard(provider: FreeModelProvider): HTMLElement {
   advantagesDiv.appendChild(advantagesLabel);
   advantagesDiv.appendChild(advantagesList);
 
+  // Last verified
+  let verifiedNote: HTMLElement | null = null;
+  if (provider.lastVerified) {
+    verifiedNote = document.createElement('div');
+    verifiedNote.className = 'text-xs text-white/40 mb-3';
+    verifiedNote.textContent = `Last verified: ${provider.lastVerified}`;
+  }
+
+  // Key visibility warning (security)
+  let keyWarning: HTMLElement | null = null;
+  if (provider.keyVisibilityNote) {
+    keyWarning = document.createElement('div');
+    keyWarning.className = 'text-xs text-amber-400 bg-amber-500/10 p-2 rounded mb-3';
+    keyWarning.textContent = provider.keyVisibilityNote;
+  }
+
   // Links
   const linksDiv = document.createElement('div');
   linksDiv.className = 'flex gap-3 mt-4';
@@ -431,6 +458,8 @@ function createProviderCard(provider: FreeModelProvider): HTMLElement {
   card.appendChild(description);
   card.appendChild(modelsDiv);
   card.appendChild(limitsDiv);
+  if (verifiedNote) card.appendChild(verifiedNote);
+  if (keyWarning) card.appendChild(keyWarning);
   card.appendChild(advantagesDiv);
   card.appendChild(linksDiv);
 
