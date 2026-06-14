@@ -479,7 +479,7 @@
   padding: 0;
 }
 
-<!-- Theme toggle button (legacy compatibility — class removed from HTML but kept for safety) -->
+/* Theme toggle button (legacy compatibility — class removed from HTML but kept for safety) */
 .theme-toggle-btn {
   display: inline-flex;
   align-items: center;

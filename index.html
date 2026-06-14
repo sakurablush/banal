@@ -8,6 +8,8 @@
       content="The world's largest directory of verified free tools for developers — 227+ tools (128 AI + 99 developer tools), no login required. Chat, image, video, coding, PDF, backend, automation. Free forever."
     />
     <meta name="theme-color" content="#06060b" />
+    <!-- CSP for security hardening - protects against XSS in forks and inline injection -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.groq.com https://generativelanguage.googleapis.com https://router.huggingface.co https://oai.endpoints.kepler.ai.cloud.ovh.net;">
     <title>Banal — 227+ Free Tools for Developers | AI + Dev Tools | Verified</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -43,6 +45,8 @@
         <div class="hidden sm:flex gap-6 text-sm">
           <a href="#ai-tools" class="text-white/60 hover:text-white transition-colors" data-i18n="nav.aiTools">AI Tools</a>
           <a href="#dev-tools" class="text-white/60 hover:text-white transition-colors" data-i18n="nav.devTools">Dev Tools</a>
+          <a href="#quick-start" class="text-white/60 hover:text-white transition-colors" data-i18n="nav.quickStart">Quick Start</a>
+          <a href="#free-models" class="text-white/60 hover:text-white transition-colors" data-i18n="nav.freeModels">Free Models</a>
           <a href="#prompt-templates" class="text-white/60 hover:text-white transition-colors"
             data-i18n="nav.promptTemplates">Prompt Templates</a
           >
@@ -50,6 +54,13 @@
             data-i18n="nav.playground">API Playground</a
           >
           <a href="#articles" class="text-white/60 hover:text-white transition-colors" data-i18n="nav.articles">Articles</a>
+          <button
+            id="open-chat-modal"
+            class="text-white/60 hover:text-white transition-colors bg-transparent border-none cursor-pointer font-inherit text-sm"
+            data-i18n="nav.chat"
+          >
+            Chat
+          </button>
         </div>
         <div class="flex items-center gap-3">
 <button
@@ -82,9 +93,18 @@
       <div class="sm:hidden border-t border-white/5 px-4 py-2 flex gap-4 text-xs overflow-x-auto">
         <a href="#ai-tools" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.aiTools">AI Tools</a>
         <a href="#dev-tools" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.devTools">Dev Tools</a>
+        <a href="#quick-start" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.quickStart">Quick Start</a>
+        <a href="#free-models" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.freeModels">Free Models</a>
         <a href="#prompt-templates" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.promptTemplates">Prompt Templates</a>
         <a href="#playground" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.playground">APIs</a>
         <a href="#articles" class="text-white/60 hover:text-white whitespace-nowrap" data-i18n="nav.articles">Articles</a>
+        <button
+          id="open-chat-modal-mobile"
+          class="text-white/60 hover:text-white whitespace-nowrap bg-transparent border-none cursor-pointer font-inherit"
+          data-i18n="nav.chat"
+        >
+          Chat
+        </button>
       </div>
     </header>
 
@@ -192,11 +212,63 @@
             <div class="inline-block px-8 py-4 rounded-2xl glass-card">
               Loading 99+ verified developer tools...
             </div>
-          </div>
-        </div>
-      </section>
+</div>
+         </div>
+       </section>
 
-      <!-- PROMPT TEMPLATES -->
+       <!-- QUICK START -->
+       <section id="quick-start" class="py-8 sm:py-12 border-t border-white/5">
+         <div class="max-w-7xl mx-auto px-4 sm:px-6">
+           <div class="text-center mb-12">
+             <div class="eyebrow-void" data-i18n="section.quickStart.eyebrow">QUICK START</div>
+             <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+               <span class="gradient-neon" data-i18n="section.quickStart.title1">9 prompt templates.</span>
+               <span class="text-white/80" data-i18n="section.quickStart.title2">Copy, fill, use.</span>
+             </h2>
+             <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base" data-i18n="section.quickStart.desc">
+               Popular templates to get started immediately in any free AI chat.
+             </p>
+           </div>
+
+           <div id="quickstart-root">
+             <div class="text-center py-12 text-white/20 text-sm">
+               <div class="inline-block px-6 py-3 rounded-xl glass-card">Loading quick start templates...</div>
+             </div>
+           </div>
+         </div>
+       </section>
+
+       <!-- FREE MODELS -->
+       <section id="free-models" class="py-8 sm:py-12 border-t border-white/5 bg-gradient-to-b from-transparent via-violet-950/5 to-transparent">
+         <div class="max-w-7xl mx-auto px-4 sm:px-6">
+           <div class="text-center mb-12">
+             <div class="eyebrow-void" data-i18n="section.freeModels.eyebrow">FREE MODELS</div>
+             <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+               <span class="gradient-neon" data-i18n="section.freeModels.title1">Free API keys.</span>
+               <span class="text-white/80" data-i18n="section.freeModels.title2">Open source.</span>
+             </h2>
+             <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base" data-i18n="section.freeModels.desc">
+               Get free API access or run models locally. No credit card. No subscription.
+             </p>
+           </div>
+
+           <h3 class="text-xl font-bold text-white mb-4" data-i18n="section.freeModels.apiKeys">Free API Keys</h3>
+           <div id="free-models-root">
+             <div class="text-center py-12 text-white/20 text-sm">
+               <div class="inline-block px-6 py-3 rounded-xl glass-card">Loading free providers...</div>
+             </div>
+           </div>
+
+           <h3 class="text-xl font-bold text-white mb-4 mt-12" data-i18n="section.freeModels.osModels">Open Source Models</h3>
+           <div id="open-source-models-root">
+             <div class="text-center py-12 text-white/20 text-sm">
+               <div class="inline-block px-6 py-3 rounded-xl glass-card">Loading open source models...</div>
+             </div>
+           </div>
+         </div>
+       </section>
+
+       <!-- PROMPT TEMPLATES -->
       <section
         id="prompt-templates"
         class="py-8 sm:py-12 border-t border-white/5 bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
@@ -499,6 +571,17 @@ npm run build</code></pre>
         </div>
       </div>
     </footer>
+
+    <!-- CHAT MODAL -->
+    <div id="chat-modal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" aria-hidden="true" role="dialog" aria-labelledby="chat-modal-title">
+      <div class="bg-[#06060b] border border-white/10 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div class="flex items-center justify-between p-4 border-b border-white/10">
+          <h2 id="chat-modal-title" class="text-xl font-bold text-white">Chat with AI</h2>
+          <button id="close-chat-modal" class="text-white/60 hover:text-white text-2xl leading-none" aria-label="Close chat">×</button>
+        </div>
+        <div id="chat-modal-content" class="flex-1 overflow-hidden"></div>
+      </div>
+    </div>
 
     <script type="module" src="/src/main.ts"></script>
   </body>

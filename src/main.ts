@@ -15,6 +15,9 @@ import { initDirectory } from './directory';
 import { ParticleSystem } from './lib/particle-system';
 import { renderPlayground } from './api-playground';
 import { renderPromptTemplatesStandalone } from './prompt-templates-standalone';
+import { initQuickStart } from './quickstart';
+import { initFreeModels } from './free-models';
+import { initChatModal } from './chat-modal';
 
 // Boot theme first (before any rendering so CSS variables are correct)
 initTheme();
@@ -87,6 +90,27 @@ try {
   }
 } catch (error) {
   console.error('API Playground failed to initialize:', error);
+}
+
+// Quick Start — popular prompt templates to get started immediately
+try {
+  initQuickStart();
+} catch (error) {
+  console.error('Quick Start section failed to initialize:', error);
+}
+
+// Free Models — API keys and open source models for zero-cost AI
+try {
+  initFreeModels();
+} catch (error) {
+  console.error('Free Models section failed to initialize:', error);
+}
+
+// Chat Modal — opens the real chat interface in a modal dialog
+try {
+  initChatModal();
+} catch (error) {
+  console.error('Chat modal failed to initialize:', error);
 }
 
 // Extremely small core — everything else lives in focused, tested modules.
