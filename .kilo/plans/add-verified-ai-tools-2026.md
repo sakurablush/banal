@@ -12,6 +12,7 @@
 Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy **sprawdzone, pewne narzędzia AI**, które działają w 2026 roku. Tylko pewniaki - żadnych eksperymentalnych bubli!
 
 ### Kryteria wyboru:
+
 - ✅ **Sprawdzone** - działają w produkcji, mają dużą bazę użytkowników
 - ✅ **Darmowe** - mają użyteczny free tier (nie tylko trial)
 - ✅ **Transparentne** - jasne limity, brak ukrytych kosztów
@@ -24,6 +25,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 ### 2.1 Międzynarodowe Pewniaki (AI Chat & Assistants)
 
 #### 1. **ChatGPT Free** (OpenAI)
+
 - **URL:** https://chat.openai.com/
 - **Access:** no-login (wymaga konta, ale bez credit card)
 - **Model:** GPT-4o mini (unlimited), GPT-4o (limited daily)
@@ -34,6 +36,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **MAU:** 300M+ (szacunkowo)
 
 #### 2. **Claude Free** (Anthropic)
+
 - **URL:** https://claude.ai/
 - **Access:** no-login (wymaga konta, ale bez credit card)
 - **Model:** Claude Sonnet 4.6
@@ -44,6 +47,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **MAU:** 50M+ (szacunkowo)
 
 #### 3. **Gemini Free** (Google)
+
 - **URL:** https://gemini.google.com/
 - **Access:** no-login (wymaga konta Google, ale bez credit card)
 - **Model:** Gemini 3.1 Flash
@@ -54,6 +58,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **MAU:** 200M+ (szacunkowo)
 
 #### 4. **Perplexity Free**
+
 - **URL:** https://www.perplexity.ai/
 - **Access:** no-login (wymaga konta, ale bez credit card)
 - **Model:** Sonar (unlimited basic), Pro models (5 searches/day)
@@ -64,6 +69,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **MAU:** 100M+ (szacunkowo)
 
 #### 5. **Free.ai**
+
 - **URL:** https://free.ai/
 - **Access:** no-login (anonymous 10K tokens/day) lub free account (30K tokens/day)
 - **Model:** Qwen 2.5 72B (comparable to GPT-4), FLUX (images), CogVideoX (video), Kokoro (TTS)
@@ -76,6 +82,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 ### 2.2 Chińskie Pewniaki (AI Chat & Search)
 
 #### 6. **Doubao** (ByteDance) - 豆包
+
 - **URL:** https://doubao.com/
 - **Access:** no-login (wymaga chińskiego phone number)
 - **Model:** Doubao (proprietary)
@@ -86,6 +93,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **MAU:** 260M (Q1 2026)
 
 #### 7. **ERNIE Bot** (Baidu) - 文心一言
+
 - **URL:** https://yiyan.baidu.com/
 - **Access:** no-login (wymaga konta Baidu)
 - **Model:** ERNIE 4.0
@@ -96,6 +104,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **MAU:** 220M (Q1 2026)
 
 #### 8. **Quark** (Alibaba) - 夸克
+
 - **URL:** https://quark.sm.cn/
 - **Access:** no-login (wymaga konta Alibaba)
 - **Model:** Qwen 2.5 Max
@@ -106,6 +115,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **MAU:** 180M (Q1 2026)
 
 #### 9. **Yuanbao** (Tencent) - 元宝
+
 - **URL:** https://yuanbao.tencent.com/
 - **Access:** no-login (wymaga konta Tencent/WeChat)
 - **Model:** Hunyuan
@@ -116,6 +126,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **MAU:** 150M (Q1 2026)
 
 #### 10. **Kimi** (Moonshot AI)
+
 - **URL:** https://kimi.moonshot.cn/
 - **Access:** no-login (wymaga chińskiego phone number)
 - **Model:** Kimi K2
@@ -128,6 +139,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 ### 2.3 Chińskie Cloud Platforms (Free API Credits)
 
 #### 11. **Volcano Engine** (ByteDance) - 火山引擎
+
 - **URL:** https://www.volcengine.com/
 - **Access:** free-key (wymaga real-name auth)
 - **Model:** Doubao, DeepSeek
@@ -138,6 +150,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **Use case:** High-frequency API calls
 
 #### 12. **Alibaba Cloud Bailian** (Alibaba) - 阿里云百炼
+
 - **URL:** https://bailian.console.aliyun.com/
 - **Access:** free-key (wymaga real-name auth)
 - **Model:** Qwen3.5, GLM-5
@@ -148,6 +161,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **Use case:** Multi-model testing
 
 #### 13. **Baidu Qianfan** (Baidu) - 百度千帆
+
 - **URL:** https://cloud.baidu.com/product/qianfan
 - **Access:** free-key (wymaga real-name auth)
 - **Model:** ERNIE, DeepSeek
@@ -158,6 +172,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **Use case:** Baidu ecosystem development
 
 #### 14. **Tencent HunYuan** (Tencent) - 腾讯混元
+
 - **URL:** https://cloud.tencent.com/product/hunyuan
 - **Access:** free-key (wymaga real-name auth)
 - **Model:** HunYuan-Lite
@@ -170,6 +185,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 ### 2.4 AI Coding Assistants (Pewniaki)
 
 #### 15. **Gemini CLI** (Google)
+
 - **URL:** https://github.com/google-gemini/gemini-cli
 - **Access:** no-login (wymaga konta Google)
 - **Model:** Gemini 3.1 Pro
@@ -180,6 +196,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **GitHub Stars:** 50K+ (szacunkowo)
 
 #### 16. **CoStrict**
+
 - **URL:** https://costrict.ai/
 - **Access:** open-source (BYOK)
 - **Model:** Multi-model (Claude, GPT, Gemini, GLM, MiniMax, etc.)
@@ -190,6 +207,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **GitHub Stars:** 3,899
 
 #### 17. **MiMoCode** (Xiaomi)
+
 - **URL:** https://github.com/XiaomiMiMo/MiMo-Code
 - **Access:** open-source (BYOK) lub MiMo Auto (free for limited time)
 - **Model:** Multi-model (MiMo, Claude, GPT, etc.)
@@ -200,6 +218,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 - **GitHub Stars:** 3,879
 
 #### 18. **korgex**
+
 - **URL:** https://github.com/New1Direction/korgex
 - **Access:** open-source (BYOK)
 - **Model:** Multi-model (Claude, GPT, Gemini, Grok, local via Ollama)
@@ -216,6 +235,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 ### 3.1 Faza 1: Dodanie narzędzi do zero-key-tools.ts
 
 #### Krok 1.1: Dodanie międzynarodowych pewniaków (5 narzędzi)
+
 ```typescript
 {
   id: 'chatgpt-free',
@@ -285,6 +305,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 ```
 
 #### Krok 1.2: Dodanie chińskich pewniaków (5 narzędzi)
+
 ```typescript
 {
   id: 'doubao',
@@ -354,6 +375,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 ```
 
 #### Krok 1.3: Dodanie chińskich cloud platforms (4 narzędzia)
+
 ```typescript
 {
   id: 'volcano-engine',
@@ -410,6 +432,7 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 ```
 
 #### Krok 1.4: Dodanie AI coding assistants (4 narzędzia)
+
 ```typescript
 {
   id: 'gemini-cli',
@@ -468,56 +491,62 @@ Po przeszukaniu internetu (źródła chińskie i międzynarodowe) znaleźliśmy 
 ### 3.2 Faza 2: Aktualizacja README.md
 
 #### Krok 2.1: Dodanie sekcji "International Verified Tools"
+
 ```markdown
 ### International Verified Tools
 
-| Tool | Description | Type | Access |
-| ---- | ----------- | ---- | ------ |
-| [ChatGPT Free](https://chat.openai.com/) | GPT-4o mini unlimited, GPT-4o limited | 🌐 WEB | No login |
-| [Claude Free](https://claude.ai/) | Sonnet 4.6, highest quality | 🌐 WEB | No login |
-| [Gemini Free](https://gemini.google.com/) | Gemini 3.1 Flash, unlimited | 🌐 WEB | No login |
-| [Perplexity Free](https://www.perplexity.ai/) | Cited sources, real-time research | 🌐 WEB | No login |
-| [Free.ai](https://free.ai/) | 400+ tools, 30K tokens/day | 🌐 WEB | No login |
+| Tool                                          | Description                           | Type   | Access   |
+| --------------------------------------------- | ------------------------------------- | ------ | -------- |
+| [ChatGPT Free](https://chat.openai.com/)      | GPT-4o mini unlimited, GPT-4o limited | 🌐 WEB | No login |
+| [Claude Free](https://claude.ai/)             | Sonnet 4.6, highest quality           | 🌐 WEB | No login |
+| [Gemini Free](https://gemini.google.com/)     | Gemini 3.1 Flash, unlimited           | 🌐 WEB | No login |
+| [Perplexity Free](https://www.perplexity.ai/) | Cited sources, real-time research     | 🌐 WEB | No login |
+| [Free.ai](https://free.ai/)                   | 400+ tools, 30K tokens/day            | 🌐 WEB | No login |
 ```
 
 #### Krok 2.2: Dodanie sekcji "Chinese Verified Tools"
+
 ```markdown
 ### Chinese Verified Tools (中国验证工具)
 
-| Tool | Description | Type | Access |
-| ---- | ----------- | ---- | ------ |
-| [Doubao (豆包)](https://doubao.com/) | 260M MAU, ByteDance | 🌐 WEB | No login |
-| [ERNIE Bot (文心一言)](https://yiyan.baidu.com/) | 220M MAU, Baidu | 🌐 WEB | No login |
-| [Quark (夸克)](https://quark.sm.cn/) | 180M MAU, 256K context | 🌐 WEB | No login |
-| [Yuanbao (元宝)](https://yuanbao.tencent.com/) | 150M MAU, WeChat | 🌐 WEB | No login |
-| [Kimi](https://kimi.moonshot.cn/) | 90M MAU, 2M context | 🌐 WEB | No login |
+| Tool                                             | Description            | Type   | Access   |
+| ------------------------------------------------ | ---------------------- | ------ | -------- |
+| [Doubao (豆包)](https://doubao.com/)             | 260M MAU, ByteDance    | 🌐 WEB | No login |
+| [ERNIE Bot (文心一言)](https://yiyan.baidu.com/) | 220M MAU, Baidu        | 🌐 WEB | No login |
+| [Quark (夸克)](https://quark.sm.cn/)             | 180M MAU, 256K context | 🌐 WEB | No login |
+| [Yuanbao (元宝)](https://yuanbao.tencent.com/)   | 150M MAU, WeChat       | 🌐 WEB | No login |
+| [Kimi](https://kimi.moonshot.cn/)                | 90M MAU, 2M context    | 🌐 WEB | No login |
 ```
 
 #### Krok 2.3: Dodanie sekcji "Chinese Cloud Platforms (Free API Credits)"
+
 ```markdown
 ### Chinese Cloud Platforms (Free API Credits)
 
-| Platform | Free Quota | Valid Period | Models |
-| -------- | ---------- | ------------ | ------ |
-| [Volcano Engine (火山引擎)](https://www.volcengine.com/) | 2M tokens/day | Permanent | Doubao, DeepSeek |
-| [Alibaba Cloud Bailian (阿里云百炼)](https://bailian.console.aliyun.com/) | 1M tokens | Permanent | Qwen3.5, GLM-5 |
-| [Baidu Qianfan (百度千帆)](https://cloud.baidu.com/product/qianfan) | 1M tokens/model | 3 months | ERNIE, DeepSeek |
-| [Tencent HunYuan (腾讯混元)](https://cloud.tencent.com/product/hunyuan) | 1M tokens/year | 12 months | HunYuan-Lite |
+| Platform                                                                  | Free Quota      | Valid Period | Models           |
+| ------------------------------------------------------------------------- | --------------- | ------------ | ---------------- |
+| [Volcano Engine (火山引擎)](https://www.volcengine.com/)                  | 2M tokens/day   | Permanent    | Doubao, DeepSeek |
+| [Alibaba Cloud Bailian (阿里云百炼)](https://bailian.console.aliyun.com/) | 1M tokens       | Permanent    | Qwen3.5, GLM-5   |
+| [Baidu Qianfan (百度千帆)](https://cloud.baidu.com/product/qianfan)       | 1M tokens/model | 3 months     | ERNIE, DeepSeek  |
+| [Tencent HunYuan (腾讯混元)](https://cloud.tencent.com/product/hunyuan)   | 1M tokens/year  | 12 months    | HunYuan-Lite     |
 ```
 
 ### 3.3 Faza 3: Testy i walidacja
 
 #### Krok 3.1: Uruchomienie testów
+
 ```bash
 npm test
 ```
 
 #### Krok 3.2: Uruchomienie buildu
+
 ```bash
 npm run build
 ```
 
 #### Krok 3.3: Weryfikacja count
+
 - AI Tools: 128 + 14 = 142+
 - Developer Tools: 99+
 - **Total: 241+ tools**
@@ -547,12 +576,14 @@ All tests passing (235/235)."
 ### 4.1 Statystyki
 
 **Nowe narzędzia:** 14
+
 - Międzynarodowe pewniaki: 5
 - Chińskie pewniaki: 5
 - Chińskie cloud platforms: 4
 - AI coding assistants: 4
 
 **Total tools po dodaniu:** 241+
+
 - AI Tools: 142+
 - Developer Tools: 99+
 

@@ -2,7 +2,7 @@
  * Shared types for the local-first API Playground.
  */
 
-export type PlaygroundProviderId = 'groq' | 'huggingface' | 'ovh' | 'open-meteo';
+export type PlaygroundProviderId = 'groq' | 'gemini' | 'huggingface' | 'ovh' | 'open-meteo';
 export type PlaygroundCategory = 'chat' | 'data' | 'image' | 'utility';
 export type PlaygroundAuthMode = 'none' | 'required' | 'optional';
 export type PlaygroundHttpMethod = 'GET' | 'POST';

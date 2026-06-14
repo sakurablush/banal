@@ -61,9 +61,9 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
   it('clicking a filter chip filters the prompt cards', () => {
     const el = setup();
     const chips = Array.from(el.querySelectorAll('.quick-filter-chip')) as HTMLElement[];
-    
+
     // Click on "Career & Money" filter
-    const careerChip = chips.find(c => c.textContent?.includes('Career'));
+    const careerChip = chips.find((c) => c.textContent?.includes('Career'));
     expect(careerChip).toBeTruthy();
     careerChip!.click();
 
@@ -213,7 +213,9 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     expect(accordion).toBeTruthy();
 
     // Press Escape (with bubbles and cancelable for proper event handling)
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    document.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true })
+    );
     vi.advanceTimersByTime(100);
 
     // Accordion should be closed

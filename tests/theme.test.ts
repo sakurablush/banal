@@ -3,7 +3,7 @@
  * Targets 100% coverage (lines, functions, branches, statements).
  * Tests light/dark mode logic, system detection, sessionStorage persistence, and icon toggling.
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   getStoredTheme,
   getSystemTheme,
@@ -40,14 +40,14 @@ describe('theme — getStoredTheme (sessionStorage retrieval)', () => {
 describe('theme — getSystemTheme (OS preference detection)', () => {
   it('returns dark when system prefers dark', () => {
     const originalMatchMedia = window.matchMedia;
-    window.matchMedia = vi.fn().mockImplementation((q) => ({ matches: true }));
+    window.matchMedia = vi.fn().mockImplementation(() => ({ matches: true }));
     expect(getSystemTheme()).toBe('dark');
     window.matchMedia = originalMatchMedia;
   });
 
   it('returns light when system prefers light', () => {
     const originalMatchMedia = window.matchMedia;
-    window.matchMedia = vi.fn().mockImplementation((q) => ({ matches: false }));
+    window.matchMedia = vi.fn().mockImplementation(() => ({ matches: false }));
     expect(getSystemTheme()).toBe('light');
     window.matchMedia = originalMatchMedia;
   });
@@ -77,7 +77,9 @@ describe('theme — setTheme (apply theme + icon toggling)', () => {
   beforeEach(() => {
     sessionStorage.clear();
     document.documentElement.removeAttribute('data-theme');
-    document.body.querySelectorAll('.theme-icon-moon, .theme-icon-sun').forEach(el => el.remove());
+    document.body
+      .querySelectorAll('.theme-icon-moon, .theme-icon-sun')
+      .forEach((el) => el.remove());
   });
 
   it('sets data-theme attribute on documentElement', () => {
@@ -144,7 +146,7 @@ describe('theme — initTheme (system listener setup)', () => {
 
   it('sets initial theme from system preference when none stored', () => {
     const originalMatchMedia = window.matchMedia;
-    window.matchMedia = vi.fn().mockImplementation((q) => ({ matches: false }));
+    window.matchMedia = vi.fn().mockImplementation(() => ({ matches: false }));
     initTheme();
     expect(['light', 'dark']).toContain(document.documentElement.getAttribute('data-theme'));
     window.matchMedia = originalMatchMedia;

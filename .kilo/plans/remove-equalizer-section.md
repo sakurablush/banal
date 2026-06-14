@@ -3,6 +3,7 @@
 ## Status: ✅ GOTOWY DO IMPLEMENTACJI
 
 ## Cel
+
 Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick starty, chat) w bardziej logiczne miejsca. Dodać do DIRECTORY sekcję z modelami AI oferującymi darmowe API keys.
 
 ---
@@ -10,6 +11,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 ## Faza 1: Usunięcie sekcji THE EQUALIZER z index.html
 
 ### Zmiany w `index.html`:
+
 1. **Usunąć całą sekcję THE EQUALIZER** (linie ~169-193)
    - Usunąć `<section id="experience">` z całą zawartością
    - Zachować ID `experience` dla przyszłego użycia w modalu
@@ -19,6 +21,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    - Usunąć link do `#experience` z mobile nav (linia ~77)
 
 ### Walidacja:
+
 - [ ] Sekcja THE EQUALIZER usunięta
 - [ ] Brak błędów w konsoli
 - [ ] Nawigacja działa poprawnie
@@ -28,7 +31,9 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 ## Faza 2: Stworzenie nowej sekcji "Quick Start" między DIRECTORY a SUPERPOWERS
 
 ### Zmiany w `index.html`:
+
 1. **Dodać nową sekcję po sekcji DIRECTORY** (po linii ~167)
+
    ```html
    <section id="quickstart" class="py-8 sm:py-12 border-t border-white/5">
      <div class="max-w-7xl mx-auto px-4 sm:px-6">
@@ -56,7 +61,9 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    - Dodać `<a href="#quickstart">Quick Start</a>` do desktop i mobile nav
 
 ### Zmiany w `src/main.ts`:
+
 1. **Importować nową funkcję**
+
    ```typescript
    import { renderQuickStart } from './quickstart';
    ```
@@ -67,6 +74,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    ```
 
 ### Nowy plik `src/quickstart.ts`:
+
 1. **Stworzyć moduł quick start**
    - Renderować 5 popularnych superpowers jako karty
    - Użyć istniejącej logiki z `chat.ts` (funkcja `renderQuickStarts`)
@@ -74,6 +82,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    - Po kliknięciu: otworzyć modal z formularzem (jak w superpowers)
 
 ### Walidacja:
+
 - [ ] Nowa sekcja widoczna między DIRECTORY a SUPERPOWERS
 - [ ] 5 kart quick start renderuje się poprawnie
 - [ ] Przyciski "Copy Template" działają
@@ -84,9 +93,14 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 ## Faza 3: Dodanie sekcji "Free AI Models" do DIRECTORY
 
 ### Zmiany w `index.html`:
+
 1. **Dodać nową sekcję po sekcji DIRECTORY** (przed Quick Start)
+
    ```html
-   <section id="free-models" class="py-8 sm:py-12 border-t border-white/5 bg-gradient-to-b from-transparent via-violet-950/5 to-transparent">
+   <section
+     id="free-models"
+     class="py-8 sm:py-12 border-t border-white/5 bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
+   >
      <div class="max-w-7xl mx-auto px-4 sm:px-6">
        <div class="text-center mb-10">
          <div class="eyebrow-void">FREE AI MODELS</div>
@@ -112,6 +126,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    - Dodać `<a href="#free-models">Free Models</a>` do desktop i mobile nav
 
 ### Nowy plik `src/free-models.ts`:
+
 1. **Stworzyć moduł free models**
    - Renderować karty z dostawcami darmowych API
    - Każda karta zawiera:
@@ -187,6 +202,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    - Responsywny grid (1-2-3 kolumny)
 
 ### Walidacja:
+
 - [ ] Nowa sekcja widoczna po DIRECTORY
 - [ ] Wszystkie karty renderują się poprawnie
 - [ ] Linki do warunków działają
@@ -198,7 +214,9 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 ## Faza 4: Chat jako modal
 
 ### Zmiany w `index.html`:
+
 1. **Dodać przycisk "Chat" w headerze**
+
    ```html
    <button id="open-chat-modal" class="text-white/60 hover:text-white transition-colors">
      Chat
@@ -208,7 +226,9 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 2. **Dodać modal chat na końcu body**
    ```html
    <div id="chat-modal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm">
-     <div class="absolute inset-4 sm:inset-8 lg:inset-16 bg-[#06060b] rounded-2xl border border-white/10 overflow-hidden flex flex-col">
+     <div
+       class="absolute inset-4 sm:inset-8 lg:inset-16 bg-[#06060b] rounded-2xl border border-white/10 overflow-hidden flex flex-col"
+     >
        <div class="flex items-center justify-between p-4 border-b border-white/10">
          <h3 class="text-xl font-bold">Chat with AI</h3>
          <button id="close-chat-modal" class="text-white/60 hover:text-white text-2xl">×</button>
@@ -221,6 +241,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    ```
 
 ### Nowy plik `src/chat-modal.ts`:
+
 1. **Stworzyć moduł chat modal**
    - Obsługiwać otwieranie/zamykanie modala
    - Renderować chat UI wewnątrz modala
@@ -228,22 +249,23 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    - Zachować wszystkie funkcje: quick starts, superpowers, export, keys modal
 
 2. **Logika otwierania/zamykania**
+
    ```typescript
    export function initChatModal() {
      const openBtn = document.getElementById('open-chat-modal');
      const closeBtn = document.getElementById('close-chat-modal');
      const modal = document.getElementById('chat-modal');
      const content = document.getElementById('chat-modal-content');
-     
+
      openBtn?.addEventListener('click', () => {
        modal?.classList.remove('hidden');
        renderChatUI(content!);
      });
-     
+
      closeBtn?.addEventListener('click', () => {
        modal?.classList.add('hidden');
      });
-     
+
      modal?.addEventListener('click', (e) => {
        if (e.target === modal) {
          modal.classList.add('hidden');
@@ -253,12 +275,14 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    ```
 
 ### Zmiany w `src/chat.ts`:
+
 1. **Refaktoryzować do funkcji renderującej**
    - Przenieść logikę z `initChat()` do `renderChatUI(container: HTMLElement)`
    - Zachować wszystkie istniejące funkcje
    - Dostosować do renderowania w modalu zamiast w sekcji
 
 ### Walidacja:
+
 - [ ] Przycisk "Chat" w headerze działa
 - [ ] Modal otwiera się poprawnie
 - [ ] Chat UI renderuje się w modalu
@@ -271,6 +295,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 ## Faza 5: Testowanie i walidacja providerów
 
 ### Testy do wykonania:
+
 1. **OVHcloud AI Endpoints (Anonymous)**
    - [x] PRZETESTOWANY - DZIAŁA
    - Limit: 2 RPM per IP
@@ -302,6 +327,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    - [ ] Sprawdzić jakość odpowiedzi
 
 ### Zmiany w `src/providers/index.ts`:
+
 1. **Dodać nowych providerów**
    - Mistral AI
    - DeepSeek
@@ -317,6 +343,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    - `testProvider()` - testowanie czy provider działa
 
 ### Walidacja:
+
 - [ ] Wszystkie providerzy przetestowani
 - [ ] Rate limits zweryfikowane
 - [ ] Jakość odpowiedzi sprawdzona
@@ -327,16 +354,22 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 ## Faza 6: Aktualizacja nawigacji i linków
 
 ### Zmiany w `index.html`:
+
 1. **Zaktualizować desktop nav**
+
    ```html
    <div class="hidden sm:flex gap-6 text-sm">
      <a href="#tools" class="text-white/60 hover:text-white transition-colors">Tools</a>
      <a href="#free-models" class="text-white/60 hover:text-white transition-colors">Free Models</a>
      <a href="#quickstart" class="text-white/60 hover:text-white transition-colors">Quick Start</a>
      <a href="#superpowers" class="text-white/60 hover:text-white transition-colors">Superpowers</a>
-     <a href="#playground" class="text-white/60 hover:text-white transition-colors">API Playground</a>
+     <a href="#playground" class="text-white/60 hover:text-white transition-colors"
+       >API Playground</a
+     >
      <a href="#articles" class="text-white/60 hover:text-white transition-colors">Articles</a>
-     <button id="open-chat-modal" class="text-white/60 hover:text-white transition-colors">Chat</button>
+     <button id="open-chat-modal" class="text-white/60 hover:text-white transition-colors">
+       Chat
+     </button>
    </div>
    ```
 
@@ -349,11 +382,14 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
      <a href="#superpowers" class="text-white/60 hover:text-white whitespace-nowrap">Superpowers</a>
      <a href="#playground" class="text-white/60 hover:text-white whitespace-nowrap">APIs</a>
      <a href="#articles" class="text-white/60 hover:text-white whitespace-nowrap">Articles</a>
-     <button id="open-chat-modal" class="text-white/60 hover:text-white whitespace-nowrap">Chat</button>
+     <button id="open-chat-modal" class="text-white/60 hover:text-white whitespace-nowrap">
+       Chat
+     </button>
    </div>
    ```
 
 ### Walidacja:
+
 - [ ] Wszystkie linki w nawigacji działają
 - [ ] Smooth scroll do sekcji działa
 - [ ] Mobile nav jest responsywna
@@ -364,6 +400,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 ## Faza 7: Testy jednostkowe
 
 ### Nowe testy do napisania:
+
 1. **`tests/quickstart.test.ts`**
    - Test renderowania kart quick start
    - Test kopiowania template'ów
@@ -385,6 +422,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    - Test funkcji pomocniczych
 
 ### Walidacja:
+
 - [ ] Wszystkie nowe testy przechodzą
 - [ ] Istniejące testy nadal przechodzą
 - [ ] Coverage >80% dla nowych modułów
@@ -394,12 +432,15 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 ## Faza 8: Build i finalna walidacja
 
 ### Kroki:
+
 1. **Uruchomić build**
+
    ```bash
    npm run build
    ```
 
 2. **Uruchomić testy**
+
    ```bash
    npm test
    ```
@@ -419,6 +460,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
    - [ ] Brak 404
 
 ### Walidacja:
+
 - [ ] Build przechodzi bez błędów
 - [ ] Wszystkie testy przechodzą
 - [ ] Strona działa poprawnie w przeglądarce
@@ -430,10 +472,12 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 ## Podsumowanie zmian
 
 ### Usunięte:
+
 - Sekcja THE EQUALIZER z index.html
 - Link do #experience z nawigacji
 
 ### Dodane:
+
 - Nowa sekcja "Quick Start" z 5 popularnymi superpowers
 - Nowa sekcja "Free AI Models" z listą dostawców darmowych API
 - Chat jako modal dostępny z headera
@@ -441,12 +485,14 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 - Nowe testy jednostkowe
 
 ### Zmodyfikowane:
+
 - Nawigacja w headerze (desktop i mobile)
 - `src/main.ts` - dodane importy i wywołania nowych modułów
 - `src/chat.ts` - refaktoryzacja do funkcji renderującej
 - `src/providers/index.ts` - dodani nowi providerzy i funkcje pomocnicze
 
 ### Korzyści:
+
 - ✅ Jasna struktura strony
 - ✅ Brak mylącej sekcji THE EQUALIZER
 - ✅ Quick starty w logicznym miejscu
@@ -459,6 +505,7 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 ## Notatki
 
 ### OVHcloud AI Endpoints
+
 - **Status**: ✅ PRZETESTOWANY - DZIAŁA
 - **Endpoint**: https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions
 - **Model**: Meta-Llama-3_3-70B-Instruct
@@ -467,11 +514,13 @@ Usunąć mylną sekcję "THE EQUALIZER" i przenieść użyteczne elementy (quick
 - **Wady**: Bardzo niski rate limit
 
 ### Rekomendacje
+
 1. **Dla użytkowników bez klucza API**: OVH (anonymous) jako fallback
 2. **Dla użytkowników z kluczem API**: Groq (najszybszy) → Gemini (najlepsza jakość) → HF (największy wybór)
 3. **Dla zaawansowanych**: Mistral, DeepSeek, Together AI
 
 ### Priorytet implementacji
+
 1. **Wysoki**: Faza 1, 2, 3 (usunięcie THE EQUALIZER, quick starts, free models)
 2. **Średni**: Faza 4, 5 (chat modal, testowanie providerów)
 3. **Niski**: Faza 6, 7, 8 (nawigacja, testy, build)

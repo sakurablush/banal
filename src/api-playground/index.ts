@@ -97,11 +97,15 @@ const COPY = {
     clearAllKeys: 'Clear all playground keys',
     savedKey: 'Saved',
     enterKey: 'Enter key',
-    keyWarning: 'Client-side keys are convenient but risky on shared devices. Use session-only keys when needed.',
-    geminiKeyWarning: 'Gemini puts your key in the URL query string (?key=...). More visible in browser history/proxies than header auth. Consider Groq for better privacy on shared devices.',
+    keyWarning:
+      'Client-side keys are convenient but risky on shared devices. Use session-only keys when needed.',
+    geminiKeyWarning:
+      'Gemini puts your key in the URL query string (?key=...). More visible in browser history/proxies than header auth. Consider Groq for better privacy on shared devices.',
     imageComingSoon: 'Image APIs are paused until a browser-safe, no-captcha provider is verified.',
-    utilityComingSoon: 'Utility APIs are next. The playground is ready for CORS-friendly providers.',
-    geocodeHint: 'Open-Meteo accepts coordinates or a city name and will geocode city names in-browser.',
+    utilityComingSoon:
+      'Utility APIs are next. The playground is ready for CORS-friendly providers.',
+    geocodeHint:
+      'Open-Meteo accepts coordinates or a city name and will geocode city names in-browser.',
     noKeyHint: 'No key is required for this provider.',
     abortHint: 'Cancelled. Nothing was sent after cancellation.',
   },
@@ -130,7 +134,8 @@ const COPY = {
     json: 'JSON',
     request: 'リクエスト',
     logs: 'ログ',
-    noResponse: 'まだレスポンスはありません。送信するとレイテンシ、ヘッダー、生JSONを確認できます。',
+    noResponse:
+      'まだレスポンスはありません。送信するとレイテンシ、ヘッダー、生JSONを確認できます。',
     noHistory: '履歴はまだありません。',
     copy: 'コピー',
     copied: 'コピー済み',
@@ -153,11 +158,14 @@ const COPY = {
     clearAllKeys: 'プレイグラウンドの鍵をすべて消去',
     savedKey: '保存済み',
     enterKey: '鍵を入力',
-    keyWarning: 'クライアント側の鍵は便利ですが共有端末では注意。必要ならセッション鍵のみを使ってください。',
-    geminiKeyWarning: 'Geminiは鍵をURLクエリ文字列(?key=...)に含めます。ヘッダー認証よりもブラウザ履歴やプロキシで見えやすいです。共有端末ではGroqの使用を検討してください。',
+    keyWarning:
+      'クライアント側の鍵は便利ですが共有端末では注意。必要ならセッション鍵のみを使ってください。',
+    geminiKeyWarning:
+      'Geminiは鍵をURLクエリ文字列(?key=...)に含めます。ヘッダー認証よりもブラウザ履歴やプロキシで見えやすいです。共有端末ではGroqの使用を検討してください。',
     imageComingSoon: '画像APIは、ブラウザ安全でCAPTCHA不要のプロバイダー確認まで保留です。',
     utilityComingSoon: 'ユーティリティAPIは次段階です。CORS対応プロバイダーを追加できます。',
-    geocodeHint: 'Open-Meteoは緯度経度または都市名を受け付け、都市名はブラウザ内で地理コード化します。',
+    geocodeHint:
+      'Open-Meteoは緯度経度または都市名を受け付け、都市名はブラウザ内で地理コード化します。',
     noKeyHint: 'このプロバイダーは鍵不要です。',
     abortHint: 'キャンセルしました。キャンセル後の送信はありません。',
   },
@@ -278,7 +286,8 @@ export function renderPlayground({ lang, container }: PlaygroundOptions): void {
   root.querySelector<HTMLElement>('.pg-response-title')!.textContent = copy.response;
   root.querySelector<HTMLButtonElement>('[data-action="send"]')!.textContent = copy.send;
   root.querySelector<HTMLButtonElement>('[data-action="cancel"]')!.textContent = copy.cancel;
-  root.querySelector<HTMLButtonElement>('[data-action="clear"]')!.textContent = copy.clearConversation;
+  root.querySelector<HTMLButtonElement>('[data-action="clear"]')!.textContent =
+    copy.clearConversation;
   root.querySelector<HTMLElement>('.pg-sidebar-title')!.textContent = copy.providers;
 
   const settingLabels = root.querySelectorAll<HTMLElement>('.pg-setting-label');
@@ -382,7 +391,10 @@ export function renderPlayground({ lang, container }: PlaygroundOptions): void {
       `;
       button.querySelector<HTMLElement>('.pg-provider-name')!.textContent = provider.name;
       button.querySelector<HTMLElement>('.pg-provider-desc')!.textContent = provider.description;
-      button.querySelector<HTMLElement>('.pg-status-pill')!.textContent = providerStatus(provider, hasKey);
+      button.querySelector<HTMLElement>('.pg-status-pill')!.textContent = providerStatus(
+        provider,
+        hasKey
+      );
       button.querySelector<HTMLElement>('.pg-provider-rate')!.textContent = provider.rateLimitHint;
       button.addEventListener('click', () => {
         state.selectedProviderId = provider.id;
@@ -436,7 +448,10 @@ export function renderPlayground({ lang, container }: PlaygroundOptions): void {
     `;
     summary.querySelector<HTMLElement>('.pg-summary-title')!.textContent = provider.name;
     summary.querySelector<HTMLElement>('.pg-summary-desc')!.textContent = provider.description;
-    summary.querySelector<HTMLElement>('.pg-status-pill')!.textContent = providerStatus(provider, hasKey);
+    summary.querySelector<HTMLElement>('.pg-status-pill')!.textContent = providerStatus(
+      provider,
+      hasKey
+    );
     summary.querySelector<HTMLElement>('.pg-chip')!.textContent = provider.rateLimitHint;
     const docsLink = summary.querySelector<HTMLAnchorElement>('a[href="' + provider.docsUrl + '"]');
     if (docsLink) docsLink.textContent = copy.providerDocs;
@@ -512,7 +527,8 @@ export function renderPlayground({ lang, container }: PlaygroundOptions): void {
     if (state.messages.length === 0) {
       const empty = document.createElement('div');
       empty.className = 'pg-message-empty';
-      empty.textContent = provider?.id === 'open-meteo' ? copy.geocodeHint : provider?.note || copy.noKeyHint;
+      empty.textContent =
+        provider?.id === 'open-meteo' ? copy.geocodeHint : provider?.note || copy.noKeyHint;
       messages.appendChild(empty);
       return;
     }
@@ -558,7 +574,10 @@ export function renderPlayground({ lang, container }: PlaygroundOptions): void {
       const pre = document.createElement('pre');
       pre.className = 'pg-pre';
       pre.textContent = JSON.stringify(result.json ?? result.renderedText, null, 2);
-      const copyButton = buttonWithCopy(JSON.stringify(result.json ?? result.renderedText, null, 2), body);
+      const copyButton = buttonWithCopy(
+        JSON.stringify(result.json ?? result.renderedText, null, 2),
+        body
+      );
       body.append(copyButton, pre);
       return;
     }
@@ -735,10 +754,12 @@ export function renderPlayground({ lang, container }: PlaygroundOptions): void {
       </div>
       <div class="pg-keys-body"></div>
     `;
-    panel.querySelector<HTMLButtonElement>('[data-action="close-keys"]')!.addEventListener('click', () => {
-      state.keysPanelOpen = false;
-      renderKeysPanel();
-    });
+    panel
+      .querySelector<HTMLButtonElement>('[data-action="close-keys"]')!
+      .addEventListener('click', () => {
+        state.keysPanelOpen = false;
+        renderKeysPanel();
+      });
 
     const body = panel.querySelector<HTMLElement>('.pg-keys-body')!;
     const sessionToggle = document.createElement('label');
@@ -762,23 +783,25 @@ export function renderPlayground({ lang, container }: PlaygroundOptions): void {
     });
     body.appendChild(sessionToggle);
 
-    PLAYGROUND_PROVIDERS.filter((provider) => provider.authMode === 'required').forEach((provider) => {
-      const row = document.createElement('div');
-      row.className = 'pg-key-row';
-      row.innerHTML = `
+    PLAYGROUND_PROVIDERS.filter((provider) => provider.authMode === 'required').forEach(
+      (provider) => {
+        const row = document.createElement('div');
+        row.className = 'pg-key-row';
+        row.innerHTML = `
         <label>
           <span></span>
           <input type="password" data-key="${provider.id}" autocomplete="off">
         </label>
         <a href="${provider.keyUrl}" target="_blank" rel="noopener"></a>
       `;
-      row.querySelector('span')!.textContent = provider.name;
-      const input = row.querySelector<HTMLInputElement>(`[data-key="${provider.id}"]`)!;
-      const mask = getSavedKeyMask(provider.id, state.keyMode);
-      input.placeholder = mask ? `${copy.savedKey} ${mask}` : copy.enterKey;
-      row.querySelector('a')!.textContent = copy.providerDocs;
-      body.appendChild(row);
-    });
+        row.querySelector('span')!.textContent = provider.name;
+        const input = row.querySelector<HTMLInputElement>(`[data-key="${provider.id}"]`)!;
+        const mask = getSavedKeyMask(provider.id, state.keyMode);
+        input.placeholder = mask ? `${copy.savedKey} ${mask}` : copy.enterKey;
+        row.querySelector('a')!.textContent = copy.providerDocs;
+        body.appendChild(row);
+      }
+    );
 
     const actions = document.createElement('div');
     actions.className = 'pg-key-actions';
@@ -792,10 +815,12 @@ export function renderPlayground({ lang, container }: PlaygroundOptions): void {
     clear.textContent = copy.clearAllKeys;
 
     save.addEventListener('click', () => {
-      PLAYGROUND_PROVIDERS.filter((provider) => provider.authMode === 'required').forEach((provider) => {
-        const input = body.querySelector<HTMLInputElement>(`[data-key="${provider.id}"]`);
-        if (input?.value) setPlaygroundKey(provider.id, input.value, state.keyMode);
-      });
+      PLAYGROUND_PROVIDERS.filter((provider) => provider.authMode === 'required').forEach(
+        (provider) => {
+          const input = body.querySelector<HTMLInputElement>(`[data-key="${provider.id}"]`);
+          if (input?.value) setPlaygroundKey(provider.id, input.value, state.keyMode);
+        }
+      );
       renderKeysPanel();
       renderProviderList();
       renderWorkspace();
@@ -820,10 +845,7 @@ export function renderPlayground({ lang, container }: PlaygroundOptions): void {
     const input = composer.value.trim();
     if (!input) return;
 
-    const messages: PlaygroundChatMessage[] = [
-      ...state.messages,
-      { role: 'user', content: input },
-    ];
+    const messages: PlaygroundChatMessage[] = [...state.messages, { role: 'user', content: input }];
     state.messages = messages;
     state.activeRequest = true;
     state.abortController = new AbortController();
@@ -836,7 +858,9 @@ export function renderPlayground({ lang, container }: PlaygroundOptions): void {
         providerId: provider.id,
         input,
         messages,
-        model: provider.models.includes(state.selectedModel) ? state.selectedModel : provider.defaultModel,
+        model: provider.models.includes(state.selectedModel)
+          ? state.selectedModel
+          : provider.defaultModel,
         settings: state.settings,
         keyMode: state.keyMode,
         signal: state.abortController.signal,

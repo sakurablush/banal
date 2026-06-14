@@ -108,7 +108,7 @@ describe('zero-key panel rendering', () => {
     // Should use horizontal scroll container
     const scrollContainer = root.querySelector('.tools-horizontal-scroll');
     expect(scrollContainer).not.toBeNull();
-    
+
     // Should show Supabase and Neon
     expect(root.textContent).toContain('Supabase');
     expect(root.textContent).toContain('Neon');
@@ -313,7 +313,9 @@ describe('zero-key panel rendering', () => {
     const root = renderPanel();
 
     // Find and click open-source filter
-    const filterChips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filterChips = root.querySelectorAll(
+      '.quick-filter-chip'
+    ) as NodeListOf<HTMLButtonElement>;
     const openSourceFilter = Array.from(filterChips).find((chip) =>
       chip.textContent?.toLowerCase().includes('open source')
     );
@@ -330,7 +332,9 @@ describe('zero-key panel rendering', () => {
     const root = renderPanel();
 
     // Find and click offline filter
-    const filterChips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filterChips = root.querySelectorAll(
+      '.quick-filter-chip'
+    ) as NodeListOf<HTMLButtonElement>;
     const offlineFilter = Array.from(filterChips).find((chip) =>
       chip.textContent?.toLowerCase().includes('offline')
     );
@@ -362,7 +366,7 @@ describe('zero-key panel rendering', () => {
     expect(heroInput.value).toBe('Docker');
   });
 
-// ─── Horizontal scroll card layout ───────────────────────────────────────────
+  // ─── Horizontal scroll card layout ───────────────────────────────────────────
 
   it('horizontal tool card has proper width and snap alignment', () => {
     const root = renderPanel();
@@ -439,7 +443,7 @@ describe('zero-key panel rendering', () => {
     expect(footer!.children[footer!.children.length - 1]).toBe(cta);
   });
 
-// ─── Sidebar layout ────────────────────────────────────────────────────────────
+  // ─── Sidebar layout ────────────────────────────────────────────────────────────
 
   it('renders category sidebar', () => {
     const root = renderPanel();
@@ -499,6 +503,25 @@ describe('zero-key panel rendering', () => {
     // Each chip should have an aria-label
     for (const chip of chips) {
       expect(chip.hasAttribute('aria-label')).toBe(true);
+    }
+  });
+
+  // ─── Badge rendering ─────────────────────────────────────────────────────────────
+
+  it('renders free models badge with zk2-badge-free class for tools with true-free-models badge', () => {
+    const root = renderPanel();
+    const freeBadges = root.querySelectorAll('.zk2-badge-free');
+
+    // 18 tools have true-free-models badge, but only 11 are visible
+    // (badge slice(0,4) excludes those where true-free-models is in position 5+)
+    expect(freeBadges.length).toBeGreaterThan(0);
+    expect(freeBadges.length).toBe(11);
+
+    // Verify badge has correct text content and classes
+    for (const badge of freeBadges) {
+      expect(badge.classList.contains('zk2-badge')).toBe(true);
+      expect(badge.classList.contains('zk2-badge-free')).toBe(true);
+      expect(badge.textContent).toContain('Free');
     }
   });
 });

@@ -12,11 +12,13 @@
 ### 1.1 Obecna struktura directory
 
 **Statystyki:**
+
 - **103 narzędzia AI** (kategorie zaczynające się od `ai-`)
 - **99 narzędzi non-AI** (coding, backend, automation, security, productivity, learning, public data, docs)
 - **Razem:** 202 narzędzia
 
 **Kategorie AI (9):**
+
 - `ai-assistants` - Chat i asystenci AI
 - `ai-image` - Generowanie i edycja obrazów
 - `ai-video` - Generowanie i edycja wideo
@@ -28,6 +30,7 @@
 - `ai-math` - Matematyka, nauka, edukacja
 
 **Kategorie non-AI (9):**
+
 - `coding-devtools` - Narzędzia developerskie
 - `docs-knowledge` - Dokumentacja i wiedza
 - `public-data` - Dane publiczne i open datasets
@@ -44,6 +47,7 @@
 **Rzeczywistość:** ~50% to narzędzia non-AI (CLI tools, backend, security, etc.)
 
 **Konsekwencje:**
+
 - Mylący tytuł - użytkownicy oczekują tylko AI tools
 - Brak jasnego podziału - trudno znaleźć co jest AI, a co nie
 - Utrata zaufania - "dlaczego SQLite jest w AI tools?"
@@ -52,6 +56,7 @@
 ### 1.3 Brakujące narzędzia (krytyczne luki)
 
 **AI Coding Agents (professional setup):**
+
 - ❌ Kilo Code (kilo.ai) - darmowe modele, VS Code/JetBrains/CLI
 - ❌ Cline - open source, BYOK, Apache-2.0
 - ❌ Continue - open source, IDE extension
@@ -75,6 +80,7 @@
 - ❌ Free Claude Code - proxy dla Claude Code, 17 providers
 
 **AI Development Platforms:**
+
 - ❌ Google AI Studio - darmowe Gemini models
 - ❌ Gemini Code Assist - 180K completions/month free
 - ❌ Amazon Q Developer - unlimited completions free
@@ -89,10 +95,12 @@
 **Podział na dwie główne sekcje:**
 
 #### Sekcja A: AI Tools (103 + ~25 nowych = ~128 narzędzi)
+
 **Tytuł:** "Free AI Tools Directory"  
 **Podtytuł:** "128+ verified free AI tools. Chat, image, video, code, PDF, research. All verified. All free."
 
 **Kategorie:**
+
 1. **AI Chat & Assistants** (20+ tools)
    - Duck.ai, LMArena, Groq, Gemini, Perchance, etc.
    - **NOWE:** Kilo Code, Cline, Continue, Multi.dev, FreeHive, Nova, Free.ai Coder, Kursor, Terax, Claurst, OpenADE, Kodely, Code Mavi, Async IDE
@@ -126,10 +134,12 @@
     - **NOWE:** Kilo Code, Cline, Continue, OpenCode, Aider, Multi.dev, FreeHive, Nova, Free.ai Coder, Firebase Studio, Google Antigravity, Zed, Kursor, Terax, Claurst, OpenADE, Kodely, Code Mavi, Async IDE, FreeRide, Free Claude Code, GitHub Copilot Free, Gemini Code Assist, Amazon Q Developer
 
 #### Sekcja B: Developer & Productivity Tools (99 narzędzi)
+
 **Tytuł:** "Free Developer & Productivity Tools"  
 **Podtytuł:** "99+ verified free tools for developers. Coding, backend, automation, security, learning. All open source or free tier."
 
 **Kategorie:**
+
 1. **Coding & Developer Workflow** (30+ tools)
    - Git, Docker, VS Code, etc.
 
@@ -160,7 +170,9 @@
 ### 2.2 Zmiany w UI/UX
 
 #### A. Hero Section
+
 **Obecny:**
+
 ```
 200+ Free AI Tools
 Chat, image, video, code, PDF, research
@@ -168,6 +180,7 @@ All verified. All free.
 ```
 
 **Nowy:**
+
 ```
 227+ Free Tools for Developers
 AI tools + Developer tools. All verified. All free.
@@ -175,31 +188,37 @@ No login. No credit card. No bullshit.
 ```
 
 #### B. Navigation
+
 **Obecny:**
+
 ```
 Tools | Free Models | Quick Start | Superpowers | API Playground | Articles
 ```
 
 **Nowy:**
+
 ```
 AI Tools | Dev Tools | Free Models | Quick Start | Prompt Templates | API Playground | Articles
 ```
 
 #### C. Directory Page Layout
+
 **Nowa struktura:**
 
 ```markdown
 # Free Tools Directory
 
 ## 🤖 AI Tools (128+ tools)
+
 Free AI-powered tools for chat, image, video, code, PDF, and research.
 
-[AI Chat & Assistants] [AI Image] [AI Video] [AI Audio] [AI Writing] 
+[AI Chat & Assistants] [AI Image] [AI Video] [AI Audio] [AI Writing]
 [AI Search] [AI PDF] [AI Presentations] [AI Math] [AI Coding Assistants]
 
 ---
 
 ## 💻 Developer & Productivity Tools (99+ tools)
+
 Free tools for coding, backend, automation, security, and learning.
 
 [Coding & DevTools] [Backend & Infra] [Automation & Ops] [Security & Privacy]
@@ -207,7 +226,9 @@ Free tools for coding, backend, automation, security, and learning.
 ```
 
 #### D. Tool Cards
+
 **Dodanie badge'y:**
+
 - 🤖 `AI-Powered` - dla narzędzi AI
 - 💻 `Developer Tool` - dla narzędzi non-AI
 - 🆓 `No Key Required` - dla narzędzi bez klucza API
@@ -217,15 +238,16 @@ Free tools for coding, backend, automation, security, and learning.
 ### 2.3 Zmiany w treści
 
 #### A. Transparentność
+
 **Dodanie sekcji "Honest Limitations":**
+
 ```markdown
 ## Honest Limitations
 
 We will not lie to you:
 
-- **"Free" means different things:** Some tools are truly free (no key, no limits). 
+- **"Free" means different things:** Some tools are truly free (no key, no limits).
   Others require a free API key (no credit card). Others have rate limits or daily quotas.
-  
 - **AI tools are not magic:** They can hallucinate, give wrong answers, or refuse legitimate requests.
   Always verify important information.
 
@@ -241,7 +263,9 @@ We mark every tool with its access type and limitations so you know what to expe
 ```
 
 #### B. Access Types
+
 **Nowe typy dostępu:**
+
 - `no-login` - No account required, open in browser
 - `public-api` - Free public API, no key required
 - `free-key` - Free API key required (no credit card)
@@ -250,7 +274,9 @@ We mark every tool with its access type and limitations so you know what to expe
 - `self-host` - Requires self-hosting (Docker, local install)
 
 #### C. Quality Notes
+
 **Dodanie quality notes do każdego narzędzia:**
+
 ```typescript
 {
   id: 'kilo-code',
@@ -484,6 +510,7 @@ We mark every tool with its access type and limitations so you know what to expe
 ### 3.2 Inne nowe narzędzia AI
 
 #### AI Search & Research
+
 26. **Google AI Studio** (już powyżej)
 
 ---
@@ -493,6 +520,7 @@ We mark every tool with its access type and limitations so you know what to expe
 ### 4.1 Faza 1: Refaktoryzacja struktury (2 godziny)
 
 #### Krok 1.1: Zmiana nazw kategorii
+
 ```typescript
 // src/data/zero-key-tools.ts
 
@@ -547,6 +575,7 @@ export const categoryLabels: Record<ZeroKeyCategory, string> = {
 ```
 
 #### Krok 1.2: Migracja istniejących narzędzi
+
 ```typescript
 // Zmiana category dla wszystkich istniejących narzędzi
 // ai-assistants → ai-chat
@@ -562,6 +591,7 @@ export const categoryLabels: Record<ZeroKeyCategory, string> = {
 ```
 
 #### Krok 1.3: Dodanie nowych narzędzi
+
 ```typescript
 // Dodanie 25 nowych narzędzi AI Coding Assistants
 // (szczegóły w sekcji 3.1)
@@ -570,12 +600,13 @@ export const categoryLabels: Record<ZeroKeyCategory, string> = {
 ### 4.2 Faza 2: Zmiany w UI (2 godziny)
 
 #### Krok 2.1: Aktualizacja index.html
+
 ```html
 <!-- Hero Section -->
 <section class="hero-section">
   <h1>227+ Free Tools for Developers</h1>
   <p class="hero-subtitle">
-    AI tools + Developer tools. All verified. All free.<br>
+    AI tools + Developer tools. All verified. All free.<br />
     No login. No credit card. No bullshit.
   </p>
 </section>
@@ -612,6 +643,7 @@ export const categoryLabels: Record<ZeroKeyCategory, string> = {
 ```
 
 #### Krok 2.2: Aktualizacja directory.ts
+
 ```typescript
 // src/directory.ts
 
@@ -645,13 +677,13 @@ export function renderDirectory(): void {
 
 // Helper functions
 function countTools(prefix: 'ai' | 'dev'): number {
-  return zeroKeyTools.filter(t => t.category.startsWith(prefix)).length;
+  return zeroKeyTools.filter((t) => t.category.startsWith(prefix)).length;
 }
 
 function renderCategoryFilters(container: HTMLElement, prefix: 'ai' | 'dev'): void {
   const categories = Object.keys(categoryLabels)
-    .filter(cat => cat.startsWith(prefix))
-    .map(cat => ({
+    .filter((cat) => cat.startsWith(prefix))
+    .map((cat) => ({
       id: cat,
       label: categoryLabels[cat as ZeroKeyCategory],
     }));
@@ -659,7 +691,7 @@ function renderCategoryFilters(container: HTMLElement, prefix: 'ai' | 'dev'): vo
   // Render category pills
   const pillsContainer = document.createElement('div');
   pillsContainer.className = 'category-pills';
-  categories.forEach(cat => {
+  categories.forEach((cat) => {
     const pill = document.createElement('button');
     pill.className = 'category-pill';
     pill.textContent = cat.label;
@@ -677,6 +709,7 @@ function renderCategoryFilters(container: HTMLElement, prefix: 'ai' | 'dev'): vo
 ```
 
 #### Krok 2.3: Aktualizacja stylów
+
 ```css
 /* src/style.css */
 
@@ -738,60 +771,75 @@ function renderCategoryFilters(container: HTMLElement, prefix: 'ai' | 'dev'): vo
 ### 4.3 Faza 3: Transparentność i zaufanie (1 godzina)
 
 #### Krok 3.1: Dodanie sekcji "Honest Limitations"
+
 ```html
 <!-- index.html -->
 <section id="honest-limitations" class="limitations-section">
   <div class="container">
     <h2>Honest Limitations</h2>
     <p class="limitations-intro">We will not lie to you:</p>
-    
+
     <div class="limitations-grid">
       <div class="limitation-card">
         <h3>🔍 "Free" means different things</h3>
-        <p>Some tools are truly free (no key, no limits). Others require a free API key (no credit card). Others have rate limits or daily quotas.</p>
+        <p>
+          Some tools are truly free (no key, no limits). Others require a free API key (no credit
+          card). Others have rate limits or daily quotas.
+        </p>
       </div>
-      
+
       <div class="limitation-card">
         <h3>🤖 AI tools are not magic</h3>
-        <p>They can hallucinate, give wrong answers, or refuse legitimate requests. Always verify important information.</p>
+        <p>
+          They can hallucinate, give wrong answers, or refuse legitimate requests. Always verify
+          important information.
+        </p>
       </div>
-      
+
       <div class="limitation-card">
         <h3>⏱️ Rate limits are real</h3>
-        <p>Free tiers exist to share resources. If you hit a limit, wait or try another tool. This protects the free service for everyone.</p>
+        <p>
+          Free tiers exist to share resources. If you hit a limit, wait or try another tool. This
+          protects the free service for everyone.
+        </p>
       </div>
-      
+
       <div class="limitation-card">
         <h3>🔒 Privacy matters</h3>
-        <p>Do not treat any hosted AI as confidential legal, medical, or financial counsel. Your prompts may be logged or used for training.</p>
+        <p>
+          Do not treat any hosted AI as confidential legal, medical, or financial counsel. Your
+          prompts may be logged or used for training.
+        </p>
       </div>
-      
+
       <div class="limitation-card">
         <h3>🔄 Tools change</h3>
         <p>Free tiers can be reduced or removed. We verify regularly, but always test yourself.</p>
       </div>
     </div>
-    
+
     <p class="limitations-footer">
-      We mark every tool with its access type and limitations so you know what to expect before you click.
+      We mark every tool with its access type and limitations so you know what to expect before you
+      click.
     </p>
   </div>
 </section>
 ```
 
 #### Krok 3.2: Dodanie badge'y do tool cards
+
 ```typescript
 // src/directory.ts
 
 function renderToolCard(tool: ZeroKeyTool): HTMLElement {
   const card = document.createElement('div');
   card.className = 'tool-card';
-  
+
   // Determine badge type
   const isAI = tool.category.startsWith('ai-');
   const badgeType = isAI ? 'ai' : 'dev';
   const badgeLabel = isAI ? '🤖 AI' : '💻 Dev';
-  
+
   // Access badge
   let accessBadge = '';
   if (tool.access === 'no-login' || tool.access === 'public-api') {
@@ -799,12 +847,12 @@ function renderToolCard(tool: ZeroKeyTool): HTMLElement {
   } else if (tool.access === 'free-key' || tool.access === 'free-tier') {
     accessBadge = '<span class="tool-badge free-key">🔑 Free Key</span>';
   }
-  
+
   // Rate limit badge
   const rateLimitBadge = tool.caveat?.toLowerCase().includes('rate limit')
     ? '<span class="tool-badge rate-limited">⚡ Rate Limited</span>'
     : '';
-  
+
   card.innerHTML = `
     <span class="tool-badge ${badgeType}">${badgeLabel}</span>
     ${accessBadge}
@@ -817,7 +865,7 @@ function renderToolCard(tool: ZeroKeyTool): HTMLElement {
       Open Tool →
     </a>
   `;
-  
+
   return card;
 }
 ```
@@ -825,25 +873,26 @@ function renderToolCard(tool: ZeroKeyTool): HTMLElement {
 ### 4.4 Faza 4: Testy i walidacja (1 godzina)
 
 #### Krok 4.1: Aktualizacja testów
+
 ```typescript
 // tests/directory.test.ts
 
 describe('Directory structure', () => {
   it('should have AI and Developer sections', () => {
-    const aiTools = zeroKeyTools.filter(t => t.category.startsWith('ai-'));
-    const devTools = zeroKeyTools.filter(t => t.category.startsWith('dev-'));
-    
+    const aiTools = zeroKeyTools.filter((t) => t.category.startsWith('ai-'));
+    const devTools = zeroKeyTools.filter((t) => t.category.startsWith('dev-'));
+
     expect(aiTools.length).toBeGreaterThan(100);
     expect(devTools.length).toBeGreaterThan(90);
   });
 
   it('should have AI Coding Assistants category', () => {
-    const aiCodingTools = zeroKeyTools.filter(t => t.category === 'ai-coding');
+    const aiCodingTools = zeroKeyTools.filter((t) => t.category === 'ai-coding');
     expect(aiCodingTools.length).toBeGreaterThan(20);
   });
 
   it('should include Kilo Code', () => {
-    const kilo = zeroKeyTools.find(t => t.id === 'kilo-code');
+    const kilo = zeroKeyTools.find((t) => t.id === 'kilo-code');
     expect(kilo).toBeDefined();
     expect(kilo?.category).toBe('ai-coding');
     expect(kilo?.access).toBe('free-key');
@@ -857,6 +906,7 @@ describe('Directory structure', () => {
 ```
 
 #### Krok 4.2: Manualne testowanie
+
 - [ ] Sprawdź wszystkie linki do nowych narzędzi
 - [ ] Zweryfikuj access types i limits
 - [ ] Przetestuj filtry kategorii
@@ -867,6 +917,7 @@ describe('Directory structure', () => {
 ### 4.5 Faza 5: Dokumentacja i commit (30 minut)
 
 #### Krok 5.1: Aktualizacja README.md
+
 ```markdown
 ## Free Tools Directory
 
@@ -878,14 +929,14 @@ Free AI-powered tools for chat, image, video, code, PDF, and research.
 
 #### AI Coding Assistants (25+ tools)
 
-| Tool | Access | Best For | Quality |
-|------|--------|----------|---------|
-| [Kilo Code](https://kilo.ai/) | Free key | Professional AI coding, 500+ models | Apache-2.0, auto-routing |
-| [Cline](https://github.com/cline/cline) | BYOK | Open source, native subagents | Apache-2.0, 80.8% SWE-bench |
-| [Continue](https://continue.dev/) | BYOK | IDE extension, model-agnostic | Apache-2.0 |
-| [OpenCode](https://github.com/opencode-ai/opencode) | BYOK | Terminal CLI, 120K+ stars | Open source, LSP |
-| [Aider](https://aider.chat/) | BYOK | Git-heavy refactoring | Open source, excellent Git |
-| ... | ... | ... | ... |
+| Tool                                                | Access   | Best For                            | Quality                     |
+| --------------------------------------------------- | -------- | ----------------------------------- | --------------------------- |
+| [Kilo Code](https://kilo.ai/)                       | Free key | Professional AI coding, 500+ models | Apache-2.0, auto-routing    |
+| [Cline](https://github.com/cline/cline)             | BYOK     | Open source, native subagents       | Apache-2.0, 80.8% SWE-bench |
+| [Continue](https://continue.dev/)                   | BYOK     | IDE extension, model-agnostic       | Apache-2.0                  |
+| [OpenCode](https://github.com/opencode-ai/opencode) | BYOK     | Terminal CLI, 120K+ stars           | Open source, LSP            |
+| [Aider](https://aider.chat/)                        | BYOK     | Git-heavy refactoring               | Open source, excellent Git  |
+| ...                                                 | ...      | ...                                 | ...                         |
 
 ### Developer Tools (99+ tools)
 
@@ -893,11 +944,11 @@ Free tools for coding, backend, automation, security, and learning.
 
 #### Coding & Developer Workflow (30+ tools)
 
-| Tool | Access | Best For | Quality |
-|------|--------|----------|---------|
-| [Git](https://git-scm.com/) | Open source | Version control | Industry standard |
-| [VS Code](https://code.visualstudio.com/) | Free | Code editor | Microsoft-backed |
-| ... | ... | ... | ... |
+| Tool                                      | Access      | Best For        | Quality           |
+| ----------------------------------------- | ----------- | --------------- | ----------------- |
+| [Git](https://git-scm.com/)               | Open source | Version control | Industry standard |
+| [VS Code](https://code.visualstudio.com/) | Free        | Code editor     | Microsoft-backed  |
+| ...                                       | ...         | ...             | ...               |
 
 ### Honest Limitations
 
@@ -913,6 +964,7 @@ We mark every tool with its access type and limitations so you know what to expe
 ```
 
 #### Krok 5.2: Commit
+
 ```bash
 git add -A
 git commit -m "feat: reorganize directory - separate AI and Developer tools
@@ -936,6 +988,7 @@ with their access type and limitations."
 ## 5. Kryteria akceptacji
 
 ### 5.1 Funkcjonalne
+
 - [ ] Directory podzielone na AI Tools i Developer Tools
 - [ ] 25+ nowych AI Coding Assistants dodanych
 - [ ] Wszystkie narzędzia mają access type i quality notes
@@ -944,6 +997,7 @@ with their access type and limitations."
 - [ ] Honest Limitations section widoczna i czytelna
 
 ### 5.2 Transparentność
+
 - [ ] Każde narzędzie ma jasno oznaczony access type
 - [ ] Każde narzędzie ma quality note wyjaśniający dlaczego jest dobre
 - [ ] Każde narzędzie ma caveat (jeśli dotyczy) z ograniczeniami
@@ -951,6 +1005,7 @@ with their access type and limitations."
 - [ ] Brak mylących twierdzeń (np. "200+ AI tools" gdy 50% to non-AI)
 
 ### 5.3 Jakość
+
 - [ ] Wszystkie linki działają
 - [ ] Wszystkie access types są poprawne
 - [ ] Wszystkie quality notes są prawdziwe i pomocne
@@ -959,6 +1014,7 @@ with their access type and limitations."
 - [ ] Responsywność na mobile/tablet/desktop
 
 ### 5.4 UX
+
 - [ ] Jasny podział na AI i Developer tools
 - [ ] Łatwo znaleźć narzędzia po kategorii
 - [ ] Badge'e pomagają szybko zrozumieć typ narzędzia
@@ -970,29 +1026,37 @@ with their access type and limitations."
 ## 6. Ryzyka i mitigacje
 
 ### Ryzyko 1: Zbyt wiele nowych narzędzi
+
 **Problem:** Dodanie 25+ nowych narzędzi może przytłoczyć użytkowników  
 **Mitigacja:**
+
 - Podział na Tier 1 (must-have), Tier 2 (managed), Tier 3 (open source), Tier 4 (big tech)
 - Domyślnie pokazuj tylko Tier 1 i Tier 2
 - Pozwól filtrować po tier
 
 ### Ryzyko 2: Zmiana URL-i
+
 **Problem:** Zmiana kategorii może zepsuć istniejące linki  
 **Mitigacja:**
+
 - Zachowaj stare ID narzędzi
 - Dodaj redirect ze starych kategorii do nowych
 - Zaktualizuj wszystkie wewnętrzne linki
 
 ### Ryzyko 3: Nieaktualne informacje
+
 **Problem:** Nowe narzędzia mogą zmienić pricing/access  
 **Mitigacja:**
+
 - Dodaj `lastVerified` do każdego narzędzia
 - Dodaj skrypt weryfikujący linki co tydzień
 - Dodaj "Report outdated info" button na każdej karcie
 
 ### Ryzyko 4: Utrata SEO
+
 **Problem:** Zmiana tytułu z "AI Tools" może wpłynąć na SEO  
 **Mitigacja:**
+
 - Zachowaj "AI Tools" w podtytule
 - Dodaj meta description: "227+ free tools for developers: 128 AI tools + 99 developer tools"
 - Dodaj structured data (JSON-LD) dla obu sekcji
@@ -1002,6 +1066,7 @@ with their access type and limitations."
 ## 7. Podsumowanie
 
 ### Co robimy:
+
 1. **Dzielimy directory** na AI Tools (128+) i Developer Tools (99+)
 2. **Dodajemy 25 nowych AI Coding Assistants** (Kilo, Cline, Continue, etc.)
 3. **Zmieniamy tytuł** z "200+ AI Tools" na "227+ Free Tools for Developers"
@@ -1010,6 +1075,7 @@ with their access type and limitations."
 6. **Aktualizujemy UI/UX** dla lepszego podziału
 
 ### Dlaczego:
+
 - **Transparentność:** Użytkownicy wiedzą co jest AI, a co nie
 - **Zaufanie:** Honest Limitations buduje wiarygodność
 - **Użyteczność:** Łatwiej znaleźć odpowiednie narzędzia
@@ -1017,6 +1083,7 @@ with their access type and limitations."
 - **Jakość:** Każde narzędzie ma quality note i caveat
 
 ### Kiedy:
+
 - **Szacowany czas:** 6-8 godzin
 - **Priorytet:** Wysoki
 - **Status:** Gotowy do implementacji

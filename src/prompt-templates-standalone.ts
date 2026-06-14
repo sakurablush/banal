@@ -33,7 +33,12 @@ const PROMPT_CATEGORIES: PromptCategory[] = [
   { id: 'learning-growth', labelEn: 'Learning', labelJa: '学び', icon: '\u{1F393}' },
   { id: 'health-grounding', labelEn: 'Grounding', labelJa: 'グラウンディング', icon: '\u{1F914}' },
   { id: 'paperwork-rights', labelEn: 'Paperwork', labelJa: '手続き', icon: '\u{1F4DC}' },
-  { id: 'communication', labelEn: 'Communication', labelJa: 'コミュニケーション', icon: '\u{1F4AC}' },
+  {
+    id: 'communication',
+    labelEn: 'Communication',
+    labelJa: 'コミュニケーション',
+    icon: '\u{1F4AC}',
+  },
 ];
 
 // Map prompt IDs to categories
@@ -49,19 +54,14 @@ const PROMPT_CATEGORY_MAP: Record<string, string> = {
   'en-ja-cultural-bridge': 'communication',
 };
 
-function getPromptsForCategory(
-  categoryId: string,
-  allPrompts: PromptTemplate[]
-): PromptTemplate[] {
+function getPromptsForCategory(categoryId: string, allPrompts: PromptTemplate[]): PromptTemplate[] {
   if (categoryId === 'all') {
     return allPrompts;
   }
   return allPrompts.filter((pt) => PROMPT_CATEGORY_MAP[pt.id] === categoryId);
 }
 
-function getCategoryCounts(
-  allPrompts: PromptTemplate[]
-): Record<string, number> {
+function getCategoryCounts(allPrompts: PromptTemplate[]): Record<string, number> {
   const counts: Record<string, number> = { all: allPrompts.length };
   for (const pt of allPrompts) {
     const cat = PROMPT_CATEGORY_MAP[pt.id] || 'all';
@@ -132,7 +132,7 @@ export function renderPromptTemplatesStandalone(options: {
 }): void {
   const { container, lang } = options;
 
-try {
+  try {
     const lib = new PromptTemplatesLibrary(lang);
     const prompts = lib.getAll();
     const state: PromptTemplatesViewState = {
@@ -218,7 +218,10 @@ function createQuickFilters(state: PromptTemplatesViewState): HTMLElement {
     countSpan.textContent = `(${count})`;
 
     chip.append(iconSpan, ' ', labelSpan, ' ', countSpan);
-    chip.setAttribute('aria-label', state.lang === 'ja' ? `${label}でフィルター` : `Filter by ${label}`);
+    chip.setAttribute(
+      'aria-label',
+      state.lang === 'ja' ? `${label}でフィルター` : `Filter by ${label}`
+    );
     chip.addEventListener('click', () => {
       state.selectedCategory = cat.id;
       reRenderHorizontal(state);
@@ -243,7 +246,10 @@ function createPromptScrollContainer(state: PromptTemplatesViewState): HTMLEleme
   return scroll;
 }
 
-function createHorizontalPromptCard(state: PromptTemplatesViewState, pt: PromptTemplate): HTMLElement {
+function createHorizontalPromptCard(
+  state: PromptTemplatesViewState,
+  pt: PromptTemplate
+): HTMLElement {
   const card = document.createElement('article');
   card.className = 'prompt-card-horizontal';
   card.dataset.promptId = pt.id;
@@ -266,13 +272,17 @@ function createHorizontalPromptCard(state: PromptTemplatesViewState, pt: PromptT
   // Category label
   const categoryLabel = document.createElement('div');
   categoryLabel.className = 'pt-prompt-category';
-  categoryLabel.textContent = catData ? (state.lang === 'ja' ? catData.labelJa : catData.labelEn) : '';
+  categoryLabel.textContent = catData
+    ? state.lang === 'ja'
+      ? catData.labelJa
+      : catData.labelEn
+    : '';
   card.appendChild(categoryLabel);
 
   // Title
   const title = document.createElement('h3');
   title.className = 'pt-prompt-title';
-title.textContent = pt.title;
+  title.textContent = pt.title;
   card.appendChild(title);
 
   // Description
@@ -319,9 +329,14 @@ title.textContent = pt.title;
 // Track the element that opened the accordion for focus restoration
 let lastFocusedElement: HTMLElement | null = null;
 // Track currently open accordion to close it when another opens
-let openAccordion: { card: HTMLElement; accordion: HTMLElement; focusCleanup?: () => void } | null = null;
+let openAccordion: { card: HTMLElement; accordion: HTMLElement; focusCleanup?: () => void } | null =
+  null;
 
-function closeAccordion(card: HTMLElement, accordion: HTMLElement, focusCleanup?: () => void): void {
+function closeAccordion(
+  card: HTMLElement,
+  accordion: HTMLElement,
+  focusCleanup?: () => void
+): void {
   accordion.remove();
   card.setAttribute('aria-expanded', 'false');
   card.classList.remove('expanded');
@@ -367,11 +382,18 @@ function trapFocus(element: HTMLElement): () => void {
   return () => element.removeEventListener('keydown', handleTab);
 }
 
-function createPromptAccordion(state: PromptTemplatesViewState, pt: PromptTemplate, card: HTMLElement): PromptAccordionResult {
+function createPromptAccordion(
+  state: PromptTemplatesViewState,
+  pt: PromptTemplate,
+  card: HTMLElement
+): PromptAccordionResult {
   const accordion = document.createElement('div');
   accordion.className = 'prompt-accordion';
   accordion.setAttribute('role', 'region');
-  accordion.setAttribute('aria-label', state.lang === 'ja' ? `${pt.title}の入力フォーム` : `${pt.title} form`);
+  accordion.setAttribute(
+    'aria-label',
+    state.lang === 'ja' ? `${pt.title}の入力フォーム` : `${pt.title} form`
+  );
 
   // Header with title and close button
   const header = document.createElement('div');
@@ -554,7 +576,11 @@ function createPromptAccordion(state: PromptTemplatesViewState, pt: PromptTempla
   return { accordion, focusCleanup };
 }
 
-function openPromptAccordion(state: PromptTemplatesViewState, pt: PromptTemplate, card: HTMLElement): void {
+function openPromptAccordion(
+  state: PromptTemplatesViewState,
+  pt: PromptTemplate,
+  card: HTMLElement
+): void {
   // Close any existing accordion first
   if (openAccordion && openAccordion.card !== card) {
     closeAccordion(openAccordion.card, openAccordion.accordion, openAccordion.focusCleanup);

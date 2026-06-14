@@ -6,18 +6,19 @@ Banal AI is a frontend-only Single Page Application (SPA) designed for users on 
 
 ### Key Threat Vectors
 
-| Vector | Description | Mitigation |
-|--------|-------------|------------|
-| **H1** - Shared device data leakage | `localStorage` persists API keys and chat history across sessions | Clear-all button, ephemeral mode recommended, warnings |
-| **H3** - Malicious fork distribution | Anyone can fork and host modified versions | Verify integrity, use trusted sources only |
-| **M2** - API key visibility in browser history | Gemini API key visible in URL query params | Prefer header-auth providers, documented warnings |
-| **M3** - XSS via innerHTML | Dynamic content injection could be exploited in forks | CSP, escapeHtml everywhere, input sanitization |
+| Vector                                         | Description                                                       | Mitigation                                             |
+| ---------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------ |
+| **H1** - Shared device data leakage            | `localStorage` persists API keys and chat history across sessions | Clear-all button, ephemeral mode recommended, warnings |
+| **H3** - Malicious fork distribution           | Anyone can fork and host modified versions                        | Verify integrity, use trusted sources only             |
+| **M2** - API key visibility in browser history | Gemini API key visible in URL query params                        | Prefer header-auth providers, documented warnings      |
+| **M3** - XSS via innerHTML                     | Dynamic content injection could be exploited in forks             | CSP, escapeHtml everywhere, input sanitization         |
 
 ---
 
 ## Shared Device Usage
 
 **This is critical for the target audience.** Many users access Banal from:
+
 - Library/public computers
 - Shared family devices
 - Cracked/feature phones
@@ -33,6 +34,7 @@ Banal AI is a frontend-only Single Page Application (SPA) designed for users on 
 ### Ephemeral Mode (Recommended)
 
 When using Banal on shared devices, consider enabling ephemeral mode:
+
 - Theme preference uses `sessionStorage` (auto-cleans on tab close)
 - API keys use `localStorage` but should be cleared after use
 - Chat history persists until manually cleared via "Clear All"
@@ -46,11 +48,13 @@ Since Banal is MIT licensed and forkable by design, **only download from trusted
 ### Verifying Integrity
 
 **Option 1: Official Releases**
+
 - Download only from the official GitHub repository: `github.com/sakurablush/banal`
 - Verify GPG signatures if available
 - Check release checksums
 
 **Option 2: Hash Verification**
+
 ```bash
 # Compare file hashes against known-good values
 sha256sum dist/assets/index-*.js
@@ -58,6 +62,7 @@ sha256sum dist/assets/style-*.css
 ```
 
 **Option 3: Source Comparison**
+
 - Review all changes in a fork before use
 - Check for modifications to:
   - `src/providers/` (API key handling)
@@ -79,12 +84,12 @@ sha256sum dist/assets/style-*.css
 
 ### What We Store Locally
 
-| Data | Storage Location | Purpose | Auto-Clear |
-|------|------------------|---------|------------|
-| API keys | `localStorage` | Enable chat with providers | No (use Clear All) |
-| Chat history | `localStorage` | Continue conversations | No (use Clear All) |
-| Theme preference | `sessionStorage` | Light/dark mode preference | Yes (on tab close) |
-| Language preference | `localStorage` | EN/JA language | No |
+| Data                | Storage Location | Purpose                    | Auto-Clear         |
+| ------------------- | ---------------- | -------------------------- | ------------------ |
+| API keys            | `localStorage`   | Enable chat with providers | No (use Clear All) |
+| Chat history        | `localStorage`   | Continue conversations     | No (use Clear All) |
+| Theme preference    | `sessionStorage` | Light/dark mode preference | Yes (on tab close) |
+| Language preference | `localStorage`   | EN/JA language             | No                 |
 
 ### What We NEVER Do
 
@@ -96,6 +101,7 @@ sha256sum dist/assets/style-*.css
 ### What Providers See
 
 When you use chat features, your prompts are sent directly to:
+
 - Groq (`api.groq.com`)
 - Google Gemini (`generativelanguage.googleapis.com`)
 - Hugging Face (`router.huggingface.co`)
@@ -131,4 +137,4 @@ If you maintain a fork:
 
 ---
 
-*This security policy reflects the audit findings and the project's commitment to serving vulnerable users with dignity and protection.*
+_This security policy reflects the audit findings and the project's commitment to serving vulnerable users with dignity and protection._

@@ -1,35 +1,79 @@
 /**
  * Local-first key storage for the API Playground.
  *
- * Persistent keys reuse the existing `banal-api-keys-v1` localStorage key so chat
- * and playground share Groq/HF/OVH credentials. Session-only keys live in
+ * Persistent keys use sessionStorage. Session-only keys live in
  * sessionStorage and are intended for shared machines.
  */
 
-import {
-  clearApiKey,
-  getAllStoredKeys,
-  getStoredApiKey,
-  storeApiKey,
-  type Provider as CoreProvider,
-} from '../providers';
 import { maskKey } from './utils';
 import type { PlaygroundKeyMode, PlaygroundProviderId } from './types';
 
 export type { PlaygroundKeyMode } from './types';
 
-const SESSION_STORAGE_KEY = 'banal-api-keys-session-v1';
+const STORAGE_KEY = 'banal-api-keys-v1';
 
+// Core providers that use the shared key storage
+type CoreProvider = 'groq' | 'gemini' | 'hf' | 'ovh-anon';
+
+// Stored keys type (for persistent storage)
+type StoredKeys = Partial<Record<CoreProvider, string>>;
+
+// Session keys type (maps playground provider ID to key)
 type SessionKeys = Partial<Record<PlaygroundProviderId, string>>;
 
-const CORE_PROVIDER_BY_PLAYGROUND_ID: Record<PlaygroundProviderId, CoreProvider> = {
+const SESSION_STORAGE_KEY = 'banal-api-keys-session-v1';
+
+// Mapping from PlaygroundProviderId to CoreProvider (for shared key storage)
+const PLAYGROUND_TO_CORE: Record<PlaygroundProviderId, CoreProvider | null> = {
   groq: 'groq',
+  gemini: 'gemini',
   huggingface: 'hf',
   ovh: 'ovh-anon',
-  'open-meteo': 'ovh-anon',
+  'open-meteo': null, // no key needed
 };
 
-const PLAYGROUND_CORE_PROVIDERS: CoreProvider[] = ['groq', 'hf', 'ovh-anon'];
+function loadPersistentKeys(): StoredKeys {
+  if (typeof sessionStorage === 'undefined') return {};
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function savePersistentKeys(keys: StoredKeys): void {
+  if (typeof sessionStorage === 'undefined') return;
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(keys));
+  } catch {
+    // quota or incognito — conversation still works this session
+  }
+}
+
+function getStoredApiKey(provider: CoreProvider): string | null {
+  const keys = loadPersistentKeys();
+  return keys[provider] || null;
+}
+
+function storeApiKey(provider: CoreProvider, key: string): void {
+  if (!key || typeof key !== 'string') return;
+  const trimmed = key.trim();
+  if (!trimmed) return;
+  const keys = loadPersistentKeys();
+  keys[provider] = trimmed;
+  savePersistentKeys(keys);
+}
+
+function clearApiKey(provider: CoreProvider): void {
+  const keys = loadPersistentKeys();
+  delete keys[provider];
+  savePersistentKeys(keys);
+}
+
+function getAllStoredKeys(): StoredKeys {
+  return loadPersistentKeys();
+}
 
 function readSessionKeys(): SessionKeys {
   try {
@@ -58,7 +102,8 @@ export function getPlaygroundKey(
     return readSessionKeys()[provider] || null;
   }
 
-  return getStoredApiKey(CORE_PROVIDER_BY_PLAYGROUND_ID[provider]);
+  const core = PLAYGROUND_TO_CORE[provider];
+  return core ? getStoredApiKey(core) : null;
 }
 
 export function setPlaygroundKey(
@@ -76,7 +121,10 @@ export function setPlaygroundKey(
     return;
   }
 
-  storeApiKey(CORE_PROVIDER_BY_PLAYGROUND_ID[provider], trimmed);
+  const core = PLAYGROUND_TO_CORE[provider];
+  if (core) {
+    storeApiKey(core, trimmed);
+  }
 }
 
 export function clearPlaygroundKey(
@@ -92,7 +140,10 @@ export function clearPlaygroundKey(
     return;
   }
 
-  clearApiKey(CORE_PROVIDER_BY_PLAYGROUND_ID[provider]);
+  const core = PLAYGROUND_TO_CORE[provider];
+  if (core) {
+    clearApiKey(core);
+  }
 }
 
 export function clearAllPlaygroundKeys(mode: PlaygroundKeyMode | 'all' = 'all'): void {
@@ -105,7 +156,9 @@ export function clearAllPlaygroundKeys(mode: PlaygroundKeyMode | 'all' = 'all'):
   }
 
   if (mode === 'persistent' || mode === 'all') {
-    PLAYGROUND_CORE_PROVIDERS.forEach((provider) => clearApiKey(provider));
+    (['groq', 'gemini', 'hf', 'ovh-anon'] as CoreProvider[]).forEach((provider) =>
+      clearApiKey(provider)
+    );
   }
 }
 
@@ -125,5 +178,5 @@ export function getSavedKeyMask(
 }
 
 export function getAllPersistentKeys(): Record<string, string> {
-  return getAllStoredKeys();
+  return getAllStoredKeys() as Record<string, string>;
 }

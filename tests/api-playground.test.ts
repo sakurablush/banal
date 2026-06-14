@@ -81,7 +81,9 @@ describe('API Playground Providers', () => {
     it('returns chat providers', () => {
       const chatProviders = getProvidersByMode('chat');
       expect(chatProviders.length).toBe(3);
-      expect(chatProviders.map((p) => p.id)).toEqual(expect.arrayContaining(['groq', 'huggingface', 'ovh']));
+      expect(chatProviders.map((p) => p.id)).toEqual(
+        expect.arrayContaining(['groq', 'huggingface', 'ovh'])
+      );
     });
 
     it('returns data providers', () => {
@@ -200,7 +202,9 @@ describe('API Playground Providers', () => {
     });
 
     it('throws error when building Open-Meteo without coordinates', () => {
-      expect(() => buildOpenMeteoRequest({ ...mockContext, provider: openMeteoProvider } as any)).toThrow('coordinates are required');
+      expect(() =>
+        buildOpenMeteoRequest({ ...mockContext, provider: openMeteoProvider } as any)
+      ).toThrow('coordinates are required');
     });
 
     it('builds request with correct body structure', () => {
@@ -398,7 +402,10 @@ describe('API Playground Utils', () => {
   describe('parseCoordinates', () => {
     it('parses valid coordinates', () => {
       expect(parseCoordinates('52.52, 13.41')).toEqual({ latitude: '52.52', longitude: '13.41' });
-      expect(parseCoordinates('-33.87, 151.21')).toEqual({ latitude: '-33.87', longitude: '151.21' });
+      expect(parseCoordinates('-33.87, 151.21')).toEqual({
+        latitude: '-33.87',
+        longitude: '151.21',
+      });
       expect(parseCoordinates('52.52 13.41')).toEqual({ latitude: '52.52', longitude: '13.41' });
     });
 
@@ -435,7 +442,13 @@ describe('API Playground Utils', () => {
           weatherCode: 1,
         },
         daily: [
-          { date: '2024-01-01', temperatureMax: 18, temperatureMin: 5, precipitationSum: 0, weatherCode: 1 },
+          {
+            date: '2024-01-01',
+            temperatureMax: 18,
+            temperatureMin: 5,
+            precipitationSum: 0,
+            weatherCode: 1,
+          },
         ],
       };
       const result = buildWeatherText(summary);
@@ -604,9 +617,10 @@ describe('API Playground Client', () => {
         statusText: 'OK',
         ok: true,
         headers: new Headers(),
-        text: async () => JSON.stringify({
-          results: [{ latitude: 52.52, longitude: 13.41, name: 'Berlin' }],
-        }),
+        text: async () =>
+          JSON.stringify({
+            results: [{ latitude: 52.52, longitude: 13.41, name: 'Berlin' }],
+          }),
       } as any);
 
       const result = await resolveWeatherCoordinates('Berlin');

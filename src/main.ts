@@ -17,58 +17,18 @@ import { renderPlayground } from './api-playground';
 import { renderPromptTemplatesStandalone } from './prompt-templates-standalone';
 import { initQuickStart } from './quickstart';
 import { initFreeModels } from './free-models';
-import { initChatModal } from './chat-modal';
 
 // Boot theme first (before any rendering so CSS variables are correct)
 initTheme();
 
-// Ephemeral mode: switch between persistent (localStorage) and session-only storage
-const EPHEMERAL_KEY = 'banal-ephemeral';
-export function isEphemeralMode(): boolean {
-  if (typeof window === 'undefined') return false;
-  return sessionStorage.getItem(EPHEMERAL_KEY) === 'true';
-}
-export function setEphemeralMode(ephemeral: boolean): void {
-  if (typeof window === 'undefined') return;
-  try {
-    if (ephemeral) {
-      sessionStorage.setItem(EPHEMERAL_KEY, 'true');
-    } else {
-      sessionStorage.removeItem(EPHEMERAL_KEY);
-    }
-  } catch {
-    // ignore
-  }
-}
-
 // Wire theme toggle button (setTheme is already available via static import)
 const themeToggleBtn = document.getElementById('theme-toggle');
-const themeIcon = document.getElementById('theme-icon');
-if (themeToggleBtn && themeIcon) {
+if (themeToggleBtn) {
   themeToggleBtn.addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme') || 'dark';
     const next = current === 'dark' ? 'light' : 'dark';
     setTheme(next);
-    themeIcon.textContent = next === 'dark' ? '🌙' : '☀️';
   });
-  // Set initial icon
-  const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-  themeIcon.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-}
-
-// Ephemeral mode toggle for shared devices
-const ephemeralBtn = document.getElementById('ephemeral-toggle');
-if (ephemeralBtn) {
-  const updateEphemeralBtn = () => {
-    const isEphemeral = isEphemeralMode();
-    ephemeralBtn.classList.toggle('active', isEphemeral);
-    ephemeralBtn.setAttribute('aria-pressed', String(isEphemeral));
-  };
-  ephemeralBtn.addEventListener('click', () => {
-    setEphemeralMode(!isEphemeralMode());
-    updateEphemeralBtn();
-  });
-  updateEphemeralBtn();
 }
 
 // Boot i18n first (lang switcher + data-i18n + events for dynamic parts)
@@ -138,13 +98,6 @@ try {
   initFreeModels();
 } catch (error) {
   console.error('Free Models section failed to initialize:', error);
-}
-
-// Chat Modal — opens the real chat interface in a modal dialog
-try {
-  initChatModal();
-} catch (error) {
-  console.error('Chat modal failed to initialize:', error);
 }
 
 // Extremely small core — everything else lives in focused, tested modules.

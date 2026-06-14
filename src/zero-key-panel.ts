@@ -305,7 +305,10 @@ function renderQuickFilters(state: PanelState): HTMLElement {
     );
     chip.type = 'button';
     chip.textContent = def.label;
-    chip.setAttribute('aria-label', state.lang === 'ja' ? `${def.label}でフィルター` : `Filter by ${def.label}`);
+    chip.setAttribute(
+      'aria-label',
+      state.lang === 'ja' ? `${def.label}でフィルター` : `Filter by ${def.label}`
+    );
     chip.addEventListener('click', () => {
       if (state.lifeFilters.has(def.id)) {
         state.lifeFilters.delete(def.id);
@@ -392,9 +395,12 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
   // Badges
   if (tool.badges.length > 0) {
     const badgesWrap = create('div', 'zk2-card-badges');
-    for (const b of tool.badges.slice(0, 3)) {
-      const badge = create('span', 'zk2-badge');
-      badge.textContent = b;
+    for (const b of tool.badges.slice(0, 4)) {
+      const badge = create(
+        'span',
+        b === 'true-free-models' ? 'zk2-badge zk2-badge-free' : 'zk2-badge'
+      );
+      badge.textContent = b === 'true-free-models' ? '🔓 Free' : b;
       badgesWrap.appendChild(badge);
     }
     card.appendChild(badgesWrap);
@@ -541,7 +547,10 @@ function updateSidebarActiveState(state: PanelState): void {
   const buttons = sidebar.querySelectorAll('.zk2-cat-item');
   buttons.forEach((btn) => {
     const cat = (btn as HTMLElement).dataset.category;
-    btn.classList.toggle('active', cat === 'all' ? state.activeCategory === null : cat === state.activeCategory);
+    btn.classList.toggle(
+      'active',
+      cat === 'all' ? state.activeCategory === null : cat === state.activeCategory
+    );
   });
 }
 

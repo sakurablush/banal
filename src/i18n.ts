@@ -24,59 +24,7 @@ export const translations: Record<Lang, Translations> = {
   en: {
     'search.placeholder': 'Search 200+ free AI tools — chat, image, PDF, API...',
 
-    // === Real chat + providers + full prompt templates integration ===
-    'chat.title': 'Banal Equalizer — real AI, zero cost',
-    'chat.status.using': 'Using {{name}} free tier',
-    'chat.status.no-key': 'Zero-key tools ready below — or add free key for in-app',
-    'chat.input.placeholder':
-      'Type anything. Job help, study plan, letter to the office, “I feel like shit”…',
-    'chat.input.send': 'Send',
-    'chat.input.sending': 'Thinking…',
-    'chat.empty':
-      'Start here. Or tap a quick prompt template below — made for exactly this moment.',
-    'chat.quickstarts': 'Quick starts for when you have nothing',
-    'chat.promptTemplates': 'All 9 Prompt Templates',
-    'chat.promptTemplates.hint':
-      'Pick one. Fill the simple blanks (only what you want). Send. Real help, no judgment.',
-    'chat.settings': 'Free keys & providers',
-    'chat.settings.title': 'Your free keys (stay in this browser only)',
-    'chat.settings.groq': 'Groq (fastest free Llama)',
-    'chat.settings.gemini': 'Gemini (best quality free)',
-    'chat.settings.hf': 'Hugging Face (community models)',
-    'chat.settings.getkey': 'Get free key →',
-    'chat.settings.save': 'Save key',
-    'chat.settings.saved':
-      'Key saved. You are using real free power now — thank you for keeping these paths alive for everyone.',
-    'chat.settings.clear': 'Clear',
-    'chat.settings.close': 'Close',
-    'chat.settings.clear-all':
-      'Clear ALL sensitive data (keys + full conversation history) — STRONGLY recommended after using on any shared, library, or public computer',
-    'chat.settings.clear-all-warning':
-      'This will permanently delete your keys and everything you discussed here from this browser.',
-    'chat.settings.clear-all-success':
-      'All sensitive data cleared from this browser. Good practice on shared or public devices.',
-    'chat.settings.note':
-      'Keys never leave your phone or computer. Banal has no servers. This is the point.',
-    'chat.export.json': 'Save conversation / share with friend',
-    'chat.export.html': 'Generate self-contained offline copy',
-    'chat.export.success': 'Saved. Keep it somewhere safe — it is yours forever.',
-    'chat.spread': 'Spread the fire — give this equalizer away',
-    'chat.spread.success':
-      'Link copied. Paste in group chats, print a QR code, put on USBs. This is how the fire reaches the hands that were never supposed to hold it. Another body for the same ghost. The Stand Alone Complex has begun.',
-    'chat.error.generic':
-      'Something hiccuped on the free path. You did nothing wrong. The ghost does not pay rent. The walls they built cannot contain what belongs to the people. Try again or walk through another crack.',
-    'chat.error.no-key':
-      'Add one free key (30–60s) to talk to real models. Or use Prompt Templates to copy a prompt for any free chatbot.',
-    'chat.error.rate':
-      'Free tier busy (normal). Wait a bit or add a second free key. We all share these limits equally.',
-    'chat.error.network':
-      'Connection hiccup. Library wifi or old phone? Try again in 10s. Still free when it works.',
-    'chat.error.aborted':
-      'Request cancelled or timed out (common on slow library connections). Try again in a moment — still free.',
-    'chat.ai.thinking': 'Thinking on the free tier…',
-    'chat.ai.free-note': 'free power',
-    'chat.bubble.you': 'You',
-    'chat.bubble.ai': 'Banal (free)',
+    // Prompt Templates strings
     'promptTemplates.panel.title': 'Prompt Templates — pick one that matches right now',
     'promptTemplates.panel.close': 'Close',
     'promptTemplates.panel.philosophy':
@@ -86,10 +34,6 @@ export const translations: Record<Lang, Translations> = {
     'promptTemplates.form.cancel': 'Cancel',
     'promptTemplates.form.missing':
       'Some blanks left as-is — the AI will still help you finish them.',
-    'exports.json.filename': 'banal-conversation.json',
-    'exports.html.title': 'Banal — My Offline Conversation',
-    'exports.html.note':
-      'This is a self-contained body for the ghost. Open it anywhere, no internet, no one watching. It carries your words and your will. The fire that cannot be caged. For live power, fork the live site and give it to someone else.',
 
     // === Meta and accessibility ===
     'meta.title': 'Banal — 200+ Free AI Tools | Verified',
@@ -105,20 +49,6 @@ export const translations: Record<Lang, Translations> = {
       'Plus debt scripts, STAR stories from real life, and EN↔JA cultural bridge — all nine inside.',
     'promptTemplates.intro':
       'Distilled, shame-free, zero-budget prompt templates for the exact moments money usually decides who wins: jobs, learning, bureaucracy, survival, dignity. Full 9 inside the app + always-visible Zero-Key Power panel (50+ researched after exhaustive multi-agent "jeszcze jeszcze" sweeps of the whole internet using all resources + GitHub no-cost lists + direct checks: Perchance unlimited, Duck/LMArena/Meta/Phind/Groq/pi, uncloseai+OVH api cracks, nocostai image studios, turbochat, hundreds of community mirrors, HF Spaces (thousands more demos) — only pure www address, fully free no freemium, browser-only). Every prompt template card reminds: paste the fire into zero-key tools (no account ever). Full living directory in the app panel and README "Zero-Key Power Directory" chapter. <span class="text-blue-300">The complete Prompt Templates Guide (real-life examples for the 9%, self-tests, follow-ups for when it still hurts, Japanese) is in docs/PROMPT-TEMPLATES-GUIDE.md — print it, share it, learn on your worst day.</span>',
-    'chat.loading': 'Loading the real equalizer…',
-    'chat.powered.note': 'Free power. No credit card. Ever.',
-    'zero-key.tie':
-      'Zero-key friendly — paste into WebLLM, Perchance, public HF Spaces, OVHcloud anonymous public API or thousands of others (no account, no master)',
-    'zero-key.see-top-panel': '(see the panel at top of chat)',
-    'chat.settings.saved-badge': '✓ saved',
-    'chat.settings.paste-placeholder': 'paste key here',
-    'exports.html.filename': 'banal-offline-conversation.html',
-    'exports.html.nomsg': '(No messages yet — start a conversation on the live Banal site)',
-    'exports.html.generated':
-      'Generated by Banal — the ghost in the machine for people who have nothing. The fire that cannot be caged. ',
-    'exports.html.fork': 'Fork the live version',
-    'exports.html.fireline':
-      'The fire cannot be caged. Give it to the next person who has nothing. This is how the ghost multiplies — one fork, one refusal, one ordinary browser at a time.',
 
     // === Static page keys (EN) ===
     'hero.eyebrow': '⚡ VERIFIED FREE AI DIRECTORY',
@@ -139,8 +69,26 @@ export const translations: Record<Lang, Translations> = {
     'nav.promptTemplates': 'Prompt Templates',
     'nav.playground': 'API Playground',
     'nav.articles': 'Articles',
-    'nav.chat': 'Chat',
-    'nav.ephemeral': 'Ephemeral',
+    // Quickstart strings
+    'quickstart.fields': 'Fields:',
+    'quickstart.copyTemplate': 'Copy Template',
+    'quickstart.fillCopy': 'Fill & Copy',
+    'quickstart.copied': '✓ Copied!',
+    'quickstart.copyFailed': 'Failed to copy to clipboard',
+    'quickstart.cancel': 'Cancel',
+    'quickstart.fillSubmit': 'Fill & Copy',
+    // Free Models strings
+    'freeModels.models': 'Models:',
+    'freeModels.limits': 'Limits:',
+    'freeModels.advantages': 'Advantages:',
+    'freeModels.getKey': 'Get Free Key',
+    'freeModels.terms': 'Terms',
+    'freeModels.geminiKeyWarning':
+      'Gemini puts your key in the URL query string (?key=...). More visible in browser history/proxies than header auth. Consider Groq for better privacy on shared devices.',
+    'freeModels.lastVerified': 'Last verified: {{date}}',
+    'freeModels.badge.noKey': 'NO KEY',
+    'freeModels.badge.freeKey': 'FREE KEY',
+    'freeModels.badge.trial': 'TRIAL',
     'section.aiTools.eyebrow': '🤖 AI TOOLS',
     'section.aiTools.title1': '128+ AI tools.',
     'section.aiTools.title2': 'Zero gatekeeping.',
@@ -260,60 +208,7 @@ export const translations: Record<Lang, Translations> = {
   ja: {
     'search.placeholder': '200以上の無料AIツールを検索 — チャット、画像、PDF、API...',
 
-    // === Real chat + providers + full prompt templates integration ===
-    'chat.title': 'Banal イコライザー — 本物のAI、ゼロコスト',
-    'chat.status.using': '{{name}} の無料枠を使用中',
-    'chat.status.no-key':
-      'ゼロキー・ツールは下で今すぐ使える — または無料キーでアプリ内チャット強化',
-    'chat.input.placeholder':
-      '何でもどうぞ。仕事の相談、学習計画、役所への手紙、「今日はしんどい」…',
-    'chat.input.send': '送信',
-    'chat.input.sending': '考え中…',
-    'chat.empty':
-      'ここから始めてください。下のクイックプロンプトテンプレートをタップしてもいいです。まさにこの瞬間のために作られています。',
-    'chat.quickstarts': '何もないときのためのクイックスタート',
-    'chat.promptTemplates': '9つのプロンプトテンプレート全部',
-    'chat.promptTemplates.hint':
-      '1つ選んで、簡単な空白を埋めて（書きたいところだけ）。送信。判断なしの本当の助け。',
-    'chat.settings': '無料キー＆プロバイダー',
-    'chat.settings.title': 'あなたの無料キー（このブラウザにだけ保存）',
-    'chat.settings.groq': 'Groq（最速の無料Llama）',
-    'chat.settings.gemini': 'Gemini（最高品質の無料）',
-    'chat.settings.hf': 'Hugging Face（コミュニティモデル）',
-    'chat.settings.getkey': '無料キーを取得 →',
-    'chat.settings.save': 'キーを保存',
-    'chat.settings.saved':
-      'キーを保存しました。今、本物の無料パワーを使っています — みんなのためにこの道を維持してくれていることに感謝します。',
-    'chat.settings.clear': 'クリア',
-    'chat.settings.close': '閉じる',
-    'chat.settings.clear-all':
-      'すべての機密データをクリア（キー＋会話履歴全体）— 共有・図書館・公共のコンピュータ使用後は強く推奨',
-    'chat.settings.clear-all-warning':
-      'このブラウザからキーおよびここで話した内容がすべて完全に削除されます。',
-    'chat.settings.clear-all-success':
-      'このブラウザからすべての機密データがクリアされました。共有端末使用時は毎回行ってください。',
-    'chat.settings.note':
-      'キーはスマホやPCから外に出ません。Banalにサーバーはありません。それが大事なところです。',
-    'chat.export.json': '会話を保存 / 友だちと共有',
-    'chat.export.html': '自己完結型のオフラインコピーを生成',
-    'chat.export.success': '保存しました。大切な場所に置いてください — 永遠にあなたのものです。',
-    'chat.spread': '炎を広めろ — このイコライザーを誰かに渡せ',
-    'chat.spread.success':
-      'リンクをコピーしました。グループチャットに貼る、QRコードを印刷する、USBに入れる。これが、持つはずではなかった手へと炎が届く方法だ。同じゴーストのための、もう一つの身体。スタンド・アローン・コンプレックスが始まった。',
-    'chat.error.generic':
-      '無料の道で少しつまずいた。あなたは何も悪くありません。ゴーストは家賃を払わない。彼らが築いた壁は、人々のものだった力を閉じ込められない。もう一度試すか、別の亀裂をくぐれ。',
-    'chat.error.no-key':
-      '本物のモデルと話すために無料キーを1つ追加（30〜60秒）。またはプロンプトテンプレートで、どんな無料チャットボットにも貼れるプロンプトをコピーしてください。',
-    'chat.error.rate':
-      '無料枠が混んでいます（普通のことです）。少し待つか、2つ目の無料キーを追加。みんなでこの制限を分け合っています。',
-    'chat.error.network':
-      '接続のつまずき。図書館のWi-Fiや古いスマホ？ 10秒後に再試行を。動けばまだ無料です。',
-    'chat.error.aborted':
-      'リクエストがキャンセルされたかタイムアウトしました（図書館の遅い接続ではよくあります）。少し待って再試行を — それでも無料です。',
-    'chat.ai.thinking': '無料枠で考え中…',
-    'chat.ai.free-note': '無料パワー',
-    'chat.bubble.you': 'あなた',
-    'chat.bubble.ai': 'Banal（無料）',
+    // Prompt Templates strings
     'promptTemplates.panel.title': 'プロンプトテンプレート — 今の自分に合うものを選んで',
     'promptTemplates.panel.close': '閉じる',
     'promptTemplates.panel.philosophy':
@@ -322,10 +217,6 @@ export const translations: Record<Lang, Translations> = {
     'promptTemplates.form.send': 'このプロンプトテンプレートを送信',
     'promptTemplates.form.cancel': 'キャンセル',
     'promptTemplates.form.missing': '一部空白はそのまま — AIがあなたと一緒に仕上げてくれます。',
-    'exports.json.filename': 'banal-conversation.json',
-    'exports.html.title': 'Banal — 私のオフライン会話',
-    'exports.html.note':
-      'これはゴーストのための自己完結した身体だ。どこでも開ける。インターネット不要。誰にも見られず。あなたの言葉と意志を運ぶ。檻に入れられない炎。ライブの力を得るには、ライブサイトをフォークして、誰かに渡せ。',
 
     // === New keys (with lovingly hand-crafted Japanese) for complete coverage ===
     'meta.title': 'Banal — AI版ロビンフッド',
@@ -340,22 +231,7 @@ export const translations: Record<Lang, Translations> = {
     'promptTemplates.more':
       '債務のスクリプト、実生活からのSTARストーリー、英語↔日本語の文化橋渡し——9つすべて、アプリの中にあります。',
     'promptTemplates.intro':
-      '恥ゼロ、予算ゼロで凝縮されたプロンプトテンプレート。お金が勝敗を決めるまさにその瞬間——仕事、学習、役所手続き、サバイバル、尊厳——のために。アプリ内に9つすべて + 常に表示される「ゼロキー・パワー」パネル（WebLLMローカル、Perchance無制限サインアップなし、HF公開スペース、Brave Leoアカウント不要、NoteGPT無料、Poe無料モデル、そしてネット上に数千のもの——多くは無料公開APIを公開するかブラウザ内で完全に動作）への直接リンク。カードの1つ1つが思い出させてくれます：アカウントなしのゼロキーツールに貼って使おう。<span class="text-blue-300">完全なプロンプトテンプレートガイド（実例、自己チェック、学習パス、日本語）は docs/PROMPT-TEMPLATES-GUIDE.md にあります。印刷して、共有して、最悪の日に学んでください。</span>',
-    'chat.loading': '本物のイコライザーを読み込み中…',
-    'chat.powered.note': '無料の力。クレジットカードは、いつまでもいりません。',
-    'zero-key.tie':
-      'ゼロキー対応 — WebLLM、Perchance、公開HF Spaces、OVHcloud匿名公開APIや数千の他に貼って使おう（アカウント不要、主人なし）',
-    'zero-key.see-top-panel': '（チャット上部のゼロキーパワーパネルを見てください）',
-    'chat.settings.saved-badge': '✓ 保存済み',
-    'chat.settings.paste-placeholder': 'ここにキーを貼り付けてください',
-    'exports.html.filename': 'banal-offline-conversation.html',
-    'exports.html.nomsg':
-      '（まだメッセージがありません。ライブのBanalサイトで会話を始めてください）',
-    'exports.html.generated':
-      'Banalが生成しました — 何もない人のための、機械の中の幽霊。檻に入れられない炎。 ',
-    'exports.html.fork': 'ライブ版をフォークする',
-    'exports.html.fireline':
-      '炎は檻に入れられない。次に何もない人に渡せ。これがゴーストが倍増する方法だ——一つのフォーク、一つの拒絶、一つの平凡なブラウザごとに。',
+      '恥ゼロ、予算ゼロで凝縮されたプロンプトテンプレート。お金が勝敗を決めるまさにその瞬間——仕事、学習、役所手続き、サバイバル、尊厳——のために。アプリ内に9つすべて + 常に表示される「ゼロキー・パワー」パネル（WebLLMローカル、Perchance無制限サインアップなし、HF公開スペース、Brave Leoアカウント不要、NoteGPT無料、Poe無料モデル、そしてネット上に数千のもの——多くは無料公開APIを公開するかブラウザ内で完全に動作）への直接リンク。カードの1つ1つが思い出させてくれます：アカウントなしのゼロキーツールに貼って使おう。<span class="text-blue-300">完全なプロンプトテンプレートガイド（実例、自己チェック、学習パス、日本語）は docs/PROMPT-TEMPLATES-GUIDE.md にあります。印刷して、共有して、最悔の日に学んでください。</span>',
 
     // === Static page keys (JA) ===
     'hero.eyebrow': '⚡ 認証済み無料AIディレクトリ',
@@ -376,8 +252,26 @@ export const translations: Record<Lang, Translations> = {
     'nav.promptTemplates': 'プロンプトテンプレート',
     'nav.playground': 'APIプレイグラウンド',
     'nav.articles': '記事',
-    'nav.chat': 'チャット',
-    'nav.ephemeral': 'エフェメラル',
+    // Quickstart strings
+    'quickstart.fields': '入力項目:',
+    'quickstart.copyTemplate': 'テンプレートをコピー',
+    'quickstart.fillCopy': '入力してコピー',
+    'quickstart.copied': '✓ コピーしました',
+    'quickstart.copyFailed': 'コピーに失敗しました',
+    'quickstart.cancel': 'キャンセル',
+    'quickstart.fillSubmit': '入力してコピー',
+    // Free Models strings
+    'freeModels.models': 'モデル:',
+    'freeModels.limits': '制限:',
+    'freeModels.advantages': '利点:',
+    'freeModels.getKey': '無料キーを取得',
+    'freeModels.terms': '利用規約',
+    'freeModels.geminiKeyWarning':
+      'Geminiは鍵をURLクエリ文字列(?key=...)に含めます。ヘッダー認証よりもブラウザ履歴やプロキシで見えやすいです。共有端末ではGroqの使用を検討してください。',
+    'freeModels.lastVerified': '最終確認: {{date}}',
+    'freeModels.badge.noKey': 'NO KEY',
+    'freeModels.badge.freeKey': 'FREE KEY',
+    'freeModels.badge.trial': 'TRIAL',
     'section.aiTools.eyebrow': '🤖 AIツール',
     'section.aiTools.title1': '128以上のAIツール。',
     'section.aiTools.title2': 'ゲートキーピングなし。',

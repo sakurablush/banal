@@ -11,6 +11,8 @@
  * downloaded and run locally with no API keys and no rate limits.
  */
 
+import { t } from './i18n';
+
 interface FreeModelProvider {
   id: string;
   name: string;
@@ -22,7 +24,7 @@ interface FreeModelProvider {
   termsUrl: string;
   description: string;
   lastVerified?: string; // ISO date when limits/situation last verified
-  keyVisibilityNote?: string; // Security note about key handling (e.g., Gemini puts key in URL)
+  keyVisibilityNoteKey?: 'gemini' | 'unknown'; // i18n key for security warning
 }
 
 interface OpenSourceModel {
@@ -72,7 +74,7 @@ const providers: FreeModelProvider[] = [
     termsUrl: 'https://ai.google.dev/gemini-api/docs/rate-limits',
     description: 'High-quality models from Google. Great for complex tasks.',
     lastVerified: '2025-06-01',
-    keyVisibilityNote: 'Gemini puts your key in the URL query string (?key=...). More visible in browser history/proxies than header auth. Consider Groq for better privacy on shared devices.',
+    keyVisibilityNoteKey: 'gemini',
   },
   {
     id: 'hf',
@@ -360,8 +362,13 @@ function createProviderCard(provider: FreeModelProvider): HTMLElement {
         ? 'bg-blue-500/20 text-blue-400'
         : 'bg-purple-500/20 text-purple-400'
   }`;
-  badge.textContent =
-    provider.tier === 'anonymous' ? 'NO KEY' : provider.tier === 'free-key' ? 'FREE KEY' : 'TRIAL';
+  const badgeKey =
+    provider.tier === 'anonymous'
+      ? 'freeModels.badge.noKey'
+      : provider.tier === 'free-key'
+        ? 'freeModels.badge.freeKey'
+        : 'freeModels.badge.trial';
+  badge.textContent = t('en', badgeKey);
 
   // Name
   const name = document.createElement('h3');
@@ -378,7 +385,7 @@ function createProviderCard(provider: FreeModelProvider): HTMLElement {
   modelsDiv.className = 'mb-3';
   const modelsLabel = document.createElement('div');
   modelsLabel.className = 'text-white/40 text-xs mb-1';
-  modelsLabel.textContent = 'Models:';
+  modelsLabel.textContent = t('en', 'freeModels.models');
   const modelsList = document.createElement('div');
   modelsList.className = 'text-white/80 text-sm';
   modelsList.textContent = provider.models.join(', ');
@@ -390,7 +397,7 @@ function createProviderCard(provider: FreeModelProvider): HTMLElement {
   limitsDiv.className = 'mb-4';
   const limitsLabel = document.createElement('div');
   limitsLabel.className = 'text-white/40 text-xs mb-1';
-  limitsLabel.textContent = 'Limits:';
+  limitsLabel.textContent = t('en', 'freeModels.limits');
   const limitsValue = document.createElement('div');
   limitsValue.className = 'text-white/80 text-sm';
   limitsValue.textContent = provider.limits;
@@ -402,7 +409,7 @@ function createProviderCard(provider: FreeModelProvider): HTMLElement {
   advantagesDiv.className = 'mb-4';
   const advantagesLabel = document.createElement('div');
   advantagesLabel.className = 'text-white/40 text-xs mb-1';
-  advantagesLabel.textContent = 'Advantages:';
+  advantagesLabel.textContent = t('en', 'freeModels.advantages');
   const advantagesList = document.createElement('ul');
   advantagesList.className = 'text-white/80 text-sm list-disc list-inside';
   provider.advantages.forEach((adv) => {
@@ -418,15 +425,16 @@ function createProviderCard(provider: FreeModelProvider): HTMLElement {
   if (provider.lastVerified) {
     verifiedNote = document.createElement('div');
     verifiedNote.className = 'text-xs text-white/40 mb-3';
-    verifiedNote.textContent = `Last verified: ${provider.lastVerified}`;
+    const verifiedTemplate = t('en', 'freeModels.lastVerified');
+    verifiedNote.textContent = verifiedTemplate.replace('{{date}}', provider.lastVerified);
   }
 
   // Key visibility warning (security)
   let keyWarning: HTMLElement | null = null;
-  if (provider.keyVisibilityNote) {
+  if (provider.keyVisibilityNoteKey === 'gemini') {
     keyWarning = document.createElement('div');
     keyWarning.className = 'text-xs text-amber-400 bg-amber-500/10 p-2 rounded mb-3';
-    keyWarning.textContent = provider.keyVisibilityNote;
+    keyWarning.textContent = t('en', 'freeModels.geminiKeyWarning');
   }
 
   // Links
@@ -439,7 +447,7 @@ function createProviderCard(provider: FreeModelProvider): HTMLElement {
   getKeyBtn.rel = 'noopener noreferrer';
   getKeyBtn.className =
     'flex-1 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg transition-colors text-center';
-  getKeyBtn.textContent = 'Get Free Key';
+  getKeyBtn.textContent = t('en', 'freeModels.getKey');
 
   const termsLink = document.createElement('a');
   termsLink.href = provider.termsUrl;
@@ -447,7 +455,7 @@ function createProviderCard(provider: FreeModelProvider): HTMLElement {
   termsLink.rel = 'noopener noreferrer';
   termsLink.className =
     'px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold rounded-lg transition-colors text-center';
-  termsLink.textContent = 'Terms';
+  termsLink.textContent = t('en', 'freeModels.terms');
 
   linksDiv.appendChild(getKeyBtn);
   linksDiv.appendChild(termsLink);

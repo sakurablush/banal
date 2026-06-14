@@ -16,14 +16,14 @@
 
 ## Duplicates Removed
 
-| Original Tool | Duplicate Tool | Action |
-|---------------|----------------|--------|
-| `riffusion` | flow-music (rebrand) | ✅ Renamed |
-| `continue-dev` | `continue` | ✅ Removed duplicate |
-| `suno` | `suno-ai` | ✅ Removed duplicate |
-| `pika-free` | `pika-labs` | ✅ Removed duplicate |
-| `midjourney-free` | `midjourney-web` | ✅ Removed duplicate |
-| `gamma` | `gamma-app` | ✅ Removed duplicate |
+| Original Tool     | Duplicate Tool       | Action               |
+| ----------------- | -------------------- | -------------------- |
+| `riffusion`       | flow-music (rebrand) | ✅ Renamed           |
+| `continue-dev`    | `continue`           | ✅ Removed duplicate |
+| `suno`            | `suno-ai`            | ✅ Removed duplicate |
+| `pika-free`       | `pika-labs`          | ✅ Removed duplicate |
+| `midjourney-free` | `midjourney-web`     | ✅ Removed duplicate |
+| `gamma`           | `gamma-app`          | ✅ Removed duplicate |
 
 **Total duplicates removed: 5 entries**  
 **Tools count: 272 → 267**
@@ -32,10 +32,10 @@
 
 ## Category Corrections
 
-| Tool | Changed From | Changed To |
-|------|--------------|----------|
-| `claude-code` | ai-agents | ai-coding |
-| `gemini-cli` | ai-agents | ai-coding |
+| Tool          | Changed From | Changed To |
+| ------------- | ------------ | ---------- |
+| `claude-code` | ai-agents    | ai-coding  |
+| `gemini-cli`  | ai-agents    | ai-coding  |
 
 ---
 

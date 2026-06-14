@@ -2,15 +2,8 @@
  * Browser fetch layer for the API Playground.
  */
 
-import {
-  getPlaygroundKey,
-  type PlaygroundKeyMode,
-} from './keys';
-import {
-  classifyProviderError,
-  getProviderById,
-  type PlaygroundProvider,
-} from './providers';
+import { getPlaygroundKey, type PlaygroundKeyMode } from './keys';
+import { classifyProviderError, getProviderById, type PlaygroundProvider } from './providers';
 import { parseCoordinates } from './utils';
 import type {
   PlaygroundChatMessage,

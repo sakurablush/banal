@@ -80,7 +80,9 @@ export function buildWeatherText(summary?: WeatherSummary): string {
     const rain = day.precipitationSum;
     return `${day.date}: ${high}/${low}°C, ${rain} mm`;
   });
-  return daily?.length ? `${current}. Next days: ${daily.join('; ')}. ${summary.attribution}` : `${current}. ${summary.attribution}`;
+  return daily?.length
+    ? `${current}. Next days: ${daily.join('; ')}. ${summary.attribution}`
+    : `${current}. ${summary.attribution}`;
 }
 
 export function renderMarkdown(text: string): string {

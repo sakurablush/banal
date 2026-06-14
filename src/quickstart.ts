@@ -11,6 +11,7 @@ import {
   extractTemplateVariables,
   type Locale,
 } from './lib/prompt-templates';
+import { t } from './i18n';
 
 const POPULAR_TEMPLATES = [
   'job-gaps-as-strengths',
@@ -82,7 +83,7 @@ function createPromptTemplateCard(
     varsDiv.className = 'mb-4';
     const varsLabel = document.createElement('div');
     varsLabel.className = 'text-white/40 text-xs mb-1';
-    varsLabel.textContent = lang === 'ja' ? '入力項目:' : 'Fields:';
+    varsLabel.textContent = t(lang as 'en' | 'ja', 'quickstart.fields');
     const varsValue = document.createElement('div');
     varsValue.className = 'text-white/80 text-sm';
     varsValue.textContent = `${variables.length} ${lang === 'ja' ? '項目' : 'fields'}`;
@@ -100,23 +101,26 @@ function createPromptTemplateCard(
   const actions = document.createElement('div');
   actions.className = 'flex gap-3 mt-4';
 
+  const copyText = t(lang as 'en' | 'ja', 'quickstart.copyTemplate');
+  const fillText = t(lang as 'en' | 'ja', 'quickstart.fillCopy');
+
   // Copy button
   const copyBtn = document.createElement('button');
   copyBtn.type = 'button';
   copyBtn.className =
     'flex-1 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg transition-colors';
-  copyBtn.textContent = lang === 'ja' ? 'テンプレートをコピー' : 'Copy Template';
+  copyBtn.textContent = copyText;
   copyBtn.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(pt.template);
       const originalText = copyBtn.textContent;
-      copyBtn.textContent = lang === 'ja' ? '✓ コピーしました' : '✓ Copied!';
+      copyBtn.textContent = t(lang as 'en' | 'ja', 'quickstart.copied');
       setTimeout(() => {
         copyBtn.textContent = originalText;
       }, 2000);
     } catch (error) {
       console.error('Failed to copy:', error);
-      alert(lang === 'ja' ? 'コピーに失敗しました' : 'Failed to copy to clipboard');
+      alert(t(lang as 'en' | 'ja', 'quickstart.copyFailed'));
     }
   });
 
@@ -125,7 +129,7 @@ function createPromptTemplateCard(
   fillBtn.type = 'button';
   fillBtn.className =
     'flex-1 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold rounded-lg transition-colors';
-  fillBtn.textContent = lang === 'ja' ? '入力してコピー' : 'Fill & Copy';
+  fillBtn.textContent = fillText;
   fillBtn.addEventListener('click', () => {
     openFillModal(pt, lib, lang);
   });
@@ -223,14 +227,14 @@ function openFillModal(
   cancelBtn.type = 'button';
   cancelBtn.className =
     'flex-1 px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg transition-colors';
-  cancelBtn.textContent = lang === 'ja' ? 'キャンセル' : 'Cancel';
+  cancelBtn.textContent = t(lang as 'en' | 'ja', 'quickstart.cancel');
   cancelBtn.addEventListener('click', () => modal.remove());
 
   const submitBtn = document.createElement('button');
   submitBtn.type = 'submit';
   submitBtn.className =
     'flex-1 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-lg transition-colors';
-  submitBtn.textContent = lang === 'ja' ? '入力してコピー' : 'Fill & Copy';
+  submitBtn.textContent = t(lang as 'en' | 'ja', 'quickstart.fillSubmit');
 
   actions.appendChild(cancelBtn);
   actions.appendChild(submitBtn);
@@ -248,11 +252,11 @@ function openFillModal(
 
     try {
       await navigator.clipboard.writeText(filled);
-      submitBtn.textContent = lang === 'ja' ? '✓ コピーしました' : '✓ Copied!';
+      submitBtn.textContent = t(lang as 'en' | 'ja', 'quickstart.copied');
       setTimeout(() => modal.remove(), 1500);
     } catch (error) {
       console.error('Failed to copy:', error);
-      alert(lang === 'ja' ? 'コピーに失敗しました' : 'Failed to copy to clipboard');
+      alert(t(lang as 'en' | 'ja', 'quickstart.copyFailed'));
     }
   });
 

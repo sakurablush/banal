@@ -12,6 +12,7 @@
 Po szczegółowym researchu (benchmarki, GitHub stars, produkcja) znaleźliśmy **sprawdzone platformy agentów AI**, które dają darmowy dostęp do autonomicznych agentów. Skupiamy się na:
 
 ### Kryteria wyboru:
+
 - ✅ **Platformy agentowe** (nie tylko chat/coding assistants)
 - ✅ **Open-source** lub **free tier** z transparentnymi limitami
 - ✅ **Zweryfikowane** - GitHub stars, benchmarki, produkcja
@@ -47,8 +48,8 @@ export type ZeroKeyCategory =
   | 'ai-presentation'
   | 'ai-math'
   | 'ai-coding'
-  | 'ai-agents' // NOWA KATEGORIA
-  // ... reszta
+  | 'ai-agents'; // NOWA KATEGORIA
+// ... reszta
 ```
 
 ---
@@ -58,6 +59,7 @@ export type ZeroKeyCategory =
 ### 3.1 Tier 1: Production-Ready Agent Platforms (8 narzędzi)
 
 #### 1. **OpenHands (OpenDevin)**
+
 - **URL:** https://github.com/All-Hands-AI/OpenHands
 - **GitHub Stars:** 72,000+
 - **Access:** open-source (self-hosted)
@@ -68,6 +70,7 @@ export type ZeroKeyCategory =
 - **License:** MIT
 
 #### 2. **Agent Zero**
+
 - **URL:** https://github.com/agent0ai/agent-zero
 - **GitHub Stars:** 18,000+
 - **Access:** open-source (Docker-based)
@@ -78,6 +81,7 @@ export type ZeroKeyCategory =
 - **License:** Custom (NOASSERTION)
 
 #### 3. **OpenCode**
+
 - **URL:** https://github.com/anomalyco/opencode
 - **GitHub Stars:** 172,000+ (najwięcej wśród open-source coding agents)
 - **Access:** open-source (BYOK)
@@ -88,6 +92,7 @@ export type ZeroKeyCategory =
 - **License:** MIT
 
 #### 4. **Gemini CLI**
+
 - **URL:** https://github.com/google-gemini/gemini-cli
 - **GitHub Stars:** 105,000+
 - **Access:** free-tier (1,000 req/day, 60 req/min z Google account)
@@ -98,6 +103,7 @@ export type ZeroKeyCategory =
 - **License:** Apache-2.0
 
 #### 5. **Claude Code**
+
 - **URL:** https://claude.ai/code
 - **GitHub Stars:** 131,000+
 - **Access:** free-tier (z Claude subscription) lub BYOK
@@ -108,6 +114,7 @@ export type ZeroKeyCategory =
 - **License:** Proprietary
 
 #### 6. **Cline**
+
 - **URL:** https://github.com/cline/cline
 - **GitHub Stars:** 63,000+
 - **Access:** open-source (BYOK)
@@ -118,6 +125,7 @@ export type ZeroKeyCategory =
 - **License:** Apache-2.0
 
 #### 7. **Aider**
+
 - **URL:** https://github.com/paul-gauthier/aider
 - **GitHub Stars:** 45,000+
 - **Access:** open-source (BYOK)
@@ -128,6 +136,7 @@ export type ZeroKeyCategory =
 - **License:** Apache-2.0
 
 #### 8. **Kilo Code**
+
 - **URL:** https://kilo.ai/
 - **GitHub Stars:** N/A (commercial product)
 - **Access:** free-forever (BYOK, zero markup)
@@ -140,6 +149,7 @@ export type ZeroKeyCategory =
 ### 3.2 Tier 2: Specialized Agent Frameworks (9 narzędzi)
 
 #### 9. **FreeAgent**
+
 - **URL:** https://github.com/transformer24/freeagent
 - **GitHub Stars:** Nowy projekt (2026-03-19)
 - **Access:** open-source (local-first)
@@ -150,6 +160,7 @@ export type ZeroKeyCategory =
 - **License:** Open-source
 
 #### 10. **MRAgent**
+
 - **URL:** https://github.com/bonzainsights/MrAgent
 - **GitHub Stars:** Nowy projekt (2026-03-06)
 - **Access:** free-tier (NVIDIA NIM, Qwen OAuth, Groq)
@@ -160,6 +171,7 @@ export type ZeroKeyCategory =
 - **License:** Open-source
 
 #### 11. **Drodo**
+
 - **URL:** https://github.com/Drodo44/Drodo.io
 - **GitHub Stars:** Nowy projekt (2026-04-03)
 - **Access:** open-source (self-hosted)
@@ -170,6 +182,7 @@ export type ZeroKeyCategory =
 - **License:** Open-source
 
 #### 12. **Synapse**
+
 - **URL:** https://github.com/droxer/HiAgent
 - **GitHub Stars:** Nowy projekt (2026-03-15)
 - **Access:** open-source (self-hosted)
@@ -180,6 +193,7 @@ export type ZeroKeyCategory =
 - **License:** Apache-2.0
 
 #### 13. **CodeBot AI**
+
 - **URL:** https://github.com/Ascendral/codebot-ai
 - **GitHub Stars:** Nowy projekt (2026-02-27)
 - **Access:** open-source (self-hosted)
@@ -190,6 +204,7 @@ export type ZeroKeyCategory =
 - **License:** MIT
 
 #### 14. **8gent Code**
+
 - **URL:** https://github.com/PodJamz/8gent-code
 - **GitHub Stars:** Nowy projekt (2026-03-11)
 - **Access:** open-source (local-first)
@@ -200,6 +215,7 @@ export type ZeroKeyCategory =
 - **License:** Open-source
 
 #### 15. **korgex**
+
 - **URL:** https://github.com/New1Direction/korgex
 - **GitHub Stars:** Nowy projekt (2026-05-24)
 - **Access:** open-source (BYOK)
@@ -210,6 +226,7 @@ export type ZeroKeyCategory =
 - **License:** MIT
 
 #### 16. **YUAN**
+
 - **URL:** https://github.com/yuaone/yuan
 - **GitHub Stars:** Nowy projekt (2026-03-08)
 - **Access:** open-source (BYOK)
@@ -220,6 +237,7 @@ export type ZeroKeyCategory =
 - **License:** Open-source
 
 #### 17. **Kode**
+
 - **URL:** https://github.com/sicario-labs/kode
 - **GitHub Stars:** Nowy projekt (2026-05-24)
 - **Access:** open-source (BYOK)
@@ -232,6 +250,7 @@ export type ZeroKeyCategory =
 ### 3.3 Tier 3: Autonomous & Self-Evolving Agents (5 narzędzi)
 
 #### 18. **Autopilot**
+
 - **URL:** https://github.com/rish-e/autopilot
 - **GitHub Stars:** Nowy projekt (2026-03-23)
 - **Access:** open-source (self-hosted)
@@ -242,6 +261,7 @@ export type ZeroKeyCategory =
 - **License:** MIT
 
 #### 19. **AuroraCoder**
+
 - **URL:** https://github.com/1001WillsStudio/AuroraCoder
 - **GitHub Stars:** Nowy projekt (2026-05-30)
 - **Access:** open-source (Docker sandbox)
@@ -252,6 +272,7 @@ export type ZeroKeyCategory =
 - **License:** MIT
 
 #### 20. **yoyo-evolve**
+
 - **URL:** https://github.com/yologdev/yoyo-evolve
 - **GitHub Stars:** 1,800+
 - **Access:** open-source (self-hosted)
@@ -262,6 +283,7 @@ export type ZeroKeyCategory =
 - **License:** MIT
 
 #### 21. **XETHRYON**
+
 - **URL:** https://github.com/EstarinAzx/XETHRYON
 - **GitHub Stars:** Nowy projekt (2026-03-20)
 - **Access:** open-source (self-hosted)
@@ -272,6 +294,7 @@ export type ZeroKeyCategory =
 - **License:** Open-source
 
 #### 22. **Continuous Agent**
+
 - **URL:** https://github.com/jackzhaojin/continuous-agent
 - **GitHub Stars:** Nowy projekt (2026-01-24)
 - **Access:** open-source (self-hosted)
@@ -284,6 +307,7 @@ export type ZeroKeyCategory =
 ### 3.4 Tier 4: Agent Frameworks & Orchestration (3 narzędzia)
 
 #### 23. **LangChain / LangGraph**
+
 - **URL:** https://github.com/langchain-ai/langchain
 - **GitHub Stars:** 100,000+
 - **Access:** open-source (self-hosted)
@@ -294,6 +318,7 @@ export type ZeroKeyCategory =
 - **License:** MIT
 
 #### 24. **CrewAI**
+
 - **URL:** https://github.com/crewAIInc/crewAI
 - **GitHub Stars:** 30,000+
 - **Access:** open-source (self-hosted) + cloud tiers
@@ -304,6 +329,7 @@ export type ZeroKeyCategory =
 - **License:** MIT
 
 #### 25. **Dify**
+
 - **URL:** https://github.com/langgenius/dify
 - **GitHub Stars:** 144,000+
 - **Access:** open-source (self-hosted) + cloud free tier
@@ -320,6 +346,7 @@ export type ZeroKeyCategory =
 ### 4.1 Dlaczego chińskie platformy?
 
 Chiny przodują w adopcji agentów AI:
+
 - **Tencent ClawBot** - 1.4B WeChat users, deployed 2026-03-22
 - **Alibaba Wukong** - 27M DingTalk users, multi-agent orchestration
 - **Baidu DuClaw** - multi-device coverage (cloud + desktop + mobile + smart speakers)
@@ -327,6 +354,7 @@ Chiny przodują w adopcji agentów AI:
 ### 4.2 Narzędzia do dodania
 
 #### 26. **Tencent Cloud ADP (Agent Development Platform)**
+
 - **URL:** https://cloud.tencent.com/product/adp
 - **Access:** free-tier (wymaga Tencent Cloud account)
 - **Best for:** Enterprise-grade, multi-agent, 150+ plugins, MCP support
@@ -336,6 +364,7 @@ Chiny przodują w adopcji agentów AI:
 - **License:** Proprietary
 
 #### 27. **Baidu Qianfan AppBuilder**
+
 - **URL:** https://github.com/baidubce/app-builder
 - **GitHub Stars:** 578
 - **Access:** free-tier (wymaga Baidu Cloud account)
@@ -346,6 +375,7 @@ Chiny przodują w adopcji agentów AI:
 - **License:** Apache-2.0
 
 #### 28. **Tencent CloudBase Agent UI**
+
 - **URL:** https://github.com/TencentCloudBase/cloudbase-agent-ui
 - **GitHub Stars:** 86
 - **Access:** free-tier (wymaga Tencent CloudBase)
@@ -800,36 +830,36 @@ export const categoryLabels: Record<ZeroKeyCategory, string> = {
 ```markdown
 ### AI Agent Platforms (28 tools)
 
-| Tool | Description | Type | Access |
-| ---- | ----------- | ---- | ------ |
-| [OpenHands (OpenDevin)](https://github.com/All-Hands-AI/OpenHands) | Autonomous coding agent, 53-72% SWE-bench | 💻 CLI | Open source |
-| [Agent Zero](https://github.com/agent0ai/agent-zero) | Full Linux system, plugin hub, 18K stars | 💻 CLI | Open source |
-| [OpenCode](https://github.com/anomalyco/opencode) | 172K stars, 75+ providers, local models | 💻 CLI | Open source |
-| [Gemini CLI](https://github.com/google-gemini/gemini-cli) | 1M context, 1K req/day, Google-backed | 💻 CLI | Free tier |
-| [Claude Code](https://claude.ai/code) | Best reasoning, 88.6% SWE-bench | 💻 CLI | Free tier |
-| [Cline](https://github.com/cline/cline) | 63K stars, VS Code + JetBrains | 💻 CLI | Open source |
-| [Aider](https://github.com/paul-gauthier/aider) | 45K stars, Git-aware, any LLM | 💻 CLI | Open source |
-| [Kilo Code](https://kilo.ai/) | 500+ models, zero markup | 💻 CLI | Open source |
-| [FreeAgent](https://github.com/transformer24/freeagent) | 60+ tools, 100% local, no API keys | 💻 CLI | Open source |
-| [MRAgent](https://github.com/bonzainsights/MrAgent) | NVIDIA NIM, Qwen OAuth, ~2K req/day | 💻 CLI | Free tier |
-| [Drodo](https://github.com/Drodo44/Drodo.io) | 2,397 skills, 14,936 templates | 💻 CLI | Open source |
-| [Synapse](https://github.com/droxer/HiAgent) | 20+ tools, MCP, Google OAuth | 💻 CLI | Open source |
-| [CodeBot AI](https://github.com/Ascendral/codebot-ai) | Audit trail, 8 providers, CORD safety | 💻 CLI | Open source |
-| [8gent Code](https://github.com/PodJamz/8gent-code) | Local-first, NemoClaw, 8 powers | 💻 CLI | Open source |
-| [korgex](https://github.com/New1Direction/korgex) | Tamper-evident, hash-chained, 1.5K tests | 💻 CLI | Open source |
-| [YUAN](https://github.com/yuaone/yuan) | Deterministic Decision Engine, 3 modes | 💻 CLI | Open source |
-| [Kode](https://github.com/sicario-labs/kode) | Verification-first, Go binary, security | 💻 CLI | Open source |
-| [Autopilot](https://github.com/rish-e/autopilot) | Self-expanding, Guardian, parallel | 💻 CLI | Open source |
-| [AuroraCoder](https://github.com/1001WillsStudio/AuroraCoder) | DeepSeek V4 Pro, VNC desktop | 💻 CLI | Open source |
-| [yoyo-evolve](https://github.com/yologdev/yoyo-evolve) | Self-evolving, 51K lines, 2K tests | 💻 CLI | Open source |
-| [XETHRYON](https://github.com/EstarinAzx/XETHRYON) | Swarm orchestration, autonomy mode | 💻 CLI | Open source |
-| [Continuous Agent](https://github.com/jackzhaojin/continuous-agent) | 24/7 autonomous, prioritized queue | 💻 CLI | Open source |
-| [LangChain / LangGraph](https://github.com/langchain-ai/langchain) | 100K stars, 34.5M downloads | 💻 CLI | Open source |
-| [CrewAI](https://github.com/crewAIInc/crewAI) | 30K stars, role-based, visual | 💻 CLI | Free tier |
-| [Dify](https://github.com/langgenius/dify) | 144K stars, RAG, visual workflow | 💻 CLI | Free tier |
-| [Tencent Cloud ADP](https://cloud.tencent.com/product/adp) | Enterprise, multi-agent, 150+ plugins | 🔌 API | Free tier |
-| [Baidu Qianfan AppBuilder](https://github.com/baidubce/app-builder) | 40+ components, ERNIE, RAG | 🔌 API | Free tier |
-| [Tencent CloudBase Agent UI](https://github.com/TencentCloudBase/cloudbase-agent-ui) | WeChat mini-program, DeepSeek/Hunyuan | 🔌 API | Free tier |
+| Tool                                                                                 | Description                               | Type   | Access      |
+| ------------------------------------------------------------------------------------ | ----------------------------------------- | ------ | ----------- |
+| [OpenHands (OpenDevin)](https://github.com/All-Hands-AI/OpenHands)                   | Autonomous coding agent, 53-72% SWE-bench | 💻 CLI | Open source |
+| [Agent Zero](https://github.com/agent0ai/agent-zero)                                 | Full Linux system, plugin hub, 18K stars  | 💻 CLI | Open source |
+| [OpenCode](https://github.com/anomalyco/opencode)                                    | 172K stars, 75+ providers, local models   | 💻 CLI | Open source |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli)                            | 1M context, 1K req/day, Google-backed     | 💻 CLI | Free tier   |
+| [Claude Code](https://claude.ai/code)                                                | Best reasoning, 88.6% SWE-bench           | 💻 CLI | Free tier   |
+| [Cline](https://github.com/cline/cline)                                              | 63K stars, VS Code + JetBrains            | 💻 CLI | Open source |
+| [Aider](https://github.com/paul-gauthier/aider)                                      | 45K stars, Git-aware, any LLM             | 💻 CLI | Open source |
+| [Kilo Code](https://kilo.ai/)                                                        | 500+ models, zero markup                  | 💻 CLI | Open source |
+| [FreeAgent](https://github.com/transformer24/freeagent)                              | 60+ tools, 100% local, no API keys        | 💻 CLI | Open source |
+| [MRAgent](https://github.com/bonzainsights/MrAgent)                                  | NVIDIA NIM, Qwen OAuth, ~2K req/day       | 💻 CLI | Free tier   |
+| [Drodo](https://github.com/Drodo44/Drodo.io)                                         | 2,397 skills, 14,936 templates            | 💻 CLI | Open source |
+| [Synapse](https://github.com/droxer/HiAgent)                                         | 20+ tools, MCP, Google OAuth              | 💻 CLI | Open source |
+| [CodeBot AI](https://github.com/Ascendral/codebot-ai)                                | Audit trail, 8 providers, CORD safety     | 💻 CLI | Open source |
+| [8gent Code](https://github.com/PodJamz/8gent-code)                                  | Local-first, NemoClaw, 8 powers           | 💻 CLI | Open source |
+| [korgex](https://github.com/New1Direction/korgex)                                    | Tamper-evident, hash-chained, 1.5K tests  | 💻 CLI | Open source |
+| [YUAN](https://github.com/yuaone/yuan)                                               | Deterministic Decision Engine, 3 modes    | 💻 CLI | Open source |
+| [Kode](https://github.com/sicario-labs/kode)                                         | Verification-first, Go binary, security   | 💻 CLI | Open source |
+| [Autopilot](https://github.com/rish-e/autopilot)                                     | Self-expanding, Guardian, parallel        | 💻 CLI | Open source |
+| [AuroraCoder](https://github.com/1001WillsStudio/AuroraCoder)                        | DeepSeek V4 Pro, VNC desktop              | 💻 CLI | Open source |
+| [yoyo-evolve](https://github.com/yologdev/yoyo-evolve)                               | Self-evolving, 51K lines, 2K tests        | 💻 CLI | Open source |
+| [XETHRYON](https://github.com/EstarinAzx/XETHRYON)                                   | Swarm orchestration, autonomy mode        | 💻 CLI | Open source |
+| [Continuous Agent](https://github.com/jackzhaojin/continuous-agent)                  | 24/7 autonomous, prioritized queue        | 💻 CLI | Open source |
+| [LangChain / LangGraph](https://github.com/langchain-ai/langchain)                   | 100K stars, 34.5M downloads               | 💻 CLI | Open source |
+| [CrewAI](https://github.com/crewAIInc/crewAI)                                        | 30K stars, role-based, visual             | 💻 CLI | Free tier   |
+| [Dify](https://github.com/langgenius/dify)                                           | 144K stars, RAG, visual workflow          | 💻 CLI | Free tier   |
+| [Tencent Cloud ADP](https://cloud.tencent.com/product/adp)                           | Enterprise, multi-agent, 150+ plugins     | 🔌 API | Free tier   |
+| [Baidu Qianfan AppBuilder](https://github.com/baidubce/app-builder)                  | 40+ components, ERNIE, RAG                | 🔌 API | Free tier   |
+| [Tencent CloudBase Agent UI](https://github.com/TencentCloudBase/cloudbase-agent-ui) | WeChat mini-program, DeepSeek/Hunyuan     | 🔌 API | Free tier   |
 ```
 
 ### 5.4 Faza 4: Testy i walidacja
@@ -866,6 +896,7 @@ All tests passing (235/235)."
 ### 6.1 Statystyki
 
 **Nowe narzędzia:** 28
+
 - Production-Ready Agent Platforms: 8
 - Specialized Agent Frameworks: 9
 - Autonomous & Self-Evolving Agents: 5
@@ -873,6 +904,7 @@ All tests passing (235/235)."
 - Chinese Agent Platforms: 3
 
 **Total tools po dodaniu:** 269+
+
 - AI Tools: 170+ (142 + 28)
 - Developer Tools: 99+
 

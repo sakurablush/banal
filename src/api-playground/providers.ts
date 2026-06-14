@@ -7,12 +7,7 @@
  * so localStorage credentials continue to work across chat and playground.
  */
 
-import {
-  buildWeatherText,
-  parseCoordinates,
-  renderMarkdown,
-  renderWeatherHtml,
-} from './utils';
+import { buildWeatherText, parseCoordinates, renderMarkdown, renderWeatherHtml } from './utils';
 import type {
   PlaygroundCategory,
   PlaygroundErrorCode,
@@ -38,11 +33,7 @@ type PlaygroundRateLimitMetadata = {
 
 export { PLAYGROUND_CATEGORY_LABELS } from './utils';
 
-export const GROQ_MODELS = [
-  'llama-3.3-70b-versatile',
-  'llama-3.1-8b-instant',
-  'gemma2-9b-it',
-];
+export const GROQ_MODELS = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'gemma2-9b-it'];
 
 export const HUGGINGFACE_MODELS = [
   'openai/gpt-oss-120b:fastest',
@@ -51,6 +42,9 @@ export const HUGGINGFACE_MODELS = [
 ];
 
 export const OVH_MODELS = ['Meta-Llama-3_3-70B-Instruct', 'Mixtral-8x7B-Instruct-v0.1'];
+
+// Gemini models available for free tier
+export const GEMINI_MODELS = ['gemini-1.5-flash', 'gemini-2.0-flash'];
 
 const DEFAULT_SETTINGS: PlaygroundSettings = {
   temperature: 0.7,
@@ -165,7 +159,9 @@ function parseOpenAiChatResponse(json: unknown, _rawText: string): PlaygroundRen
 }
 
 function readStringArray(value: unknown): string[] {
-  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === 'string')
+    : [];
 }
 
 function readNumber(value: unknown, fallback = 0): number {
@@ -199,29 +195,23 @@ function parseOpenMeteoResponse(json: unknown, _rawText: string): PlaygroundRend
       : undefined;
 
   const hourlyTimes = readStringArray(hourly?.time);
-  const hourlyTemperatures = Array.isArray(hourly?.temperature_2m)
-    ? hourly.temperature_2m
-    : [];
+  const hourlyTemperatures = Array.isArray(hourly?.temperature_2m) ? hourly.temperature_2m : [];
   const hourlyPrecipitation = Array.isArray(hourly?.precipitation_probability)
     ? hourly.precipitation_probability
     : [];
   const hourlyWind = Array.isArray(hourly?.wind_speed_10m) ? hourly.wind_speed_10m : [];
 
-  const hourlySummary = hourlyTimes
-    .slice(0, 24)
-    .map((time, index) => ({
-      time,
-      temperature: readNumber(hourlyTemperatures[index]),
-      precipitationProbability: readNumber(hourlyPrecipitation[index]),
-      windSpeed: readNumber(hourlyWind[index]),
-    }));
+  const hourlySummary = hourlyTimes.slice(0, 24).map((time, index) => ({
+    time,
+    temperature: readNumber(hourlyTemperatures[index]),
+    precipitationProbability: readNumber(hourlyPrecipitation[index]),
+    windSpeed: readNumber(hourlyWind[index]),
+  }));
 
   const dailyTimes = readStringArray(daily?.time);
   const dailyMax = Array.isArray(daily?.temperature_2m_max) ? daily.temperature_2m_max : [];
   const dailyMin = Array.isArray(daily?.temperature_2m_min) ? daily.temperature_2m_min : [];
-  const dailyPrecipitation = Array.isArray(daily?.precipitation_sum)
-    ? daily.precipitation_sum
-    : [];
+  const dailyPrecipitation = Array.isArray(daily?.precipitation_sum) ? daily.precipitation_sum : [];
   const dailyWeather = Array.isArray(daily?.weather_code) ? daily.weather_code : [];
 
   const dailySummary = dailyTimes.map((date, index) => ({
@@ -261,7 +251,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function rateLimitFromStatus(status: number | undefined, body: unknown): PlaygroundRateLimitMetadata {
+function rateLimitFromStatus(
+  status: number | undefined,
+  body: unknown
+): PlaygroundRateLimitMetadata {
   if (status === 429) {
     return {
       isRateLimited: true,
@@ -415,7 +408,8 @@ export const PLAYGROUND_PROVIDERS: PlaygroundProvider[] = [
     endpoint: 'https://router.huggingface.co/v1/chat/completions',
     defaultModel: HUGGINGFACE_MODELS[0],
     models: HUGGINGFACE_MODELS,
-    inputPlaceholder: 'Ask the HF Inference Providers router. Use :fastest or a model/provider policy.',
+    inputPlaceholder:
+      'Ask the HF Inference Providers router. Use :fastest or a model/provider policy.',
     rateLimitHint: 'HF token permissions and model routing determine availability.',
     note: 'Use a Hugging Face token with Inference Providers access. This endpoint reuses the existing HF key.',
     requestBuilder: buildHuggingFaceRequest,
