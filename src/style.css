@@ -3337,6 +3337,8 @@
   position: fixed;
   inset: 0;
   background: rgba(6, 6, 11, 0.95);
+  border: 2px solid rgba(168, 85, 247, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   z-index: 100;
@@ -3715,7 +3717,8 @@
 }
 
 [data-theme='light'] .pg-keys-panel {
-  background: rgba(248, 249, 252, 0.95);
+  background: rgba(248, 249, 252, 0.95) !important;
+  border: 2px solid rgba(124, 58, 237, 0.3) !important;
 }
 
 [data-theme='light'] .pg-key-row input {
@@ -3752,6 +3755,7 @@
 .tools-horizontal-scroll {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-auto-flow: dense;
   gap: 16px;
   padding: 24px 0 16px;
   max-height: 420px;
@@ -4137,6 +4141,7 @@
 /* Access Badges */
 .zk2-card-access-badges {
   display: flex;
+  align-items: baseline;
   flex-wrap: wrap;
   gap: 6px;
   margin-top: 0.25rem;

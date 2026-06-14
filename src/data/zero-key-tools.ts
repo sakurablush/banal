@@ -13,7 +13,7 @@
 export type ZeroKeySurface = 'web' | 'api' | 'cli';
 
 export type ZeroKeyCategory =
-  // AI categories (12)
+  // AI categories (13)
   | 'ai-chat'
   | 'ai-image'
   | 'ai-video'
@@ -26,6 +26,7 @@ export type ZeroKeyCategory =
   | 'ai-coding'
   | 'ai-agents'
   | 'ai-open-source'
+  | 'ai-models'
   // Developer categories (9)
   | 'dev-coding'
   | 'dev-backend'
@@ -72,6 +73,7 @@ export const categoryLabels: Record<ZeroKeyCategory, string> = {
   'ai-coding': 'AI Coding Assistants',
   'ai-agents': 'AI Agent Platforms',
   'ai-open-source': 'Open Source Models (Download & Run Locally)',
+  'ai-models': 'Latest Open Source Models',
   // Developer categories
   'dev-coding': 'Coding & Developer Workflow',
   'dev-backend': 'Backend, Hosting & Databases',
@@ -3722,5 +3724,66 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'Apache 2.0 (check exact terms for latest). Gemma 3 is designed for efficiency. 2B-27B range. Good for devices with limited RAM.',
     caveat: 'VRAM: 2B ~4GB, 9B ~18GB, 27B ~54GB',
     lastVerified: '2026-06-12',
+  },
+  // Latest 2026 models - ai-models category
+  {
+    id: 'glm-5',
+    name: 'GLM-5 (Zhipu AI)',
+    url: 'https://huggingface.co/zai-org/GLM-5',
+    surface: 'cli',
+    category: 'ai-models',
+    access: 'open-source',
+    requiresSignup: false,
+    badges: ['MIT', '1M context', 'reasoning', 'multilingual'],
+    bestFor: 'Long-context reasoning, multilingual tasks, and advanced problem solving.',
+    qualityNote:
+      'MIT license. Released June 2026. 744B parameters with 40B active. 1M token context window. Competitive with GPT-4 level performance.',
+    caveat: 'VRAM: Quantized 40B ~80GB, full model requires enterprise hardware',
+    lastVerified: '2026-06-14',
+  },
+  {
+    id: 'glm-5.1',
+    name: 'GLM-5.1 (Zhipu AI)',
+    url: 'https://huggingface.co/zai-org/GLM-5.1',
+    surface: 'cli',
+    category: 'ai-models',
+    access: 'open-source',
+    requiresSignup: false,
+    badges: ['MIT', 'autonomous', '8-hour runtime', '128K context'],
+    bestFor: 'Extended autonomous task execution with 8-hour continuous operation.',
+    qualityNote:
+      'MIT license. Released April 2026. ~754B parameters with ~42B active. Unique 8-hour autonomous runtime capability.',
+    caveat: 'VRAM: Quantized ~85GB, requires significant hardware for full performance',
+    lastVerified: '2026-06-14',
+  },
+  {
+    id: 'qwen3',
+    name: 'Qwen3 (Alibaba)',
+    url: 'https://huggingface.co/Qwen/Qwen3',
+    surface: 'cli',
+    category: 'ai-models',
+    access: 'open-source',
+    requiresSignup: false,
+    badges: ['Apache 2.0', '235B MoE', '128K context', 'multilingual'],
+    bestFor: 'Massive multilingual model with 22B active parameters across 235B MoE.',
+    qualityNote:
+      'Apache 2.0 license. Released April 2025. Mixture of Experts architecture with 235B total parameters (22B active). Strong multilingual and coding capabilities.',
+    caveat: 'VRAM: MoE models require careful quantization for consumer hardware',
+    lastVerified: '2026-06-14',
+  },
+  {
+    id: 'qwen3-coder',
+    name: 'Qwen3-Coder (Alibaba)',
+    url: 'https://huggingface.co/Qwen/Qwen3-Coder',
+    surface: 'cli',
+    category: 'ai-models',
+    access: 'open-source',
+    requiresSignup: false,
+    badges: ['Apache 2.0', '480B', '256K→1M context', 'coding'],
+    bestFor: 'Specialized coding model with up to 1M context for large codebases.',
+    qualityNote:
+      'Apache 2.0 license. Released July 2025. 480B parameters (35B active). Designed for code understanding with extended context window.',
+    caveat: 'VRAM: Quantized ~70GB, full model requires enterprise hardware',
+    lastVerified: '2026-06-14',
   },
 ];

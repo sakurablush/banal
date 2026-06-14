@@ -89,8 +89,8 @@ export const translations: Record<Lang, Translations> = {
     'freeModels.badge.noKey': 'NO KEY',
     'freeModels.badge.freeKey': 'FREE KEY',
     'freeModels.badge.trial': 'TRIAL',
-    'section.aiTools.eyebrow': '🤖 AI TOOLS',
-    'section.aiTools.title1': '128+ AI tools.',
+    'section.aiTools.eyebrow': '🤖 AI TOOLS & MODELS',
+    'section.aiTools.title1': '132+ AI tools & models.',
     'section.aiTools.title2': 'Zero gatekeeping.',
     'section.aiTools.desc':
       'Free AI-powered tools for chat, image, video, code, PDF, and research. <span class="text-white/50">All verified. All free.</span>',
@@ -272,8 +272,8 @@ export const translations: Record<Lang, Translations> = {
     'freeModels.badge.noKey': 'NO KEY',
     'freeModels.badge.freeKey': 'FREE KEY',
     'freeModels.badge.trial': 'TRIAL',
-    'section.aiTools.eyebrow': '🤖 AIツール',
-    'section.aiTools.title1': '128以上のAIツール。',
+    'section.aiTools.eyebrow': '🤖 AIツール＆モデル',
+    'section.aiTools.title1': '132以上のAIツール＆モデル。',
     'section.aiTools.title2': 'ゲートキーピングなし。',
     'section.aiTools.desc':
       'チャット、画像、動画、コード、PDF、研究のための無料AIツール。<span class="text-white/50">すべて認証済み。すべて無料。</span>',

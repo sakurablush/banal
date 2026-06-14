@@ -37,15 +37,16 @@ const categoryIcons: Record<ZeroKeyCategory, string> = {
   'ai-pdf': '\u{1F4C4}',
   'ai-presentation': '\u{1F4CA}',
   'ai-math': '\u{1F9EE}',
-  'ai-coding': '\u{1F916}',
-  'ai-agents': '\u{1F916}',
-  'ai-open-source': '\u{1F9E0}',
+  'ai-coding': '\u{1F9E0}',
+  'ai-agents': '\u{1F465}',
+  'ai-open-source': '\u{1F4E6}', // 📦 downloadable models
+  'ai-models': '\u{1F31F}', // 🌟 newest models
   // Developer categories
   'dev-coding': '\u{1F4BB}',
   'dev-docs': '\u{1F4DA}',
   'dev-data': '\u{1F5C4}\uFE0F',
   'dev-design': '\u{1F58C}\uFE0F',
-  'dev-backend': '\u{2601}\uFE0F',
+  'dev-backend': '\u{1F680}',
   'dev-automation': '\u{2699}\uFE0F',
   'dev-security': '\u{1F512}',
   'dev-productivity': '\u{1F4CB}',
@@ -56,7 +57,7 @@ const categoryIcons: Record<ZeroKeyCategory, string> = {
 
 const COPY = {
   en: {
-    title: '200+ Free AI Tools',
+    title: 'AI Tools & Models',
     searchPlaceholder: 'Search tools\u2026 (Ctrl+K to focus)',
     clearFilters: 'Clear all filters',
     open: 'Open',
@@ -68,9 +69,9 @@ const COPY = {
     allCategory: 'All Tools',
   },
   ja: {
-    title: '200+ \u7121\u6599AI\u30C4\u30FC\u30EB',
+    title: 'AIツール＆モデル',
     searchPlaceholder: '\u691C\u7D22\u2026 (Ctrl+K)',
-    clearFilters: '\u30D5\u30A3\u30EB\u30BF\u30FC\u30AF\u30EA\u30A2',
+    clearFilters: '\u30D5\u30A3\u30EALL\u30BF\u30FC\u30AF\u30EA\u30A2',
     open: '\u958B\u304F',
     docs: '\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8',
     report: '\u5831\u544A',
@@ -136,6 +137,32 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
         tool.surface !== 'web' ||
         tool.category === 'dev-coding' ||
         /developer|coding|api|cli|git|database|deploy/i.test(h),
+    },
+    // New filters for 2026 redesign
+    {
+      id: 'cli',
+      label: e('CLI', 'CLI'),
+      predicate: (tool) => tool.surface === 'cli',
+    },
+    {
+      id: 'browser',
+      label: e('Browser', 'ブラウザ'),
+      predicate: (tool) => tool.surface === 'web',
+    },
+    {
+      id: 'self-host',
+      label: e('Self-hostable', 'セルフホスト'),
+      predicate: (tool) => tool.access === 'self-host' || tool.access === 'open-source',
+    },
+    {
+      id: 'no-key',
+      label: e('No API Key', 'APIキー不要'),
+      predicate: (tool) => tool.access === 'open-source' || tool.access === 'no-login' || tool.requiresSignup === false,
+    },
+    {
+      id: 'high-context',
+      label: e('1M+ Context', '長文対応'),
+      predicate: (_tool, h) => /1M|256K|400K/.test(h),
     },
   ];
 }
