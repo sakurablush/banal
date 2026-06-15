@@ -105,9 +105,9 @@ describe('zero-key panel rendering', () => {
     // Flush debounce
     vi.advanceTimersByTime(150);
 
-    // Should use horizontal scroll container
-    const scrollContainer = root.querySelector('.tools-horizontal-scroll');
-    expect(scrollContainer).not.toBeNull();
+    // Should use grid container
+    const gridContainer = root.querySelector('.zk2-grid');
+    expect(gridContainer).not.toBeNull();
 
     // Should show Supabase and Neon
     expect(root.textContent).toContain('Supabase');

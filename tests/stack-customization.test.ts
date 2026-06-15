@@ -13,7 +13,6 @@ import {
   clearCustomStacks,
 } from '../src/lib/stack-customization';
 import { toolStacks } from '../src/data/tool-stacks';
-import type { CustomStack } from '../src/lib/stack-customization';
 
 describe('Stack Customization', () => {
   beforeEach(() => {

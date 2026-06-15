@@ -504,11 +504,9 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
   });
   footer.appendChild(reportBtn);
 
-  // Open button (CTA)
-  const btn = create('a', 'zk2-card-cta');
-  btn.href = tool.url;
-  btn.target = '_blank';
-  btn.rel = 'noopener noreferrer';
+  // Open button (CTA) - actual button instead of link
+  const btn = create('button', 'zk2-card-cta');
+  btn.type = 'button';
   btn.textContent = (tool.surface === 'cli' ? copy.docs : copy.open) + ' \u2192';
   btn.setAttribute(
     'aria-label',
@@ -516,8 +514,10 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
       ? `${tool.surface === 'cli' ? copy.docs : copy.open}: ${tool.name}`
       : `${tool.surface === 'cli' ? copy.docs : copy.open} ${tool.name}`
   );
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
     state.onToolOpen?.();
+    window.open(tool.url, '_blank', 'noopener,noreferrer');
   });
   footer.appendChild(btn);
 
@@ -632,12 +632,18 @@ function renderContent(state: PanelState): void {
 
   contentArea.innerHTML = '';
 
+  // Re-render quick filters (they are in zk2-layout, not contentArea)
+  const layout = container.querySelector('.zk2-layout') as HTMLElement | null;
+  if (layout) {
+    const oldFilters = layout.querySelector('.quick-filters-row');
+    if (oldFilters) {
+      const newFilters = renderQuickFilters(state);
+      layout.replaceChild(newFilters, oldFilters);
+    }
+  }
+
   const copy = COPY[state.lang];
   const results = state.results;
-
-  // Quick filters row
-  const filtersRow = renderQuickFilters(state);
-  contentArea.appendChild(filtersRow);
 
   // Stats bar with aria-live for screen reader announcements
   const statsBar = create('div', 'zk2-stats-bar');
@@ -657,14 +663,14 @@ function renderContent(state: PanelState): void {
     return;
   }
 
-  // Scroll container
-  const scrollContainer = create('div', 'tools-horizontal-scroll');
+  // Grid container (instead of horizontal scroll)
+  const gridContainer = create('div', 'zk2-grid');
   results.forEach((result, i) => {
     const card = renderHorizontalToolCard(state, result);
     card.style.animationDelay = `${Math.min(i * 20, 400)}ms`;
-    scrollContainer.appendChild(card);
+    gridContainer.appendChild(card);
   });
-  contentArea.appendChild(scrollContainer);
+  contentArea.appendChild(gridContainer);
 }
 
 // ─── Keyboard Navigation ─────────────────────────────────────────────────────
@@ -742,6 +748,10 @@ export function renderZeroKeyPowerPanel(
   // Sidebar with categories
   const sidebar = renderSidebar(state);
   layout.appendChild(sidebar);
+
+  // Quick filters row (same level as sidebar for alignment)
+  const filtersRow = renderQuickFilters(state);
+  layout.appendChild(filtersRow);
 
   // Horizontal content area
   const content = create('div', 'zk2-horizontal-content');
