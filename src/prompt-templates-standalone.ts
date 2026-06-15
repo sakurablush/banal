@@ -180,13 +180,77 @@ export function renderPromptTemplatesStandalone(options: {
 // ─── Horizontal Layout ────────────────────────────────────────────────────────
 
 function renderHorizontalLayout(state: PromptTemplatesViewState): void {
+  // Create zk2-layout wrapper (same as tools directories)
+  const layout = document.createElement('div');
+  layout.className = 'zk2-layout';
+  state.container.appendChild(layout);
+
+  // Sidebar with categories
+  const sidebar = createSidebar(state);
+  layout.appendChild(sidebar);
+
   // Quick filters row
   const filtersRow = createQuickFilters(state);
-  state.container.appendChild(filtersRow);
+  layout.appendChild(filtersRow);
 
-  // Horizontal scroll container for prompt cards
-  const scrollContainer = createPromptScrollContainer(state);
-  state.container.appendChild(scrollContainer);
+  // Content area with grid
+  const content = document.createElement('div');
+  content.className = 'zk2-horizontal-content';
+  layout.appendChild(content);
+
+  // Stats bar
+  const statsBar = document.createElement('div');
+  statsBar.className = 'zk2-stats-bar';
+  const filteredPrompts = getPromptsForCategory(state.selectedCategory, state.prompts);
+  statsBar.textContent = state.lang === 'ja' 
+    ? `${filteredPrompts.length}件のテンプレートを表示` 
+    : `Showing ${filteredPrompts.length} templates`;
+  content.appendChild(statsBar);
+
+  // Grid container for prompt cards
+  const gridContainer = createPromptGridContainer(state);
+  content.appendChild(gridContainer);
+}
+
+function createSidebar(state: PromptTemplatesViewState): HTMLElement {
+  const sidebar = document.createElement('div');
+  sidebar.className = 'zk2-sidebar';
+
+  const counts = getCategoryCounts(state.prompts);
+  const categories = PROMPT_CATEGORIES;
+
+  for (const cat of categories) {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = `zk2-cat-item${state.selectedCategory === cat.id ? ' active' : ''}`;
+    item.dataset.category = cat.id;
+
+    const icon = document.createElement('span');
+    icon.className = 'zk2-cat-icon';
+    icon.textContent = cat.icon;
+
+    const label = document.createElement('span');
+    label.className = 'zk2-cat-label';
+    label.textContent = state.lang === 'ja' ? cat.labelJa : cat.labelEn;
+
+    const count = document.createElement('span');
+    count.className = 'zk2-cat-count';
+    count.textContent = `(${counts[cat.id] || 0})`;
+
+    item.append(icon, label, count);
+    const labelText = state.lang === 'ja' ? cat.labelJa : cat.labelEn;
+    item.setAttribute(
+      'aria-label',
+      state.lang === 'ja' ? `${labelText}でフィルター` : `Filter by ${labelText}`
+    );
+    item.addEventListener('click', () => {
+      state.selectedCategory = cat.id;
+      reRenderHorizontal(state);
+    });
+    sidebar.appendChild(item);
+  }
+
+  return sidebar;
 }
 
 function createQuickFilters(state: PromptTemplatesViewState): HTMLElement {
@@ -232,18 +296,18 @@ function createQuickFilters(state: PromptTemplatesViewState): HTMLElement {
   return row;
 }
 
-function createPromptScrollContainer(state: PromptTemplatesViewState): HTMLElement {
-  const scroll = document.createElement('div');
-  scroll.className = 'prompts-horizontal-scroll';
+function createPromptGridContainer(state: PromptTemplatesViewState): HTMLElement {
+  const grid = document.createElement('div');
+  grid.className = 'zk2-grid';
 
   const filteredPrompts = getPromptsForCategory(state.selectedCategory, state.prompts);
 
   for (const pt of filteredPrompts) {
     const card = createHorizontalPromptCard(state, pt);
-    scroll.appendChild(card);
+    grid.appendChild(card);
   }
 
-  return scroll;
+  return grid;
 }
 
 function createHorizontalPromptCard(
@@ -251,7 +315,7 @@ function createHorizontalPromptCard(
   pt: PromptTemplate
 ): HTMLElement {
   const card = document.createElement('article');
-  card.className = 'prompt-card-horizontal';
+  card.className = 'tool-card-horizontal';
   card.dataset.promptId = pt.id;
   card.tabIndex = 0;
   card.role = 'button';
@@ -292,31 +356,31 @@ function createHorizontalPromptCard(
 
   // Title
   const title = document.createElement('h3');
-  title.className = 'pt-prompt-title';
+  title.className = 'zk2-card-name';
   title.textContent = pt.title;
   card.appendChild(title);
 
   // Description
   const desc = document.createElement('p');
-  desc.className = 'pt-prompt-desc';
+  desc.className = 'zk2-card-desc';
   desc.textContent = pt.description;
   card.appendChild(desc);
 
-  // Actions
-  const actions = document.createElement('div');
-  actions.className = 'prompt-card-actions';
+  // Footer with actions
+  const footer = document.createElement('div');
+  footer.className = 'zk2-card-footer';
 
   const fillBtn = document.createElement('button');
   fillBtn.type = 'button';
-  fillBtn.className = 'sp-btn sp-btn-secondary';
-  fillBtn.textContent = state.lang === 'ja' ? '入力してコピー' : 'Fill & Copy';
+  fillBtn.className = 'zk2-card-cta';
+  fillBtn.textContent = state.lang === 'ja' ? '入力してコピー →' : 'Fill & Copy →';
   fillBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     openPromptAccordion(state, pt, card);
   });
-  actions.appendChild(fillBtn);
+  footer.appendChild(fillBtn);
 
-  card.appendChild(actions);
+  card.appendChild(footer);
 
   // Click on card opens accordion
   card.addEventListener('click', () => {
@@ -599,8 +663,8 @@ function openPromptAccordion(
 
   // If clicking the same card that's already open, close it
   if (openAccordion && openAccordion.card === card) {
-    const accordion = card.nextElementSibling as HTMLElement;
-    if (accordion && accordion.classList.contains('prompt-accordion')) {
+    const accordion = document.querySelector('.prompt-accordion') as HTMLElement;
+    if (accordion) {
       closeAccordion(card, accordion, openAccordion.focusCleanup);
     }
     return;
@@ -610,7 +674,15 @@ function openPromptAccordion(
   lastFocusedElement = document.activeElement as HTMLElement;
 
   const { accordion, focusCleanup } = createPromptAccordion(state, pt, card);
-  card.parentNode!.insertBefore(accordion, card.nextSibling);
+  
+  // Find the content area and append accordion at the end (under the grid)
+  const contentArea = state.container.querySelector('.zk2-horizontal-content') as HTMLElement;
+  if (contentArea) {
+    contentArea.appendChild(accordion);
+  } else {
+    // Fallback: insert after card if content area not found
+    card.parentNode!.insertBefore(accordion, card.nextSibling);
+  }
 
   // Set up Escape handler
   document.removeEventListener('keydown', escapeHandler);
@@ -620,6 +692,9 @@ function openPromptAccordion(
   openAccordion = { card, accordion, focusCleanup };
   card.setAttribute('aria-expanded', 'true');
   card.classList.add('expanded');
+  
+  // Scroll to accordion
+  accordion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function closePromptAccordion(): void {
@@ -635,7 +710,7 @@ function closePromptAccordion(): void {
   });
 
   // Remove expanded state from all cards
-  const cards = document.querySelectorAll('.prompt-card-horizontal');
+  const cards = document.querySelectorAll('.tool-card-horizontal');
   cards.forEach((card) => {
     card.setAttribute('aria-expanded', 'false');
     card.classList.remove('expanded');
@@ -662,10 +737,7 @@ function reRenderHorizontal(state: PromptTemplatesViewState): void {
 
   // Clear and re-render
   container.innerHTML = '';
-  const filtersRow = createQuickFilters(state);
-  container.appendChild(filtersRow);
-  const scrollContainer = createPromptScrollContainer(state);
-  container.appendChild(scrollContainer);
+  renderHorizontalLayout(state);
 }
 
 // ─── Language Change Listener ─────────────────────────────────────────────────

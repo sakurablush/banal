@@ -31,6 +31,14 @@
 - SEO optimization (Open Graph, Twitter Cards, JSON-LD)
 - Comprehensive test suite
 
+**UI Improvements:**
+- Fixed height directory layout (700px max-height)
+- Styled scrollbars matching application theme
+- Consistent layout across all directories (AI tools, Dev tools, Models, Stacks, Prompt Templates)
+- Prompt Templates now use same layout as tools directories (sidebar + grid + quick filters)
+- Form displays under directory when clicking prompt template
+- OPEN button instead of clickable links
+
 ---
 
 ## Executive Summary

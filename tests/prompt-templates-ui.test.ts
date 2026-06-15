@@ -38,13 +38,13 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('renders horizontal scroll container for prompt cards', () => {
     const el = setup();
-    const scrollContainer = el.querySelector('.prompts-horizontal-scroll');
+    const scrollContainer = el.querySelector('.zk2-grid');
     expect(scrollContainer).toBeTruthy();
   });
 
   it('renders horizontal prompt cards instead of sidebar layout', () => {
     const el = setup();
-    const cards = Array.from(el.querySelectorAll('.prompt-card-horizontal'));
+    const cards = Array.from(el.querySelectorAll('.tool-card-horizontal'));
     expect(cards.length).toBe(9); // 9 templates total
   });
 
@@ -68,8 +68,8 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     careerChip!.click();
 
     // Should show fewer cards (only career-money templates)
-    const scrollContainer = el.querySelector('.prompts-horizontal-scroll');
-    const cards = scrollContainer!.querySelectorAll('.prompt-card-horizontal');
+    const scrollContainer = el.querySelector('.zk2-grid');
+    const cards = scrollContainer!.querySelectorAll('.tool-card-horizontal');
     expect(cards.length).toBeLessThan(9);
   });
 
@@ -77,7 +77,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('clicking a horizontal prompt card opens accordion', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     expect(card).toBeTruthy();
 
     card.click();
@@ -89,7 +89,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('accordion contains form fields for prompts with variables', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
 
     card.click();
 
@@ -100,7 +100,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('clicking close button closes accordion', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     const closeBtn = document.querySelector('.prompt-accordion-close') as HTMLButtonElement;
@@ -114,7 +114,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('Escape key closes accordion', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     const accordion = document.querySelector('.prompt-accordion') as HTMLElement;
@@ -130,7 +130,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('horizontal prompt card has proper accessibility attributes', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
 
     expect(card.tabIndex).toBe(0);
     expect(card.getAttribute('role')).toBe('button');
@@ -139,7 +139,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('opens accordion via keyboard Enter key', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
 
     card.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
 
@@ -150,7 +150,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('clicking Fill & Copy button opens accordion without errors', () => {
     const el = setup();
-    const fillBtn = el.querySelector('.prompt-card-actions button') as HTMLButtonElement;
+    const fillBtn = el.querySelector('.zk2-card-footer button') as HTMLButtonElement;
     expect(fillBtn).toBeTruthy();
     expect(fillBtn.textContent).toContain('Fill & Copy');
 
@@ -161,7 +161,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('accordion copy button copies to clipboard using toast notification', async () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     const copyBtn = document.querySelector('.sp-btn-primary') as HTMLButtonElement;
@@ -179,7 +179,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('accordion has proper ARIA attributes for form region', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     const accordion = document.querySelector('.prompt-accordion') as HTMLElement;
@@ -189,7 +189,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('focus trap prevents Tab from leaving accordion', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     const accordion = document.querySelector('.prompt-accordion') as HTMLElement;
@@ -203,7 +203,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('accordion Escape key closes and focus returns to triggering card', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
 
     // Focus and click the card to simulate user interaction
     card.focus();
@@ -230,7 +230,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
   it('accordion copy button uses toast notification with proper ARIA', async () => {
     // This test verifies the toast implementation exists - actual ARIA is tested in showToast
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     vi.advanceTimersByTime(100);
@@ -244,7 +244,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('close button uses textContent instead of innerHTML to prevent XSS', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     const closeBtn = document.querySelector('.prompt-accordion-close') as HTMLButtonElement;
@@ -276,7 +276,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('horizontal prompt card has aria-expanded false on initial render', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
 
     // Card should have aria-expanded="false" from the start
     expect(card.getAttribute('aria-expanded')).toBe('false');
@@ -286,7 +286,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('focus trap cleanup function is stored when accordion opens', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     // The openAccordion should have a focusCleanup function stored
@@ -315,7 +315,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('uses sessionStorage instead of localStorage for form values', async () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
 
     // Verify sessionStorage is used (not localStorage) by checking the module uses it
     // The actual storage is internal, but we verify no localStorage calls are made
@@ -339,7 +339,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('preview button shows filled template text', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     const previewBtn = document.querySelector('.sp-btn-ghost') as HTMLButtonElement;
@@ -365,7 +365,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     });
 
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     vi.advanceTimersByTime(150);
@@ -386,7 +386,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('toast appears and disappears after timeout', async () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     const copyBtn = document.querySelector('.sp-btn-primary') as HTMLButtonElement;
@@ -412,7 +412,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('clicking same card again closes the accordion', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
 
     // Open accordion
     card.click();
@@ -429,7 +429,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('opening a second accordion closes the first one', () => {
     const el = setup();
-    const cards = el.querySelectorAll('.prompt-card-horizontal') as NodeListOf<HTMLElement>;
+    const cards = el.querySelectorAll('.tool-card-horizontal') as NodeListOf<HTMLElement>;
 
     // Open first accordion
     cards[0].click();
@@ -449,7 +449,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('opens accordion via keyboard Space key', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
 
     card.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
 
@@ -460,7 +460,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('calling __ptCleanup cleans up language listener and accordion', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     // Accordion should be open
@@ -478,13 +478,13 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('calling renderPromptTemplatesStandalone again cleans up previous instance', () => {
     const el = setup();
-    expect(el.querySelectorAll('.prompt-card-horizontal').length).toBe(9);
+    expect(el.querySelectorAll('.tool-card-horizontal').length).toBe(9);
 
     // Re-render
     renderPromptTemplatesStandalone({ container: el, lang: 'ja' });
 
     // Should still have 9 cards but in Japanese
-    expect(el.querySelectorAll('.prompt-card-horizontal').length).toBe(9);
+    expect(el.querySelectorAll('.tool-card-horizontal').length).toBe(9);
     const chips = el.querySelectorAll('.quick-filter-chip');
     expect(chips.length).toBe(6);
   });
@@ -552,7 +552,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('copy button text changes to checkmark and restores after timeout', async () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     const copyBtn = document.querySelector('.sp-btn-primary') as HTMLButtonElement;
@@ -608,7 +608,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     const careerChip = chips.find((c) => c.textContent?.includes('Career'));
     careerChip!.click();
 
-    const filteredCount = el.querySelectorAll('.prompt-card-horizontal').length;
+    const filteredCount = el.querySelectorAll('.tool-card-horizontal').length;
     expect(filteredCount).toBeLessThan(9);
 
     // Click "All" filter
@@ -616,7 +616,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     const allChip = newChips.find((c) => c.textContent?.includes('All'));
     allChip!.click();
 
-    const allCount = el.querySelectorAll('.prompt-card-horizontal').length;
+    const allCount = el.querySelectorAll('.tool-card-horizontal').length;
     expect(allCount).toBe(9);
   });
 
@@ -624,7 +624,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('typing in form input auto-saves to sessionStorage', () => {
     const el = setup();
-    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     vi.advanceTimersByTime(150);
