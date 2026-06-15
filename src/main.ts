@@ -15,7 +15,8 @@ import { initDirectory } from './directory';
 import { ParticleSystem } from './lib/particle-system';
 import { renderPlayground } from './api-playground';
 import { renderPromptTemplatesStandalone } from './prompt-templates-standalone';
-import { initFreeModels } from './free-models';
+
+// Boot theme first (before any rendering so CSS variables are correct)
 
 // Boot theme first (before any rendering so CSS variables are correct)
 initTheme();
@@ -83,13 +84,6 @@ try {
   }
 } catch (error) {
   console.error('API Playground failed to initialize:', error);
-}
-
-// Free Models — API keys and open source models for zero-cost AI
-try {
-  initFreeModels();
-} catch (error) {
-  console.error('Free Models section failed to initialize:', error);
 }
 
 // Extremely small core — everything else lives in focused, tested modules.
