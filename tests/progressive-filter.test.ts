@@ -187,6 +187,78 @@ describe('Progressive Filter', () => {
         t.category === 'ai-chat' && t.requiresSignup === false
       )).toBe(true);
     });
+
+    it('should filter by platform tags', () => {
+      const state = {
+        ...createInitialFilterState(),
+        tags: ['browser'],
+      };
+      const filtered = applyProgressiveFilters(zeroKeyTools, state);
+      expect(filtered.every(t => t.surface === 'web')).toBe(true);
+    });
+
+    it('should filter by CLI tag', () => {
+      const state = {
+        ...createInitialFilterState(),
+        tags: ['cli'],
+      };
+      const filtered = applyProgressiveFilters(zeroKeyTools, state);
+      expect(filtered.every(t => t.surface === 'cli')).toBe(true);
+    });
+
+    it('should filter by API tag', () => {
+      const state = {
+        ...createInitialFilterState(),
+        tags: ['api'],
+      };
+      const filtered = applyProgressiveFilters(zeroKeyTools, state);
+      expect(filtered.every(t => t.surface === 'api')).toBe(true);
+    });
+
+    it('should filter by open-source tag', () => {
+      const state = {
+        ...createInitialFilterState(),
+        tags: ['open-source'],
+      };
+      const filtered = applyProgressiveFilters(zeroKeyTools, state);
+      expect(filtered.every(t => t.access === 'open-source')).toBe(true);
+    });
+
+    it('should filter by self-hosted tag', () => {
+      const state = {
+        ...createInitialFilterState(),
+        tags: ['self-hosted'],
+      };
+      const filtered = applyProgressiveFilters(zeroKeyTools, state);
+      expect(filtered.every(t => t.access === 'self-host' || t.access === 'open-source')).toBe(true);
+    });
+
+    it('should filter by free-forever tag', () => {
+      const state = {
+        ...createInitialFilterState(),
+        tags: ['free-forever'],
+      };
+      const filtered = applyProgressiveFilters(zeroKeyTools, state);
+      expect(filtered.every(t => t.access === 'no-login' || t.access === 'open-source')).toBe(true);
+    });
+
+    it('should filter by free-tier tag', () => {
+      const state = {
+        ...createInitialFilterState(),
+        tags: ['free-tier'],
+      };
+      const filtered = applyProgressiveFilters(zeroKeyTools, state);
+      expect(filtered.every(t => t.access === 'free-tier' || t.access === 'free-key')).toBe(true);
+    });
+
+    it('should filter by verified tag', () => {
+      const state = {
+        ...createInitialFilterState(),
+        tags: ['verified'],
+      };
+      const filtered = applyProgressiveFilters(zeroKeyTools, state);
+      expect(filtered.every(t => t.lastVerified !== undefined)).toBe(true);
+    });
   });
 
   describe('serializeFilterState', () => {

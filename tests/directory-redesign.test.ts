@@ -15,10 +15,13 @@ import {
   getDomainForCategory,
   getCategoriesForDomain,
   getCategoryDefinition,
+  getDomainDefinition,
   getCategoryLabel,
   getCategoryIcon,
   matchesCategoryPrefix,
+  getCategoryCountsByDomain,
 } from '../src/data/categories';
+import type { ToolCategory } from '../src/types/tool';
 import {
   ALL_TAGS,
   ACCESS_TAGS,
@@ -119,6 +122,36 @@ describe('Categories System', () => {
     expect(matchesCategoryPrefix('ai-chat', 'dev')).toBe(false);
     expect(matchesCategoryPrefix('dev-editors', 'dev')).toBe(true);
     expect(matchesCategoryPrefix('dev-editors', 'ai')).toBe(false);
+  });
+
+  it('should get domain definition by ID', () => {
+    const def = getDomainDefinition('ai');
+    expect(def).toBeDefined();
+    expect(def?.label).toBe('AI & Machine Learning');
+    expect(def?.icon).toBeTruthy();
+  });
+
+  it('should return undefined for invalid domain', () => {
+    const def = getDomainDefinition('invalid' as any);
+    expect(def).toBeUndefined();
+  });
+
+  it('should count categories by domain', () => {
+    const categories = ['ai-chat', 'ai-image', 'dev-editors', 'prod-notes'] as ToolCategory[];
+    const counts = getCategoryCountsByDomain(categories);
+    
+    expect(counts.ai).toBe(2);
+    expect(counts.dev).toBe(1);
+    expect(counts.prod).toBe(1);
+    expect(counts.design).toBe(0);
+    expect(counts.business).toBe(0);
+    expect(counts.infra).toBe(0);
+  });
+
+  it('should handle empty category list', () => {
+    const counts = getCategoryCountsByDomain([] as ToolCategory[]);
+    expect(counts.ai).toBe(0);
+    expect(counts.dev).toBe(0);
   });
 });
 
