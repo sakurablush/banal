@@ -8,7 +8,7 @@
  * - Quick filter chips for categories
  *
  * Features preserved from original:
- * - Auto-save to localStorage per template
+ * - Auto-save to sessionStorage per template (more secure - cleared on tab close)
  * - Keyboard shortcuts: Ctrl/Cmd+Enter to copy, Esc to close form
  * - Toast notification on copy
  * - Preview mode
@@ -95,11 +95,11 @@ interface PromptAccordionResult {
   focusCleanup: () => void;
 }
 
-// ─── LocalStorage Helpers ──────────────────────────────────────────────────────
+// ─── SessionStorage Helpers ──────────────────────────────────────────────────────
 
 function getSavedValues(templateId: string, lang: Locale): Record<string, string> {
   try {
-    const raw = localStorage.getItem(STORAGE_PREFIX + templateId + '-' + lang);
+    const raw = sessionStorage.getItem(STORAGE_PREFIX + templateId + '-' + lang);
     if (raw) return JSON.parse(raw);
   } catch {
     // ignore parse errors
@@ -109,7 +109,7 @@ function getSavedValues(templateId: string, lang: Locale): Record<string, string
 
 function saveValues(templateId: string, lang: Locale, values: Record<string, string>): void {
   try {
-    localStorage.setItem(STORAGE_PREFIX + templateId + '-' + lang, JSON.stringify(values));
+    sessionStorage.setItem(STORAGE_PREFIX + templateId + '-' + lang, JSON.stringify(values));
   } catch {
     // ignore storage errors
   }
@@ -261,23 +261,32 @@ function createHorizontalPromptCard(
     state.lang === 'ja' ? `${pt.title}のテンプレートを開く` : `Open ${pt.title} template`
   );
 
-  // Category icon badge
+  // Header: icon + category badge (same structure as tool cards)
+  const header = document.createElement('div');
+  header.className = 'zk2-card-header';
+  const icon = document.createElement('span');
+  icon.className = 'zk2-card-icon';
   const cat = PROMPT_CATEGORY_MAP[pt.id] || 'all';
   const catData = PROMPT_CATEGORIES.find((c) => c.id === cat);
-  const iconBadge = document.createElement('div');
-  iconBadge.className = 'prompt-card-icon';
-  iconBadge.textContent = catData?.icon || '\u{1F4AC}';
-  card.appendChild(iconBadge);
+  icon.textContent = catData?.icon || '\u{1F4AC}';
+  header.appendChild(icon);
 
-  // Category label
-  const categoryLabel = document.createElement('div');
-  categoryLabel.className = 'pt-prompt-category';
-  categoryLabel.textContent = catData
-    ? state.lang === 'ja'
-      ? catData.labelJa
-      : catData.labelEn
-    : '';
-  card.appendChild(categoryLabel);
+  // Category badge
+  const catBadge = document.createElement('span');
+  catBadge.className = 'zk2-card-surface zk2-surface-web';
+  catBadge.textContent = (catData ? (state.lang === 'ja' ? catData.labelJa : catData.labelEn) : '').toUpperCase();
+  header.appendChild(catBadge);
+
+  card.appendChild(header);
+
+  // Access type badge - prompt templates are always browser-based
+  const accessBadges = document.createElement('div');
+  accessBadges.className = 'zk2-card-access-badges';
+  const typeBadge = document.createElement('span');
+  typeBadge.className = 'zk2-access-badge zk2-access-ai';
+  typeBadge.textContent = state.lang === 'ja' ? '🤖 AI' : '🤖 AI';
+  accessBadges.appendChild(typeBadge);
+  card.appendChild(accessBadges);
 
   // Title
   const title = document.createElement('h3');

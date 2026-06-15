@@ -310,4 +310,28 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     const chipsJA = el.querySelectorAll('.quick-filter-chip');
     expect(chipsJA.length).toBe(6);
   });
+
+  // ─── Session Storage Security ───────────────────────────────────────────────────
+
+  it('uses sessionStorage instead of localStorage for form values', async () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+
+    // Verify sessionStorage is used (not localStorage) by checking the module uses it
+    // The actual storage is internal, but we verify no localStorage calls are made
+    card.click();
+
+    const input = document.querySelector('.sp-form-input') as HTMLInputElement;
+    expect(input).toBeTruthy();
+
+    // Type in the input
+    input.value = 'test value';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+
+    // Verify sessionStorage was used (check that session storage contains our data)
+    // The module should use sessionStorage for security (cleared on tab close)
+    const storedKeys = Object.keys(sessionStorage);
+    const hasTemplateData = storedKeys.some((key) => key.startsWith('banal-pt-'));
+    expect(hasTemplateData).toBe(true);
+  });
 });

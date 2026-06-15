@@ -328,15 +328,15 @@ describe('zero-key panel rendering', () => {
     expect(cards.length).toBeGreaterThan(0);
   });
 
-  it('filters by offline capability', () => {
+  it('filters by offline/self-host capability', () => {
     const root = renderPanel();
 
-    // Find and click offline filter
+    // Find and click self-host filter (replaces offline filter)
     const filterChips = root.querySelectorAll(
       '.quick-filter-chip'
     ) as NodeListOf<HTMLButtonElement>;
     const offlineFilter = Array.from(filterChips).find((chip) =>
-      chip.textContent?.toLowerCase().includes('offline')
+      chip.textContent?.toLowerCase().includes('self-host')
     );
 
     expect(offlineFilter).toBeDefined();

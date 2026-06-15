@@ -4,7 +4,7 @@
  * This module is intentionally declarative: providers describe their metadata,
  * build their own requests, and know how to turn provider JSON into rendered UI.
  * The chat providers use the same endpoints and key IDs as `src/providers/index.ts`
- * so localStorage credentials continue to work across chat and playground.
+ * so sessionStorage credentials continue to work across chat and playground.
  */
 
 import { buildWeatherText, parseCoordinates, renderMarkdown, renderWeatherHtml } from './utils';

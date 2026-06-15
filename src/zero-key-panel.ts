@@ -28,29 +28,29 @@ function matchesCategoryPrefix(category: string, prefix: 'ai' | 'dev'): boolean 
 
 const categoryIcons: Record<ZeroKeyCategory, string> = {
   // AI categories
-  'ai-chat': '\u{1F4AC}',
-  'ai-image': '\u{1F3A8}',
-  'ai-video': '\u{1F3AC}',
-  'ai-audio': '\u{1F3B5}',
-  'ai-writing': '\u{270D}\uFE0F',
-  'ai-search': '\u{1F50D}',
-  'ai-pdf': '\u{1F4C4}',
-  'ai-presentation': '\u{1F4CA}',
-  'ai-math': '\u{1F9EE}',
-  'ai-coding': '\u{1F9E0}',
-  'ai-agents': '\u{1F465}',
-  'ai-open-source': '\u{1F4E6}', // 📦 downloadable models
-  'ai-models': '\u{1F31F}', // 🌟 newest models
+  'ai-chat': '\u{1F4AC}', // 💬 speech balloon
+  'ai-image': '\u{1F3A8}', // 🎨 artist palette
+  'ai-video': '\u{1F3AC}', // 🎬 clapper board
+  'ai-audio': '\u{1F3B5}', // 🎵 musical note
+  'ai-writing': '\u{270D}\uFE0F', // ✍️ writing hand
+  'ai-search': '\u{1F50D}', // 🔍 magnifying glass
+  'ai-pdf': '\u{1F4C4}', // 📄 page
+  'ai-presentation': '\u{1F4CA}', // 📊 chart
+  'ai-math': '\u{1F9EE}', // 🧮 abacus
+  'ai-coding': '\u{1F6E0}\uFE0F', // 🛠️ hammer & wrench (coding/tools)
+  'ai-agents': '\u{1F916}', // 🤖 robot (agents/platforms)
+  'ai-open-source': '\u{1F4BE}', // 💾 floppy disk (download models)
+  'ai-models': '\u{1F31F}', // 🌟 glowing star (newest models)
   // Developer categories
-  'dev-coding': '\u{1F4BB}',
-  'dev-docs': '\u{1F4DA}',
-  'dev-data': '\u{1F5C4}\uFE0F',
-  'dev-design': '\u{1F58C}\uFE0F',
-  'dev-backend': '\u{1F680}',
-  'dev-automation': '\u{2699}\uFE0F',
-  'dev-security': '\u{1F512}',
-  'dev-productivity': '\u{1F4CB}',
-  'dev-learning': '\u{1F393}',
+  'dev-coding': '\u{1F4BB}', // 💻 laptop
+  'dev-docs': '\u{1F4DA}', // 📚 books
+  'dev-data': '\u{1F5C4}\uFE0F', // 🗄️ file cabinet
+  'dev-design': '\u{1F58C}\uFE0F', // 🎽 drafting compass
+  'dev-backend': '\u{1F680}', // 🚀 rocket (hosting/deployment)
+  'dev-automation': '\u{2699}\uFE0F', // ⚙️ gear
+  'dev-security': '\u{1F512}', // 🔒 lock
+  'dev-productivity': '\u{1F4CB}', // 📋 clipboard
+  'dev-learning': '\u{1F393}', // 🎓 graduation cap
 };
 
 // ─── Copy / i18n ─────────────────────────────────────────────────────────────
@@ -107,6 +107,7 @@ interface LifeFilterDefinition {
 function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
   const e = (en: string, ja: string) => (lang === 'ja' ? ja : en);
   return [
+    // Access filters - core zero-budget needs
     {
       id: 'no-signup',
       label: e('No Signup', 'アカウント不要'),
@@ -118,27 +119,18 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
       predicate: (tool) => tool.requiresSignup === true,
     },
     {
-      id: 'open-source',
-      label: e('Open source', 'オープンソース'),
-      predicate: (tool) => tool.access === 'open-source' || tool.access === 'self-host',
+      id: 'no-key',
+      label: e('No API Key', 'APIキー不要'),
+      predicate: (tool) => tool.requiresSignup === false || tool.access === 'open-source',
     },
+    // Free tokens/API credits for zero-budget developers
     {
-      id: 'offline',
-      label: e('Offline', 'オフライン'),
-      predicate: (tool, h) =>
-        tool.access === 'open-source' ||
-        tool.surface === 'cli' ||
-        /local|offline|desktop|self-host|WebGPU/i.test(h),
+      id: 'free-tokens',
+      label: e('Free Tokens', '無料トークン'),
+      predicate: (_tool, h) =>
+        /free token|free credit|hugging face|google ai studio|cohere|trial/i.test(h),
     },
-    {
-      id: 'developer',
-      label: e('For devs', '開発者向け'),
-      predicate: (tool, h) =>
-        tool.surface !== 'web' ||
-        tool.category === 'dev-coding' ||
-        /developer|coding|api|cli|git|database|deploy/i.test(h),
-    },
-    // New filters for 2026 redesign - Zero Budget Developer focus
+    // Surface filters - where you run tools
     {
       id: 'cli',
       label: e('CLI', 'CLI'),
@@ -154,30 +146,62 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
       label: e('API', 'API'),
       predicate: (tool) => tool.surface === 'api',
     },
+    // Deployment filters - self-hosted and open source
     {
       id: 'self-host',
       label: e('Self-host', 'セルフホスト'),
       predicate: (tool) => tool.access === 'self-host' || tool.access === 'open-source',
     },
     {
-      id: 'no-key',
-      label: e('No API Key', 'APIキー不要'),
-      predicate: (tool) => tool.access === 'open-source' || tool.access === 'no-login' || tool.requiresSignup === false,
+      id: 'open-source',
+      label: e('Open Source', 'オープンソース'),
+      predicate: (tool) => tool.access === 'open-source',
     },
+    // Capability filters - what you can do
     {
       id: 'free-api',
       label: e('Free API', '無料API'),
-      predicate: (tool) => tool.access === 'public-api' || tool.access === 'open-source',
+      predicate: (tool) => tool.access === 'public-api' && tool.caveat?.toLowerCase().includes('rate') === false,
     },
     {
       id: 'high-context',
       label: e('1M+ Context', '長文対応'),
-      predicate: (_tool, h) => /1M|256K|400K/.test(h),
+      predicate: (_tool, h) => /1M|256K|400K/i.test(h),
     },
     {
-      id: 'local-first',
-      label: e('Local First', 'ローカル優先'),
-      predicate: (tool) => tool.access === 'open-source' && tool.surface === 'cli',
+      id: 'developer',
+      label: e('For Devs', '開発者向け'),
+      predicate: (tool, h) =>
+        tool.surface !== 'web' ||
+        tool.category === 'dev-coding' ||
+        /developer|coding|api|cli|git|database|deploy/i.test(h),
+    },
+    // Special needs for zero-budget developers
+    {
+      id: 'multilingual',
+      label: e('Multilingual', '多言語'),
+      predicate: (_tool, h) => /multilingual|chinese|japanese|korean|spanish/i.test(h.toLowerCase()),
+    },
+    // Money filters - free access paths
+    {
+      id: 'rate-limited',
+      label: e('Free Limited', '無料制限あり'),
+      predicate: (tool) =>
+        (tool.caveat?.toLowerCase().includes('rate limit') ?? false) ||
+        (tool.caveat?.toLowerCase().includes('daily') ?? false),
+    },
+    // Privacy & offline capability
+    {
+      id: 'web-llm',
+      label: e('Web LLM', 'WebLLM'),
+      predicate: (_tool, h) =>
+        /webllm|local|offline|browser ll?lm/i.test(h.toLowerCase()),
+    },
+    {
+      id: 'privacy-first',
+      label: e('Privacy', 'プライバシー'),
+      predicate: (_tool, h) =>
+        /private|privacy|encrypted|local/i.test(h.toLowerCase()),
     },
   ];
 }
