@@ -101,9 +101,9 @@ describe('theme — setTheme (apply theme + icon toggling)', () => {
     moonIcon.className = 'theme-icon-moon';
     document.body.appendChild(moonIcon);
 
-    // Dark mode - moon visible (empty style)
+    // Dark mode - moon visible (with dimensions)
     setTheme('dark');
-    expect(moonIcon.getAttribute('style')).toBe('');
+    expect(moonIcon.getAttribute('style')).toBe('width:20px;height:20px;');
     expect(moonIcon.style.display).toBe('');
 
     // Light mode - moon hidden
@@ -120,9 +120,9 @@ describe('theme — setTheme (apply theme + icon toggling)', () => {
     setTheme('dark');
     expect(sunIcon.getAttribute('style')).toBe('display:none;opacity:0');
 
-    // Light mode - sun visible (empty style)
+    // Light mode - sun visible (with dimensions)
     setTheme('light');
-    expect(sunIcon.getAttribute('style')).toBe('');
+    expect(sunIcon.getAttribute('style')).toBe('width:20px;height:20px;');
     expect(sunIcon.style.display).toBe('');
   });
 

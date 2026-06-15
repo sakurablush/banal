@@ -35,11 +35,18 @@ export function setTheme(theme: ThemeMode): void {
   // Toggle icon visibility (moon = dark mode, sun = light mode)
   const moonIcon = document.querySelector('.theme-icon-moon');
   const sunIcon = document.querySelector('.theme-icon-sun');
+  const themeToggle = document.getElementById('theme-toggle');
+
   if (moonIcon) {
-    moonIcon.setAttribute('style', theme === 'dark' ? '' : 'display:none;opacity:0');
+    moonIcon.setAttribute('style', theme === 'dark' ? 'width:20px;height:20px;' : 'display:none;opacity:0');
   }
   if (sunIcon) {
-    sunIcon.setAttribute('style', theme === 'dark' ? 'display:none;opacity:0' : '');
+    sunIcon.setAttribute('style', theme === 'dark' ? 'display:none;opacity:0' : 'width:20px;height:20px;');
+  }
+
+  // Update aria-pressed for accessibility
+  if (themeToggle) {
+    themeToggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
   }
 
   try {
