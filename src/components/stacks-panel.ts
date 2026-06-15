@@ -6,6 +6,7 @@
 import type { Lang } from '../i18n';
 import { toolStacks, getStackAudiences } from '../data/tool-stacks';
 import type { ToolStack, StackAudience } from '../types/tool';
+import { renderStackDetail } from './stack-detail';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -175,6 +176,25 @@ function renderStackCard(state: StacksPanelState, stack: ToolStack): HTMLElement
   }
   costSection.appendChild(costList);
   card.appendChild(costSection);
+
+  // Click to open detail view
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => {
+    const container = state.container;
+    if (!container) return;
+    
+    // Store original content
+    const originalContent = container.innerHTML;
+    
+    // Render detail view
+    container.innerHTML = '';
+    const detailView = renderStackDetail(stack, state.lang, () => {
+      // Back button callback - restore original content
+      container.innerHTML = originalContent;
+      renderContent(state);
+    });
+    container.appendChild(detailView);
+  });
 
   return card;
 }

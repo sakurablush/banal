@@ -6,6 +6,7 @@
 import type { Lang } from '../i18n';
 import { aiModels, getModelFamilies } from '../data/ai-models';
 import type { AIModel } from '../types/tool';
+import { renderModelDetail } from './model-detail';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -253,6 +254,28 @@ function renderModelCard(state: ModelsPanelState, model: AIModel): HTMLElement {
   compareLabel.textContent = typeof copy.compare === 'string' ? copy.compare : 'Compare';
   compareWrap.appendChild(compareLabel);
   card.appendChild(compareWrap);
+
+  // Click to open detail view
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', (e) => {
+    // Don't open detail if clicking on checkbox
+    if ((e.target as HTMLElement).closest('.model-compare-check')) return;
+    
+    const container = state.container;
+    if (!container) return;
+    
+    // Store original content
+    const originalContent = container.innerHTML;
+    
+    // Render detail view
+    container.innerHTML = '';
+    const detailView = renderModelDetail(model, state.lang, () => {
+      // Back button callback - restore original content
+      container.innerHTML = originalContent;
+      renderContent(state);
+    });
+    container.appendChild(detailView);
+  });
 
   return card;
 }

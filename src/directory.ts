@@ -8,6 +8,7 @@ import { zeroKeyTools } from './data/zero-key-tools';
 import { renderModelsPanel, type ModelsPanelApi } from './components/models-panel';
 import { renderStacksPanel, type StacksPanelApi } from './components/stacks-panel';
 import { renderOnboarding } from './components/onboarding-flow';
+import { renderGettingStartedGuides } from './components/getting-started-guides';
 import { aiModels } from './data/ai-models';
 import { toolStacks } from './data/tool-stacks';
 
@@ -22,6 +23,7 @@ export function initDirectory(): void {
   const modelsRoot = document.getElementById('ai-models-root');
   const stacksRoot = document.getElementById('tool-stacks-root');
   const onboardingRoot = document.getElementById('onboarding-root');
+  const guidesRoot = document.getElementById('guides-root');
 
   // Store panel APIs for category quick-nav
   let aiPanelApi: ZeroKeyPanelApi | null = null;
@@ -133,6 +135,16 @@ export function initDirectory(): void {
         renderOnboarding(onboardingRoot, lang);
       } catch (error) {
         console.error('Failed to render onboarding quiz:', error);
+      }
+    }
+
+    // Render Getting Started Guides
+    if (guidesRoot) {
+      try {
+        guidesRoot.innerHTML = '';
+        guidesRoot.appendChild(renderGettingStartedGuides(lang));
+      } catch (error) {
+        console.error('Failed to render getting started guides:', error);
       }
     }
   };
