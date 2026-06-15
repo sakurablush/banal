@@ -212,6 +212,22 @@ export const inferenceProviders: InferenceProvider[] = [
     caveat: 'Anonymous free routes are rate-limited. Some providers may log data.',
     lastVerified: '2026-06-14',
   },
+  {
+    id: 'novita',
+    name: 'Novita AI',
+    url: 'https://novita.ai/',
+    freeTier: {
+      requiresCard: false,
+      requiresSignup: true,
+      limits: 'Free trial credits, budget-friendly pricing',
+    },
+    topFreeModels: ['Llama 3.3 70B', 'Qwen 2.5 72B', 'DeepSeek R1'],
+    apiFormat: 'openai-compatible',
+    quality: { speed: 'fast', reliability: 'medium' },
+    bestFor: 'Budget-friendly multi-modal inference with free trial credits',
+    caveat: 'Free trial credits limited. Smaller provider with growing model selection.',
+    lastVerified: '2026-06-15',
+  },
 ];
 
 // ─── Helper Functions ───────────────────────────────────────────────────────

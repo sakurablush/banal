@@ -50,6 +50,7 @@ import {
   getZeroBudgetStacks,
   getStackAudiences,
 } from '../src/data/tool-stacks';
+import { zeroKeyTools } from '../src/data/zero-key-tools';
 import {
   inferenceProviders,
   getProviderById,
@@ -376,5 +377,64 @@ describe('Progressive Filtering Engine', () => {
     expect(deserialized.category).toBe('ai-chat');
     expect(deserialized.tags).toEqual(['no-signup', 'browser']);
     expect(deserialized.searchQuery).toBe('test');
+  });
+});
+
+// ─── Data Completeness Tests ────────────────────────────────────────────────
+
+describe('Data Completeness', () => {
+  it('should have all critical AI coding tools from plan', () => {
+    const criticalTools = [
+      'kilo-code',
+      'cline',
+      'roo-code',
+      'opencode',
+      'cursor',
+      'windsurf',
+      'kiro',
+      'aider',
+      'continue-dev',
+      'goose',
+      'tabby',
+      'void',
+      'stagewise',
+      'bolt-diy',
+    ];
+
+    const toolIds = zeroKeyTools.map((t) => t.id);
+    for (const toolId of criticalTools) {
+      expect(toolIds).toContain(toolId);
+    }
+  });
+
+  it('should have all inference providers from plan', () => {
+    const criticalProviders = [
+      'google-ai-studio',
+      'cerebras',
+      'groq',
+      'mistral',
+      'nvidia-nim',
+      'cloudflare',
+      'openrouter',
+      'together',
+      'fireworks',
+      'deepinfra',
+      'huggingface',
+      'kilo-gateway',
+      'novita',
+    ];
+
+    const providerIds = inferenceProviders.map((p) => p.id);
+    for (const providerId of criticalProviders) {
+      expect(providerIds).toContain(providerId);
+    }
+  });
+
+  it('should have 35+ AI models', () => {
+    expect(aiModels.length).toBeGreaterThanOrEqual(35);
+  });
+
+  it('should have 10+ tool stacks', () => {
+    expect(toolStacks.length).toBeGreaterThanOrEqual(10);
   });
 });
