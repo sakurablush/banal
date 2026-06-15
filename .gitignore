@@ -12,6 +12,13 @@ coverage/
 *.swp
 *.swo
 
+# Cursor & Kilo (tool configs)
+.cursor/
+.kilo/
+
+# Playwright MCP snapshots (ephemeral)
+.playwright-mcp/
+
 # Env
 .env
 .env.local
@@ -25,7 +32,25 @@ lerna-debug.log*
 
 # Vitest / test artifacts
 *.log
+test-results/
+playwright-report/
+html-report/
 
 # Temporary
 tmp/
 *.tmp
+
+# TypeScript
+*.tsbuildinfo
+
+# ESLint cache
+.eslintcache
+
+# Prettier
+.prettiercache
+
+# Source maps
+*.map
+
+# Articles (content, not code)
+articles/

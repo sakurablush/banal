@@ -398,7 +398,8 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
 
   bar.appendChild(chipsRow);
 
-  // Quick filter chips
+  // Quick filter chips — only show chips that have at least 1 matching model
+  // for the current family + license filters (prevents dead-end chips)
   const quickChips = create('div', 'models-quick-chips');
   const chipDefs = [
     { label: typeof copy.coding === 'string' ? copy.coding : 'Coding', useCase: 'coding' },
@@ -407,7 +408,21 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
     { label: typeof copy.longContext === 'string' ? copy.longContext : 'Long Context', useCase: 'long-context' },
     { label: typeof copy.singleGpu === 'string' ? copy.singleGpu : 'Single GPU', useCase: 'consumer-hardware' },
   ];
+
+  // Pre-filter models by family + license (excluding useCase) to check chip availability
+  let baseModels = [...aiModels];
+  if (state.familyFilter) {
+    baseModels = baseModels.filter((m) => m.family === state.familyFilter);
+  }
+  if (state.licenseFilter) {
+    baseModels = baseModels.filter((m) => m.license.type === state.licenseFilter);
+  }
+
   for (const chip of chipDefs) {
+    // Only render chip if at least 1 model matches this useCase
+    const hasMatches = baseModels.some((m) => m.bestFor.includes(chip.useCase));
+    if (!hasMatches) continue;
+
     const btn = create('button', `models-quick-chip${state.useCaseFilter === chip.useCase ? ' active' : ''}`);
     btn.type = 'button';
     btn.textContent = chip.label;

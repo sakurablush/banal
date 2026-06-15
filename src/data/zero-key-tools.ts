@@ -50,6 +50,7 @@ export interface ZeroKeyTool {
   bestFor: string;
   qualityNote: string;
   caveat?: string;
+  docsUrl?: string;
   lastVerified?: string;
 }
 
@@ -100,6 +101,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'DuckDuckGo puts strong hosted models behind a privacy-first chat surface with no account friction.',
     caveat: 'Do not treat any hosted AI as confidential legal, medical, or financial counsel.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'lmarena',
@@ -113,6 +115,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Comparing model answers when quality matters more than speed.',
     qualityNote:
       'The Arena ecosystem is one of the best public ways to test many capable models against the same prompt.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'webllm-chat',
@@ -127,6 +130,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Runs open models in the browser through WebGPU. This is the strongest privacy story in the web section.',
     caveat: 'Needs modern browser/GPU support and can be slow on old shared machines.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'perchance-chat',
@@ -140,6 +144,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Zero-friction text help when the user cannot make an account.',
     qualityNote:
       'Practical browser chat with very low friction; useful as the emergency fallback tab.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'huggingface-spaces',
@@ -154,6 +159,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The deepest community lab on the web; excellent if you search by model or task, not random hype.',
     caveat: 'Spaces can sleep, break, rate-limit, or require login depending on the author.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'chatgpt-free',
@@ -169,6 +175,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'The most popular AI chatbot. Free tier gives access to GPT-4o-mini and limited GPT-4o, which handles most everyday tasks well.',
     caveat:
       'Free tier has usage caps that reset periodically. Some features require Plus subscription.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'microsoft-copilot',
@@ -183,6 +190,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'One of the best free options because it often runs GPT-4 class models without requiring login. Includes image generation via DALL-E.',
     caveat: 'Microsoft account unlocks more features; conversation limits exist.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'google-gemini',
@@ -198,6 +206,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Free access to Gemini models with strong reasoning. Excellent for tasks involving images, long documents, and Google Workspace.',
     caveat: 'Requires Google account. Some advanced features limited to paid tiers.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'meta-ai',
@@ -212,6 +221,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Powered by Llama models. Offers surprisingly capable chat and image generation with zero friction.',
     caveat: 'Available in limited regions. Quality varies compared to GPT-4 class models.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'pi-ai',
@@ -226,6 +236,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Designed specifically for natural conversation. More empathetic and patient than most chatbots, great for brainstorming.',
     caveat: 'Less capable at technical/coding tasks than specialized tools.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'grok',
@@ -240,6 +251,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Free tier available via X. Strong at current events and trending topics due to real-time data access.',
     caveat: 'Requires X account. Free tier has daily message limits.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'you-com',
@@ -254,6 +266,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Unique hybrid of search engine and AI chat. Free tier lets you switch between different AI models for answers.',
     caveat: 'Some advanced models and features behind paywall.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'groq',
@@ -268,20 +281,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Custom LPU hardware makes it the fastest way to run Llama, Mixtral, and other open models. Free tier is generous.',
     caveat: 'Rate limits apply. Model selection limited to open-source models.',
-  },
-  {
-    id: 'perplexity-ai',
-    name: 'Perplexity AI',
-    url: 'https://www.perplexity.ai/',
-    surface: 'web',
-    category: 'ai-chat',
-    access: 'free-tier',
-    requiresSignup: true,
-    badges: ['citations', 'research', 'web search'],
-    bestFor: 'Research questions where you need answers with cited sources you can verify.',
-    qualityNote:
-      'The best free AI search tool for serious research. Every answer includes clickable source citations.',
-    caveat: 'Pro Search (more thorough) is limited on free tier. Basic search is unlimited.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'deepseek-chat',
@@ -296,6 +296,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'DeepSeek-V3 and R1 models punch well above their weight. Excellent for math, coding, and analytical tasks at zero cost.',
     caveat: 'Requires account. Based in China; consider data residency for sensitive work.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'phind',
@@ -310,6 +311,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Built specifically for developers. Searches technical content and generates code-aware answers with sources.',
     caveat: 'Free tier has daily limits on advanced model queries.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'mistral-le-chat',
@@ -325,6 +327,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'European AI lab with strong models. Free tier includes access to their full model lineup including canvas and code features.',
     caveat: 'Requires account. Smaller ecosystem than ChatGPT or Gemini.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'huggingchat',
@@ -339,6 +342,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Run by Hugging Face, the open-source AI hub. Gives free access to top open models like Llama, Mixtral, and Command R+.',
     caveat: 'Requires Hugging Face account. Model availability may change.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'poe',
@@ -348,11 +352,12 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     category: 'ai-chat',
     access: 'free-tier',
     requiresSignup: true,
-    badges: ['multi-model', 'bots', 'community'],
-    bestFor: 'Trying many different AI models and community-built bots from one interface.',
+    badges: ['multi-model', 'GPT-4', 'Claude', 'community'],
+    bestFor: 'Trying many different AI models (GPT-4, Claude, Gemini) and community bots from one interface.',
     qualityNote:
       'By Quora. Free tier gives access to GPT-4o-mini, Claude, Gemini, and thousands of custom bots in one place.',
     caveat: 'Free tier has daily message limits per model. Premium models cost credits.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'perchance-image',
@@ -367,6 +372,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'One of the rare truly unlimited, no-login image generators. Quality is decent for concepts and illustrations.',
     caveat: 'Image quality below DALL-E/Midjourney level. Best for drafts and experiments.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'craiyon',
@@ -381,6 +387,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Formerly DALL-E Mini. Simple interface, generates multiple images per prompt. Good for rapid ideation.',
     caveat: 'Lower quality than premium generators. Has ads on the free tier.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'deepai-image',
@@ -395,6 +402,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Offers text-to-image, style transfer, and other visual AI tools without requiring an account.',
     caveat: 'Free tier has watermarks and limited resolution.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'pollinations-image',
@@ -408,6 +416,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Programmatic image generation with a dead-simple API that needs no authentication.',
     qualityNote:
       'Unique in offering both a web UI and a completely open API. Perfect for developers building image features into free apps.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'scribble-diffusion',
@@ -421,6 +430,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Turning rough sketches into polished AI images for brainstorming and fun.',
     qualityNote:
       'A delightful tool that takes your doodles and a text prompt to create refined images. Great for visual ideation.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'remove-bg',
@@ -435,6 +445,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The gold standard for background removal. Results are immediate and remarkably accurate.',
     caveat: 'Free tier gives lower resolution. Full resolution requires credits or subscription.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'cleanup-pictures',
@@ -449,6 +460,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Brush over anything you want removed and AI fills it in naturally. Surprisingly good results for free.',
     caveat: 'Free tier limits resolution. Complex removals may need multiple passes.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'canva-free',
@@ -464,6 +476,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The most accessible design tool for non-designers. Free tier includes AI image generation, templates, and a huge asset library.',
     caveat: 'Best features require Pro subscription. Free tier has watermarked premium assets.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'microsoft-designer',
@@ -478,6 +491,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Combines DALL-E image generation with design templates. Generous free tier for social media graphics and visual content.',
     caveat: 'Requires Microsoft account. Daily generation limits apply.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'leonardo-ai',
@@ -492,6 +506,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Offers 150 daily free tokens, multiple specialized models, and features like image-to-image. Quality rivals paid tools.',
     caveat: 'Requires account. Free tokens refresh daily but run out fast with high-res images.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'ideogram',
@@ -507,6 +522,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The best free tool for images containing readable text. Other generators struggle with text; Ideogram excels at it.',
     caveat: 'Requires account. Free tier has daily generation limits.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'capcut',
@@ -522,6 +538,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'By ByteDance. The best free video editor for short-form content. AI auto-captions alone save hours of work.',
     caveat: 'Some premium templates and effects require Pro. Watermark on some exports.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'clipchamp',
@@ -536,6 +553,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Acquired by Microsoft, now built into Windows. Free tier includes AI text-to-speech, templates, and stock media.',
     caveat: 'Free tier exports at 1080p max. Some stock assets are premium-only.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'giz-ai',
@@ -550,6 +568,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Aggregates several AI generation models. Useful for comparing outputs and finding what works for your use case.',
     caveat: 'Free tier has limited generations per day. Quality varies by model.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'flow-music',
@@ -580,6 +599,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Simple and effective TTS with a wide selection of voices and languages. No account needed for basic use.',
     caveat: 'Character limits per conversion on the free tier.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'musicfy',
@@ -594,6 +614,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Offers AI voice conversion, text-to-music, and stem splitting. Fun for creators exploring AI music.',
     caveat: 'Free tier has limited generations. Full features require subscription.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'suno',
@@ -609,6 +630,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The most impressive free AI music tool. Generates full songs with realistic vocals that sound surprisingly professional.',
     caveat: 'Free tier gives limited daily credits. Commercial use requires paid plan.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'tinywow',
@@ -624,6 +646,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Hundreds of free tools including AI writer, summarizer, PDF converter, image editor. Files auto-delete for privacy.',
     caveat: 'Ad-supported. Individual tools may be less polished than specialized alternatives.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'toolbaz',
@@ -637,6 +660,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Quick AI text generation, rewriting, and content creation without any registration.',
     qualityNote:
       'Collection of free AI writing tools including text generator, paraphraser, and content detector.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'quillbot',
@@ -652,6 +676,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The best free paraphrasing tool. Also includes grammar checker, summarizer, and citation generator.',
     caveat: 'Free tier limits paraphraser to 125 words at a time. Premium unlocks longer text.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'deepl-translator',
@@ -667,6 +692,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'Consistently outperforms Google Translate for nuanced text. No account needed for web use. Supports documents too.',
     caveat:
       'Free web version has character limits per translation. Some language pairs better than others.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'google-translate',
@@ -681,6 +707,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The widest language coverage of any free translator. Includes camera translation, conversation mode, and offline support.',
     caveat: 'Quality varies significantly between language pairs. Nuance can be lost.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'languagetool',
@@ -695,6 +722,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Open-source grammar checker that works across languages. Great Grammarly alternative, especially for non-English writing.',
     caveat: 'Free tier has character limits and fewer advanced suggestions than premium.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'hemingway-editor',
@@ -710,6 +738,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Unique tool that focuses purely on readability. Highlights hard-to-read sentences, adverbs, and passive voice.',
     caveat: 'English only. Does not fix errors — it highlights issues for you to address.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'copy-ai',
@@ -724,6 +753,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Excellent for marketing-specific writing. Templates for ads, emails, product descriptions, and social media.',
     caveat: 'Free tier limited to one seat and 2,000 words per month.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'rytr',
@@ -738,6 +768,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Good for structured content creation with tone and use-case templates. Outputs are decent starting points.',
     caveat: 'Free tier limited to 10,000 characters per month.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'chatpdf',
@@ -752,6 +783,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Upload any PDF and chat with it. Excellent for quickly understanding research papers, contracts, and long documents.',
     caveat: 'Free tier limits pages per PDF and questions per day.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'smallpdf-ai',
@@ -766,6 +798,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Part of the trusted Smallpdf suite. AI summarization is accurate and highlights the most important sections.',
     caveat: 'Free tier has daily processing limits. Full suite requires subscription.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'ilovepdf',
@@ -780,6 +813,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The most comprehensive free PDF toolkit on the web. Handles conversions, compression, and editing without an account.',
     caveat: 'Free tier has daily task limits. Batch processing requires premium.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'pdf24',
@@ -793,6 +827,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Reliable PDF creation, editing, and conversion tools with no account required.',
     qualityNote:
       'Completely free, no file limits, and genuinely no-login. One of the most generous free PDF toolkits available.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'perplexity-search',
@@ -802,11 +837,12 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     category: 'ai-search',
     access: 'free-tier',
     requiresSignup: true,
-    badges: ['cited search', 'research', 'real-time'],
-    bestFor: 'AI-powered research with inline citations so you can verify every claim.',
+    badges: ['cited search', 'research', 'real-time', 'citations'],
+    bestFor: 'Research questions where you need answers with cited sources you can verify.',
     qualityNote:
-      'The most trustworthy AI search tool because it shows its sources. Excellent for research, fact-checking, and learning.',
-    caveat: 'Pro Search limited on free tier. Basic search is unlimited.',
+      'The most trustworthy AI search tool because it shows its sources. Every answer includes clickable source citations. Excellent for research, fact-checking, and learning.',
+    caveat: 'Pro Search (more thorough) is limited on free tier. Basic search is unlimited.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'consensus',
@@ -822,6 +858,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'Searches across 200M+ academic papers and synthesizes findings. Essential for evidence-based decision making.',
     caveat:
       'Free tier limits searches per month. Best for scientific/medical/social science questions.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'elicit',
@@ -837,6 +874,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Built specifically for researchers. Extracts structured data from papers and helps synthesize findings across studies.',
     caveat: 'Free tier has usage limits. Most powerful for academic/scientific research.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'semantic-scholar',
@@ -851,6 +889,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'Finding and understanding academic papers with AI-generated summaries and citation graphs.',
     qualityNote:
       'By Allen AI. Covers 200M+ papers with AI-generated TLDRs, citation context, and influence scores. Completely free.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'connected-papers',
@@ -865,6 +904,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Creates beautiful visual graphs of paper relationships. Invaluable for literature reviews and finding seminal works.',
     caveat: 'Free tier limits graphs per month. Requires starting from a known paper.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'wolfram-alpha',
@@ -879,6 +919,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The computational knowledge engine. Solves equations, plots functions, converts units, and answers factual queries with precision.',
     caveat: 'Step-by-step solutions require Pro. Free tier shows answers but not always the work.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'desmos',
@@ -893,6 +934,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'Interactive graphing calculator for visualizing functions, data, and geometric constructions.',
     qualityNote:
       'The best free graphing calculator on the web. Used by millions of students and teachers. Beautifully designed.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'geogebra',
@@ -907,6 +949,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'Interactive geometry, algebra, calculus, and statistics tools for learning and teaching.',
     qualityNote:
       'Comprehensive free math software used worldwide in education. Includes graphing, geometry, 3D, spreadsheets, and CAS.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'khan-academy',
@@ -921,6 +964,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Completely free education platform with Khanmigo AI tutor. Covers K-12 through college-level courses with practice exercises.',
     caveat: 'Khanmigo AI tutor features may have limited availability on free tier.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'symbolab',
@@ -935,6 +979,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Shows detailed solution steps, not just answers. Covers a wide range of math topics from basic to advanced.',
     caveat: 'Free tier limits step-by-step solutions per day. Full access requires subscription.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'mathway',
@@ -949,6 +994,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Solves problems across basic math, algebra, calculus, statistics, and more. Camera input makes it great for homework.',
     caveat: 'Free tier shows answers only. Step-by-step solutions require premium.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'gamma',
@@ -964,6 +1010,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The best AI presentation tool. Generates polished, professional slides from a simple description. Results look genuinely good.',
     caveat: 'Free tier includes Gamma branding. Export to PowerPoint requires credits.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'beautiful-ai',
@@ -979,6 +1026,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Smart templates that adapt as you add content. The AI enforces good design principles automatically.',
     caveat: 'Free tier is limited. Most useful features require Pro subscription.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'slidesai',
@@ -993,19 +1041,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Works as a Google Slides add-on. Paste your text and it generates a complete slide deck with layouts and images.',
     caveat: 'Free tier limited to 3 presentations per month.',
-  },
-  {
-    id: 'pollinations',
-    name: 'Pollinations.ai',
-    url: 'https://pollinations.ai/',
-    surface: 'web',
-    category: 'dev-design',
-    access: 'public-api',
-    requiresSignup: false,
-    badges: ['image', 'text', 'open API'],
-    bestFor: 'Fast images, quick text endpoints, prototypes, and visual prompts.',
-    qualityNote:
-      'A rare tool that is both web-friendly and API-friendly, with open access patterns developers can wire up fast.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'excalidraw',
@@ -1019,6 +1055,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor:
       'Explaining ideas, system diagrams, UI sketches, and plans without a design subscription.',
     qualityNote: 'Mature, beloved, open-source diagramming that works immediately in a browser.',
+    docsUrl: 'https://docs.excalidraw.com/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'photopea',
@@ -1032,6 +1070,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Photoshop-like editing on machines where you cannot install anything.',
     qualityNote:
       'One of the strongest free browser image editors, especially for PSD and practical design work.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'penpot',
@@ -1045,6 +1084,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'UI design and collaboration when Figma is too expensive or too locked down.',
     qualityNote: 'Serious open-source product design tool with hosted and self-hosted paths.',
     caveat: 'Hosted collaboration needs an account; self-hosting needs technical comfort.',
+    docsUrl: 'https://help.penpot.app/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'diagrams-net',
@@ -1058,6 +1099,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Architecture diagrams, flowcharts, network maps, and documentation visuals.',
     qualityNote:
       'A boring, dependable classic. It saves locally and does not force an account for core work.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'stackblitz',
@@ -1071,6 +1113,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Instant web app prototypes and debugging snippets without local setup.',
     qualityNote:
       'Fast browser development environment that removes install friction for learners and broke machines.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'codesandbox',
@@ -1084,6 +1127,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Shareable frontend experiments, reproductions, and learning projects.',
     qualityNote:
       'Still one of the easiest ways to make code visible and shareable from any browser.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'bolt-new',
@@ -1099,6 +1143,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'By StackBlitz. Describe what you want in natural language and it generates, runs, and deploys a full-stack app. Revolutionary for prototyping.',
     caveat: 'Free tier has limited AI tokens per day. Complex apps may need manual refinement.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'v0-dev',
@@ -1114,6 +1159,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The best AI tool for generating React components with Tailwind CSS. Outputs clean, copy-pasteable code that actually works.',
     caveat: 'Free tier has generation limits. Outputs are React/Next.js focused.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'replit',
@@ -1128,13 +1174,14 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Full development environment in the browser. AI agent can build apps from descriptions. Great for learning and prototyping.',
     caveat: 'Free tier has resource limits. Always-on deployments require paid plan.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'continue-dev',
     name: 'Continue.dev',
     url: 'https://continue.dev/',
     surface: 'cli',
-    category: 'dev-coding',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['IDE extension', 'open-source', 'local AI', 'true-free-models'],
@@ -1142,6 +1189,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'Adding AI code assistance to VS Code or JetBrains with any model, including local ones.',
     qualityNote:
       'The leading open-source AI coding assistant. Works with Ollama, OpenAI, Anthropic, or any provider. Full data control.',
+    docsUrl: 'https://docs.continue.dev/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'ollama',
@@ -1156,13 +1205,15 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The easiest way to run Llama, Mistral, CodeLlama, and dozens of open models locally. One command to get started.',
     caveat: 'Requires decent hardware (8GB+ RAM). Large models need GPU for reasonable speed.',
+    docsUrl: 'https://github.com/ollama/ollama/tree/main/docs',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'cody-sourcegraph',
     name: 'Cody by Sourcegraph',
     url: 'https://sourcegraph.com/cody',
     surface: 'web',
-    category: 'dev-coding',
+    category: 'ai-coding',
     access: 'free-tier',
     requiresSignup: true,
     badges: ['AI code assistant', 'codebase-aware', 'IDE'],
@@ -1170,6 +1221,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Free tier includes generous autocomplete and chat. Codebase-aware context means better answers than generic AI.',
     caveat: 'Free tier has monthly usage limits on chat and commands.',
+    docsUrl: 'https://sourcegraph.com/docs/cody',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'github-pages',
@@ -1182,6 +1235,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['static hosting', 'custom domain', 'git'],
     bestFor: 'Publishing static sites, docs, portfolios, and small tools for free.',
     qualityNote: 'The simplest no-server path for shipping something public from a repository.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'cloudflare-pages',
@@ -1195,6 +1249,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Free static hosting with preview deploys and a strong global edge.',
     qualityNote:
       'Generous free tier and production-grade delivery for small teams and solo builders.',
+    docsUrl: 'https://developers.cloudflare.com/pages/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'supabase',
@@ -1209,6 +1265,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The quickest credible open-source Firebase alternative for developers on a zero-dollar start.',
     caveat: 'Hosted free tier has quotas and usually requires an account.',
+    docsUrl: 'https://supabase.com/docs',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'neon',
@@ -1222,6 +1280,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Free Postgres for prototypes, demos, learning SQL, and small apps.',
     qualityNote:
       'A practical free database path with developer-friendly branching and modern Postgres ergonomics.',
+    docsUrl: 'https://neon.tech/docs',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'railway',
@@ -1235,6 +1295,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Deploying small services when static hosting is not enough.',
     qualityNote: 'Good developer experience for turning a repo into a live service quickly.',
     caveat: 'Free/credit policies change often; verify before depending on it.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'render',
@@ -1248,6 +1309,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Static sites, small web services, and simple deploys without DevOps overhead.',
     qualityNote: 'Clear deploy UX and a known path for beginners moving beyond localhost.',
     caveat: 'Free services can sleep and limits can change.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'n8n',
@@ -1262,6 +1324,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Powerful workflow automation with a self-hostable path that can replace a lot of paid glue.',
     caveat: 'Hosted cloud is paid/freemium; the zero-cost path is self-hosting.',
+    docsUrl: 'https://docs.n8n.io/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'uptime-kuma',
@@ -1275,6 +1339,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Monitoring websites, APIs, cron jobs, and personal infrastructure.',
     qualityNote:
       'One of the best free self-hosted uptime monitors: polished, practical, and widely used.',
+    docsUrl: 'https://github.com/louislam/uptime-kuma/wiki',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'kuma-status',
@@ -1288,6 +1354,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Open-source monitoring/status pages without jumping straight to paid SaaS.',
     qualityNote:
       'A credible open-source alternative in a category that often becomes expensive fast.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'vaultwarden',
@@ -1303,6 +1370,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'A proven, resource-light way to get excellent password management without a subscription.',
     caveat: 'Self-hosting password infrastructure requires backups and careful security hygiene.',
+    docsUrl: 'https://github.com/dani-garcia/vaultwarden/wiki',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'bitwarden-free',
@@ -1315,6 +1384,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['passwords', 'apps', 'OSS core'],
     bestFor: 'A no-cost password manager that normal people can actually use.',
     qualityNote: 'The free tier covers the essential password-manager job well, across devices.',
+    docsUrl: 'https://bitwarden.com/help/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'proton-drive-free',
@@ -1329,6 +1400,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'Private file storage for documents that should not sit unprotected on a shared machine.',
     qualityNote: 'A useful privacy-first free tier from a serious provider.',
     caveat: 'Storage is limited on free plans.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'joplin-cloudless',
@@ -1342,6 +1414,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Owning notes, research, plans, and personal knowledge without Notion lock-in.',
     qualityNote:
       'Excellent open-source notes app with local-first control and multiple sync options.',
+    docsUrl: 'https://joplinapp.org/help/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'cryptpad',
@@ -1355,6 +1429,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Private collaborative docs, sheets, forms, and whiteboards.',
     qualityNote:
       'End-to-end encrypted collaboration is rare in free web tools; CryptPad is a serious option.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'libretranslate',
@@ -1368,6 +1443,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Translation without depending entirely on closed commercial APIs.',
     qualityNote: 'Open-source translation with public instances and a self-host path.',
     caveat: 'Public instances vary in quality and rate limits.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'freecodecamp',
@@ -1381,6 +1457,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Structured coding learning when paid bootcamps are not an option.',
     qualityNote:
       'Massive, proven free curriculum with real practice instead of passive videos only.',
+    docsUrl: 'https://www.freecodecamp.org/learn/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'roadmap-sh',
@@ -1393,6 +1471,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['roadmaps', 'developer career', 'guides'],
     bestFor: 'Knowing what to learn next without buying a course.',
     qualityNote: 'High-signal developer roadmaps that cut through tutorial noise.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'open-meteo',
@@ -1407,6 +1486,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'No API key, clear docs, strong model coverage, and a self-hostable open-source server.',
     caveat: 'Free non-commercial usage has limits and requires attribution.',
+    docsUrl: 'https://open-meteo.com/en/docs',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'nws-api',
@@ -1421,6 +1502,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Official US weather data is the right source for serious alerting and civic tools.',
     caveat: 'US-focused; follow usage policies and identify your app in requests.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'data-gov',
@@ -1434,6 +1516,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor:
       'Finding US federal datasets across health, labor, climate, finance, and public services.',
     qualityNote: 'The index for public-good data that can power serious civic and survival tools.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'rest-countries',
@@ -1447,6 +1530,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Country metadata, flags, currencies, calling codes, and region filters.',
     qualityNote:
       'A reliable starter API for real apps and teaching because the domain is useful and understandable.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'frankfurter',
@@ -1460,6 +1544,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Currency conversion prototypes without signing up for a finance API.',
     qualityNote: 'Simple exchange-rate API using European Central Bank reference data.',
     caveat: 'Not for trading or real-time financial decisions.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'openfoodfacts-api',
@@ -1473,6 +1558,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Nutrition apps, barcode lookup, grocery tools, and public health prototypes.',
     qualityNote:
       'Community-maintained open food database with real-world utility for low-budget apps.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'overpass-api',
@@ -1487,6 +1573,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'OpenStreetMap queries can power practical local-help tools without proprietary maps.',
     caveat: 'Public instances are shared resources. Cache results and be polite.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'nominatim',
@@ -1500,6 +1587,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Address search and reverse geocoding for low-volume civic tools.',
     qualityNote: 'The standard open geocoding path for OSM-backed projects.',
     caveat: 'Strict public usage policy; self-host or use a provider for production/high volume.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'wikimedia-api',
@@ -1513,6 +1601,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Search, summaries, media, page metadata, and free knowledge integrations.',
     qualityNote:
       'Direct access to one of the most valuable public knowledge infrastructures on earth.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'open-library-api',
@@ -1526,6 +1615,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Book search, ISBN lookup, author data, covers, and library-centered projects.',
     qualityNote: 'Free public APIs and data dumps for mission-aligned book and education tools.',
     caveat: 'Not intended as a high-volume third-party backend.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'crossref-api',
@@ -1538,6 +1628,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['DOI', 'research', 'metadata'],
     bestFor: 'Academic metadata, DOI lookup, citations, and literature discovery.',
     qualityNote: 'Essential free infrastructure for research tools and citation workflows.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'hacker-news-api',
@@ -1550,6 +1641,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['news', 'no key', 'Firebase'],
     bestFor: 'Developer-news readers, trend trackers, search experiments, and teaching APIs.',
     qualityNote: 'Simple, free, no-auth API with live-ish HN data and stable examples.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'openalex',
@@ -1562,6 +1654,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['scholarly graph', 'research', 'open'],
     bestFor: 'Research discovery, author/institution graphs, citations, and open bibliometrics.',
     qualityNote: 'A serious open scholarly index with generous public access and clear docs.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'github-api',
@@ -1575,6 +1668,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Repo search, issues, pull requests, releases, automation, and portfolio tooling.',
     qualityNote: 'The default API for building developer tools around the open-source ecosystem.',
     caveat: 'Unauthenticated rate limits are low; tokens improve limits but must be protected.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'gitlab-api',
@@ -1589,6 +1683,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'Open DevOps automation around GitLab projects, pipelines, issues, and merge requests.',
     qualityNote:
       'Broad API surface that can power serious internal tools even on free/self-hosted GitLab.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'jsonplaceholder',
@@ -1601,6 +1696,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['fake REST', 'no key', 'teaching'],
     bestFor: 'Learning fetch, CRUD UI, demos, tests, and frontend exercises.',
     qualityNote: 'The quickest fake REST API that still teaches real client patterns.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'dummyjson',
@@ -1614,6 +1710,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'E-commerce demos, auth mockups, carts, products, and realistic frontend practice.',
     qualityNote:
       'More practical fake data than toy examples, with endpoints that resemble real app work.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'httpbin',
@@ -1626,6 +1723,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['HTTP testing', 'no key', 'debugging'],
     bestFor: 'Testing clients, headers, auth, redirects, cookies, and webhooks.',
     qualityNote: 'The classic HTTP inspection endpoint every developer eventually needs.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'pollinations-api',
@@ -1639,6 +1737,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Adding generated images or text to tiny apps without a paid model key.',
     qualityNote:
       'Useful because the API is simple enough for beginners and open enough for rapid prototypes.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'libretranslate-api',
@@ -1653,6 +1752,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'The self-host path matters: translation can be a privacy-sensitive survival tool.',
     caveat: 'Public endpoints may require keys or have rate limits; self-host for reliability.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'ripgrep',
@@ -1665,6 +1765,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['search', 'fast', 'Rust'],
     bestFor: 'Finding text in large codebases instantly.',
     qualityNote: 'The first CLI upgrade many developers should install. It saves hours.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'fd',
@@ -1677,6 +1778,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['file search', 'fast', 'ergonomic'],
     bestFor: 'Finding files without memorizing hostile find syntax.',
     qualityNote: 'Fast, readable, and pairs perfectly with fzf and editors.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'jq',
@@ -1689,6 +1791,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['JSON', 'scripts', 'API'],
     bestFor: 'Reading, filtering, transforming, and debugging JSON API responses.',
     qualityNote: 'Essential for anyone working with APIs on a low-resource machine.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'yq',
@@ -1702,6 +1805,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Editing YAML/JSON/TOML/XML configs in scripts.',
     qualityNote:
       'Practical infrastructure glue for Docker, Kubernetes, CI, and config-heavy repos.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'httpie',
@@ -1714,6 +1818,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['HTTP', 'API testing', 'readable'],
     bestFor: 'Testing APIs with friendlier syntax than raw curl.',
     qualityNote: 'A real productivity win for beginners and pros debugging REST APIs.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'curl',
@@ -1727,6 +1832,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Downloading, probing, and scripting almost any network request.',
     qualityNote:
       'The universal network tool. It is everywhere, documented everywhere, and still unbeatable.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'git',
@@ -1739,6 +1845,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['version control', 'universal', 'OSS'],
     bestFor: 'Owning your work history and collaborating without paid tooling.',
     qualityNote: 'The core skill/tool for escaping fragile copy-paste development.',
+    docsUrl: 'https://git-scm.com/doc',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'gh-cli',
@@ -1751,6 +1859,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['GitHub', 'PRs', 'issues'],
     bestFor: 'Managing repos, pull requests, issues, releases, and Actions from the terminal.',
     qualityNote: 'Turns GitHub into scriptable infrastructure for solo developers and maintainers.',
+    docsUrl: 'https://cli.github.com/manual/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'uv',
@@ -1763,6 +1873,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['Python', 'packages', 'fast'],
     bestFor: 'Installing Python packages, managing projects, and replacing slow Python tooling.',
     qualityNote: 'Fast enough to make Python project setup feel modern on modest hardware.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'pnpm',
@@ -1775,6 +1886,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['Node', 'packages', 'disk efficient'],
     bestFor: 'Node package installs that are faster and use less disk space.',
     qualityNote: 'Great for old laptops where node_modules waste hurts.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'mise',
@@ -1787,6 +1899,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['runtime versions', 'tasks', 'dev env'],
     bestFor: 'Managing Node, Python, Go, Ruby, Java, and project tasks consistently.',
     qualityNote: 'A practical modern replacement for a pile of language-specific version managers.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'lazygit',
@@ -1800,6 +1913,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Understanding and managing Git changes visually from the terminal.',
     qualityNote:
       'Excellent for people who know Git concepts but need a clearer interface under pressure.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'hyperfine',
@@ -1812,6 +1926,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['benchmark', 'scripts', 'performance'],
     bestFor: 'Measuring command performance honestly instead of guessing.',
     qualityNote: 'Makes performance conversations concrete with repeatable benchmarks.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'tokei',
@@ -1824,6 +1939,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['code stats', 'fast', 'multi-language'],
     bestFor: 'Counting code by language quickly for audits and repo understanding.',
     qualityNote: 'Fast codebase visibility without SaaS analytics.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'ruff',
@@ -1836,6 +1952,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['Python', 'lint', 'format'],
     bestFor: 'Python linting and formatting that is fast enough to run constantly.',
     qualityNote: 'A major free upgrade for Python code quality and feedback loops.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'biome',
@@ -1848,6 +1965,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['JS/TS', 'lint', 'format'],
     bestFor: 'Fast formatting and linting for JavaScript/TypeScript projects.',
     qualityNote: 'A serious all-in-one tool that can simplify frontend project maintenance.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'playwright',
@@ -1861,6 +1979,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'End-to-end tests, screenshots, browser automation, and visual checks.',
     qualityNote:
       'Production-grade browser automation for free, with great docs and cross-browser support.',
+    docsUrl: 'https://playwright.dev/docs/intro',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'just',
@@ -1874,6 +1994,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Giving a project clear commands: test, build, deploy, format, reset.',
     qualityNote:
       'Small, readable automation that helps contributors succeed without tribal knowledge.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'direnv',
@@ -1886,6 +2007,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['env vars', 'shell', 'security'],
     bestFor: 'Loading per-project environment safely when entering a directory.',
     qualityNote: 'Keeps secrets and project setup out of random shell history and README rituals.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'k6',
@@ -1898,6 +2020,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['load testing', 'JS scripts', 'performance'],
     bestFor: 'Testing whether an API or site survives real traffic.',
     qualityNote: 'Open-source load testing that gives solo builders feedback before users do.',
+    docsUrl: 'https://grafana.com/docs/k6/latest/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'rclone',
@@ -1910,6 +2034,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['sync', 'backups', 'cloud storage'],
     bestFor: 'Backups and file sync across many storage providers.',
     qualityNote: 'Turns cheap/free storage accounts into scriptable backup infrastructure.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'podman',
@@ -1923,6 +2048,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Running containers locally without Docker Desktop lock-in.',
     qualityNote:
       'Rootless containers and open tooling make it a strong choice for low-budget dev environments.',
+    docsUrl: 'https://docs.podman.io/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'sqlite',
@@ -1935,6 +2062,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['database', 'embedded', 'zero server'],
     bestFor: 'Local apps, prototypes, scripts, small services, and data analysis.',
     qualityNote: 'The most underrated zero-cost database: no server, no account, no bill.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'trivy',
@@ -1947,6 +2075,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['security scan', 'containers', 'deps'],
     bestFor: 'Scanning containers, dependencies, IaC, secrets, and repo risk.',
     qualityNote: 'One of the easiest high-value security tools to add to a poor developer stack.',
+    docsUrl: 'https://aquasecurity.github.io/trivy/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'gitleaks',
@@ -1960,6 +2090,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Catching leaked API keys before they become a bill or breach.',
     qualityNote:
       'A must-have for anyone using free credits or API keys they cannot afford to leak.',
+    docsUrl: 'https://gitleaks.io/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'age',
@@ -1972,6 +2104,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['encryption', 'files', 'simple'],
     bestFor: 'Encrypting files with a modern, understandable command-line tool.',
     qualityNote: 'Much easier to use correctly than older encryption workflows.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'syncthing',
@@ -1984,6 +2117,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['sync', 'private', 'peer-to-peer'],
     bestFor: 'Private file sync between your own devices without a central cloud account.',
     qualityNote: 'Excellent for people who need ownership and cannot pay for more cloud storage.',
+    docsUrl: 'https://docs.syncthing.net/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'fzf',
@@ -1996,6 +2131,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['fuzzy finder', 'terminal', 'workflow'],
     bestFor: 'Interactive picking: files, history, branches, processes, anything piped.',
     qualityNote: 'A tiny tool that changes the feel of the whole terminal.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'bat',
@@ -2008,6 +2144,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['cat alternative', 'syntax highlight', 'Git'],
     bestFor: 'Reading files with syntax highlighting and useful defaults.',
     qualityNote: 'Tiny quality-of-life upgrade that makes terminal reading less punishing.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'eza',
@@ -2020,6 +2157,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['ls alternative', 'Git status', 'icons'],
     bestFor: 'Seeing directory structure and metadata more clearly than plain ls.',
     qualityNote: 'Useful on messy projects where visibility prevents mistakes.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'zoxide',
@@ -2032,6 +2170,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['jump', 'terminal', 'speed'],
     bestFor: 'Jumping to frequent directories without typing long paths.',
     qualityNote: 'Small tool, huge daily payoff.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'huggingface-inference-api',
@@ -2047,23 +2186,6 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'The broadest open-model catalog on a hosted API. Free inference is useful for experiments, demos, and low-volume prototypes.',
     caveat:
       'Free endpoints share capacity and can sleep or rate-limit; production workloads need paid endpoints or self-hosting.',
-    lastVerified: '2026-06-12',
-  },
-  {
-    id: 'kilo-ai',
-    name: 'Kilo AI',
-    url: 'https://kilo.ai/',
-    surface: 'web',
-    category: 'ai-agents',
-    access: 'free-tier',
-    requiresSignup: false,
-    badges: ['Auto Free', 'kilo-auto/free', '200 req/hour', 'gateway'],
-    bestFor:
-      'Starting with Kilo Code and Kilo Gateway, then choosing free, BYOK, or paid model routing.',
-    qualityNote:
-      'Kilo AI is the product hub for Kilo Code and Kilo Gateway; it documents Auto Free routes and no-credit usage paths.',
-    caveat:
-      'Free model routes are rate-limited and may log prompts/outputs depending on the upstream provider; avoid sensitive data.',
     lastVerified: '2026-06-12',
   },
   {
@@ -2143,6 +2265,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['free GPU', 'LLMs', 'chat'],
     bestFor: 'Running larger LLMs on free GPU compute without a powerful home machine.',
     qualityNote: 'Offers free GPU hours for running open models in the browser.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'together-ai',
@@ -2155,6 +2278,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['free credits', 'open models', 'API'],
     bestFor: 'Free API access to Llama, Mixtral, and other open models.',
     qualityNote: 'Free starter credits; popular for hobbyist AI app backends.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'cerebras-inference',
@@ -2183,6 +2307,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['image gen API', 'fast', 'free credits'],
     bestFor: 'Programmatic image generation and editing via fast API.',
     qualityNote: 'Free credits available; popular for production prototyping.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'replicate',
@@ -2195,6 +2320,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['open models', 'API', 'free credits'],
     bestFor: 'Running 1000+ open AI models via simple API call.',
     qualityNote: 'Huge model library with generous free tier for experimentation.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'banana-dev',
@@ -2207,6 +2333,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['serverless GPU', 'inference', 'Python'],
     bestFor: 'Running ML models on serverless GPU without managing infrastructure.',
     qualityNote: 'Free tier includes CPU minutes and some GPU access.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'google-colab',
@@ -2219,6 +2346,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['GPU', 'notebooks', 'Python'],
     bestFor: 'Running Python, ML, and data science in a free cloud notebook with GPU.',
     qualityNote: 'Free GPU access is the killer feature for students and hobbyists.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'kaggle',
@@ -2231,6 +2359,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['datasets', 'GPU notebooks', 'competitions'],
     bestFor: 'Learning ML, finding datasets, and competing for free with GPU notebooks.',
     qualityNote: 'Free GPU notebooks and 100,000+ public datasets.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'koboldcpp',
@@ -2243,6 +2372,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['local LLM', 'GGUF', 'CPU/GPU', 'true-free-models'],
     bestFor: 'Running GGUF LLMs locally with a simple UI on any machine.',
     qualityNote: 'Lightweight, works on CPU; great for low-resource hardware.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'lm-studio',
@@ -2255,6 +2385,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['local LLM', 'desktop app', 'GGUF', 'true-free-models'],
     bestFor: 'Discovering, downloading, and running local LLMs with a clean GUI.',
     qualityNote: 'Excellent for non-technical users wanting private AI chat.',
+    docsUrl: 'https://lmstudio.ai/docs',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'jan-ai',
@@ -2267,6 +2399,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['local LLM', 'desktop', 'privacy', 'true-free-models'],
     bestFor: 'Open-source desktop app for running local LLMs privately.',
     qualityNote: 'Actively developed, clean UX, works offline with downloaded models.',
+    docsUrl: 'https://jan.ai/docs',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'open-webui',
@@ -2279,6 +2413,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['LLM interface', 'self-host', 'RAG', 'true-free-models'],
     bestFor: 'Self-hosted web UI for LLMs with RAG, multi-model, and file support.',
     qualityNote: 'Formerly Ollama WebUI; now a full-featured open-source AI chat platform.',
+    docsUrl: 'https://docs.openwebui.com/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'text-generation-webui',
@@ -2291,6 +2427,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['local LLM', 'extensions', 'multi-model', 'true-free-models'],
     bestFor: 'Advanced local LLM hosting with extensions, character cards, and APIs.',
     qualityNote: 'The most flexible open-source local LLM interface; steep learning curve.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'llama-cpp-python',
@@ -2303,6 +2440,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['Python', 'GGUF', 'bindings'],
     bestFor: 'Python bindings for llama.cpp for running LLMs in scripts and apps.',
     qualityNote: 'Makes local LLM integration accessible from Python code.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'gpt4all',
@@ -2315,6 +2453,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['local LLM', 'desktop app', 'offline', 'true-free-models'],
     bestFor: 'Running a private local AI assistant on any computer without internet.',
     qualityNote: 'One of the most mature local LLM desktop apps with a large model hub.',
+    docsUrl: 'https://docs.gpt4all.io/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'stablediffusion-webui',
@@ -2328,6 +2468,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Running Stable Diffusion locally with full control over generation.',
     qualityNote:
       'The most popular open-source UI for Stable Diffusion with thousands of extensions.',
+    docsUrl: 'https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'stablediffusion-comfyui',
@@ -2340,6 +2482,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['image gen', 'node-based', 'local'],
     bestFor: 'Visual node-based interface for building complex Stable Diffusion workflows.',
     qualityNote: 'Ultimate flexibility for advanced users; has a learning curve.',
+    docsUrl: 'https://docs.comfy.org/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'fooocus',
@@ -2352,6 +2496,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['image gen', 'simple', 'Stable Diffusion'],
     bestFor: 'Simple Stable Diffusion GUI with automatic prompt enhancement.',
     qualityNote: 'One-click image generation like Midjourney but open-source.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'midjourney-free',
@@ -2364,6 +2509,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['high quality', 'artistic', 'popular'],
     bestFor: 'High-quality artistic AI image generation (free trial available).',
     qualityNote: 'Industry-leading aesthetic quality; free trial has limited generations.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'dall-e-free',
@@ -2376,6 +2522,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['DALL-E', 'Microsoft', 'free'],
     bestFor: 'Free DALL-E image generation via Microsoft Copilot/Bing.',
     qualityNote: 'Access to DALL-E 3 quality without paying for ChatGPT Plus.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'kaiber-free',
@@ -2388,6 +2535,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['video gen', 'animation', 'free tier'],
     bestFor: 'AI video generation with style transfer and animation.',
     qualityNote: 'Free tier includes daily credits for short video generation.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'runway-free',
@@ -2400,6 +2548,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['video editing', 'AI', 'free tier'],
     bestFor: 'AI-powered video editing, green screen, and generation.',
     qualityNote: 'Industry-standard video AI tools with free trial credits.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'pika-free',
@@ -2412,6 +2561,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['video gen', 'Discord', 'free tier'],
     bestFor: 'Free AI video generation via Discord or web interface.',
     qualityNote: 'Popular for generating short animated clips from text prompts.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'moises-free',
@@ -2424,6 +2574,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['stem separation', 'music', 'free tier'],
     bestFor: 'Separating vocals and instruments from music tracks.',
     qualityNote: 'Free tier includes basic stem separation and pitch shifting.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'whisper-web',
@@ -2436,6 +2587,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['transcription', 'offline', 'no signup'],
     bestFor: 'Free speech-to-text transcription running in the browser.',
     qualityNote: 'OpenAI Whisper running client-side via WebAssembly.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'paperpal',
@@ -2448,6 +2600,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['academic writing', 'grammar', 'free tier'],
     bestFor: 'Real-time AI writing and grammar for academic and scientific writing.',
     qualityNote: 'Specifically trained on academic writing patterns.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'writefull',
@@ -2460,18 +2613,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['academic', 'LaTeX', 'grammar'],
     bestFor: 'AI language feedback for academic writing with LaTeX support.',
     qualityNote: 'Designed specifically for researchers and academics.',
-  },
-  {
-    id: 'notion-ai-free',
-    name: 'Notion AI Free Trial',
-    url: 'https://www.notion.so/',
-    surface: 'web',
-    category: 'dev-productivity',
-    access: 'free-tier',
-    requiresSignup: true,
-    badges: ['workspace', 'AI assistant', 'notes'],
-    bestFor: 'All-in-one workspace with AI writing and organization.',
-    qualityNote: 'Free tier includes basic AI features; full AI requires add-on.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'obsidian',
@@ -2484,6 +2626,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['notes', 'local', 'graph view'],
     bestFor: 'Local-first personal knowledge base with linking and graph view.',
     qualityNote: 'Free for personal use; excellent for building a second brain.',
+    docsUrl: 'https://help.obsidian.md/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'logseq',
@@ -2496,6 +2640,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['notes', 'outliner', 'local-first'],
     bestFor: 'Outliner-based local-first knowledge management.',
     qualityNote: 'Open-source alternative to Roam Research and Obsidian.',
+    docsUrl: 'https://docs.logseq.com/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'vercel-free',
@@ -2508,6 +2654,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['Jamstack', 'serverless', 'edge'],
     bestFor: 'Free frontend deployment with serverless functions.',
     qualityNote: 'Industry standard for Next.js and static sites.',
+    docsUrl: 'https://vercel.com/docs',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'deno-deploy-free',
@@ -2520,6 +2668,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['serverless', 'TypeScript', 'edge'],
     bestFor: 'Running TypeScript/JavaScript on the edge for free.',
     qualityNote: 'Free tier includes 100,000 requests per day.',
+    docsUrl: 'https://docs.deno.com/deploy/manual/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'pdf-ai',
@@ -2533,6 +2683,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'AI-powered PDF analysis and question answering.',
     qualityNote: 'Clean interface with good document understanding.',
     caveat: 'Free tier has document limits.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'docanalyzer',
@@ -2545,6 +2696,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['multi-document', 'comparison', 'AI'],
     bestFor: 'Analyzing and comparing multiple documents with AI.',
     qualityNote: 'Useful for contract review and document comparison.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'brilliant',
@@ -2558,6 +2710,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Interactive learning for math, science, and CS fundamentals.',
     qualityNote: 'Excellent problem-based learning approach.',
     caveat: 'Free tier has limited course access.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'exercism',
@@ -2570,6 +2723,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['coding', 'mentorship', 'free'],
     bestFor: 'Learning programming with human mentorship, completely free.',
     qualityNote: 'Non-profit with excellent code review from volunteers.',
+    docsUrl: 'https://exercism.org/docs',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'leetcode-free',
@@ -2583,6 +2738,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Practicing coding problems for technical interviews.',
     qualityNote: 'Industry standard for interview prep; many free problems.',
     caveat: 'Premium unlocks more problems and features.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'notion-free',
@@ -2592,10 +2748,12 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     category: 'dev-docs',
     access: 'free-tier',
     requiresSignup: true,
-    badges: ['notes', 'wiki', 'collaboration'],
-    bestFor: 'Personal knowledge base with flexible document structure.',
-    qualityNote: 'Free for personal use with generous limits.',
+    badges: ['notes', 'wiki', 'collaboration', 'AI assistant'],
+    bestFor: 'All-in-one workspace for notes, wikis, and project management with basic AI features.',
+    qualityNote: 'Free for personal use with generous limits. Free tier includes basic AI writing assistant; full AI requires paid add-on.',
     caveat: 'Team features require paid plan.',
+    docsUrl: 'https://www.notion.so/help',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'anytype',
@@ -2608,6 +2766,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['local-first', 'encrypted', 'knowledge'],
     bestFor: 'Privacy-focused knowledge management with local-first sync.',
     qualityNote: 'End-to-end encrypted with no server-side data access.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'gitbook-free',
@@ -2620,6 +2779,8 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['documentation', 'team', 'public'],
     bestFor: 'Creating beautiful public documentation for projects.',
     qualityNote: 'Excellent for open-source project docs; free for public.',
+    docsUrl: 'https://docs.gitbook.com/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'udio',
@@ -2633,6 +2794,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'High-quality AI music generation with genre control.',
     qualityNote: 'Professional-quality output rivaling Suno.',
     caveat: 'Free tier has monthly limits.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'mubert',
@@ -2646,6 +2808,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Generating royalty-free background music for content.',
     qualityNote: 'Great for YouTube, podcasts, and video backgrounds.',
     caveat: 'Free tier has watermark; paid for commercial use.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'haiper',
@@ -2659,6 +2822,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Fast AI video generation from text or image prompts.',
     qualityNote: 'Quick generations with decent quality for free tier.',
     caveat: 'Free tier has credit system.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'tensor-art',
@@ -2671,6 +2835,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['models', 'community', 'generous'],
     bestFor: 'Using thousands of community models for image generation.',
     qualityNote: 'Huge model library with generous free daily credits.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'seaart',
@@ -2684,6 +2849,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'AI image generation with extensive LoRA model support.',
     qualityNote: 'Strong for anime and stylized art with many custom models.',
     caveat: 'Free credits system with daily limits.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'jenni-ai',
@@ -2697,6 +2863,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Academic writing assistance with citation support.',
     qualityNote: 'Good for students writing essays and research papers.',
     caveat: 'Free tier has daily word limits.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'tldraw',
@@ -2709,19 +2876,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['whiteboard', 'collaborative', 'free'],
     bestFor: 'Free collaborative whiteboard for diagrams and sketches.',
     qualityNote: 'Open-source; works entirely in browser with no account.',
-  },
-  {
-    id: 'poe-free',
-    name: 'Poe Free',
-    url: 'https://poe.com/',
-    surface: 'web',
-    category: 'ai-chat',
-    access: 'free-tier',
-    requiresSignup: true,
-    badges: ['multi-model', 'GPT-4', 'Claude'],
-    bestFor: 'Accessing multiple AI models (GPT-4, Claude, etc.) from one interface.',
-    qualityNote: 'Aggregator with daily free access to top models.',
-    caveat: 'Limited daily queries per model on free tier.',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'zed-editor',
@@ -2734,18 +2889,22 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     badges: ['IDE', 'AI', 'fast'],
     bestFor: 'Fast, modern code editor with built-in AI assistance.',
     qualityNote: 'From Atom creators; native performance with collaborative AI.',
+    docsUrl: 'https://zed.dev/docs',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'codeium',
     name: 'Codeium',
     url: 'https://codeium.com/',
     surface: 'web',
-    category: 'dev-coding',
+    category: 'ai-coding',
     access: 'free-tier',
     requiresSignup: true,
     badges: ['AI autocomplete', 'IDE extension', 'free', 'true-free-models'],
     bestFor: 'Free AI code autocomplete that works in any IDE.',
     qualityNote: 'Strong alternative to GitHub Copilot; completely free for individuals.',
+    docsUrl: 'https://docs.codeium.com/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'multi-dev',
@@ -2975,6 +3134,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'Inline completions with multi-agent hub. 2K completions + 50 chats/month free.',
     qualityNote: 'Microsoft-backed. ~55% SWE-bench. Generous free tier for individuals.',
     caveat: '2K completions + 50 chats/month free. Paid plans for more usage.',
+    docsUrl: 'https://docs.github.com/en/copilot',
     lastVerified: '2026-06-11',
   },
   {
@@ -3003,6 +3163,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     bestFor: 'AWS infrastructure code with unlimited completions. 50 agentic requests/month free.',
     qualityNote: 'Amazon-backed. Unlimited completions with 50 agentic requests/month free.',
     caveat: 'Unlimited completions free. 50 agentic requests/month free. May require AWS account.',
+    docsUrl: 'https://docs.aws.amazon.com/amazonq/latest/aws-builder-use-ug/',
     lastVerified: '2026-06-11',
   },
   {
@@ -3205,6 +3366,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'Google-backed, Apache-2.0. ReAct loop, MCP support. 1,000 req/day, 60 req/min with Google account.',
     caveat:
       'Requires Google account. Rate limits apply (1,000 req/day, 60 req/min). 70.7% Terminal-Bench 2.1.',
+    docsUrl: 'https://github.com/google-gemini/gemini-cli',
     lastVerified: '2026-06-11',
   },
   {
@@ -3241,7 +3403,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'korgex',
     url: 'https://github.com/New1Direction/korgex',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['tamper-evident', 'hash-chained', '1.5K tests', 'MCP'],
@@ -3256,7 +3418,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'OpenHands (OpenDevin)',
     url: 'https://github.com/All-Hands-AI/OpenHands',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['72K stars', 'autonomous', '53-72% SWE-bench', 'MIT'],
@@ -3272,7 +3434,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Agent Zero',
     url: 'https://github.com/agent0ai/agent-zero',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['18K stars', 'full Linux', 'plugin hub', 'A0 CLI'],
@@ -3288,7 +3450,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'OpenCode',
     url: 'https://github.com/anomalyco/opencode',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['172K stars', '75+ providers', 'local models', 'MIT'],
@@ -3313,6 +3475,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'Anthropic-backed. Opus 4.8 model. 78.9% Terminal-Bench 2.1, 88.6% SWE-bench Verified.',
     caveat:
       'Requires Claude subscription ($20/mo) or API key. 4x less likely to let flaws pass unremarked vs Opus 4.7.',
+    docsUrl: 'https://docs.anthropic.com/en/docs/claude-code',
     lastVerified: '2026-06-11',
   },
   {
@@ -3320,7 +3483,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Cline',
     url: 'https://github.com/cline/cline',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['63K stars', 'VS Code', 'JetBrains', 'Apache-2.0'],
@@ -3328,6 +3491,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Apache-2.0, actively maintained. Full terminal and browser access for Claude/GPT.',
     caveat: 'BYOK - you pay for API calls. Model-dependent performance.',
+    docsUrl: 'https://docs.cline.bot/',
     lastVerified: '2026-06-11',
   },
   {
@@ -3335,13 +3499,14 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Aider',
     url: 'https://github.com/paul-gauthier/aider',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['45K stars', 'Git-aware', 'any LLM', 'Apache-2.0'],
     bestFor: 'Git-aware pair programming, any LLM, mature project.',
     qualityNote: 'Apache-2.0, mature project. Git-aware, works with any LLM.',
     caveat: 'BYOK - you pay for API calls. Model-dependent performance.',
+    docsUrl: 'https://aider.chat/docs/',
     lastVerified: '2026-06-11',
   },
   {
@@ -3349,23 +3514,25 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Kilo Code',
     url: 'https://kilo.ai/',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['500+ models', 'Auto Free', 'zero markup', 'Apache-2.0', 'true-free-models'],
     bestFor:
-      'VS Code, JetBrains, and CLI coding agent with open-source workflow and free model routing.',
+      'VS Code, JetBrains, and CLI coding agent with free model routing, BYOK, or local inference.',
     qualityNote:
-      'Apache-2.0 coding agent that can use Kilo Gateway free models, BYOK, local models, or paid providers with zero markup.',
-    caveat: 'Auto Free is rate-limited; BYOK/paid providers cost money outside Kilo.',
-    lastVerified: '2026-06-12',
+      'Apache-2.0 coding agent. Kilo.ai documents Auto Free routes and no-credit usage paths. Uses Kilo Gateway free models, BYOK, local models, or paid providers with zero markup.',
+    caveat:
+      'Auto Free is rate-limited; free model routes may log prompts depending on upstream provider. BYOK/paid providers cost money outside Kilo.',
+    docsUrl: 'https://docs.kilo.ai/',
+    lastVerified: '2026-06-15',
   },
   {
     id: 'roo-code',
     name: 'Roo Code',
     url: 'https://github.com/RooVetGit/Roo-Code',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['22.5K stars', 'multi-agent', 'VS Code', 'Apache-2.0'],
@@ -3373,6 +3540,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Apache-2.0, fork of Cline with multi-agent modes and custom personas. 5.0 rating on VS Code marketplace.',
     caveat: 'BYOK - you pay for API calls. Model-dependent performance.',
+    docsUrl: 'https://docs.roocode.com/',
     lastVerified: '2026-06-15',
   },
   {
@@ -3388,6 +3556,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Commercial product with $50B valuation. Composer mode for complex multi-file tasks. Free tier: 50 slow requests/month.',
     caveat: 'Free tier limited to 50 slow requests/month. Pro plan $20/mo for unlimited fast requests.',
+    docsUrl: 'https://docs.cursor.com/',
     lastVerified: '2026-06-15',
   },
   {
@@ -3403,6 +3572,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Codeium product with free tier. Autonomous agent mode for complex tasks. Good for refactoring.',
     caveat: 'Free tier has usage limits. Paid tiers for heavy usage.',
+    docsUrl: 'https://docs.windsurf.com/',
     lastVerified: '2026-06-15',
   },
   {
@@ -3418,6 +3588,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'AWS product with spec-driven approach. Free tier: 50 requests/day. Good for structured development workflows.',
     caveat: 'Free tier limited to 50 requests/day. Requires AWS account.',
+    docsUrl: 'https://docs.aws.amazon.com/kiro/',
     lastVerified: '2026-06-15',
   },
   {
@@ -3425,7 +3596,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Goose',
     url: 'https://github.com/block/goose',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['32.3K stars', 'CLI + desktop', 'Block', 'Apache-2.0'],
@@ -3448,6 +3619,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Apache-2.0, self-hosted. Runs local models for code completion. No cloud dependency, full privacy.',
     caveat: 'Requires GPU for good performance. Model-dependent quality.',
+    docsUrl: 'https://tabby.tabbyml.com/docs/',
     lastVerified: '2026-06-15',
   },
   {
@@ -3463,6 +3635,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Apache-2.0 VS Code fork. Currently paused but notable for architecture and community interest.',
     caveat: 'Project currently paused. May resume in future.',
+    docsUrl: 'https://docs.voideditor.com/',
     lastVerified: '2026-06-15',
   },
   {
@@ -3485,7 +3658,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Bolt.diy',
     url: 'https://github.com/stackblitz/bolt.diy',
     surface: 'web',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['19.1K stars', 'cloud IDE', 'StackBlitz', 'MIT'],
@@ -3500,7 +3673,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'FreeAgent',
     url: 'https://github.com/transformer24/freeagent',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['60+ tools', '100% local', 'no API keys', 'ComfyUI'],
@@ -3516,7 +3689,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'MRAgent',
     url: 'https://github.com/bonzainsights/MrAgent',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'free-tier',
     requiresSignup: true,
     badges: ['NVIDIA NIM', 'Qwen OAuth', '~2K req/day', 'voice input'],
@@ -3532,7 +3705,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Drodo',
     url: 'https://github.com/Drodo44/Drodo.io',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['2,397 skills', '14,936 templates', '238 agents', 'n8n'],
@@ -3547,7 +3720,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Synapse',
     url: 'https://github.com/droxer/HiAgent',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['20+ tools', 'MCP', 'Google OAuth', 'Tauri v2'],
@@ -3562,7 +3735,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'CodeBot AI',
     url: 'https://github.com/Ascendral/codebot-ai',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['audit trail', '8 providers', '32 tools', 'CORD safety'],
@@ -3578,7 +3751,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: '8gent Code',
     url: 'https://github.com/PodJamz/8gent-code',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['local-first', 'NemoClaw', '8 powers', 'voice chat'],
@@ -3594,7 +3767,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'YUAN',
     url: 'https://github.com/yuaone/yuan',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['deterministic', '3 modes', '15 tools', 'SubAgent'],
@@ -3609,7 +3782,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Kode',
     url: 'https://github.com/sicario-labs/kode',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['verification-first', 'Go binary', 'security', 'browser'],
@@ -3624,7 +3797,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Autopilot',
     url: 'https://github.com/rish-e/autopilot',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['self-expanding', 'Guardian', 'parallel', 'webhook'],
@@ -3639,7 +3812,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'AuroraCoder',
     url: 'https://github.com/1001WillsStudio/AuroraCoder',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['DeepSeek V4 Pro', 'VNC desktop', 'parallel', 'Docker'],
@@ -3654,7 +3827,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'yoyo-evolve',
     url: 'https://github.com/yologdev/yoyo-evolve',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['1.8K stars', 'self-evolving', '51K lines', '2K tests'],
@@ -3669,7 +3842,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'XETHRYON',
     url: 'https://github.com/EstarinAzx/XETHRYON',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['swarm', 'autonomy', 'knowledge graph', 'cyberpunk'],
@@ -3684,7 +3857,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     name: 'Continuous Agent',
     url: 'https://github.com/jackzhaojin/continuous-agent',
     surface: 'cli',
-    category: 'ai-agents',
+    category: 'ai-coding',
     access: 'open-source',
     requiresSignup: false,
     badges: ['24/7', 'prioritized queue', 'multi-vendor', 'PM2'],
@@ -3798,6 +3971,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'Apache 2.0 license. Use via Ollama, LM Studio, or HuggingFace. 8B for laptops, 70B for desktops, 405B for servers.',
     caveat: 'VRAM: 8B ~16GB, 70B ~140GB, 405B ~800GB',
+    docsUrl: 'https://llama.meta.com/docs/',
     lastVerified: '2026-06-12',
   },
   {
@@ -3828,6 +4002,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     qualityNote:
       'MIT license. R1 is reasoning-focused, V3 is general-purpose. Both excellent for technical tasks. Quantized versions run on consumer hardware.',
     caveat: 'VRAM: 37B activated ~75GB (quantized), full 671B needs enterprise GPU',
+    docsUrl: 'https://api-docs.deepseek.com/',
     lastVerified: '2026-06-12',
   },
   {

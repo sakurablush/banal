@@ -286,7 +286,7 @@ describe('Onboarding Flow', () => {
     expect(container.classList.contains('onboarding-flow')).toBe(true);
     
     const title = container.querySelector('.onboarding-title');
-    expect(title?.textContent).toBe('Welcome to Banal AI Tools');
+    expect(title?.textContent).toBe('Welcome to Banal AI Tools (beta)');
 
     const options = container.querySelectorAll('.onboarding-option');
     expect(options.length).toBeGreaterThan(0);
@@ -306,7 +306,7 @@ describe('Onboarding Flow', () => {
     renderOnboarding(container, 'ja');
 
     const title = container.querySelector('.onboarding-title');
-    expect(title?.textContent).toBe('Banal AIツールへようこそ');
+    expect(title?.textContent).toBe('Banal AIツールへようこそ（ベータ）');
   });
 });
 

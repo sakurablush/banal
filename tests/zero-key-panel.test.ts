@@ -39,13 +39,13 @@ describe('zero-key tools data', () => {
     }
   });
 
-  it('includes verified free-token and Kilo AI tooling', () => {
+  it('includes verified free-token and Kilo Code tooling', () => {
     const byId = Object.fromEntries(zeroKeyTools.map((tool) => [tool.id, tool]));
 
-    expect(byId['kilo-ai']).toMatchObject({
-      name: 'Kilo AI',
+    expect(byId['kilo-code']).toMatchObject({
+      name: 'Kilo Code',
       url: 'https://kilo.ai/',
-      category: 'ai-agents',
+      category: 'ai-coding',
     });
     expect(byId['kilo-gateway']).toMatchObject({
       surface: 'api',
@@ -103,7 +103,7 @@ describe('zero-key panel rendering', () => {
     input.dispatchEvent(new Event('input', { bubbles: true }));
 
     // Flush debounce
-    vi.advanceTimersByTime(150);
+    vi.advanceTimersByTime(300);
 
     // Should use grid container
     const gridContainer = root.querySelector('.zk2-grid');
@@ -135,8 +135,8 @@ describe('zero-key panel rendering', () => {
     input.value = 'zzzz-no-such-zero-key-tool';
     input.dispatchEvent(new Event('input', { bubbles: true }));
 
-    // Flush debounce
-    vi.advanceTimersByTime(150);
+    // Flush debounce (250ms + buffer)
+    vi.advanceTimersByTime(300);
 
     // Should show empty state (no horizontal scroll when no results)
     const empty = root.querySelector('.zk2-empty');
@@ -173,7 +173,7 @@ describe('zero-key panel rendering', () => {
     heroInput.dispatchEvent(new Event('input', { bubbles: true }));
 
     // Flush debounce
-    vi.advanceTimersByTime(150);
+    vi.advanceTimersByTime(300);
 
     // Panel search should sync
     const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
@@ -229,7 +229,7 @@ describe('zero-key panel rendering', () => {
     // Type something
     panelInput.value = 'Redis';
     panelInput.dispatchEvent(new Event('input', { bubbles: true }));
-    vi.advanceTimersByTime(150);
+    vi.advanceTimersByTime(300);
 
     // Press Escape
     panelInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
@@ -265,7 +265,7 @@ describe('zero-key panel rendering', () => {
     // Apply a search that returns no results
     panelInput.value = 'zzzz-no-such-tool';
     panelInput.dispatchEvent(new Event('input', { bubbles: true }));
-    vi.advanceTimersByTime(150);
+    vi.advanceTimersByTime(300);
 
     // Should show empty state
     expect(root.querySelector('.zk2-empty')).not.toBeNull();
@@ -360,7 +360,7 @@ describe('zero-key panel rendering', () => {
     // Type in panel search
     panelInput.value = 'Docker';
     panelInput.dispatchEvent(new Event('input', { bubbles: true }));
-    vi.advanceTimersByTime(150);
+    vi.advanceTimersByTime(300);
 
     // Hero input should sync
     expect(heroInput.value).toBe('Docker');
@@ -623,7 +623,7 @@ describe('zero-key panel API methods', () => {
     // After destroy, hero input events should not affect panel
     heroInput.value = 'after-destroy';
     heroInput.dispatchEvent(new Event('input', { bubbles: true }));
-    vi.advanceTimersByTime(150);
+    vi.advanceTimersByTime(300);
 
     // Panel should not have changed (listener was aborted)
     expect(panelInput.value).toBe('test');
@@ -746,7 +746,7 @@ describe('zero-key panel API methods', () => {
     const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
     panelInput.value = 'zzzz-no-such-tool';
     panelInput.dispatchEvent(new Event('input', { bubbles: true }));
-    vi.advanceTimersByTime(150);
+    vi.advanceTimersByTime(300);
 
     // Should show empty state
     const clearBtn = root.querySelector('.zk2-empty-clear') as HTMLButtonElement;
@@ -775,7 +775,7 @@ describe('zero-key panel API methods', () => {
     // Hero input should still work with new render
     heroInput.value = 'Docker';
     heroInput.dispatchEvent(new Event('input', { bubbles: true }));
-    vi.advanceTimersByTime(150);
+    vi.advanceTimersByTime(300);
 
     const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
     expect(panelInput.value).toBe('Docker');

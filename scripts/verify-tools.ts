@@ -2,9 +2,11 @@
  * Tool Verification Script
  *
  * Verifies that all tools in the database have working URLs.
+ * Also checks for duplicate URLs and reports lastVerified coverage.
  * Can be run manually or via GitHub Actions for weekly verification.
  *
- * Usage: npx tsx scripts/verify-tools.ts
+ * Usage: npm run verify:tools
+ *    or: npx tsx scripts/verify-tools.ts
  *
  * Output: Writes results to verification-results.json
  */
@@ -24,17 +26,73 @@ interface VerificationResult {
   timestamp: string;
 }
 
+interface DuplicateEntry {
+  url: string;
+  tools: { id: string; name: string }[];
+}
+
 interface VerificationReport {
   timestamp: string;
   totalTools: number;
   verified: number;
   failed: number;
   errors: number;
+  duplicateUrls: DuplicateEntry[];
+  lastVerifiedCoverage: {
+    total: number;
+    withDate: number;
+    withoutDate: number;
+    percentage: number;
+  };
   results: VerificationResult[];
 }
 
 const TIMEOUT_MS = 10000;
 const CONCURRENCY = 5; // Don't hammer servers too hard
+
+/**
+ * Pre-flight check: detect duplicate URLs in the tool database.
+ * Same URL with different surfaces (web/api/cli) is allowed and reported separately.
+ */
+function detectDuplicateUrls(tools: ZeroKeyTool[]): DuplicateEntry[] {
+  const urlMap = new Map<string, { id: string; name: string; surface: string }[]>();
+
+  for (const tool of tools) {
+    const existing = urlMap.get(tool.url) || [];
+    existing.push({ id: tool.id, name: tool.name, surface: tool.surface });
+    urlMap.set(tool.url, existing);
+  }
+
+  const duplicates: DuplicateEntry[] = [];
+  for (const [url, tools] of urlMap) {
+    if (tools.length > 1) {
+      // Check if all entries have different surfaces (intentional multi-surface)
+      const surfaces = new Set(tools.map((t) => t.surface));
+      if (surfaces.size < tools.length) {
+        // Same surface + same URL = true duplicate (should not exist)
+        duplicates.push({ url, tools: tools.map(({ id, name }) => ({ id, name })) });
+      }
+    }
+  }
+
+  return duplicates;
+}
+
+/**
+ * Calculate lastVerified coverage statistics.
+ */
+function calculateLastVerifiedCoverage(tools: ZeroKeyTool[]): {
+  total: number;
+  withDate: number;
+  withoutDate: number;
+  percentage: number;
+} {
+  const total = tools.length;
+  const withDate = tools.filter((t) => t.lastVerified).length;
+  const withoutDate = total - withDate;
+  const percentage = Math.round((withDate / total) * 100);
+  return { total, withDate, withoutDate, percentage };
+}
 
 async function verifyTool(tool: ZeroKeyTool): Promise<VerificationResult> {
   const startTime = Date.now();
@@ -129,6 +187,29 @@ async function verifyAllTools(): Promise<VerificationReport> {
   console.log(`Starting verification of ${zeroKeyTools.length} tools...`);
   console.log(`Concurrency: ${CONCURRENCY}, Timeout: ${TIMEOUT_MS}ms\n`);
 
+  // Pre-flight checks
+  const duplicateUrls = detectDuplicateUrls(zeroKeyTools);
+  if (duplicateUrls.length > 0) {
+    console.log('⚠️  Duplicate URLs detected (same URL + same surface):');
+    for (const dup of duplicateUrls) {
+      console.log(`  ${dup.url}`);
+      for (const tool of dup.tools) {
+        console.log(`    - ${tool.id} (${tool.name})`);
+      }
+    }
+    console.log('');
+  }
+
+  const lastVerifiedCoverage = calculateLastVerifiedCoverage(zeroKeyTools);
+  console.log(
+    `📅 lastVerified coverage: ${lastVerifiedCoverage.withDate}/${lastVerifiedCoverage.total} (${lastVerifiedCoverage.percentage}%)`
+  );
+  if (lastVerifiedCoverage.withoutDate > 0) {
+    console.log(
+      `   ${lastVerifiedCoverage.withoutDate} tools missing lastVerified date\n`
+    );
+  }
+
   const results: VerificationResult[] = [];
 
   // Process in batches
@@ -152,6 +233,8 @@ async function verifyAllTools(): Promise<VerificationReport> {
     verified,
     failed,
     errors,
+    duplicateUrls,
+    lastVerifiedCoverage,
     results,
   };
 
@@ -171,6 +254,9 @@ async function main() {
   console.log(`Verified (OK): ${report.verified}`);
   console.log(`Failed (HTTP error): ${report.failed}`);
   console.log(`Errors (network/timeout): ${report.errors}`);
+  console.log(
+    `lastVerified coverage: ${report.lastVerifiedCoverage.withDate}/${report.lastVerifiedCoverage.total} (${report.lastVerifiedCoverage.percentage}%)`
+  );
   console.log(`\nResults written to: ${outputPath}`);
 
   // List failures
@@ -182,10 +268,28 @@ async function main() {
     });
   }
 
+  // List tools missing lastVerified
+  const missingVerified = zeroKeyTools.filter((t) => !t.lastVerified);
+  if (missingVerified.length > 0) {
+    console.log(`\n=== Tools Missing lastVerified (${missingVerified.length}) ===`);
+    missingVerified.slice(0, 20).forEach((t) => {
+      console.log(`- ${t.name} (${t.id})`);
+    });
+    if (missingVerified.length > 20) {
+      console.log(`  ... and ${missingVerified.length - 20} more`);
+    }
+  }
+
   // Exit with error code if too many failures
   const failureRate = failures.length / report.totalTools;
   if (failureRate > 0.1) {
-    console.error(`\nWarning: ${Math.round(failureRate * 100)}% of tools failed verification!`);
+    console.error(`\n⚠️  ${Math.round(failureRate * 100)}% of tools failed verification!`);
+    process.exit(1);
+  }
+
+  // Warn about duplicate URLs
+  if (report.duplicateUrls.length > 0) {
+    console.error(`\n⚠️  ${report.duplicateUrls.length} duplicate URL(s) found — please merge or fix.`);
     process.exit(1);
   }
 }

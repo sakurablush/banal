@@ -58,6 +58,10 @@ export const translations: Record<Lang, Translations> = {
       '227+ tools. 128 AI + 99 developer tools. Chat, image, video, code, PDF, backend, automation. <span class="text-white/70">All verified.</span> <span class="text-white/40">Free access.</span>',
     'hero.disclaimer':
       'Some tools require free signup (no credit card). We mark everything clearly.',
+    'hero.noResults.text': 'No tools found. Try browsing our',
+    'hero.noResults.aiTools': '🤖 AI Tools',
+    'hero.noResults.devTools': '💻 Dev Tools',
+    'hero.noResults.or': 'or',
     'stats.tools': 'Tools',
     'stats.logins': 'Logins',
     'stats.freedom': 'Freedom',
@@ -205,6 +209,10 @@ export const translations: Record<Lang, Translations> = {
       '227以上のツール。128のAI + 99の開発者ツール。チャット、画像、動画、コード、PDF、バックエンド、自動化。<span class="text-white/70">すべて認証済み。</span><span class="text-white/40">無料アクセス。</span>',
     'hero.disclaimer':
       '一部のツールは無料サインアップが必要です（クレジットカード不要）。すべて明確に記載しています。',
+    'hero.noResults.text': 'ツールが見つかりませんでした。こちらをご覧ください：',
+    'hero.noResults.aiTools': '🤖 AIツール',
+    'hero.noResults.devTools': '💻 開発者ツール',
+    'hero.noResults.or': 'または',
     'stats.tools': 'ツール',
     'stats.logins': 'ログイン',
     'stats.freedom': '自由',

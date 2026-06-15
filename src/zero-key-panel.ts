@@ -221,7 +221,7 @@ export interface ZeroKeyPanelApi {
   destroy: () => void;
 }
 
-const DEBOUNCE_MS = 100;
+const DEBOUNCE_MS = 250;
 const MAX_RESULTS = 300;
 
 interface PanelState {
@@ -315,6 +315,32 @@ function applyCategoryFilter(state: PanelState, results: SearchResult[]): Search
   return results.filter(({ tool }) => tool.category === state.activeCategory);
 }
 
+/**
+ * Updates the hero no-results message visibility.
+ * Shows message only when query is non-empty AND no panels have results.
+ */
+function updateHeroNoResults(query: string): void {
+  const noResultsEl = document.getElementById('hero-no-results');
+  if (!noResultsEl) return;
+
+  if (!query.trim()) {
+    noResultsEl.style.display = 'none';
+    return;
+  }
+
+  // Check if any panel has results (look for .zk2-grid which is rendered when results exist)
+  const panels = document.querySelectorAll('[data-category-prefix]');
+  let hasAnyResults = false;
+  panels.forEach((panel) => {
+    const grid = panel.querySelector('.zk2-grid');
+    if (grid) {
+      hasAnyResults = true;
+    }
+  });
+
+  noResultsEl.style.display = hasAnyResults ? 'none' : 'block';
+}
+
 function performSearch(state: PanelState): void {
   const query = state.query;
 
@@ -331,11 +357,35 @@ function performSearch(state: PanelState): void {
   }
 
   results = applyCategoryFilter(state, results);
+
+  // Auto-remove active life filters that have no matching tools for current category
+  // This prevents showing zero results when switching categories with active chips
+  if (state.lifeFilters.size > 0) {
+    const availableFilters = getAvailableFilters(state);
+    const availableIds = new Set(availableFilters.map((f) => f.id));
+    for (const activeId of state.lifeFilters) {
+      if (!availableIds.has(activeId)) {
+        state.lifeFilters.delete(activeId);
+      }
+    }
+  }
+
   results = applyLifeFilters(state, results);
   state.results = results;
 
   updateSidebarActiveState(state);
   renderContent(state);
+
+  // Auto-scroll to panel when results found (only for non-empty queries)
+  if (query.trim() && results.length > 0 && state.container) {
+    const section = state.container.closest('section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // Update hero no-results message
+  updateHeroNoResults(query);
 }
 
 function debouncedSearch(state: PanelState, query: string): void {
@@ -360,11 +410,38 @@ function syncSearchInputs(container: HTMLElement, value: string, source: 'hero' 
 
 // ─── Render: Quick Filters ───────────────────────────────────────────────────
 
-function renderQuickFilters(state: PanelState): HTMLElement {
-  const row = create('div', 'quick-filters-row');
+/**
+ * Computes which life filter chips have at least 1 matching tool
+ * for the current category (and category prefix).
+ * Only chips with matches are rendered, so users never see a chip
+ * that would produce zero results.
+ */
+function getAvailableFilters(state: PanelState): LifeFilterDefinition[] {
   const filters = getLifeFilters(state.lang);
 
-  for (const def of filters) {
+  // Get tools matching current category (and category prefix)
+  let categoryTools = state.categoryPrefix
+    ? state.allTools.filter((t) => matchesCategoryPrefix(t.category, state.categoryPrefix!))
+    : state.allTools;
+
+  if (state.activeCategory) {
+    categoryTools = categoryTools.filter((t) => t.category === state.activeCategory);
+  }
+
+  // Build haystacks once for efficiency
+  const haystacks = categoryTools.map((t) => ({ tool: t, haystack: buildHaystack(t).toLowerCase() }));
+
+  // Only return filters that have at least 1 matching tool
+  return filters.filter((def) =>
+    haystacks.some(({ tool, haystack }) => def.predicate(tool, haystack))
+  );
+}
+
+function renderQuickFilters(state: PanelState): HTMLElement {
+  const row = create('div', 'quick-filters-row');
+  const availableFilters = getAvailableFilters(state);
+
+  for (const def of availableFilters) {
     const chip = create(
       'button',
       `quick-filter-chip${state.lifeFilters.has(def.id) ? ' active' : ''}`
@@ -480,7 +557,7 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
     card.appendChild(caveat);
   }
 
-  // Footer: Report button (left) | Open button (right)
+  // Footer: Report button (left) | Docs button (if exists) | Open button (right)
   const footer = create('div', 'zk2-card-footer');
 
   // Report button with dropdown
@@ -489,12 +566,12 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
   reportBtn.innerHTML = `<span class="report-text">${state.lang === 'ja' ? '\u5831\u544A' : 'Report'} ▼</span>`;
   reportBtn.title =
     state.lang === 'ja'
-      ? '\u3053\u306e\u30C4\u30FC\u30EB\u3092\u5831\u544A'
+      ? '\u3053\u306E\u30C4\u30FC\u30EB\u3092\u5831\u544A'
       : 'Report this tool as broken';
   reportBtn.setAttribute(
     'aria-label',
     state.lang === 'ja'
-      ? `${tool.name}のリンクを報告: ${tool.name}`
+      ? `${tool.name}\u306E\u30EA\u30F3\u30AF\u3092\u5831\u544A: ${tool.name}`
       : `Report broken link: ${tool.name}`
   );
   reportBtn.addEventListener('click', (e) => {
@@ -504,15 +581,33 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
   });
   footer.appendChild(reportBtn);
 
-  // Open button (CTA) - actual button instead of link
+  // Docs button (only if docsUrl exists)
+  if (tool.docsUrl) {
+    const docsBtn = create('button', 'zk2-card-docs');
+    docsBtn.type = 'button';
+    docsBtn.textContent = copy.docs + ' \u2192';
+    docsBtn.setAttribute(
+      'aria-label',
+      state.lang === 'ja'
+        ? `${copy.docs}: ${tool.name}`
+        : `${copy.docs} ${tool.name}`
+    );
+    docsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.open(tool.docsUrl, '_blank', 'noopener,noreferrer');
+    });
+    footer.appendChild(docsBtn);
+  }
+
+  // Open button (CTA) - ALWAYS present
   const btn = create('button', 'zk2-card-cta');
   btn.type = 'button';
-  btn.textContent = (tool.surface === 'cli' ? copy.docs : copy.open) + ' \u2192';
+  btn.textContent = copy.open + ' \u2192';
   btn.setAttribute(
     'aria-label',
     state.lang === 'ja'
-      ? `${tool.surface === 'cli' ? copy.docs : copy.open}: ${tool.name}`
-      : `${tool.surface === 'cli' ? copy.docs : copy.open} ${tool.name}`
+      ? `${copy.open}: ${tool.name}`
+      : `${copy.open} ${tool.name}`
   );
   btn.addEventListener('click', (e) => {
     e.stopPropagation();

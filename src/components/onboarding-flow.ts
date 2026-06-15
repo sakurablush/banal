@@ -11,7 +11,7 @@ import type { ToolStack, StackAudience, StackBudget, StackExperience } from '../
 
 const COPY = {
   en: {
-    welcome: 'Welcome to Banal AI Tools',
+    welcome: 'Welcome to Banal AI Tools (beta)',
     findPerfectTools: "Let's find the perfect tools for you",
     step1Title: "What's your role?",
     step2Title: "What's your budget?",
@@ -45,7 +45,7 @@ const COPY = {
     takeQuizAgain: 'Take Quiz Again',
   },
   ja: {
-    welcome: 'Banal AIツールへようこそ',
+    welcome: 'Banal AIツールへようこそ（ベータ）',
     findPerfectTools: 'あなたにぴったりのツールを見つけましょう',
     step1Title: 'あなたの役割は？',
     step2Title: '予算は？',
@@ -375,10 +375,32 @@ function createOption(label: string, isSelected: boolean): HTMLElement {
 }
 
 function findMatchingStacks(answers: OnboardingState['answers']): ToolStack[] {
-  return toolStacks.filter(stack => {
-    if (answers.role && stack.audience.type !== answers.role) return false;
-    if (answers.budget && stack.audience.budget !== answers.budget) return false;
-    if (answers.experience && stack.audience.experience !== answers.experience) return false;
-    return true;
+  // Score each stack by how many criteria match, then sort best-first.
+  // This ensures we always return results even when no exact match exists.
+  const scored = toolStacks.map(stack => {
+    let score = 0;
+    let totalCriteria = 0;
+    if (answers.role) {
+      totalCriteria++;
+      if (stack.audience.type === answers.role) score++;
+    }
+    if (answers.budget) {
+      totalCriteria++;
+      if (stack.audience.budget === answers.budget) score++;
+    }
+    if (answers.experience) {
+      totalCriteria++;
+      if (stack.audience.experience === answers.experience) score++;
+    }
+    return { stack, score, totalCriteria };
   });
+
+  // Sort by score descending; ties broken by original order
+  scored.sort((a, b) => b.score - a.score);
+
+  // Return stacks that match at least one criterion (or all if no criteria given)
+  const minScore = 1;
+  return scored
+    .filter(s => s.totalCriteria === 0 || s.score >= minScore)
+    .map(s => s.stack);
 }
