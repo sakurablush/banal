@@ -58,12 +58,20 @@ import {
   getOpenAICompatibleProviders,
 } from '../src/data/inference-providers';
 import {
+  filtersToUrl,
+  urlToFilters,
+  getSavedFilters,
+  saveFilter,
+  deleteSavedFilter,
+} from '../src/lib/filter-sharing';
+import {
   createInitialFilterState,
   getVisibleTags,
   getAvailableSubcategories,
   getCategoriesByDomain,
   serializeFilterState,
   deserializeFilterState,
+  applyProgressiveFilters,
 } from '../src/lib/progressive-filter';
 
 // ─── Categories Tests ───────────────────────────────────────────────────────
@@ -436,5 +444,25 @@ describe('Data Completeness', () => {
 
   it('should have 10+ tool stacks', () => {
     expect(toolStacks.length).toBeGreaterThanOrEqual(10);
+  });
+});
+
+// ─── Filter Integration Tests ───────────────────────────────────────────────
+
+describe('Filter Integration', () => {
+  it('should have filter sharing functions available', () => {
+    expect(typeof filtersToUrl).toBe('function');
+    expect(typeof urlToFilters).toBe('function');
+  });
+
+  it('should have saved filters functions available', () => {
+    expect(typeof getSavedFilters).toBe('function');
+    expect(typeof saveFilter).toBe('function');
+    expect(typeof deleteSavedFilter).toBe('function');
+  });
+
+  it('should have progressive filter functions available', () => {
+    expect(typeof getVisibleTags).toBe('function');
+    expect(typeof applyProgressiveFilters).toBe('function');
   });
 });

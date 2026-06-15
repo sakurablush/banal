@@ -2997,6 +2997,29 @@
   color: var(--neon-violet);
 }
 
+.models-filter-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.models-filter-btn {
+  padding: 0.5rem 1rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.models-filter-btn:hover {
+  border-color: var(--neon-violet);
+  color: var(--text-primary);
+  background: var(--glass-hover);
+}
+
 .models-stats-bar {
   color: var(--text-subtle);
   font-size: 0.75rem;
@@ -3281,6 +3304,29 @@
   background: rgba(34, 211, 238, 0.15);
   border-color: var(--neon-cyan);
   color: var(--neon-cyan);
+}
+
+.stacks-filter-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.stacks-filter-btn {
+  padding: 0.5rem 1rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.stacks-filter-btn:hover {
+  border-color: var(--neon-cyan);
+  color: var(--text-primary);
+  background: var(--glass-hover);
 }
 
 .stacks-stats {
