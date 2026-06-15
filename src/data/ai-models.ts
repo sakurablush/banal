@@ -19,7 +19,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'MIT', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/deepseek-ai/DeepSeek-V4',
+      huggingFace: 'https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro',
       inferenceProviders: ['cerebras', 'groq', 'openrouter', 'together'],
       localRunners: ['ollama', 'lm-studio', 'vllm'],
     },
@@ -40,7 +40,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Apache 2.0', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/Qwen/Qwen3.5-397B',
+      huggingFace: 'https://huggingface.co/Qwen/Qwen3.5-397B-A17B',
       inferenceProviders: ['openrouter', 'together', 'fireworks'],
       localRunners: ['ollama', 'lm-studio', 'vllm'],
     },
@@ -61,7 +61,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Llama Community', commercial: true, restrictions: ['700M MAU limit'] },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/meta-llama/Llama-4-Maverick',
+      huggingFace: 'https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct',
       inferenceProviders: ['openrouter', 'together', 'fireworks', 'groq'],
       localRunners: ['ollama', 'lm-studio'],
     },
@@ -82,7 +82,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Llama Community', commercial: true, restrictions: ['700M MAU limit'] },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/meta-llama/Llama-4-Scout',
+      huggingFace: 'https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct',
       inferenceProviders: ['openrouter', 'groq', 'together'],
       localRunners: ['ollama', 'lm-studio'],
     },
@@ -166,7 +166,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Apache 2.0', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/mistralai/Mistral-Medium-3.5',
+      huggingFace: 'https://huggingface.co/mistralai/Mistral-Medium-3.5-128B',
       inferenceProviders: ['openrouter', 'mistral', 'together'],
       localRunners: ['ollama', 'vllm'],
     },
@@ -187,7 +187,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Gemma License', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/google/gemma-4',
+      huggingFace: 'https://huggingface.co/google/gemma-4-31b-it',
       inferenceProviders: ['openrouter', 'google-ai-studio'],
       localRunners: ['ollama', 'lm-studio'],
     },
@@ -251,7 +251,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Apache 2.0', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/Qwen/Qwen3-Coder',
+      huggingFace: 'https://huggingface.co/Qwen/Qwen3-Coder-480B-A35B-Instruct',
       inferenceProviders: ['openrouter', 'together'],
       localRunners: ['ollama', 'vllm'],
     },
@@ -379,7 +379,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Llama Community', commercial: true, restrictions: ['700M MAU limit'] },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/meta-llama/Llama-3.3-70B',
+      huggingFace: 'https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct',
       inferenceProviders: ['openrouter', 'groq', 'together', 'cerebras'],
       localRunners: ['ollama', 'lm-studio'],
     },
@@ -422,7 +422,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Apache 2.0', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/mistralai/Mistral-Large-3',
+      huggingFace: 'https://huggingface.co/mistralai/Mistral-Large-3-675B-Instruct-2512',
       inferenceProviders: ['openrouter', 'mistral', 'together'],
       localRunners: ['ollama', 'vllm'],
     },
@@ -443,7 +443,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Apache 2.0', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/mistralai/Mistral-Small-3',
+      huggingFace: 'https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503',
       inferenceProviders: ['openrouter', 'mistral'],
       localRunners: ['ollama', 'lm-studio'],
     },
@@ -486,7 +486,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Gemma License', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/google/gemma-3-27b',
+      huggingFace: 'https://huggingface.co/google/gemma-3-27b-it',
       inferenceProviders: ['openrouter', 'google-ai-studio'],
       localRunners: ['ollama', 'lm-studio'],
     },
@@ -507,7 +507,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Gemma License', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/google/gemma-3-4b',
+      huggingFace: 'https://huggingface.co/google/gemma-3-4b-it',
       inferenceProviders: ['openrouter'],
       localRunners: ['ollama', 'lm-studio', 'jan'],
     },
@@ -551,7 +551,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'MIT', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/deepseek-ai/DeepSeek-Coder-V2',
+      huggingFace: 'https://huggingface.co/deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct',
       inferenceProviders: ['openrouter', 'together'],
       localRunners: ['ollama', 'vllm'],
     },

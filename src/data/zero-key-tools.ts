@@ -3895,7 +3895,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
   {
     id: 'glm-5.2',
     name: 'GLM-5.2 (Zhipu AI)',
-    url: 'https://huggingface.co/zai-org/GLM-5.2',
+    url: 'https://huggingface.co/collections/zai-org/glm-5-2',
     surface: 'cli',
     category: 'ai-models',
     access: 'open-source',
@@ -3911,7 +3911,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
   {
     id: 'qwen3',
     name: 'Qwen3 (Alibaba)',
-    url: 'https://huggingface.co/Qwen/Qwen3',
+    url: 'https://huggingface.co/Qwen/Qwen3-235B-A22B',
     surface: 'cli',
     category: 'ai-models',
     access: 'open-source',
@@ -3927,7 +3927,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
   {
     id: 'qwen3-coder',
     name: 'Qwen3-Coder (Alibaba)',
-    url: 'https://huggingface.co/Qwen/Qwen3-Coder',
+    url: 'https://huggingface.co/collections/Qwen/qwen3-coder',
     surface: 'cli',
     category: 'ai-models',
     access: 'open-source',
