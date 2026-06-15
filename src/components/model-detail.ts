@@ -6,6 +6,7 @@
 import type { Lang } from '../i18n';
 import type { AIModel } from '../types/tool';
 import { aiModels } from '../data/ai-models';
+import { renderPrivacyIndicator } from './privacy-indicator';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -305,6 +306,59 @@ export function renderModelDetail(
 
   resSection.appendChild(resList);
   container.appendChild(resSection);
+
+  // Privacy & License Info
+  const privacySection = create('section', 'model-detail-section');
+  const privacyTitle = create('h2', 'section-title');
+  privacyTitle.textContent = lang === 'ja' ? 'プライバシーとライセンス' : 'Privacy & License';
+  privacySection.appendChild(privacyTitle);
+  
+  // Derive privacy level from license
+  const privacyLevel = model.license.commercial && !model.license.restrictions?.length
+    ? 'high' as const
+    : model.license.commercial
+    ? 'medium' as const
+    : 'low' as const;
+  
+  const privacyInfo = {
+    level: privacyLevel,
+    telemetry: false,
+    encryption: true,
+    dataResidency: ['Local'] as string[],
+    trainingOnPrompts: false,
+  };
+  privacySection.appendChild(renderPrivacyIndicator(privacyInfo, lang));
+  container.appendChild(privacySection);
+
+  // Smart Recommendations (alternative models)
+  if (alternatives.length > 0) {
+    const recSection = create('section', 'model-detail-section');
+    const recTitle = create('h2', 'section-title');
+    recTitle.textContent = lang === 'ja' ? 'おすすめモデル' : 'Recommended Models';
+    recSection.appendChild(recTitle);
+    
+    const recList = create('div', 'model-recommendations-list');
+    for (const alt of alternatives.slice(0, 3)) {
+      const recCard = create('div', 'recommendation-card');
+      const recName = create('h4', 'recommendation-name');
+      recName.textContent = alt.name;
+      recCard.appendChild(recName);
+      
+      const recDesc = create('p', 'recommendation-desc');
+      recDesc.textContent = `${alt.parameters.total} params • ${alt.license.type} • ${alt.contextWindow}`;
+      recCard.appendChild(recDesc);
+      
+      const recReason = create('span', 'recommendation-reason');
+      recReason.textContent = alt.family === model.family 
+        ? (lang === 'ja' ? '同じファミリー' : 'Same family')
+        : (lang === 'ja' ? '類似の用途' : 'Similar use cases');
+      recCard.appendChild(recReason);
+      
+      recList.appendChild(recCard);
+    }
+    recSection.appendChild(recList);
+    container.appendChild(recSection);
+  }
 
   // Metadata
   const metaSection = create('div', 'model-detail-meta');
