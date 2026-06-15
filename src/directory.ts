@@ -5,6 +5,11 @@ import {
 } from './zero-key-panel';
 import { getCurrentLang } from './i18n';
 import { zeroKeyTools } from './data/zero-key-tools';
+import { renderModelsPanel, type ModelsPanelApi } from './components/models-panel';
+import { renderStacksPanel, type StacksPanelApi } from './components/stacks-panel';
+import { renderOnboarding } from './components/onboarding-flow';
+import { aiModels } from './data/ai-models';
+import { toolStacks } from './data/tool-stacks';
 
 /**
  * Initialize the main page Zero-Key Tools Directory.
@@ -14,10 +19,15 @@ import { zeroKeyTools } from './data/zero-key-tools';
 export function initDirectory(): void {
   const aiRoot = document.getElementById('ai-tools-root');
   const devRoot = document.getElementById('dev-tools-root');
+  const modelsRoot = document.getElementById('ai-models-root');
+  const stacksRoot = document.getElementById('tool-stacks-root');
+  const onboardingRoot = document.getElementById('onboarding-root');
 
   // Store panel APIs for category quick-nav
   let aiPanelApi: ZeroKeyPanelApi | null = null;
   let devPanelApi: ZeroKeyPanelApi | null = null;
+  let modelsPanelApi: ModelsPanelApi | null = null;
+  let stacksPanelApi: StacksPanelApi | null = null;
 
   const render = (lang = getCurrentLang()) => {
     // Render AI Tools section
@@ -80,10 +90,59 @@ export function initDirectory(): void {
 
     // Update dynamic tool counts
     updateToolCounts();
+
+    // Render AI Models section
+    if (modelsRoot) {
+      try {
+        modelsPanelApi = renderModelsPanel(modelsRoot, { lang });
+      } catch (error) {
+        console.error('Failed to render AI models section:', error);
+        modelsRoot.innerHTML = `
+          <div class="text-center py-16 text-white/60">
+            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
+              <p class="text-lg mb-2">\u26A0\uFE0F Unable to load AI models</p>
+              <p class="text-sm">Please refresh the page.</p>
+            </div>
+          </div>
+        `;
+        modelsPanelApi = null;
+      }
+    }
+
+    // Render Tool Stacks section
+    if (stacksRoot) {
+      try {
+        stacksPanelApi = renderStacksPanel(stacksRoot, { lang });
+      } catch (error) {
+        console.error('Failed to render tool stacks section:', error);
+        stacksRoot.innerHTML = `
+          <div class="text-center py-16 text-white/60">
+            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
+              <p class="text-lg mb-2">⚠️ Unable to load tool stacks</p>
+              <p class="text-sm">Please refresh the page.</p>
+            </div>
+          </div>
+        `;
+        stacksPanelApi = null;
+      }
+    }
+
+    // Render Onboarding Quiz
+    if (onboardingRoot) {
+      try {
+        renderOnboarding(onboardingRoot, lang);
+      } catch (error) {
+        console.error('Failed to render onboarding quiz:', error);
+      }
+    }
   };
 
   // Initial render
   render();
+
+  // Expose panel APIs for external use (e.g., quick-nav, testing)
+  void modelsPanelApi;
+  void stacksPanelApi;
 
   // Re-render when language changes
   window.addEventListener('banal:language-changed', (e: Event) => {
@@ -92,6 +151,8 @@ export function initDirectory(): void {
     // APIs are reassigned on re-render
     aiPanelApi = null;
     devPanelApi = null;
+    modelsPanelApi = null;
+    stacksPanelApi = null;
   });
 
   // Wire up category quick nav links to filter the list
@@ -125,10 +186,15 @@ export function initDirectory(): void {
   });
 }
 
-export function getPanelApis(): { ai: ZeroKeyPanelApi | null; dev: ZeroKeyPanelApi | null } {
+export function getPanelApis(): {
+  ai: ZeroKeyPanelApi | null;
+  dev: ZeroKeyPanelApi | null;
+  models: ModelsPanelApi | null;
+  stacks: StacksPanelApi | null;
+} {
   // This is a convenience function for testing
   // In production, the APIs are managed internally by initDirectory
-  return { ai: null, dev: null };
+  return { ai: null, dev: null, models: null, stacks: null };
 }
 
 /**
@@ -177,5 +243,17 @@ function updateToolCounts(): void {
   const heroCountEl = document.getElementById('stat-tools');
   if (heroCountEl) {
     heroCountEl.textContent = `${total}+`;
+  }
+
+  // Update AI models count
+  const modelsCountEl = document.querySelector('#ai-models .tool-count-badge');
+  if (modelsCountEl) {
+    modelsCountEl.textContent = `${aiModels.length}+`;
+  }
+
+  // Update tool stacks count
+  const stacksCountEl = document.querySelector('#tool-stacks .tool-count-badge');
+  if (stacksCountEl) {
+    stacksCountEl.textContent = `${toolStacks.length}+`;
   }
 }

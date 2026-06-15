@@ -184,7 +184,7 @@ describe('multi-panel independent state', () => {
 describe('directory: getPanelApis', () => {
   it('returns null panel apis as convenience function', () => {
     const apis = getPanelApis();
-    expect(apis).toEqual({ ai: null, dev: null });
+    expect(apis).toEqual({ ai: null, dev: null, models: null, stacks: null });
   });
 });
 
