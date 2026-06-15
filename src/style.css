@@ -3938,6 +3938,17 @@
   overflow-x: auto;
   padding: 8px 0 12px;
   margin-bottom: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
+}
+
+.quick-filters-row::-webkit-scrollbar {
+  height: 4px;
+}
+
+.quick-filters-row::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 2px;
 }
 
 .quick-filter-chip {
@@ -3946,13 +3957,14 @@
   min-height: 44px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.15);
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.875rem;
   font-weight: 500;
   white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
 }
 
 .quick-filter-chip:hover {
@@ -4018,6 +4030,14 @@
 }
 
 [data-theme='light'] .tools-horizontal-scroll::-webkit-scrollbar-thumb {
+  background: var(--light-active-border);
+}
+
+[data-theme='light'] .quick-filters-row {
+  scrollbar-color: var(--light-active-border) transparent;
+}
+
+[data-theme='light'] .quick-filters-row::-webkit-scrollbar-thumb {
   background: var(--light-active-border);
 }
 
