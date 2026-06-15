@@ -13,10 +13,7 @@ import { initI18n } from './i18n';
 import { initTheme, setTheme } from './theme';
 import { initDirectory } from './directory';
 import { ParticleSystem } from './lib/particle-system';
-import { renderPlayground } from './api-playground';
 import { renderPromptTemplatesStandalone } from './prompt-templates-standalone';
-
-// Boot theme first (before any rendering so CSS variables are correct)
 
 // Boot theme first (before any rendering so CSS variables are correct)
 initTheme();
@@ -71,19 +68,6 @@ try {
   }
 } catch (error) {
   console.error('Prompt Templates section failed to initialize:', error);
-}
-
-// API Playground — try free APIs directly in the browser
-try {
-  const playgroundRoot = document.getElementById('api-playground-root');
-  if (playgroundRoot) {
-    renderPlayground({
-      lang: document.documentElement.lang?.startsWith('ja') ? 'ja' : 'en',
-      container: playgroundRoot,
-    });
-  }
-} catch (error) {
-  console.error('API Playground failed to initialize:', error);
 }
 
 // Extremely small core — everything else lives in focused, tested modules.

@@ -65,7 +65,6 @@ export const translations: Record<Lang, Translations> = {
     'nav.aiTools': 'AI Tools',
     'nav.devTools': 'Dev Tools',
     'nav.promptTemplates': 'Prompt Templates',
-    'nav.playground': 'API Playground',
     'nav.articles': 'Articles',
     'section.aiTools.eyebrow': '🤖 AI TOOLS & MODELS',
     'section.aiTools.title1': '132+ AI tools & models.',
@@ -82,11 +81,6 @@ export const translations: Record<Lang, Translations> = {
     'section.promptTemplates.title2': 'Copy & paste.',
     'section.promptTemplates.desc':
       '9 powerful prompt templates for real-life situations. Copy them, fill in your details, paste into any free AI chatbot. <span class="text-white/50">No account needed.</span>',
-    'section.playground.eyebrow': 'API PLAYGROUND',
-    'section.playground.title1': 'Try it yourself.',
-    'section.playground.title2': 'Free APIs, no signup.',
-    'section.playground.desc':
-      'Test free AI APIs directly in your browser. No account. No credit card. Just click and test.',
     'section.articles.eyebrow': 'ARTICLES',
     'section.articles.title1': 'Real stories.',
     'section.articles.title2': 'No fluff.',
@@ -215,7 +209,6 @@ export const translations: Record<Lang, Translations> = {
     'nav.aiTools': 'AIツール',
     'nav.devTools': '開発者ツール',
     'nav.promptTemplates': 'プロンプトテンプレート',
-    'nav.playground': 'APIプレイグラウンド',
     'nav.articles': '記事',
     'section.aiTools.eyebrow': '🤖 AIツール＆モデル',
     'section.aiTools.title1': '132以上のAIツール＆モデル。',
@@ -232,11 +225,6 @@ export const translations: Record<Lang, Translations> = {
     'section.promptTemplates.title2': 'コピー＆ペースト。',
     'section.promptTemplates.desc':
       '9つの強力なプロンプトテンプレート。コピーして、詳細を入力し、任意の無料AIチャットボットに貼り付ける。<span class="text-white/50">アカウント不要。</span>',
-    'section.playground.eyebrow': 'APIプレイグラウンド',
-    'section.playground.title1': '自分で試そう。',
-    'section.playground.title2': '無料API、サインアップ不要。',
-    'section.playground.desc':
-      'ブラウザで直接無料AI APIをテスト。アカウント不要。クレジットカード不要。クリックしてテスト。',
     'section.articles.eyebrow': '記事',
     'section.articles.title1': 'リアルなストーリー。',
     'section.articles.title2': '無駄なし。',
