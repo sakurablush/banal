@@ -7,6 +7,7 @@ import type { Lang } from '../i18n';
 import { aiModels, getModelFamilies } from '../data/ai-models';
 import type { AIModel } from '../types/tool';
 import { renderModelDetail } from './model-detail';
+import { trackFilterEvent } from '../lib/filter-analytics';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -295,6 +296,14 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   searchInput.value = state.query;
   searchInput.addEventListener('input', () => {
     state.query = searchInput.value;
+    if (searchInput.value.trim()) {
+      trackFilterEvent({
+        action: 'apply',
+        filterType: 'search',
+        filterValue: searchInput.value,
+        resultCount: filterModels(state).length,
+      });
+    }
     renderContent(state);
   });
   searchWrap.appendChild(searchInput);
@@ -319,6 +328,14 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   }
   familySelect.addEventListener('change', () => {
     state.familyFilter = familySelect.value || null;
+    if (state.familyFilter) {
+      trackFilterEvent({
+        action: 'apply',
+        filterType: 'category',
+        filterValue: `family:${state.familyFilter}`,
+        resultCount: filterModels(state).length,
+      });
+    }
     renderContent(state);
   });
   chipsRow.appendChild(familySelect);
@@ -339,6 +356,14 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   }
   useCaseSelect.addEventListener('change', () => {
     state.useCaseFilter = useCaseSelect.value || null;
+    if (state.useCaseFilter) {
+      trackFilterEvent({
+        action: 'apply',
+        filterType: 'tag',
+        filterValue: `useCase:${state.useCaseFilter}`,
+        resultCount: filterModels(state).length,
+      });
+    }
     renderContent(state);
   });
   chipsRow.appendChild(useCaseSelect);
@@ -359,6 +384,14 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   }
   licSelect.addEventListener('change', () => {
     state.licenseFilter = licSelect.value || null;
+    if (state.licenseFilter) {
+      trackFilterEvent({
+        action: 'apply',
+        filterType: 'tag',
+        filterValue: `license:${state.licenseFilter}`,
+        resultCount: filterModels(state).length,
+      });
+    }
     renderContent(state);
   });
   chipsRow.appendChild(licSelect);
@@ -380,6 +413,21 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
     btn.textContent = chip.label;
     btn.addEventListener('click', () => {
       state.useCaseFilter = state.useCaseFilter === chip.useCase ? null : chip.useCase;
+      if (state.useCaseFilter) {
+        trackFilterEvent({
+          action: 'apply',
+          filterType: 'tag',
+          filterValue: `useCase:${state.useCaseFilter}`,
+          resultCount: filterModels(state).length,
+        });
+      } else {
+        trackFilterEvent({
+          action: 'remove',
+          filterType: 'tag',
+          filterValue: `useCase:${chip.useCase}`,
+          resultCount: filterModels(state).length,
+        });
+      }
       renderContent(state);
     });
     quickChips.appendChild(btn);

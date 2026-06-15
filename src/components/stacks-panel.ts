@@ -7,6 +7,8 @@ import type { Lang } from '../i18n';
 import { toolStacks, getStackAudiences } from '../data/tool-stacks';
 import type { ToolStack, StackAudience } from '../types/tool';
 import { renderStackDetail } from './stack-detail';
+import { trackFilterEvent } from '../lib/filter-analytics';
+import { customizeStack, saveCustomStack } from '../lib/stack-customization';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -177,6 +179,22 @@ function renderStackCard(state: StacksPanelState, stack: ToolStack): HTMLElement
   costSection.appendChild(costList);
   card.appendChild(costSection);
 
+  // Customize button
+  const customizeBtn = create('button', 'stack-customize-btn');
+  customizeBtn.type = 'button';
+  customizeBtn.textContent = state.lang === 'ja' ? '🔧 カスタマイズ' : '🔧 Customize';
+  customizeBtn.title = state.lang === 'ja' ? 'このスタックをカスタマイズ' : 'Customize this stack';
+  customizeBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent opening detail view
+    const customStack = customizeStack(stack);
+    saveCustomStack(customStack);
+    customizeBtn.textContent = state.lang === 'ja' ? '✓ 保存しました！' : '✓ Saved!';
+    setTimeout(() => {
+      customizeBtn.textContent = state.lang === 'ja' ? '🔧 カスタマイズ' : '🔧 Customize';
+    }, 2000);
+  });
+  card.appendChild(customizeBtn);
+
   // Click to open detail view
   card.style.cursor = 'pointer';
   card.addEventListener('click', () => {
@@ -294,6 +312,12 @@ export function renderStacksPanel(
   allChip.textContent = typeof copy.allAudiences === 'string' ? copy.allAudiences : 'All';
   allChip.addEventListener('click', () => {
     state.audienceFilter = null;
+    trackFilterEvent({
+      action: 'clear',
+      filterType: 'category',
+      filterValue: 'audience:all',
+      resultCount: toolStacks.length,
+    });
     renderContent(state);
   });
   chips.appendChild(allChip);
@@ -307,7 +331,24 @@ export function renderStacksPanel(
     chip.type = 'button';
     chip.textContent = `${label.icon} ${label[state.lang]}`;
     chip.addEventListener('click', () => {
-      state.audienceFilter = state.audienceFilter === aud ? null : (aud as StackAudience);
+      const wasActive = state.audienceFilter === aud;
+      state.audienceFilter = wasActive ? null : (aud as StackAudience);
+      
+      if (state.audienceFilter) {
+        trackFilterEvent({
+          action: 'apply',
+          filterType: 'category',
+          filterValue: `audience:${state.audienceFilter}`,
+          resultCount: toolStacks.filter(s => s.audience.type === state.audienceFilter).length,
+        });
+      } else {
+        trackFilterEvent({
+          action: 'remove',
+          filterType: 'category',
+          filterValue: `audience:${aud}`,
+          resultCount: toolStacks.length,
+        });
+      }
       renderContent(state);
     });
     chips.appendChild(chip);
