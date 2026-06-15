@@ -165,7 +165,7 @@ describe('theme — initTheme (system listener setup)', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
 
     // Get the handler and simulate a system theme change
-    const handler = mockAddEventListener.mock.calls[0]?.[1] as Function;
+    const handler = mockAddEventListener.mock.calls[0]?.[1] as (e: MediaQueryListEvent) => void;
     if (handler) {
       handler({ matches: true } as MediaQueryListEvent);
       expect(document.documentElement.getAttribute('data-theme')).toBe('light');
@@ -187,7 +187,7 @@ describe('theme — initTheme (system listener setup)', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
 
     // Get the handler and simulate system changing to light
-    const handler = mockAddEventListener.mock.calls[0]?.[1] as Function;
+    const handler = mockAddEventListener.mock.calls[0]?.[1] as (e: MediaQueryListEvent) => void;
     if (handler) {
       // After initTheme, sessionStorage has 'dark', so handler won't override
       // Test by clearing sessionStorage to simulate 'no manual override'

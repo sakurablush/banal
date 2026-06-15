@@ -1,5 +1,5 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
-import { initDirectory } from '../src/directory';
+import { initDirectory, getPanelApis } from '../src/directory';
 import { zeroKeyTools } from '../src/data/zero-key-tools';
 import { renderZeroKeyPowerPanel } from '../src/zero-key-panel';
 
@@ -176,5 +176,289 @@ describe('multi-panel independent state', () => {
     const aiSearch = aiRoot.querySelector('#zk-search-input') as HTMLInputElement;
 
     expect(aiSearch.value).toBe('docker');
+  });
+});
+
+// ─── Additional coverage tests ────────────────────────────────────────────────
+
+describe('directory: getPanelApis', () => {
+  it('returns null panel apis as convenience function', () => {
+    const apis = getPanelApis();
+    expect(apis).toEqual({ ai: null, dev: null });
+  });
+});
+
+describe('directory: updateToolCounts', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+    vi.restoreAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('updates category count badges with correct counts', () => {
+    document.body.innerHTML = `
+      <div id="stat-tools">0+</div>
+      <div id="ai-tools-root" data-category-prefix="ai"></div>
+      <div id="dev-tools-root" data-category-prefix="dev"></div>
+      <span data-category-count="ai-chat"></span>
+      <span data-category-count="dev-coding"></span>
+    `;
+
+    initDirectory();
+
+    const aiChatCount = document.querySelector('[data-category-count="ai-chat"]');
+    const devCodingCount = document.querySelector('[data-category-count="dev-coding"]');
+
+    const expectedAiChat = zeroKeyTools.filter((t) => t.category === 'ai-chat').length;
+    const expectedDevCoding = zeroKeyTools.filter((t) => t.category === 'dev-coding').length;
+
+    expect(aiChatCount?.textContent).toBe(`(${expectedAiChat})`);
+    expect(devCodingCount?.textContent).toBe(`(${expectedDevCoding})`);
+  });
+
+  it('updates AI and Dev tool count badges', () => {
+    document.body.innerHTML = `
+      <div id="stat-tools">0+</div>
+      <div id="ai-tools-root" data-category-prefix="ai"></div>
+      <div id="dev-tools-root" data-category-prefix="dev"></div>
+      <div id="ai-tools"><span class="tool-count-badge">0+</span></div>
+      <div id="dev-tools"><span class="tool-count-badge">0+</span></div>
+    `;
+
+    initDirectory();
+
+    const aiCount = zeroKeyTools.filter((t) => t.category.startsWith('ai-')).length;
+    const devCount = zeroKeyTools.filter((t) => t.category.startsWith('dev-')).length;
+
+    const aiBadge = document.querySelector('#ai-tools .tool-count-badge');
+    const devBadge = document.querySelector('#dev-tools .tool-count-badge');
+
+    expect(aiBadge?.textContent).toBe(`${aiCount}+`);
+    expect(devBadge?.textContent).toBe(`${devCount}+`);
+  });
+
+  it('handles missing DOM elements gracefully', () => {
+    // No stat-tools, no badges, no category counts
+    document.body.innerHTML = `
+      <div id="ai-tools-root"></div>
+      <div id="dev-tools-root"></div>
+    `;
+
+    // Should not throw
+    expect(() => initDirectory()).not.toThrow();
+  });
+});
+
+describe('directory: escapeHtml XSS prevention', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+    vi.restoreAllMocks();
+  });
+
+  it('escapes HTML in error messages to prevent XSS', async () => {
+    const zeroKeyPanel = await import('../src/zero-key-panel');
+
+    document.body.innerHTML = `
+      <div id="stat-tools">0+</div>
+      <div id="ai-tools-root"></div>
+    `;
+
+    const spy = vi.spyOn(zeroKeyPanel, 'renderZeroKeyPowerPanel').mockImplementation(() => {
+      throw new Error('<script>alert("xss")</script>');
+    });
+
+    initDirectory();
+
+    const aiRoot = document.getElementById('ai-tools-root')!;
+    // The error message should be escaped, not rendered as HTML
+    expect(aiRoot.innerHTML).not.toContain('<script>alert');
+    expect(aiRoot.textContent).toContain('<script>alert("xss")</script>');
+
+    spy.mockRestore();
+  });
+
+  it('handles non-Error exceptions in error messages', async () => {
+    const zeroKeyPanel = await import('../src/zero-key-panel');
+
+    document.body.innerHTML = `
+      <div id="stat-tools">0+</div>
+      <div id="ai-tools-root"></div>
+    `;
+
+    const spy = vi.spyOn(zeroKeyPanel, 'renderZeroKeyPowerPanel').mockImplementation(() => {
+      throw 'string error'; // non-Error throw
+    });
+
+    initDirectory();
+
+    const aiRoot = document.getElementById('ai-tools-root')!;
+    expect(aiRoot.innerHTML).toContain('Unknown error');
+
+    spy.mockRestore();
+  });
+});
+
+describe('directory: dev tools error handling', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+    vi.restoreAllMocks();
+  });
+
+  it('displays error message for dev tools when render throws', async () => {
+    const zeroKeyPanel = await import('../src/zero-key-panel');
+
+    document.body.innerHTML = `
+      <div id="stat-tools">0+</div>
+      <div id="ai-tools-root"></div>
+      <div id="dev-tools-root"></div>
+    `;
+
+    let callCount = 0;
+    const spy = vi.spyOn(zeroKeyPanel, 'renderZeroKeyPowerPanel').mockImplementation(() => {
+      callCount++;
+      if (callCount === 2) {
+        throw new Error('Dev render failed');
+      }
+      return {
+        search: vi.fn(),
+        setCategory: vi.fn(),
+        reset: vi.fn(),
+        destroy: vi.fn(),
+      };
+    });
+
+    initDirectory();
+
+    const devRoot = document.getElementById('dev-tools-root')!;
+    expect(devRoot.innerHTML).toContain('Unable to load developer tools');
+
+    spy.mockRestore();
+  });
+});
+
+describe('directory: category filter navigation', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+    vi.restoreAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('clicking data-filter card scrolls to appropriate section and sets category', () => {
+    document.body.innerHTML = `
+      <div id="stat-tools">0+</div>
+      <div id="ai-tools"></div>
+      <div id="ai-tools-root"></div>
+      <div id="dev-tools"></div>
+      <div id="dev-tools-root"></div>
+      <a data-filter="ai-chat" href="#">AI Chat</a>
+      <a data-filter="dev-coding" href="#">Dev Coding</a>
+    `;
+
+    initDirectory();
+
+    // Mock scrollIntoView
+    const aiSection = document.getElementById('ai-tools')!;
+    aiSection.scrollIntoView = vi.fn();
+
+    const devSection = document.getElementById('dev-tools')!;
+    devSection.scrollIntoView = vi.fn();
+
+    // Click AI filter
+    const aiFilter = document.querySelector('[data-filter="ai-chat"]') as HTMLElement;
+    aiFilter.click();
+
+    expect(aiSection.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+
+    // Click Dev filter
+    const devFilter = document.querySelector('[data-filter="dev-coding"]') as HTMLElement;
+    devFilter.click();
+
+    expect(devSection.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+  });
+
+  it('ignores data-filter click when category attribute is empty', () => {
+    document.body.innerHTML = `
+      <div id="stat-tools">0+</div>
+      <div id="ai-tools-root"></div>
+      <div id="dev-tools-root"></div>
+      <a data-filter="" href="#">Empty</a>
+    `;
+
+    initDirectory();
+
+    const filter = document.querySelector('[data-filter=""]') as HTMLElement;
+    // Should not throw
+    expect(() => filter.click()).not.toThrow();
+  });
+});
+
+describe('directory: missing root elements', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+    vi.restoreAllMocks();
+  });
+
+  it('handles missing ai-tools-root gracefully', () => {
+    document.body.innerHTML = `
+      <div id="stat-tools">0+</div>
+      <div id="dev-tools-root"></div>
+    `;
+
+    expect(() => initDirectory()).not.toThrow();
+
+    const devRoot = document.getElementById('dev-tools-root')!;
+    const devCards = devRoot.querySelectorAll('.tool-card-horizontal');
+    expect(devCards.length).toBeGreaterThan(0);
+  });
+
+  it('handles missing dev-tools-root gracefully', () => {
+    document.body.innerHTML = `
+      <div id="stat-tools">0+</div>
+      <div id="ai-tools-root"></div>
+    `;
+
+    expect(() => initDirectory()).not.toThrow();
+
+    const aiRoot = document.getElementById('ai-tools-root')!;
+    const aiCards = aiRoot.querySelectorAll('.tool-card-horizontal');
+    expect(aiCards.length).toBeGreaterThan(0);
+  });
+
+  it('handles both roots missing gracefully', () => {
+    document.body.innerHTML = `
+      <div id="stat-tools">0+</div>
+    `;
+
+    expect(() => initDirectory()).not.toThrow();
+  });
+});
+
+describe('directory: language change with no detail', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+    vi.restoreAllMocks();
+  });
+
+  it('falls back to getCurrentLang when event has no lang detail', () => {
+    document.body.innerHTML = `
+      <div id="stat-tools">0+</div>
+      <div id="ai-tools-root"></div>
+      <div id="dev-tools-root"></div>
+    `;
+
+    initDirectory();
+
+    // Dispatch event with no detail (fallback path)
+    window.dispatchEvent(new CustomEvent('banal:language-changed'));
+
+    const aiRoot = document.getElementById('ai-tools-root')!;
+    const aiCards = aiRoot.querySelectorAll('.tool-card-horizontal');
+    expect(aiCards.length).toBeGreaterThan(0);
   });
 });

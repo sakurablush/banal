@@ -274,7 +274,9 @@ function createHorizontalPromptCard(
   // Category badge
   const catBadge = document.createElement('span');
   catBadge.className = 'zk2-card-surface zk2-surface-web';
-  catBadge.textContent = (catData ? (state.lang === 'ja' ? catData.labelJa : catData.labelEn) : '').toUpperCase();
+  catBadge.textContent = (
+    catData ? (state.lang === 'ja' ? catData.labelJa : catData.labelEn) : ''
+  ).toUpperCase();
   header.appendChild(catBadge);
 
   card.appendChild(header);

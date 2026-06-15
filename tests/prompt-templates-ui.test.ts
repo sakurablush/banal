@@ -334,4 +334,331 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     const hasTemplateData = storedKeys.some((key) => key.startsWith('banal-pt-'));
     expect(hasTemplateData).toBe(true);
   });
+
+  // ─── Preview button ─────────────────────────────────────────────────────────
+
+  it('preview button shows filled template text', () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    card.click();
+
+    const previewBtn = document.querySelector('.sp-btn-ghost') as HTMLButtonElement;
+    expect(previewBtn).toBeTruthy();
+    expect(previewBtn.textContent).toContain('Preview');
+
+    previewBtn.click();
+
+    const previewArea = document.querySelector('.sp-preview-area') as HTMLElement;
+    expect(previewArea).toBeTruthy();
+    expect(previewArea.style.display).toBe('block');
+    expect(previewArea.textContent).toBeTruthy();
+  });
+
+  // ─── Copy failure path ──────────────────────────────────────────────────────
+
+  it('shows error toast when clipboard write fails', async () => {
+    // Mock clipboard failure
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: vi.fn().mockRejectedValue(new Error('Clipboard blocked')),
+      },
+    });
+
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    card.click();
+
+    vi.advanceTimersByTime(150);
+
+    const copyBtn = document.querySelector('.sp-btn-primary') as HTMLButtonElement;
+    copyBtn.click();
+
+    // Wait for the rejected promise to settle
+    await vi.advanceTimersByTimeAsync(200);
+
+    // Should show error toast
+    const toast = document.querySelector('.pt-toast');
+    expect(toast).toBeTruthy();
+    expect(toast?.textContent).toContain('Failed to copy');
+  });
+
+  // ─── Toast notification lifecycle ───────────────────────────────────────────
+
+  it('toast appears and disappears after timeout', async () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    card.click();
+
+    const copyBtn = document.querySelector('.sp-btn-primary') as HTMLButtonElement;
+    copyBtn.click();
+
+    // Wait for clipboard write
+    await vi.advanceTimersByTimeAsync(100);
+
+    // Toast should exist
+    let toast = document.querySelector('.pt-toast');
+    expect(toast).toBeTruthy();
+    expect(toast?.getAttribute('role')).toBe('status');
+    expect(toast?.getAttribute('aria-live')).toBe('polite');
+
+    // Advance past toast timeout (3000ms + 300ms fade)
+    await vi.advanceTimersByTimeAsync(3500);
+
+    toast = document.querySelector('.pt-toast');
+    expect(toast).toBeNull();
+  });
+
+  // ─── Accordion toggle (same card click) ─────────────────────────────────────
+
+  it('clicking same card again closes the accordion', () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+
+    // Open accordion
+    card.click();
+    expect(document.querySelector('.prompt-accordion')).toBeTruthy();
+
+    // Click same card again to close
+    card.click();
+    vi.advanceTimersByTime(100);
+
+    expect(document.querySelector('.prompt-accordion')).toBeNull();
+  });
+
+  // ─── Opening second accordion closes first ──────────────────────────────────
+
+  it('opening a second accordion closes the first one', () => {
+    const el = setup();
+    const cards = el.querySelectorAll('.prompt-card-horizontal') as NodeListOf<HTMLElement>;
+
+    // Open first accordion
+    cards[0].click();
+    expect(document.querySelectorAll('.prompt-accordion').length).toBe(1);
+
+    // Open second accordion
+    cards[1].click();
+    vi.advanceTimersByTime(100);
+
+    // Should only have one accordion
+    expect(document.querySelectorAll('.prompt-accordion').length).toBe(1);
+    expect(cards[0].getAttribute('aria-expanded')).toBe('false');
+    expect(cards[1].getAttribute('aria-expanded')).toBe('true');
+  });
+
+  // ─── Keyboard Space opens accordion ─────────────────────────────────────────
+
+  it('opens accordion via keyboard Space key', () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+
+    card.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+
+    expect(document.querySelector('.prompt-accordion')).not.toBeNull();
+  });
+
+  // ─── __ptCleanup function ────────────────────────────────────────────────────
+
+  it('calling __ptCleanup cleans up language listener and accordion', () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    card.click();
+
+    // Accordion should be open
+    expect(document.querySelector('.prompt-accordion')).toBeTruthy();
+
+    // Call cleanup
+    const typedContainer = el as any;
+    typedContainer.__ptCleanup?.();
+
+    // Accordion should be closed
+    expect(document.querySelector('.prompt-accordion')).toBeNull();
+  });
+
+  // ─── Re-rendering on second call ────────────────────────────────────────────
+
+  it('calling renderPromptTemplatesStandalone again cleans up previous instance', () => {
+    const el = setup();
+    expect(el.querySelectorAll('.prompt-card-horizontal').length).toBe(9);
+
+    // Re-render
+    renderPromptTemplatesStandalone({ container: el, lang: 'ja' });
+
+    // Should still have 9 cards but in Japanese
+    expect(el.querySelectorAll('.prompt-card-horizontal').length).toBe(9);
+    const chips = el.querySelectorAll('.quick-filter-chip');
+    expect(chips.length).toBe(6);
+  });
+
+  // ─── Japanese rendering ─────────────────────────────────────────────────────
+
+  it('renders in Japanese when lang is ja', () => {
+    renderPromptTemplatesStandalone({ container, lang: 'ja' });
+
+    const chips = container.querySelectorAll('.quick-filter-chip');
+    // Should have Japanese labels
+    const allChip = Array.from(chips).find((c) => c.textContent?.includes('すべて'));
+    expect(allChip).toBeTruthy();
+  });
+
+  // ─── Saved values restoration ───────────────────────────────────────────────
+
+  it('restores saved form values from sessionStorage', () => {
+    // Pre-populate sessionStorage with correct variable names for job-gaps-as-strengths
+    sessionStorage.setItem(
+      'banal-pt-job-gaps-as-strengths-en',
+      JSON.stringify({ yourName: 'TestUser' })
+    );
+
+    renderPromptTemplatesStandalone({ container, lang: 'en' });
+
+    // Find the card for job-gaps-as-strengths
+    const card = container.querySelector('[data-prompt-id="job-gaps-as-strengths"]') as HTMLElement;
+    expect(card).toBeTruthy();
+
+    card.click();
+
+    vi.advanceTimersByTime(150);
+
+    // Check if any input has the saved value
+    const inputs = document.querySelectorAll('.sp-form-input') as NodeListOf<HTMLInputElement>;
+    const hasSavedValue = Array.from(inputs).some((input) => input.value === 'TestUser');
+    expect(hasSavedValue).toBe(true);
+  });
+
+  // ─── Error path ─────────────────────────────────────────────────────────────
+
+  it('shows error UI when PromptTemplatesLibrary constructor throws', () => {
+    // Mock the import to make constructor throw
+    const origCreateElement = document.createElement.bind(document);
+    let callCount = 0;
+    document.createElement = function (tag: string) {
+      callCount++;
+      if (callCount === 1 && tag === 'div') {
+        throw new Error('DOM error');
+      }
+      return origCreateElement(tag);
+    } as typeof document.createElement;
+
+    renderPromptTemplatesStandalone({ container, lang: 'en' });
+
+    // Should show error message
+    expect(container.innerHTML).toContain('Unable to load prompt templates');
+
+    // Restore
+    document.createElement = origCreateElement;
+  });
+
+  // ─── Copy button text change and restore ────────────────────────────────────
+
+  it('copy button text changes to checkmark and restores after timeout', async () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    card.click();
+
+    const copyBtn = document.querySelector('.sp-btn-primary') as HTMLButtonElement;
+    const originalText = copyBtn.textContent;
+
+    copyBtn.click();
+    await vi.advanceTimersByTimeAsync(100);
+
+    expect(copyBtn.textContent).toContain('Copied');
+
+    // After 2000ms timeout, text should restore
+    await vi.advanceTimersByTimeAsync(2100);
+    expect(copyBtn.textContent).toBe(originalText);
+  });
+
+  // ─── Language change without detail (getCurrentLang fallback) ────────────────
+
+  it('language change without detail falls back to document lang', () => {
+    const el = setup();
+
+    // Set document lang to Japanese
+    document.documentElement.lang = 'ja';
+
+    // Dispatch event without detail
+    window.dispatchEvent(new CustomEvent('banal:language-changed'));
+
+    // Should re-render with Japanese
+    const chips = el.querySelectorAll('.quick-filter-chip');
+    expect(chips.length).toBe(6);
+
+    // Reset
+    document.documentElement.lang = 'en';
+  });
+
+  // ─── Filter chip aria-label in Japanese ──────────────────────────────────────
+
+  it('filter chips have Japanese aria-label when lang is ja', () => {
+    renderPromptTemplatesStandalone({ container, lang: 'ja' });
+
+    const chips = container.querySelectorAll('.quick-filter-chip');
+    for (const chip of chips) {
+      expect(chip.getAttribute('aria-label')).toContain('でフィルター');
+    }
+  });
+
+  // ─── Clicking "All" filter after category filter shows all prompts ───────────
+
+  it('clicking All filter after category filter restores all prompts', () => {
+    const el = setup();
+
+    // Click career filter
+    const chips = Array.from(el.querySelectorAll('.quick-filter-chip')) as HTMLElement[];
+    const careerChip = chips.find((c) => c.textContent?.includes('Career'));
+    careerChip!.click();
+
+    const filteredCount = el.querySelectorAll('.prompt-card-horizontal').length;
+    expect(filteredCount).toBeLessThan(9);
+
+    // Click "All" filter
+    const newChips = Array.from(el.querySelectorAll('.quick-filter-chip')) as HTMLElement[];
+    const allChip = newChips.find((c) => c.textContent?.includes('All'));
+    allChip!.click();
+
+    const allCount = el.querySelectorAll('.prompt-card-horizontal').length;
+    expect(allCount).toBe(9);
+  });
+
+  // ─── Auto-save form values on input ──────────────────────────────────────────
+
+  it('typing in form input auto-saves to sessionStorage', () => {
+    const el = setup();
+    const card = el.querySelector('.prompt-card-horizontal') as HTMLElement;
+    card.click();
+
+    vi.advanceTimersByTime(150);
+
+    const input = document.querySelector('.sp-form-input') as HTMLInputElement;
+    expect(input).toBeTruthy();
+
+    input.value = 'My test value';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+
+    // Check sessionStorage has the value
+    const keys = Object.keys(sessionStorage);
+    const relevantKey = keys.find((k) => k.startsWith('banal-pt-'));
+    expect(relevantKey).toBeTruthy();
+
+    const stored = JSON.parse(sessionStorage.getItem(relevantKey!)!);
+    expect(Object.values(stored)).toContain('My test value');
+  });
+
+  // ─── Form field textarea for long fields ─────────────────────────────────────
+
+  it('renders textarea for long-form fields like situation/description', () => {
+    const el = setup();
+    // job-gaps-as-strengths has gapSituation which should be textarea
+    const card = el.querySelector('[data-prompt-id="job-gaps-as-strengths"]') as HTMLElement;
+    expect(card).toBeTruthy();
+
+    card.click();
+    vi.advanceTimersByTime(150);
+
+    const textareas = document.querySelectorAll(
+      '.sp-form-input textarea, .sp-inline-form textarea'
+    );
+    // Should have at least one textarea for long fields
+    expect(textareas.length).toBeGreaterThan(0);
+  });
 });

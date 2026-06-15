@@ -161,7 +161,8 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
     {
       id: 'free-api',
       label: e('Free API', '無料API'),
-      predicate: (tool) => tool.access === 'public-api' && tool.caveat?.toLowerCase().includes('rate') === false,
+      predicate: (tool) =>
+        tool.access === 'public-api' && tool.caveat?.toLowerCase().includes('rate') === false,
     },
     {
       id: 'high-context',
@@ -180,7 +181,8 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
     {
       id: 'multilingual',
       label: e('Multilingual', '多言語'),
-      predicate: (_tool, h) => /multilingual|chinese|japanese|korean|spanish/i.test(h.toLowerCase()),
+      predicate: (_tool, h) =>
+        /multilingual|chinese|japanese|korean|spanish/i.test(h.toLowerCase()),
     },
     // Money filters - free access paths
     {
@@ -194,14 +196,12 @@ function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
     {
       id: 'web-llm',
       label: e('Web LLM', 'WebLLM'),
-      predicate: (_tool, h) =>
-        /webllm|local|offline|browser ll?lm/i.test(h.toLowerCase()),
+      predicate: (_tool, h) => /webllm|local|offline|browser ll?lm/i.test(h.toLowerCase()),
     },
     {
       id: 'privacy-first',
       label: e('Privacy', 'プライバシー'),
-      predicate: (_tool, h) =>
-        /private|privacy|encrypted|local/i.test(h.toLowerCase()),
+      predicate: (_tool, h) => /private|privacy|encrypted|local/i.test(h.toLowerCase()),
     },
   ];
 }

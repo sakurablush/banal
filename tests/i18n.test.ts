@@ -252,4 +252,80 @@ describe('initI18n (wires buttons + initial apply)', () => {
     const after = document.querySelector('[data-i18n="hero.title"]')!.innerHTML;
     expect(after).toBe(before);
   });
+
+  // ─── Toggle button (lang-toggle) ───────────────────────────────────────────
+
+  it('toggles language via single lang-toggle button (EN → JA)', () => {
+    document.body.innerHTML = `
+      <div data-i18n="hero.title"></div>
+      <button id="lang-toggle">🌐</button>
+    `;
+
+    initI18n();
+
+    const toggleBtn = document.getElementById('lang-toggle') as HTMLButtonElement;
+    toggleBtn.click();
+
+    expect(localStorage.getItem('banal-lang')).toBe('ja');
+    const el = document.querySelector('[data-i18n="hero.title"]')!;
+    expect(el.innerHTML).toContain('機械の中の幽霊');
+  });
+
+  it('toggles language back (JA → EN) on second click', () => {
+    document.body.innerHTML = `
+      <div data-i18n="hero.title"></div>
+      <button id="lang-toggle">🌐</button>
+    `;
+
+    initI18n();
+
+    const toggleBtn = document.getElementById('lang-toggle') as HTMLButtonElement;
+
+    // First toggle: EN → JA
+    toggleBtn.click();
+    expect(localStorage.getItem('banal-lang')).toBe('ja');
+
+    // Second toggle: JA → EN
+    toggleBtn.click();
+    expect(localStorage.getItem('banal-lang')).toBe('en');
+  });
+
+  it('animates toggle button on language switch', () => {
+    document.body.innerHTML = `
+      <div data-i18n="hero.title"></div>
+      <button id="lang-toggle">🌐</button>
+    `;
+
+    initI18n();
+
+    const toggleBtn = document.getElementById('lang-toggle') as HTMLButtonElement;
+    const animateMock = vi.fn().mockReturnValue({ cancel: vi.fn() });
+    toggleBtn.animate = animateMock;
+
+    toggleBtn.click();
+
+    expect(animateMock).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ transform: expect.stringContaining('scale') }),
+      ]),
+      expect.objectContaining({ duration: 220, easing: 'ease-out' })
+    );
+  });
+
+  it('handles toggle button without animate function gracefully', () => {
+    document.body.innerHTML = `
+      <div data-i18n="hero.title"></div>
+      <button id="lang-toggle">🌐</button>
+    `;
+
+    initI18n();
+
+    const toggleBtn = document.getElementById('lang-toggle') as HTMLButtonElement;
+    // Remove animate function
+    (toggleBtn as any).animate = undefined;
+
+    // Should not throw
+    expect(() => toggleBtn.click()).not.toThrow();
+    expect(localStorage.getItem('banal-lang')).toBe('ja');
+  });
 });

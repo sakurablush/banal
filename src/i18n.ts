@@ -61,7 +61,7 @@ export const translations: Record<Lang, Translations> = {
     'stats.tools': 'Tools',
     'stats.logins': 'Logins',
     'stats.freedom': 'Freedom',
-'stats.freeAccess': 'Free Access',
+    'stats.freeAccess': 'Free Access',
     'nav.aiTools': 'AI Tools',
     'nav.devTools': 'Dev Tools',
     'nav.promptTemplates': 'Prompt Templates',

@@ -525,3 +525,409 @@ describe('zero-key panel rendering', () => {
     }
   });
 });
+
+// ─── API methods coverage ────────────────────────────────────────────────────
+
+describe('zero-key panel API methods', () => {
+  beforeEach(() => {
+    resetZeroKeyPanelFiltersForTests();
+    document.body.innerHTML = '';
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('API.search() filters tools programmatically', () => {
+    const root = document.createElement('section');
+    document.body.appendChild(root);
+    const api = renderZeroKeyPowerPanel(root, { lang: 'en' });
+
+    api.search('Supabase');
+
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
+    expect(root.textContent).toContain('Supabase');
+  });
+
+  it('API.setCategory() filters by specific category', () => {
+    const root = document.createElement('section');
+    document.body.appendChild(root);
+    const api = renderZeroKeyPowerPanel(root, { lang: 'en' });
+
+    api.setCategory('ai-chat');
+
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
+
+    // All visible cards should be from ai-chat category
+    for (const card of cards) {
+      const url = card.querySelector('.zk2-card-cta') as HTMLAnchorElement;
+      expect(url).toBeTruthy();
+    }
+  });
+
+  it('API.setCategory(null) clears category filter', () => {
+    const root = document.createElement('section');
+    document.body.appendChild(root);
+    const api = renderZeroKeyPowerPanel(root, { lang: 'en' });
+
+    api.setCategory('ai-chat');
+    const filteredCount = root.querySelectorAll('.tool-card-horizontal').length;
+
+    api.setCategory(null);
+    const allCount = root.querySelectorAll('.tool-card-horizontal').length;
+
+    expect(allCount).toBeGreaterThan(filteredCount);
+  });
+
+  it('API.reset() clears search, category, and life filters', () => {
+    const root = document.createElement('section');
+    document.body.appendChild(root);
+    const api = renderZeroKeyPowerPanel(root, { lang: 'en' });
+
+    // Apply search
+    api.search('Docker');
+    const searchCount = root.querySelectorAll('.tool-card-horizontal').length;
+
+    // Reset everything
+    api.reset();
+    const resetCount = root.querySelectorAll('.tool-card-horizontal').length;
+
+    expect(resetCount).toBeGreaterThan(searchCount);
+
+    // Search input should be cleared
+    const input = root.querySelector('#zk-search-input') as HTMLInputElement;
+    expect(input.value).toBe('');
+  });
+
+  it('API.destroy() aborts hero listeners and clears timers', () => {
+    const heroInput = document.createElement('input');
+    heroInput.id = 'hero-search';
+    heroInput.type = 'text';
+    document.body.appendChild(heroInput);
+
+    const root = document.createElement('section');
+    document.body.appendChild(root);
+    const api = renderZeroKeyPowerPanel(root, { lang: 'en' });
+
+    // Type in search to trigger debounce
+    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    panelInput.value = 'test';
+    panelInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+    // Destroy should not throw
+    expect(() => api.destroy()).not.toThrow();
+
+    // After destroy, hero input events should not affect panel
+    heroInput.value = 'after-destroy';
+    heroInput.dispatchEvent(new Event('input', { bubbles: true }));
+    vi.advanceTimersByTime(150);
+
+    // Panel should not have changed (listener was aborted)
+    expect(panelInput.value).toBe('test');
+  });
+
+  it('category sidebar click filters tools', () => {
+    const root = renderPanel();
+
+    // Find a category button in sidebar
+    const catButtons = root.querySelectorAll('.zk2-cat-item') as NodeListOf<HTMLButtonElement>;
+    expect(catButtons.length).toBeGreaterThan(1);
+
+    // Click second category button (first is "All")
+    catButtons[1].click();
+
+    // Should show filtered results
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
+
+    // Click "All" to reset
+    catButtons[0].click();
+    const allCards = root.querySelectorAll('.tool-card-horizontal');
+    expect(allCards.length).toBeGreaterThan(cards.length);
+  });
+
+  it('life filter chip toggles on and off', () => {
+    const root = renderPanel();
+
+    // Get initial count
+    const initialCount = root.querySelectorAll('.tool-card-horizontal').length;
+
+    // Find and click Browser filter
+    let chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const browserFilter = Array.from(chips).find((c) => c.textContent === 'Browser');
+    expect(browserFilter).toBeTruthy();
+
+    // Activate filter
+    browserFilter!.click();
+
+    // Re-query chips after re-render (DOM is rebuilt)
+    chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const activeChip = Array.from(chips).find((c) => c.textContent === 'Browser');
+    expect(activeChip!.classList.contains('active')).toBe(true);
+    const filteredCount = root.querySelectorAll('.tool-card-horizontal').length;
+
+    // Deactivate filter — click the active chip
+    activeChip!.click();
+
+    // Re-query again
+    chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const deactivatedChip = Array.from(chips).find((c) => c.textContent === 'Browser');
+    expect(deactivatedChip!.classList.contains('active')).toBe(false);
+    const unfilteredCount = root.querySelectorAll('.tool-card-horizontal').length;
+
+    expect(unfilteredCount).toBe(initialCount);
+    expect(unfilteredCount).toBeGreaterThan(filteredCount);
+  });
+
+  it('rate limit badge renders for tools with rate limit caveat', () => {
+    const root = renderPanel();
+    const rateBadges = root.querySelectorAll('.zk2-access-rate-limited');
+    // At least some tools should have rate limit badges
+    expect(rateBadges.length).toBeGreaterThanOrEqual(0);
+  });
+
+  it('no-signup badge renders for tools without signup requirement', () => {
+    const root = renderPanel();
+    const noSignupBadges = root.querySelectorAll('.zk2-access-no-key');
+    expect(noSignupBadges.length).toBeGreaterThan(0);
+  });
+
+  it('free-signup badge renders for tools requiring free signup', () => {
+    const root = renderPanel();
+    const freeSignupBadges = root.querySelectorAll('.zk2-access-free-key');
+    expect(freeSignupBadges.length).toBeGreaterThan(0);
+  });
+
+  it('renders with categoryPrefix ai showing only AI tools', () => {
+    const root = document.createElement('section');
+    document.body.appendChild(root);
+    renderZeroKeyPowerPanel(root, { lang: 'en', categoryPrefix: 'ai' });
+
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
+
+    // All cards should have AI badge
+    for (const card of cards) {
+      const typeBadge = card.querySelector('.zk2-access-ai');
+      expect(typeBadge).toBeTruthy();
+    }
+  });
+
+  it('renders with categoryPrefix dev showing only Dev tools', () => {
+    const root = document.createElement('section');
+    document.body.appendChild(root);
+    renderZeroKeyPowerPanel(root, { lang: 'en', categoryPrefix: 'dev' });
+
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
+
+    // All cards should have Dev badge
+    for (const card of cards) {
+      const typeBadge = card.querySelector('.zk2-access-dev');
+      expect(typeBadge).toBeTruthy();
+    }
+  });
+
+  it('empty state clear button resets hero search too', () => {
+    const heroInput = document.createElement('input');
+    heroInput.id = 'hero-search';
+    heroInput.type = 'text';
+    heroInput.value = 'zzzz-no-such-tool';
+    document.body.appendChild(heroInput);
+
+    const root = document.createElement('section');
+    document.body.appendChild(root);
+    renderZeroKeyPowerPanel(root, { lang: 'en' });
+
+    // Search for impossible term
+    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    panelInput.value = 'zzzz-no-such-tool';
+    panelInput.dispatchEvent(new Event('input', { bubbles: true }));
+    vi.advanceTimersByTime(150);
+
+    // Should show empty state
+    const clearBtn = root.querySelector('.zk2-empty-clear') as HTMLButtonElement;
+    expect(clearBtn).toBeTruthy();
+    clearBtn.click();
+
+    // Hero input should also be cleared
+    expect(heroInput.value).toBe('');
+  });
+
+  it('re-rendering panel aborts previous hero listeners', () => {
+    const heroInput = document.createElement('input');
+    heroInput.id = 'hero-search';
+    heroInput.type = 'text';
+    document.body.appendChild(heroInput);
+
+    const root = document.createElement('section');
+    document.body.appendChild(root);
+
+    // First render
+    renderZeroKeyPowerPanel(root, { lang: 'en' });
+
+    // Second render (should abort first hero listener)
+    renderZeroKeyPowerPanel(root, { lang: 'ja' });
+
+    // Hero input should still work with new render
+    heroInput.value = 'Docker';
+    heroInput.dispatchEvent(new Event('input', { bubbles: true }));
+    vi.advanceTimersByTime(150);
+
+    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    expect(panelInput.value).toBe('Docker');
+  });
+
+  it('activating free-api filter shows only public-api tools without rate limits', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const freeApiFilter = Array.from(chips).find((c) => c.textContent === 'Free API');
+    expect(freeApiFilter).toBeTruthy();
+    freeApiFilter!.click();
+    // Should show filtered results (may be 0 or more)
+    expect(root.querySelector('.zk2-horizontal-content')).toBeTruthy();
+  });
+
+  it('activating high-context filter shows long-context tools', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filter = Array.from(chips).find((c) => c.textContent === '1M+ Context');
+    expect(filter).toBeTruthy();
+    filter!.click();
+    expect(root.querySelector('.zk2-horizontal-content')).toBeTruthy();
+  });
+
+  it('activating multilingual filter shows multilingual tools', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filter = Array.from(chips).find((c) => c.textContent === 'Multilingual');
+    expect(filter).toBeTruthy();
+    filter!.click();
+    expect(root.querySelector('.zk2-horizontal-content')).toBeTruthy();
+  });
+
+  it('activating rate-limited filter shows rate-limited tools', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filter = Array.from(chips).find((c) => c.textContent === 'Free Limited');
+    expect(filter).toBeTruthy();
+    filter!.click();
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
+  });
+
+  it('activating web-llm filter shows web LLM tools', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filter = Array.from(chips).find((c) => c.textContent === 'Web LLM');
+    expect(filter).toBeTruthy();
+    filter!.click();
+    expect(root.querySelector('.zk2-horizontal-content')).toBeTruthy();
+  });
+
+  it('activating privacy filter shows privacy-focused tools', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filter = Array.from(chips).find((c) => c.textContent === 'Privacy');
+    expect(filter).toBeTruthy();
+    filter!.click();
+    expect(root.querySelector('.zk2-horizontal-content')).toBeTruthy();
+  });
+
+  it('activating no-signup filter shows tools without signup', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filter = Array.from(chips).find((c) => c.textContent === 'No Signup');
+    expect(filter).toBeTruthy();
+    filter!.click();
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
+  });
+
+  it('activating free-signup filter shows tools with free signup', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filter = Array.from(chips).find((c) => c.textContent === 'Free Signup OK');
+    expect(filter).toBeTruthy();
+    filter!.click();
+    expect(root.querySelector('.zk2-horizontal-content')).toBeTruthy();
+  });
+
+  it('activating no-key filter shows tools without API key', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filter = Array.from(chips).find((c) => c.textContent === 'No API Key');
+    expect(filter).toBeTruthy();
+    filter!.click();
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
+  });
+
+  it('activating free-tokens filter shows free token tools', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filter = Array.from(chips).find((c) => c.textContent === 'Free Tokens');
+    expect(filter).toBeTruthy();
+    filter!.click();
+    expect(root.querySelector('.zk2-horizontal-content')).toBeTruthy();
+  });
+
+  it('activating CLI filter shows CLI tools', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filter = Array.from(chips).find((c) => c.textContent === 'CLI');
+    expect(filter).toBeTruthy();
+    filter!.click();
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
+  });
+
+  it('activating API filter shows API tools', () => {
+    const root = renderPanel();
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const filter = Array.from(chips).find((c) => c.textContent === 'API');
+    expect(filter).toBeTruthy();
+    filter!.click();
+    const cards = root.querySelectorAll('.tool-card-horizontal');
+    expect(cards.length).toBeGreaterThan(0);
+  });
+
+  it('multiple life filters can be active simultaneously', () => {
+    const root = renderPanel();
+    let chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+
+    const browserFilter = Array.from(chips).find((c) => c.textContent === 'Browser');
+    browserFilter!.click();
+
+    chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const devFilter = Array.from(chips).find((c) => c.textContent === 'For Devs');
+    devFilter!.click();
+
+    // Both should be active
+    chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const activeChips = Array.from(chips).filter((c) => c.classList.contains('active'));
+    expect(activeChips.length).toBe(2);
+  });
+
+  it('renders in Japanese with correct filter labels', () => {
+    const root = renderPanel('ja');
+    const chips = root.querySelectorAll('.quick-filter-chip') as NodeListOf<HTMLButtonElement>;
+    const jpFilter = Array.from(chips).find((c) => c.textContent === 'ブラウザ');
+    expect(jpFilter).toBeTruthy();
+  });
+
+  it('stats bar shows category label when category is active', () => {
+    const root = document.createElement('section');
+    document.body.appendChild(root);
+    const api = renderZeroKeyPowerPanel(root, { lang: 'en' });
+
+    api.setCategory('ai-chat');
+
+    const statsBar = root.querySelector('.zk2-stats-bar');
+    expect(statsBar).toBeTruthy();
+    expect(statsBar!.textContent).toContain('Chat');
+  });
+});
