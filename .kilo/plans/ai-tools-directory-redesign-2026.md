@@ -15,7 +15,7 @@
 - ✅ Phase 6: Comparison & Polish (Comparison Features, Polish & Launch)
 
 **Test Coverage:**
-- 523 tests passing (20 test files)
+- 539 tests passing (21 test files)
 - 90.66% statement coverage
 - 71.77% branch coverage
 - 92.16% function coverage
@@ -38,6 +38,9 @@
 - Prompt Templates now use same layout as tools directories (sidebar + grid + quick filters)
 - Form displays under directory when clicking prompt template
 - OPEN button instead of clickable links
+- Search and filters do not scroll - only grid scrolls
+- Section borders for better navigation
+- Beautiful articles section design with dark mode support
 
 ---
 
