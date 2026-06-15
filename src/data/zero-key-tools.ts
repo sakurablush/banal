@@ -788,7 +788,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
   {
     id: 'smallpdf-ai',
     name: 'Smallpdf AI',
-    url: 'https://smallpdf.com/ai-pdf-summarizer',
+    url: 'https://smallpdf.com/pdf-summarizer',
     surface: 'web',
     category: 'ai-pdf',
     access: 'free-tier',
@@ -3065,20 +3065,6 @@ export const zeroKeyTools: ZeroKeyTool[] = [
     lastVerified: '2026-06-11',
   },
   {
-    id: 'code-mavi',
-    name: 'Code Mavi',
-    url: 'https://github.com/oplta/codemavi',
-    surface: 'cli',
-    category: 'ai-coding',
-    access: 'open-source',
-    requiresSignup: false,
-    badges: ['VS Code fork', 'transparent prompts', 'self-correction', '15+ providers'],
-    bestFor: 'Transparent prompts with self-correction loops. See how agents think.',
-    qualityNote: 'Apache-2.0. Transparent prompts - view and edit all agent system prompts.',
-    caveat: 'Tool is free, you pay for model tokens.',
-    lastVerified: '2026-06-11',
-  },
-  {
     id: 'async-ide',
     name: 'Async IDE',
     url: 'https://github.com/ZYKJShadow/Async',
@@ -3641,7 +3627,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
   {
     id: 'stagewise',
     name: 'Stagewise',
-    url: 'https://github.com/stagewise/stagewise',
+    url: 'https://github.com/stagewise-io/stagewise',
     surface: 'web',
     category: 'ai-coding',
     access: 'open-source',
@@ -3656,7 +3642,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
   {
     id: 'bolt-diy',
     name: 'Bolt.diy',
-    url: 'https://github.com/stackblitz/bolt.diy',
+    url: 'https://github.com/stackblitz-labs/bolt.diy',
     surface: 'web',
     category: 'ai-coding',
     access: 'open-source',
@@ -3667,22 +3653,6 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       'MIT license, StackBlitz product. Cloud IDE with AI agent for full-stack development.',
     caveat: 'BYOK - you pay for API calls. Cloud-based, requires internet.',
     lastVerified: '2026-06-15',
-  },
-  {
-    id: 'freeagent',
-    name: 'FreeAgent',
-    url: 'https://github.com/transformer24/freeagent',
-    surface: 'cli',
-    category: 'ai-coding',
-    access: 'open-source',
-    requiresSignup: false,
-    badges: ['60+ tools', '100% local', 'no API keys', 'ComfyUI'],
-    bestFor: '60+ tools, 100% local, no API keys required, image generation.',
-    qualityNote:
-      'Local-first, no cloud dependency. Image generation (ComfyUI), OSINT, cybersecurity, email automation.',
-    caveat:
-      'Requires GPU (RTX 3090 recommended), 64GB RAM. ChromaDB persistent memory, intent router.',
-    lastVerified: '2026-06-11',
   },
   {
     id: 'mragent',
@@ -3744,22 +3714,6 @@ export const zeroKeyTools: ZeroKeyTool[] = [
       '8 providers (local + cloud), 32 built-in tools, CORD safety engine. SHA-256 hash-chained logs.',
     caveat:
       'BYOK, local LLM quality depends on model. 48% SWE-bench Verified (50-task slice). MIT.',
-    lastVerified: '2026-06-11',
-  },
-  {
-    id: '8gent-code',
-    name: '8gent Code',
-    url: 'https://github.com/PodJamz/8gent-code',
-    surface: 'cli',
-    category: 'ai-coding',
-    access: 'open-source',
-    requiresSignup: false,
-    badges: ['local-first', 'NemoClaw', '8 powers', 'voice chat'],
-    bestFor: 'Local-first, free by default, NemoClaw policy engine, 8 powers.',
-    qualityNote:
-      '8 powers (memory, parallel worktrees, self-evolution, etc.). Voice chat, AST-first editing, HyperAgent.',
-    caveat:
-      'Requires local LLM (Ollama) or OpenRouter free tier. NemoClaw policy engine (YAML-based).',
     lastVerified: '2026-06-11',
   },
   {
@@ -4070,7 +4024,7 @@ export const zeroKeyTools: ZeroKeyTool[] = [
   {
     id: 'glm-5.2',
     name: 'GLM-5.2 (Zhipu AI)',
-    url: 'https://huggingface.co/collections/zai-org/glm-5-2',
+    url: 'https://huggingface.co/zai-org',
     surface: 'cli',
     category: 'ai-models',
     access: 'open-source',

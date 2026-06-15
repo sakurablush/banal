@@ -48,7 +48,7 @@ For my actual workflow — backend APIs, refactoring, test writing, documentatio
 
 ### Visual Studio Code + Kilo plugin = the practical reality
 
-[Visual Studio Code](https://code.visualstudio.com/) remains my editor. The [Kilo plugin](https://plugins.jetbrains.com/plugin/00000-kilo) brings Kilo directly into the IDE. The result looks and feels practically similar to Cursor:
+[Visual Studio Code](https://code.visualstudio.com/) remains my editor. The [Kilo plugin](https://plugins.jetbrains.com/plugin/28350-kilo-code) brings Kilo directly into the IDE. The result looks and feels practically similar to Cursor:
 
 - Inline chat in your code
 - Context-aware suggestions
@@ -164,7 +164,7 @@ _Tools mentioned in this article:_
 
 - _[Kilo](https://kilo.ai) — Free AI coding agent_
 - _[VS Code](https://code.visualstudio.com/) — Free code editor_
-- _[Kilo VS Code Plugin](https://plugins.jetbrains.com/plugin/00000-kilo) — Editor integration_
+- _[Kilo VS Code Plugin](https://plugins.jetbrains.com/plugin/28350-kilo-code) — Editor integration_
 - _[Google Antigravity CLI](https://github.com/google-gemini/gemini-cli) — Free terminal AI_
 - _[Kilo Pricing](https://kilo.ai/pricing) — Free tier available_
 - _[Kilo Documentation](https://docs.kilo.ai) — Setup and usage guides_
