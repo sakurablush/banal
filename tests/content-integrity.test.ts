@@ -258,7 +258,22 @@ describe('Public docs — counts match live data', () => {
 
     const readme = readFileSync(join(process.cwd(), 'README.md'), 'utf8');
     const phrase = readmeVerificationPhrase(snapshot!);
-    expect(readme).toContain(phrase);
+    expect(readme.replace(/\s+/g, ' ')).toContain(phrase);
     expect(snapshot!.totalTools).toBe(getSiteStats().total);
+  });
+
+  it('README, ARCHITECTURE, and DIAMOND agree on test suite size', () => {
+    const pattern = /(\d+) tests across (\d+) files/g;
+    const counts = new Set<string>();
+    for (const file of ['README.md', 'docs/ARCHITECTURE.md', 'DIAMOND.md']) {
+      const text = readFileSync(join(process.cwd(), file), 'utf8');
+      for (const match of text.matchAll(pattern)) {
+        counts.add(`${match[1]} tests / ${match[2]} files`);
+      }
+    }
+    expect(
+      counts.size,
+      `inconsistent test counts across docs:\n${[...counts].join('\n')}`
+    ).toBe(1);
   });
 });

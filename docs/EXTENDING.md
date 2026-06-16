@@ -101,6 +101,9 @@ To add a new sub-category:
 
 ## Adding a prompt template
 
+Read [`docs/PROMPT-TEMPLATES-STYLE.md`](PROMPT-TEMPLATES-STYLE.md) first — 7-block
+structure, voice contract, and parity rules.
+
 The templates in `src/lib/prompt-templates.ts` are data. To add a new
 one:
 

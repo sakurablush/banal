@@ -25,7 +25,7 @@ principles behind the project are in [`SPIRIT.md`](../SPIRIT.md).
 - **A weekly catalog audit** that HEAD/GETs every tool URL and writes a
   date-stamped summary to [`docs/verification/`](../docs/verification/).
   Failures are listed transparently; some are bot blocks, not dead tools.
-- **A complete CI gate**: lint, typecheck, 651 tests across 35 files,
+- **A complete CI gate**: lint, typecheck, 662 tests across 36 files,
   and `npm audit --audit-level=moderate` on every push.
 - **MIT license.** Fork, rename, host, give away.
 
@@ -43,7 +43,9 @@ voice in the user-facing copy met the editorial test in
 - The number of prompt templates in the README matches the `TEMPLATES`
   object in `src/lib/prompt-templates.ts` (52).
 - The test counts in the documentation match the output of
-  `npm run test:run` (651 tests across 35 files).
+  `npm run test:run` (662 tests across 36 files at this marker).
+- The README audit line matches the latest file in
+  `docs/verification/` (synced by `npm run verify:tools`).
 - The tool URLs in [`docs/TOOLS-DIRECTORY.md`](docs/TOOLS-DIRECTORY.md) are
   generated from the catalog data file. No marketing-only entries.
 - Every user-facing string has parallel English and Japanese
@@ -54,7 +56,8 @@ voice in the user-facing copy met the editorial test in
 The release marker does not change the work that comes after it. The
 catalog grows, the prompt templates grow, the translations grow, and
 the next release will record the next point at which the same bar is
-met.
+met. Between releases, live counts are in [`README.md`](../README.md)
+and `src/data/site-stats.ts`.
 
 ---
 

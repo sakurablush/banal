@@ -71,7 +71,9 @@ mental health ones). Its `{{variables}}` are minimal and obvious.
 
 The `PromptTemplatesLibrary.validateParity()` method and the empathy
 smoke tests in `tests/prompt-templates.test.ts` enforce the parity and
-tone requirements. The review process is described below.
+tone requirements. Authoring rules (7-block structure, voice contract)
+are in [`docs/PROMPT-TEMPLATES-STYLE.md`](PROMPT-TEMPLATES-STYLE.md).
+The review process is described below.
 
 ### Translations and new languages
 
@@ -165,6 +167,8 @@ PR looks.
   person' line").
 - If you are touching prompt templates, run the specific test file:
   `npx vitest run tests/prompt-templates.test.ts`.
+- If you edit `src/data/zero-key-tools.ts`, run `npm run verify:tools`
+  then `npm run generate:tools-readme` before pushing.
 - Before you push: `npm run ci`.
 - If tests are flaky locally but pass on CI (or vice versa), mention
   it in the PR. We have seen free-tier network hiccups affect

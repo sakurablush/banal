@@ -21,7 +21,7 @@ describe('latest-verification', () => {
 
     const readmePath = join(process.cwd(), 'README.md');
     const before = readFileSync(readmePath, 'utf8');
-    expect(before).toContain(readmeVerificationPhrase(snapshot!));
+    expect(before.replace(/\s+/g, ' ')).toContain(readmeVerificationPhrase(snapshot!));
 
     const { updated } = syncReadmeVerification();
     expect(updated).toBe(false);

@@ -121,7 +121,7 @@ Full learning material:
 - **No backend.** Language, theme, stacks, filters, and prompt drafts live in
   `localStorage` / `sessionStorage` on your device only.
 - **No runtime npm dependencies** for end users.
-- **Test gate:** `npm run ci` — lint, typecheck, Vitest (661 tests across 36
+- **Test gate:** `npm run ci` — lint, typecheck, Vitest (662 tests across 36
   files), coverage enforced, `npm audit --audit-level=moderate`.
 - **CI:** every push + weekly
   [`verify-tools`](.github/workflows/verify-tools.yml) catalog audit →
@@ -144,6 +144,7 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | PR process and ground rules |
 | [docs/SECURITY.md](docs/SECURITY.md) | Threat model and local storage |
 | [docs/PROMPT-TEMPLATES-GUIDE.md](docs/PROMPT-TEMPLATES-GUIDE.md) | Deep guide to the templates |
+| [docs/PROMPT-TEMPLATES-STYLE.md](docs/PROMPT-TEMPLATES-STYLE.md) | Authoring rules for new templates |
 | [docs/JAPANESE.md](docs/JAPANESE.md) | Japanese translation principles |
 | [docs/verification/](docs/verification/) | Date-stamped URL audit snapshots |
 | [PENTEST_REPORT.md](PENTEST_REPORT.md) | Adversarial security review |

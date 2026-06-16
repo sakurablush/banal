@@ -22,7 +22,7 @@ export function readmeVerificationPhrase(snapshot: VerificationSnapshot): string
 }
 
 const README_VERIFICATION_RE =
-  /\(\d+\/\d+ as of \d{4}-\d{2}-\d{2} — bots and rate limits cause false negatives\)/;
+  /\(\d+\/\d+ as of \d{4}-\d{2}-\d{2} — bots and rate limits cause false\s+negatives\)/;
 
 export function getLatestVerificationSnapshot(cwd = process.cwd()): VerificationSnapshot | null {
   const dir = join(cwd, 'docs', 'verification');
@@ -41,6 +41,12 @@ export function getLatestVerificationSnapshot(cwd = process.cwd()): Verification
     failed: number;
     successRate: number;
   };
+
+  if (raw.verified + raw.failed > raw.totalTools) {
+    throw new Error(
+      `Invalid verification snapshot ${files[0]}: verified (${raw.verified}) + failed (${raw.failed}) exceeds totalTools (${raw.totalTools})`
+    );
+  }
 
   return {
     date: raw.date,
@@ -65,12 +71,21 @@ export function syncReadmeVerification(cwd = process.cwd()): {
 
   let after = before.replace(README_VERIFICATION_RE, phrase);
   if (after === before) {
-    after = before.replace(/still respond \([^)]+\)/, `still respond ${phrase}`);
+    after = before.replace(
+      /still respond \(\d+\/\d+ as of \d{4}-\d{2}-\d{2} — bots and rate limits cause false\s+negatives\)/,
+      `still respond ${phrase}`
+    );
   }
 
   if (after !== before) {
     writeFileSync(readmePath, after, 'utf8');
     return { updated: true, snapshot };
+  }
+
+  if (!before.includes(phrase)) {
+    console.warn(
+      'README.md: no verification parenthetical found — add a line like "still respond (0/0 as of YYYY-MM-DD — …)" in What you get'
+    );
   }
 
   return { updated: false, snapshot };
