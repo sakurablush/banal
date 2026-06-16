@@ -13,7 +13,7 @@ repository root.
 ## What Banal actually does
 
 Banal is a static web app that renders a curated directory of 273 external
-tools and 9 prompt templates. When you click a tool, your browser opens
+tools and 52 prompt templates. When you click a tool, your browser opens
 that tool's own URL. Banal does not proxy, log, or process those requests
 in any way.
 

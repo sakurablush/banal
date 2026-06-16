@@ -4,15 +4,18 @@
  */
 
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { toolStacks } from '../src/data/tool-stacks';
 import { toolStacksJa } from '../src/data/tool-stacks-ja';
 import { zeroKeyTools } from '../src/data/zero-key-tools';
+import { getSiteStats } from '../src/data/site-stats';
 import {
   getGettingStartedGuidesMeta,
   getGettingStartedGuidesCopy,
 } from '../src/data/getting-started-guides-copy';
 import { getLocalizedStack } from '../src/lib/stack-localization';
-import { PromptTemplatesLibrary } from '../src/lib/prompt-templates';
+import { PromptTemplatesLibrary, PROMPT_TEMPLATE_COUNT } from '../src/lib/prompt-templates';
 
 const zeroKeyIds = new Set(zeroKeyTools.map((t) => t.id));
 
@@ -166,7 +169,7 @@ describe('Getting started guides — EN/JA parity', () => {
 });
 
 describe('Prompt templates — parity and paste notes', () => {
-  it('validateParity passes for all nine templates', () => {
+  it('validateParity passes for all templates', () => {
     const { valid, issues } = PromptTemplatesLibrary.validateParity();
     expect(valid, issues.join('\n')).toBe(true);
   });
@@ -177,10 +180,12 @@ describe('Prompt templates — parity and paste notes', () => {
     for (const id of PromptTemplatesLibrary.getAllIds()) {
       const enPt = en.getById(id)!;
       const jaPt = ja.getById(id)!;
-      expect(enPt.description).toContain('Duck.ai');
-      expect(enPt.description).toContain('Free tiers cap messages');
-      expect(jaPt.description).toContain('Duck.ai');
-      expect(jaPt.description).toContain('無料枠');
+      // EN paste note names the curated chats
+      expect(enPt.description).toMatch(/Duck\.ai/);
+      expect(enPt.description).toMatch(/Free tiers cap daily messages/);
+      // JA paste note mentions the free-tier cap
+      expect(jaPt.description).toMatch(/Duck\.ai/);
+      expect(jaPt.description).toMatch(/無料枠/);
     }
   });
 
@@ -188,12 +193,29 @@ describe('Prompt templates — parity and paste notes', () => {
     const en = new PromptTemplatesLibrary('en');
     for (const id of PromptTemplatesLibrary.getAllIds()) {
       const withNote = en.getById(id)!.description;
-      expect(withNote).toContain('Free tiers cap messages');
+      // The new paste note references the curated 6 chats
+      expect(withNote).toMatch(/Free tiers cap daily messages/);
+      // Strip the canonical paste note and assert the underlying description
+      // does not already contain the paste-note text (no double-up).
       const withoutNote = withNote.replace(
-        ' Paste into Duck.ai, ChatGPT free, or Gemini free. Free tiers cap messages per day—split big jobs across days.',
+        ' Paste into Duck.ai, Microsoft Copilot, ChatGPT free, Gemini, Meta AI, or Mistral Le Chat. Free tiers cap daily messages — split big jobs across days.',
         ''
       );
-      expect(withoutNote).not.toContain('Free tiers cap messages');
+      expect(withoutNote).not.toMatch(/Free tiers cap daily messages/);
     }
+  });
+});
+
+describe('Public docs — counts match live data', () => {
+  it('README.md reflects getSiteStats() and prompt template count', () => {
+    const readme = readFileSync(join(process.cwd(), 'README.md'), 'utf8');
+    const stats = getSiteStats();
+    expect(readme).toContain(`${stats.total} tools`);
+    expect(readme).toContain(`${stats.ai} AI`);
+    expect(readme).toContain(`${stats.dev} developer`);
+    expect(readme).toContain(`${stats.prompts} prompt`);
+    expect(readme).toContain(`${stats.models} open models`);
+    expect(readme).toContain(`${stats.stacks} workflow stacks`);
+    expect(PROMPT_TEMPLATE_COUNT).toBe(stats.prompts);
   });
 });

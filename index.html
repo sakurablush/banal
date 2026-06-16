@@ -593,9 +593,71 @@
               class="text-white/40 max-w-lg mx-auto text-sm sm:text-base"
               data-i18n="section.promptTemplates.desc"
             >
-              Templates for jobs, debt letters, forms, and EN↔JA translation. Paste into any chat
-              tool listed above.
+              Templates for jobs, debt letters, doctor visits, code reviews, hard days, and
+              EN↔JA translation. Paste into any chat tool listed above.
             </p>
+          </div>
+
+          <div id="prompt-templates-howto" class="mb-8 max-w-3xl mx-auto">
+            <details class="glass-card p-5 sm:p-6" open>
+              <summary class="cursor-pointer list-none flex items-center justify-between gap-4">
+                <span
+                  class="text-base sm:text-lg font-semibold gradient-neon"
+                  data-i18n="promptTemplates.howTo.heading"
+                  >How to get value from these in 5 minutes</span
+                >
+                <span
+                  class="text-white/40 text-sm"
+                  data-i18n="promptTemplates.howTo.summary"
+                  >5 steps to use</span
+                >
+              </summary>
+              <ol
+                class="mt-4 space-y-2 text-sm sm:text-base text-white/80 list-decimal pl-5"
+                aria-label="Steps to use a prompt template"
+              >
+                <li data-i18n="promptTemplates.howTo.step1">
+                  Pick a chat from the chips below — Duck.ai, Copilot, or Meta AI need no account.
+                </li>
+                <li data-i18n="promptTemplates.howTo.step2">
+                  Pick a card. Filter by category on the left, or just scroll.
+                </li>
+                <li data-i18n="promptTemplates.howTo.step3">
+                  Fill what feels true. Leave the rest — the AI will help you finish it.
+                </li>
+                <li data-i18n="promptTemplates.howTo.step4">
+                  Click "Copy Filled" and paste the whole block into your chat.
+                </li>
+                <li data-i18n="promptTemplates.howTo.step5">
+                  Talk back. "Shorter", "Add a JA version with keigo", "Verify every number". Most
+                  of the value is in the follow-up.
+                </li>
+              </ol>
+              <div class="mt-4">
+                <div
+                  class="text-xs uppercase tracking-wider text-white/40 mb-2"
+                  data-i18n="promptTemplates.howTo.chipsLabel"
+                >
+                  Recommended free AI chats
+                </div>
+                <div id="prompt-templates-chips" class="flex flex-wrap gap-2"></div>
+              </div>
+              <p
+                class="mt-4 text-xs text-white/50"
+                data-i18n="promptTemplates.howTo.privacy"
+              >
+                Drafts are saved in this tab only and disappear when you close it. Do not paste
+                secrets.
+              </p>
+              <div class="mt-3 text-right">
+                <a
+                  href="#ai-tools"
+                  class="text-sm text-violet-300 hover:text-violet-200 underline-offset-4 hover:underline"
+                  data-i18n="promptTemplates.howTo.moreChats"
+                  >See all AI chat tools →</a
+                >
+              </div>
+            </details>
           </div>
 
           <div id="prompt-templates-root" class="panel-root panel-root--prompts">

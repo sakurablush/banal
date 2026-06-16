@@ -43,12 +43,15 @@ Each tool has the shape:
   id: 'kebab-case-unique-id',
   name: 'Tool Name',
   url: 'https://example.com/',
-  description: 'One short sentence in plain English.',
+  bestFor: 'One short sentence in plain English.',
   category: 'ai-chat',     // see src/data/categories.ts
   surface: 'web',          // 'web' | 'api' | 'cli'
-  badges: ['no-login'],    // 'no-login' | 'public-api' | 'open-source' | 'free-tier'
+  access: 'no-login',      // 'no-login' | 'public-api' | 'open-source' | 'free-tier' | 'free-key' | 'self-host'
+  requiresSignup: false,
+  badges: [],              // optional display tags
+  qualityNote: 'Why this entry is here.',
   docsUrl: 'https://example.com/docs',  // optional
-  lastVerified: 'YYYY-MM-DD',           // optional, set when the verify run confirms it works
+  lastVerified: 'YYYY-MM-DD',           // optional, set when verify confirms the URL
 }
 ```
 
@@ -57,10 +60,9 @@ Rules of thumb:
 - The `id` must be unique across the whole file.
 - The `category` must already exist in `src/data/categories.ts`. If you
   need a new category, see the "Adding a category" section below.
-- Pick the most honest `badges` you can. The four tags are defined in
-  [`MINDSET.md`](MINDSET.md#what-banal-is-and-is-not). A tool can
-  have more than one.
-- Keep `description` to one short sentence in plain English. Long
+- Pick the most honest `access` value you can. Labels are defined in
+  `src/data/zero-key-tools.ts` and explained in the README.
+- Keep `bestFor` to one short sentence in plain English. Long
   marketing copy does not belong in a directory entry.
 - If the tool exposes both a web UI and a public API, add a second
   entry with a different `id` and `surface: 'api'`. The directory
@@ -95,7 +97,7 @@ To add a new sub-category:
 
 ## Adding a prompt template
 
-The 9 templates in `src/lib/prompt-templates.ts` are data. To add a new
+The templates in `src/lib/prompt-templates.ts` are data. To add a new
 one:
 
 1. Open `src/lib/prompt-templates.ts`.
@@ -136,7 +138,7 @@ If you want to add a language, the steps are:
    you scope it and decide whether to proceed.
 3. Extend the `Locale` type in `src/i18n.ts`.
 4. Translate every key in the `translations` object.
-5. Translate the 9 prompt templates in `src/lib/prompt-templates.ts`,
+5. Translate all prompt templates in `src/lib/prompt-templates.ts`,
    keeping the placeholder set identical.
 6. Add the language button in `index.html` and wire it in
    `src/i18n.ts`.

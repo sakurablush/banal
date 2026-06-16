@@ -37,7 +37,7 @@ export default defineConfig({
           branches: 99,
           statements: 97,
         },
-        // Prompt templates library is core to the "poor people" promise — 100% enforced
+        // Prompt templates library — 100% coverage enforced
         'src/lib/prompt-templates.ts': {
           lines: 100,
           functions: 100,

@@ -15,16 +15,17 @@ principles behind the project are in [`SPIRIT.md`](../SPIRIT.md).
 ## What ships in v1.0.0
 
 - **273 curated tools** organized into two top-level groups (AI tools
-  and Developer tools), with categories, badges, search, and filters.
-- **9 prompt templates** in English and Japanese, with parity validation
+  and Developer tools), with categories, access labels, search, and filters.
+- **52 prompt templates** in English and Japanese, with parity validation
   and empathy smoke tests in the test suite.
 - **A static, zero-backend architecture** that anyone can fork, build,
   and host for free on GitHub Pages, Cloudflare Pages, or a USB stick.
 - **Bilingual UI** (English, Japanese) with first-class translation
   quality and a parity test gate.
-- **A weekly catalog audit** that verifies every tool URL and writes a
+- **A weekly catalog audit** that HEAD/GETs every tool URL and writes a
   date-stamped summary to [`docs/verification/`](../docs/verification/).
-- **A complete CI gate**: lint, typecheck, 618 tests across 29 files,
+  Failures are listed transparently; some are bot blocks, not dead tools.
+- **A complete CI gate**: lint, typecheck, 651 tests across 35 files,
   and `npm audit --audit-level=moderate` on every push.
 - **MIT license.** Fork, rename, host, give away.
 
@@ -40,11 +41,11 @@ voice in the user-facing copy met the editorial test in
 - The number of tools in the README matches
   `src/data/zero-key-tools.ts` (273).
 - The number of prompt templates in the README matches the `TEMPLATES`
-  object in `src/lib/prompt-templates.ts` (9).
+  object in `src/lib/prompt-templates.ts` (52).
 - The test counts in the documentation match the output of
-  `npm run test:run` (618 tests across 29 files).
-- The tool URLs in the README are a real subset of the entries in the
-  catalog data file. No marketing-only entries.
+  `npm run test:run` (651 tests across 35 files).
+- The tool URLs in [`docs/TOOLS-DIRECTORY.md`](docs/TOOLS-DIRECTORY.md) are
+  generated from the catalog data file. No marketing-only entries.
 - Every user-facing string has parallel English and Japanese
   translations.
 - `npm run ci` is green.

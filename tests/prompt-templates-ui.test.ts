@@ -5,6 +5,12 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { renderPromptTemplatesStandalone } from '../src/prompt-templates-standalone';
+import { promptTemplatesLibrary } from '../src/lib/prompt-templates';
+
+/** Live template count — used by assertions that need to express "less than total" or "exactly total" without hardcoding. */
+function promptLibraryCount(): number {
+  return promptTemplatesLibrary.count();
+}
 
 describe('Prompt Templates — horizontal scroller UI behavior', () => {
   let container: HTMLElement;
@@ -54,17 +60,65 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
   it('renders horizontal prompt cards instead of sidebar layout', () => {
     const el = setup();
     const cards = Array.from(el.querySelectorAll('.tool-card-horizontal'));
-    expect(cards.length).toBe(9); // 9 templates total
+    // Library scales — assert a floor, not a hard-coded count
+    expect(cards.length).toBeGreaterThanOrEqual(40);
+  });
+
+  // ─── Recommended-chat chip strip (in-UI "How to use" card) ─────────────────
+
+  it('renders the recommended-chat chip strip into the static "how to use" card', () => {
+    // The chip container is in index.html; we need to provide it for this isolated test
+    const chipsContainer = document.createElement('div');
+    chipsContainer.id = 'prompt-templates-chips';
+    document.body.appendChild(chipsContainer);
+
+    try {
+      setup();
+      const chips = chipsContainer.querySelectorAll('a');
+      // Curated 6 may shrink if data removes a tool, but never zero.
+      expect(chips.length).toBeGreaterThanOrEqual(4);
+      // Every chip is a deep-link into #ai-tools with a search term
+      for (const chip of Array.from(chips)) {
+        const href = chip.getAttribute('href') ?? '';
+        expect(href.startsWith('#ai-tools?q=')).toBe(true);
+        // Accessible: each chip is a listitem in a list with an aria-label
+        expect(chip.getAttribute('role')).toBe('listitem');
+      }
+      expect(chipsContainer.getAttribute('role')).toBe('list');
+      expect(chipsContainer.getAttribute('aria-label')).toBeTruthy();
+    } finally {
+      document.body.removeChild(chipsContainer);
+    }
+  });
+
+  it('re-renders chip strip aria-label on language change', () => {
+    const chipsContainer = document.createElement('div');
+    chipsContainer.id = 'prompt-templates-chips';
+    document.body.appendChild(chipsContainer);
+
+    try {
+      setup();
+      const enLabel = chipsContainer.getAttribute('aria-label') ?? '';
+
+      window.dispatchEvent(new CustomEvent('banal:language-changed', { detail: { lang: 'ja' } }));
+
+      const jaLabel = chipsContainer.getAttribute('aria-label') ?? '';
+      // JA aria-label is distinct from EN (e.g. "おすすめの無料AIチャット")
+      expect(jaLabel).not.toBe(enLabel);
+      expect(jaLabel.length).toBeGreaterThan(0);
+    } finally {
+      document.body.removeChild(chipsContainer);
+    }
   });
 
   // ─── Category sidebar ─────────────────────────────────────────────────────
 
-  it('renders category sidebar with 6 categories', () => {
+  it('renders category sidebar with 11 entries (10 categories + All)', () => {
     const el = setup();
     const sidebar = el.querySelector('.zk2-sidebar');
     expect(sidebar).toBeTruthy();
     const items = sidebar!.querySelectorAll('.zk2-cat-item');
-    expect(items.length).toBe(6);
+    expect(items.length).toBe(11);
   });
 
   it('clicking a category filters the prompt cards', () => {
@@ -75,10 +129,52 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     expect(careerItem).toBeTruthy();
     careerItem!.click();
 
-    // Should show fewer cards (only career-money templates)
+    // Should show fewer cards (only career-work templates)
     const scrollContainer = el.querySelector('.zk2-grid');
     const cards = scrollContainer!.querySelectorAll('.tool-card-horizontal');
-    expect(cards.length).toBeLessThan(9);
+    expect(cards.length).toBeLessThan(promptLibraryCount());
+  });
+
+  // ─── Legacy category alias (?cat=) backward compat ──────────────────────────
+
+  it('resolves legacy ?cat=career-money alias to the current career-work category', () => {
+    // Pretend the URL has ?cat=career-money (the old id)
+    const originalLocation = window.location;
+    const url = 'https://example.com/?cat=career-money';
+    Object.defineProperty(window, 'location', {
+      value: { ...originalLocation, search: '?cat=career-money', href: url },
+      writable: true,
+      configurable: true,
+    });
+
+    try {
+      renderPromptTemplatesStandalone({ container, lang: 'en' });
+      // The career-work category (the resolved alias target) should be active
+      const activeItem = container.querySelector('.zk2-cat-item.active');
+      expect(activeItem).toBeTruthy();
+      expect(activeItem!.getAttribute('data-category')).toBe('career-work');
+    } finally {
+      Object.defineProperty(window, 'location', { value: originalLocation, configurable: true });
+    }
+  });
+
+  it('ignores unknown ?cat= values without crashing', () => {
+    const originalLocation = window.location;
+    Object.defineProperty(window, 'location', {
+      value: { ...originalLocation, search: '?cat=nonexistent', href: 'https://example.com/?cat=nonexistent' },
+      writable: true,
+      configurable: true,
+    });
+
+    try {
+      renderPromptTemplatesStandalone({ container, lang: 'en' });
+      // Falls back to "all" — no category is marked active except possibly nothing
+      const activeItems = container.querySelectorAll('.zk2-cat-item.active');
+      // Either no active item or "all" — either way no crash
+      expect(activeItems.length).toBeLessThanOrEqual(1);
+    } finally {
+      Object.defineProperty(window, 'location', { value: originalLocation, configurable: true });
+    }
   });
 
   // ─── Accordion behavior ───────────────────────────────────────────────
@@ -305,14 +401,14 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
   it('re-renders correctly when language changes', () => {
     const el = setup();
     const itemsEN = el.querySelectorAll('.zk2-cat-item');
-    expect(itemsEN.length).toBe(6);
+    expect(itemsEN.length).toBe(11);
 
     // Simulate language change event
     const event = new CustomEvent('banal:language-changed', { detail: { lang: 'ja' } });
     window.dispatchEvent(event);
 
     const itemsJA = el.querySelectorAll('.zk2-cat-item');
-    expect(itemsJA.length).toBe(6);
+    expect(itemsJA.length).toBe(11);
   });
 
   // ─── Session Storage Security ───────────────────────────────────────────────────
@@ -482,15 +578,16 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('calling renderPromptTemplatesStandalone again cleans up previous instance', () => {
     const el = setup();
-    expect(el.querySelectorAll('.tool-card-horizontal').length).toBe(9);
+    const total = promptLibraryCount();
+    expect(el.querySelectorAll('.tool-card-horizontal').length).toBe(total);
 
     // Re-render
     renderPromptTemplatesStandalone({ container: el, lang: 'ja' });
 
-    // Should still have 9 cards but in Japanese
-    expect(el.querySelectorAll('.tool-card-horizontal').length).toBe(9);
+    // Should still have the same number of cards but in Japanese
+    expect(el.querySelectorAll('.tool-card-horizontal').length).toBe(total);
     const items = el.querySelectorAll('.zk2-cat-item');
-    expect(items.length).toBe(6);
+    expect(items.length).toBe(11);
   });
 
   // ─── Japanese rendering ─────────────────────────────────────────────────────
@@ -584,7 +681,7 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
     // Should re-render with Japanese
     const items = el.querySelectorAll('.zk2-cat-item');
-    expect(items.length).toBe(6);
+    expect(items.length).toBe(11);
 
     // Reset
     document.documentElement.lang = 'en';
@@ -611,14 +708,14 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     careerItem!.click();
 
     const filteredCount = el.querySelectorAll('.tool-card-horizontal').length;
-    expect(filteredCount).toBeLessThan(9);
+    expect(filteredCount).toBeLessThan(promptLibraryCount());
 
     const newItems = Array.from(el.querySelectorAll('.zk2-cat-item')) as HTMLElement[];
     const allItem = newItems.find((c) => c.textContent?.includes('All'));
     allItem!.click();
 
     const allCount = el.querySelectorAll('.tool-card-horizontal').length;
-    expect(allCount).toBe(9);
+    expect(allCount).toBe(promptLibraryCount());
   });
 
   // ─── Auto-save form values on input ──────────────────────────────────────────

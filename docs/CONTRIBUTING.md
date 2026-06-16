@@ -59,7 +59,7 @@ npm run ci           # the full gate (do this before pushing)
 
 ### New or improved prompt templates
 
-The 9 templates in `src/lib/prompt-templates.ts` are the highest-impact
+The 52 templates in `src/lib/prompt-templates.ts` are the highest-impact
 work. A good new template targets a real situation: job applications
 with gaps, fighting a welfare denial, decoding a scary medical bill,
 staying afloat with $0 and a kid, surviving a 5-minute grounding, or

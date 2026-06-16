@@ -1,6 +1,7 @@
 import { zeroKeyTools } from './zero-key-tools';
 import { aiModels } from './ai-models';
 import { toolStacks } from './tool-stacks';
+import { PROMPT_TEMPLATE_COUNT } from '../lib/prompt-templates';
 
 export interface SiteStats {
   total: number;
@@ -8,6 +9,7 @@ export interface SiteStats {
   dev: number;
   models: number;
   stacks: number;
+  prompts: number;
 }
 
 /** Live counts from curated data — single source of truth for all page copy. */
@@ -20,15 +22,17 @@ export function getSiteStats(): SiteStats {
     dev,
     models: aiModels.length,
     stacks: toolStacks.length,
+    prompts: PROMPT_TEMPLATE_COUNT,
   };
 }
 
-/** Replace `{total}`, `{ai}`, `{dev}`, `{models}`, `{stacks}` in translated strings. */
+/** Replace `{total}`, `{ai}`, `{dev}`, `{models}`, `{stacks}`, `{prompts}` in translated strings. */
 export function interpolateSiteStats(text: string, stats: SiteStats = getSiteStats()): string {
   return text
     .replace(/\{total\}/g, String(stats.total))
     .replace(/\{ai\}/g, String(stats.ai))
     .replace(/\{dev\}/g, String(stats.dev))
     .replace(/\{models\}/g, String(stats.models))
-    .replace(/\{stacks\}/g, String(stats.stacks));
+    .replace(/\{stacks\}/g, String(stats.stacks))
+    .replace(/\{prompts\}/g, String(stats.prompts));
 }

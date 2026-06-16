@@ -1,6 +1,6 @@
 /**
  * Banal main entry — the complete, wired, delightful experience.
- * Core + providers routing (100% tested) + prompt templates (9 templates + JA) + real chat + Ghost Protocol.
+ * Core wiring: i18n, theme, directory, hero mesh, and prompt templates (52, EN/JA).
  *
  * Deliberately two lines. The entire "app" is these two calls because:
  * - A human being with 3 minutes and a text editor on a public computer must be able to understand

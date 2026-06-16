@@ -1,7 +1,7 @@
 /**
  * Standalone Prompt Templates UI — Horizontal Scroller Redesign
  *
- * Renders 9 prompt templates in a horizontal scroll layout (Android app drawer style):
+ * Renders prompt templates in a horizontal scroll layout (Android app drawer style):
  * - All templates visible in a horizontal scroll container
  * - Clicking a card opens the form in an accordion slide-down under the card
  * - Keyboard navigation with ← → arrows
@@ -27,8 +27,22 @@ import { getRawSuggestionsForSection } from './lib/filter-suggestions';
 import type { FilterSuggestion } from './lib/filter-suggestions';
 import { trackFilterEvent } from './lib/filter-analytics';
 import { onPromptFormInput } from './lib/privacy-banner';
+import { zeroKeyTools } from './data/zero-key-tools';
 
 const STORAGE_PREFIX = 'banal-pt-';
+
+/**
+ * Curated set of "no-friction" AI chats to surface in the How-to-use chip strip.
+ * Sorted by access preference, then by id, to make the strip stable across renders.
+ */
+const RECOMMENDED_CHAT_IDS: readonly string[] = [
+  'duck-ai',
+  'microsoft-copilot',
+  'meta-ai',
+  'chatgpt-free',
+  'google-gemini',
+  'mistral-le-chat',
+];
 
 // ─── Category Taxonomy ──────────────────────────────────────────────────────────
 
@@ -41,29 +55,117 @@ interface PromptCategory {
 
 const PROMPT_CATEGORIES: PromptCategory[] = [
   { id: 'all', labelEn: 'All', labelJa: 'すべて', icon: '' },
-  { id: 'career-money', labelEn: 'Career & Money', labelJa: '仕事・お金', icon: '\u{1F4B0}' },
-  { id: 'learning-growth', labelEn: 'Learning', labelJa: '学び', icon: '\u{1F393}' },
-  { id: 'health-grounding', labelEn: 'Grounding', labelJa: 'グラウンディング', icon: '\u{1F914}' },
-  { id: 'paperwork-rights', labelEn: 'Paperwork', labelJa: '手続き', icon: '\u{1F4DC}' },
+  { id: 'career-work', labelEn: 'Career & Work', labelJa: '仕事・キャリア', icon: '\u{1F4BC}' },
+  { id: 'money-finance', labelEn: 'Money & Finance', labelJa: 'お金・家計', icon: '\u{1F4B0}' },
+  { id: 'learning-growth', labelEn: 'Learning & Growth', labelJa: '学び・成長', icon: '\u{1F4DA}' },
+  { id: 'health-wellbeing', labelEn: 'Health & Wellbeing', labelJa: '健康・心', icon: '\u{1F33F}' },
+  { id: 'paperwork-rights', labelEn: 'Paperwork & Rights', labelJa: '書類・権利', icon: '\u{1F4C4}' },
   {
     id: 'communication',
-    labelEn: 'Communication',
-    labelJa: 'コミュニケーション',
+    labelEn: 'Communication & Relationships',
+    labelJa: '連絡・人間関係',
     icon: '\u{1F4AC}',
+  },
+  { id: 'home-daily', labelEn: 'Home & Daily Life', labelJa: '家・暮らし', icon: '\u{1F3E0}' },
+  { id: 'creative-fun', labelEn: 'Creative & Fun', labelJa: '創作・遊び', icon: '\u{1F3A8}' },
+  { id: 'builder-dev', labelEn: 'Builder & Dev', labelJa: '開発者向け', icon: '\u{1F6E0}' },
+  {
+    id: 'crisis-hard-times',
+    labelEn: 'Crisis & Hard Times',
+    labelJa: '困難なとき',
+    icon: '\u{1F917}',
   },
 ];
 
+/**
+ * Backward compatibility for old `?cat=` query params.
+ * Old URLs keep working — they silently redirect to the new category id.
+ */
+const LEGACY_CATEGORY_ALIASES: Record<string, string> = {
+  'career-money': 'career-work',
+  health: 'health-wellbeing',
+  grounding: 'health-wellbeing',
+  paperwork: 'paperwork-rights',
+  relationships: 'communication',
+  daily: 'home-daily',
+  home: 'home-daily',
+  creative: 'creative-fun',
+  dev: 'builder-dev',
+  builder: 'builder-dev',
+  crisis: 'crisis-hard-times',
+  hardship: 'crisis-hard-times',
+};
+
+function resolveCategoryId(input: string | null | undefined): string | null {
+  if (!input) return null;
+  if (PROMPT_CATEGORIES.some((c) => c.id === input)) return input;
+  return LEGACY_CATEGORY_ALIASES[input] ?? null;
+}
+
 // Map prompt IDs to categories
 const PROMPT_CATEGORY_MAP: Record<string, string> = {
-  'job-gaps-as-strengths': 'career-money',
-  'micro-hustles': 'career-money',
-  'star-stories-caregiving': 'career-money',
-  'debt-hardship-scripts': 'career-money',
+  // Career & Work (6)
+  'job-gaps-as-strengths': 'career-work',
+  'star-stories-caregiving': 'career-work',
+  'salary-negotiation-scripts': 'career-work',
+  'resignation-letter': 'career-work',
+  'performance-review-self-eval': 'career-work',
+  'freelancer-client-comms': 'career-work',
+  // Money & Finance (6)
+  'debt-hardship-scripts': 'money-finance',
+  'budget-zero-budget-builder': 'money-finance',
+  'rent-hardship-letter': 'money-finance',
+  'subscription-cancel-script': 'money-finance',
+  'tax-prep-checklist': 'money-finance',
+  'invoice-collection-email': 'money-finance',
+  // Learning & Growth (5)
   'zero-budget-learning': 'learning-growth',
-  'grounding-low-energy': 'health-grounding',
+  'book-notes-that-stick': 'learning-growth',
+  'teach-it-back-explainer': 'learning-growth',
+  'career-skill-roadmap': 'learning-growth',
+  'conference-talk-abstract': 'learning-growth',
+  // Health & Wellbeing (5)
+  'grounding-low-energy': 'health-wellbeing',
+  'doctor-visit-prep': 'health-wellbeing',
+  'therapy-first-session-brief': 'health-wellbeing',
+  'sleep-reset-tonight': 'health-wellbeing',
+  'panic-anchor-script': 'health-wellbeing',
+  // Paperwork & Rights (5)
   'bureaucracy-letters': 'paperwork-rights',
   'form-decoder': 'paperwork-rights',
+  'insurance-claim-letter': 'paperwork-rights',
+  'lease-renewal-negotiation': 'paperwork-rights',
+  'small-claims-complaint': 'paperwork-rights',
+  // Communication & Relationships (6)
   'en-ja-cultural-bridge': 'communication',
+  'difficult-conversation-script': 'communication',
+  'apology-that-means-it': 'communication',
+  'feedback-sandwich-free': 'communication',
+  'school-email-parent': 'communication',
+  'thank-you-note-real': 'communication',
+  // Home & Daily Life (5)
+  'weekly-meal-plan-budget': 'home-daily',
+  'declutter-one-room': 'home-daily',
+  'repair-decide-call-fix': 'home-daily',
+  'moving-checklist-zero-fluff': 'home-daily',
+  'pet-vet-visit-prep': 'home-daily',
+  // Creative & Fun (5)
+  'weekend-trip-plan': 'creative-fun',
+  'gift-idea-by-person': 'creative-fun',
+  'short-story-from-prompt': 'creative-fun',
+  'song-lyrics-from-mood': 'creative-fun',
+  'birthday-card-real': 'creative-fun',
+  // Builder & Dev (5)
+  'code-review-polite-firm': 'builder-dev',
+  'bug-report-that-gets-fixed': 'builder-dev',
+  'readme-from-working-code': 'builder-dev',
+  'commit-message-history': 'builder-dev',
+  'tech-decision-record': 'builder-dev',
+  // Crisis & Hard Times (4)
+  'grief-first-week': 'crisis-hard-times',
+  'job-loss-first-72h': 'crisis-hard-times',
+  'eviction-response-letter': 'crisis-hard-times',
+  'breakup-no-contact-script': 'crisis-hard-times',
 };
 
 function getPromptsForCategory(categoryId: string, allPrompts: PromptTemplate[]): PromptTemplate[] {
@@ -189,6 +291,41 @@ function extractTemplateVariables(template: string): string[] {
 
 // ─── Main Render Function ─────────────────────────────────────────────────────
 
+/**
+ * Render the curated recommended-chats chip strip into the static "how to use" card
+ * (which lives in index.html, above the prompt-templates-root).
+ * Renders nothing if the container is missing or the curated tools have been removed
+ * from the data — the card gracefully degrades to "no chips".
+ */
+function renderRecommendedChatChips(lang: Locale): void {
+  const container = document.getElementById('prompt-templates-chips');
+  if (!container) return;
+
+  // Resolve the curated set against the live data, preserving the curated order.
+  const byId = new Map(zeroKeyTools.filter((t) => t.category === 'ai-chat').map((t) => [t.id, t]));
+  const ordered = RECOMMENDED_CHAT_IDS.map((id) => byId.get(id)).filter(
+    (t): t is NonNullable<typeof t> => Boolean(t)
+  );
+
+  container.innerHTML = '';
+  container.setAttribute('aria-label', t(lang, 'promptTemplates.howTo.chipsLabel'));
+  container.setAttribute('role', 'list');
+
+  for (const tool of ordered) {
+    const chip = document.createElement('a');
+    chip.href = `#ai-tools?q=${encodeURIComponent(tool.name)}`;
+    chip.className =
+      'zk2-card-surface zk2-surface-web inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm hover:bg-white/10 transition-colors';
+    chip.setAttribute('role', 'listitem');
+    chip.setAttribute(
+      'aria-label',
+      lang === 'ja' ? `${tool.name} — おすすめ無料AIチャット` : `${tool.name} — recommended free AI chat`
+    );
+    chip.textContent = tool.name;
+    container.appendChild(chip);
+  }
+}
+
 export function renderPromptTemplatesStandalone(options: {
   container: HTMLElement;
   lang: Locale;
@@ -214,11 +351,9 @@ export function renderPromptTemplatesStandalone(options: {
     };
 
     const fromUrl = getSectionParams('prompts');
-    const validCategories = new Set(
-      PROMPT_CATEGORIES.map((cat) => cat.id).filter((id) => id !== 'all')
-    );
-    if (fromUrl.cat && validCategories.has(fromUrl.cat)) {
-      state.selectedCategory = fromUrl.cat;
+    const resolvedCat = resolveCategoryId(fromUrl.cat);
+    if (resolvedCat && resolvedCat !== 'all') {
+      state.selectedCategory = resolvedCat;
     }
 
     // Initialize saved values for all prompts
@@ -231,6 +366,9 @@ export function renderPromptTemplatesStandalone(options: {
 
     container.innerHTML = '';
     container.className = 'pt-horizontal-shell';
+
+    // Render the recommended-chats chip strip into the static "how to use" card
+    renderRecommendedChatChips(lang);
 
     // Render the horizontal layout
     renderHorizontalLayout(state);
@@ -573,11 +711,37 @@ function createPromptAccordion(
       label.textContent = varName.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase());
       field.appendChild(label);
 
-      const isLong =
-        varName.toLowerCase().includes('situation') ||
-        varName.toLowerCase().includes('description') ||
-        varName.toLowerCase().includes('story') ||
-        varName.toLowerCase().includes('content');
+      // Heuristic: which variable names are long-form text that should render as
+      // a <textarea rows="2"> instead of a single-line <input>.
+      // List the unique SHORT substrings. Longer names (e.g. "symptomTimeline",
+      // "noticeText", "breakupMessage", "griefFirstWeekTasks") match because
+      // we use `.includes()`.
+      const LONG_VAR_SUBSTRINGS = [
+        'situation',
+        'description',
+        'story',
+        'content',
+        'letter',
+        'message',
+        'notice',
+        'plan',
+        'checklist',
+        'reasoning',
+        'context',
+        'background',
+        'notes',
+        'feedback',
+        'comment',
+        'review',
+        'abstract',
+        'symptom',
+        'route',
+        'roadmap',
+        'tasks',
+        'breakup',
+        'grief',
+      ] as const;
+      const isLong = LONG_VAR_SUBSTRINGS.some((sub) => varName.toLowerCase().includes(sub));
 
       let input: HTMLInputElement | HTMLTextAreaElement;
       if (isLong) {
@@ -807,6 +971,11 @@ function listenForLanguageChanges(state: PromptTemplatesViewState): void {
     for (const pt of state.prompts) {
       state.valuesByTemplate[pt.id] = getSavedValues(pt.id, nextLang);
     }
+
+    // The "how to use" card body is data-i18n-driven and is re-translated by the
+    // global i18n flow. Only the chip strip's aria-label and chip names are
+    // JS-rendered, so we re-render them here.
+    renderRecommendedChatChips(nextLang);
 
     reRenderHorizontal(state);
   };

@@ -32,7 +32,6 @@ export const translations: Record<Lang, Translations> = {
     'promptTemplates.panel.philosophy':
       'Starting points only. Review output before sending anything official.',
     'promptTemplates.form.title': 'Fill the blanks (only what feels true)',
-    'promptTemplates.form.send': 'Send this prompt template',
     'promptTemplates.form.cancel': 'Cancel',
     'promptTemplates.form.missing':
       'Some blanks left as-is — the AI will still help you finish them.',
@@ -53,9 +52,20 @@ export const translations: Record<Lang, Translations> = {
     'nav.experience': 'Experience',
     'nav.fork': 'Fork & Host',
     'promptTemplates.more':
-      'Debt scripts, STAR interview examples, and EN↔JA translation — all nine in the app.',
+      'Debt scripts, STAR interview examples, EN↔JA translation, salary negotiation, code review, crisis letters — all {prompts} in the app.',
     'promptTemplates.intro':
-      'Nine templates for jobs, debt letters, forms, and EN↔JA translation. Copy, fill the blanks, paste into any chat tool listed above. The in-app Zero-Key panel links tools that need no account. Full guide: docs/PROMPT-TEMPLATES-GUIDE.md.',
+      '{prompts} templates for jobs, debt letters, doctor visits, code reviews, hard days, and the good ones. Copy, fill the blanks, paste into any chat tool listed above. The in-app Zero-Key panel links tools that need no account. Full guide: docs/PROMPT-TEMPLATES-GUIDE.md.',
+    'promptTemplates.howTo.heading': 'How to get value from these in 5 minutes',
+    'promptTemplates.howTo.step1': 'Pick a chat from the chips below — Duck.ai, Copilot, or Meta AI need no account.',
+    'promptTemplates.howTo.step2': 'Pick a card. Filter by category on the left, or just scroll.',
+    'promptTemplates.howTo.step3': 'Fill what feels true. Leave the rest — the AI will help you finish it.',
+    'promptTemplates.howTo.step4': 'Click "Copy Filled" and paste the whole block into your chat.',
+    'promptTemplates.howTo.step5': 'Talk back. "Shorter", "Add a JA version with keigo", "Verify every number". Most of the value is in the follow-up.',
+    'promptTemplates.howTo.privacy':
+      'Drafts are saved in this tab only and disappear when you close it. Do not paste secrets.',
+    'promptTemplates.howTo.moreChats': 'See all AI chat tools →',
+    'promptTemplates.howTo.summary': '5 steps to use',
+    'promptTemplates.howTo.chipsLabel': 'Recommended free AI chats',
 
     // === Static page keys (EN) ===
     'hero.eyebrow': 'INDEPENDENT BUILDER REFERENCE',
@@ -100,11 +110,11 @@ export const translations: Record<Lang, Translations> = {
     'section.stacks.title2': 'Monthly cost stated.',
     'section.stacks.desc':
       'Tool combinations for client work, learning, and side projects. Monthly cost and caveats on each stack.',
-    'section.promptTemplates.eyebrow': '9 PROMPT TEMPLATES',
-    'section.promptTemplates.title1': '9 prompt templates.',
+    'section.promptTemplates.eyebrow': '{prompts} PROMPT TEMPLATES',
+    'section.promptTemplates.title1': '{prompts} prompt templates.',
     'section.promptTemplates.title2': 'Copy, fill, run.',
     'section.promptTemplates.desc':
-      'Templates for jobs, debt letters, forms, and EN↔JA translation. Paste into any chat tool listed above.',
+      'Templates for jobs, debt letters, doctor visits, code reviews, hard days, and EN↔JA translation. Paste into any chat tool listed above.',
     'section.articles.eyebrow': 'ARTICLES',
     'section.articles.title1': 'Articles.',
     'section.articles.title2': 'Setup notes and reviews.',
@@ -308,7 +318,6 @@ export const translations: Record<Lang, Translations> = {
     'promptTemplates.panel.philosophy':
       '出発点です。正式な送付前に出力を確認してください。',
     'promptTemplates.form.title': '空白を埋める（本当だと思うところだけ）',
-    'promptTemplates.form.send': 'このプロンプトテンプレートを送信',
     'promptTemplates.form.cancel': 'キャンセル',
     'promptTemplates.form.missing': '一部空白はそのまま — AIがあなたと一緒に仕上げてくれます。',
 
@@ -328,9 +337,20 @@ export const translations: Record<Lang, Translations> = {
     'nav.experience': '体験する',
     'nav.fork': 'フォークしてホスト',
     'promptTemplates.more':
-      '債務スクリプト、STAR面接例、英日翻訳 — 9件すべてアプリ内。',
+      '債務スクリプト、STAR面接例、英日翻訳、給与交渉、コードレビュー、困難時向けの手紙 — 全{prompts}件アプリ内。',
     'promptTemplates.intro':
-      '仕事、債務手紙、書類、英日翻訳向けの9テンプレート。コピーして空白を埋め、上記のチャットツールに貼り付け。アプリ内のゼロキーパネルはアカウント不要のツールへのリンク。詳細: docs/PROMPT-TEMPLATES-GUIDE.md。',
+      '仕事、債務手紙、診察、コードレビュー、困難な日、そして良い日のための{prompts}テンプレート。コピーして空白を埋め、上記のチャットツールに貼り付け。アプリ内のゼロキーパネルはアカウント不要のツールへのリンク。詳細: docs/PROMPT-TEMPLATES-GUIDE.md。',
+    'promptTemplates.howTo.heading': '5分で使いこなす',
+    'promptTemplates.howTo.step1': '下のチップからチャットを選ぶ — Duck.ai、Copilot、Meta AI はアカウント不要。',
+    'promptTemplates.howTo.step2': 'カードを選ぶ。左のカテゴリで絞り込むか、横にスクロール。',
+    'promptTemplates.howTo.step3': '本当だと思うところだけ埋める。残りはAIが一緒に仕上げてくれます。',
+    'promptTemplates.howTo.step4': '「コピーして入力」をクリックし、ブロック全体をチャットに貼り付ける。',
+    'promptTemplates.howTo.step5': '「もっと短く」「敬語付きの日本語版も」「数字を確認して」等と返す。価値はフォローアップにある。',
+    'promptTemplates.howTo.privacy':
+      '下書きはこのタブだけに保存され、閉じると消えます。機密情報は貼り付けないでください。',
+    'promptTemplates.howTo.moreChats': 'AIチャットツールをすべて見る →',
+    'promptTemplates.howTo.summary': '使い方の5ステップ',
+    'promptTemplates.howTo.chipsLabel': 'おすすめの無料AIチャット',
 
     // === Static page keys (JA) ===
     'hero.eyebrow': '独立開発者向けリファレンス',
@@ -375,11 +395,11 @@ export const translations: Record<Lang, Translations> = {
     'section.stacks.title2': '月額コストを記載。',
     'section.stacks.desc':
       'クライアント案件、学習、副業向けの組み合わせ。各スタックに月額と注意点。',
-    'section.promptTemplates.eyebrow': '9つのプロンプトテンプレート',
-    'section.promptTemplates.title1': 'プロンプトテンプレート 9件。',
+    'section.promptTemplates.eyebrow': 'プロンプトテンプレート {prompts}件',
+    'section.promptTemplates.title1': 'プロンプトテンプレート {prompts}件。',
     'section.promptTemplates.title2': 'コピー・入力・実行。',
     'section.promptTemplates.desc':
-      '仕事、債務、書類、日英翻訳向け。上記のチャットツールに貼り付けて使う。',
+      '仕事、債務、診察、コードレビュー、困難な日、日英翻訳向け。上記のチャットツールに貼り付けて使う。',
     'section.articles.eyebrow': '記事',
     'section.articles.title1': '記事。',
     'section.articles.title2': 'セットアップと検証メモ。',

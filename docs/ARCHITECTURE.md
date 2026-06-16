@@ -44,7 +44,7 @@ to behave maliciously. We mitigate that with a strict threat model in
   HTML, CSS, and JS in `dist/`.
 - **Styling:** Tailwind CSS 3.x + a small custom CSS layer
   (`src/style.css`) for the few things Tailwind cannot do ergonomically.
-- **Tests:** [Vitest](https://vitest.dev) 4.x with jsdom. 618 tests across 29
+- **Tests:** [Vitest](https://vitest.dev) 4.x with jsdom. 651 tests across 35
   files. Coverage thresholds are enforced in `vitest.config.ts`.
 - **Lint / format:** ESLint + Prettier.
 - **Runtime dependencies for end users:** **none.** The `dist/` folder is
@@ -76,7 +76,7 @@ banal/
 │   └── types/                # Shared TypeScript types.
 ├── scripts/
 │   ├── verify-tools.ts       # Audits every tool URL, writes full report + dated summary.
-│   └── generate-tools-readme.ts  # Regenerates the tool table in the README.
+│   └── generate-tools-readme.ts  # Regenerates docs/TOOLS-DIRECTORY.md.
 ├── tests/                    # Vitest + jsdom. One file per source module.
 ├── docs/                     # You are here.
 ├── .github/workflows/        # CI, deploy, and the weekly verify-tools job.
@@ -134,9 +134,10 @@ That is the entire data flow. There is no other path.
 ## The tool catalog
 
 The 273 entries live in `src/data/zero-key-tools.ts` as a typed
-`ZeroKeyTool[]`. Each entry has a stable `id`, a `name`, a `url`, a
-`description`, a `category`, a `surface` (`web`, `api`, or `cli`), a set of
-`badges`, and an optional `docsUrl` and `lastVerified` date.
+`ZeroKeyTool[]`. Each entry has a stable `id`, `name`, `url`, `bestFor`,
+`category`, `surface` (`web`, `api`, or `cli`), `access`, `requiresSignup`,
+optional `badges`, `qualityNote`, optional `caveat`, and optional `docsUrl` /
+`lastVerified` dates.
 
 `src/data/categories.ts` defines the grouping rules that turn the flat list
 into the "AI Tools" and "Developer Tools" top-level sections, and the
@@ -185,7 +186,7 @@ translation, never machine output" — see
 
 ## Prompt templates
 
-The 9 templates in `src/lib/prompt-templates.ts` are data, not code. The
+The 52 templates in `src/lib/prompt-templates.ts` are data, not code. The
 shape:
 
 ```ts
@@ -214,7 +215,7 @@ output text never contains shaming phrases.
 
 ## Testing & quality gates
 
-- **Coverage:** the full test suite is 618 tests across 29 files. Thresholds
+- **Coverage:** the full test suite is 651 tests across 35 files. Thresholds
   for lines, branches, functions, and statements are enforced in
   `vitest.config.ts`.
 - **Local gate:** `npm run ci` runs lint:check + typecheck + test:run +

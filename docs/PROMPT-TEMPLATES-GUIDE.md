@@ -1,8 +1,9 @@
 # Prompt Templates Guide
 
-**The complete, shame-free, dignity-first guide to the 9 Prompt Templates — written for people who have nothing but a browser, 15 minutes of free Wi-Fi, and a life that already asks too much of them.**
+**The complete, dignity-first guide to Banal's 52 prompt templates — written for builders who need copy-paste help on a deadline, a shared device, or a low-energy day.**
 
-This is not a manual. It is the missing education for the thinking tools the rich buy by the month — now made ordinary, portable, and yours in the exact moments you need them most.
+This is not a manual. It is a practical companion to Banal's 52 prompt templates —
+copy-paste help for deadlines, shared devices, or low-energy days.
 
 You are not behind.
 You are not broken for needing help with forms, letters, or just getting through the day.
@@ -34,9 +35,9 @@ Every word here exists so the templates reach the hands that need them most.
 
 ---
 
-## How to Use This Academy (Even on Your Worst Day)
+## How to Use This Guide (Even on Your Worst Day)
 
-1. **Pick one prompt template only.** Do not try to learn all nine at once.
+1. **Pick one prompt template only.** Do not try to learn the whole library at once.
 2. Read the "Heart of This Prompt Template" section. Let it land.
 3. Read the real-life examples that feel closest to your situation right now.
 4. Try it inside Banal (best — the form does the work) **or** copy the template into any free AI you can reach (Gemini, ChatGPT free tier, Claude, Grok, library computer with no account).
@@ -47,34 +48,35 @@ Every word here exists so the templates reach the hands that need them most.
 
 ---
 
-## How to Actually Use Any Prompt Template (Two Ways)
+## How to Actually Use Any Prompt Template
 
-### Way 1 – Inside Banal (easiest and best for most people)
+Banal has **no built-in chat**. The app helps you fill a template and copy it.
+You paste the result into a free chat tool you choose (linked at the top of the
+Prompt Templates section).
 
-1. Open the link.
-2. Click the button that says "All 9 Prompt Templates".
-3. Choose the one that matches what you need right now.
-4. Fill the blanks with whatever is true for you (you can leave some empty – the AI will still work).
-5. Click "Send this prompt template".
-6. Read the answer. Copy what helps. You can talk back to it ("make it shorter", "more gentle", "add Japanese version with keigo").
+### Inside Banal (recommended)
 
-The text you sent and the answer stay in your chat history. You can export the whole thing as one file later.
+1. Open Banal and scroll to **Prompt Templates**.
+2. Pick a category, then the template that matches your situation.
+3. Fill the blanks with what is true for you (empty fields stay as `{{placeholders}}`).
+4. Click **Copy Filled** (or use Ctrl/Cmd+Enter).
+5. Open a free chat from the chip strip (Duck.ai, Copilot, ChatGPT free, etc.)
+   or any tool in the directory.
+6. Paste. Read the answer. Ask follow-ups in that chat ("shorter", "add Japanese
+   keigo for city hall", "remove anything that sounds shaming").
 
-### Way 2 – Copy the template into any other free AI (Gemini, Claude, ChatGPT free, Grok, library computer, etc.)
+Draft values stay in `sessionStorage` for this tab only. Use **Stored data** in
+the footer to review or clear them.
 
-1. In Banal, open the prompt template you want.
-2. Fill the form with your real situation.
-3. Do **not** click Send inside Banal.
-4. Look in the chat history – the filled text you were going to send appears as your message. Copy that whole text.
-5. Paste it into the other free AI.
-6. If you want changes, reply with follow-ups like:
-   - "Make this warmer and shorter, like a tired parent wrote it."
-   - "Add a Japanese version with proper polite language for a city hall."
-   - "Check for any shame language and remove it."
+### Copy into any other free AI
 
-This way you can use the best prompt even if Banal's free providers are busy.
+Same steps 1–4, then paste into Gemini, Claude, Grok, or a library computer
+session you already have open. Use this when your preferred provider is up and
+Banal is just the drafting surface.
 
-**Pro tip:** Always start in Banal if you can. It remembers your history, has the best zero-key links at the top, and makes exporting easy. Use other AIs as backup.
+**Note:** Banal does not store chat history. The external tool you paste into
+does. Pick a provider whose privacy terms you accept for the content you are
+drafting.
 
 ---
 
@@ -93,7 +95,7 @@ This path was designed for someone who has **never** successfully used an AI bef
 - Choose the grounding prompt template.
 - Fill only these two things honestly: your name (or "friend") and one or two words for how you feel right now ("overwhelmed", "numb", "angry and tired", "like I can't do one more thing").
 - For "what you have right now" write something true: "bed", "library chair", "phone with 11% battery", "nothing".
-- Send.
+- Copy Filled, paste into a free chat, send there.
 - Read the result slowly. You do not have to do the tiny win if it feels like too much.
 
 **Self-check after:**
@@ -112,7 +114,7 @@ Real trigger example: A letter from the welfare office, a hospital bill with num
 
 - Paste or describe the scary part (you can paraphrase if typing the whole thing is too much).
 - Fill the blanks with whatever you know: "welfare denial letter", the deadline if there is one, what you are most afraid it means.
-- Send.
+- Copy Filled, paste into a free chat, send there.
 
 **What you will get:** Plain words + the 1–3 things that actually matter + exact next steps (phone numbers, what to say, what to bring) + smart questions that protect your rights.
 
@@ -179,7 +181,12 @@ You are not behind. 15 minutes a day with a broke person who keeps showing up be
 
 ---
 
-## The 9 Prompt Templates — Full Guide Materials
+## Prompt Templates — Full Guide Materials
+
+The app ships **52 templates** in 10 categories. This guide goes deep on the
+original nine themes (job gaps, learning, bureaucracy, grounding, forms,
+caregiving, debt, EN↔JA). The same principles apply to every template in the
+library.
 
 Below is everything you need for each one: heart, real-life examples written for the exact constraints you live with, self-checks, and copy-paste best practices for any free AI on earth.
 
@@ -840,7 +847,8 @@ This prompt template is one of the most powerful tools for people living between
 
 ## Using the Prompt Templates With Any Free AI (The Real Portable Power)
 
-The 9 templates in Banal are deliberately designed to be copied and pasted into **any** free chatbot you can reach on any day. Use these anywhere they help.
+The templates in Banal are designed to be copied and pasted into **any** free
+chatbot you can reach. Use them anywhere they help.
 
 - **Zero-key, no-account, no-signup ever (use these first when you have literally nothing):**
   - WebLLM (https://chat.webllm.ai/) — runs real LLMs in your browser, private, nothing leaves your device.
@@ -856,7 +864,7 @@ The 9 templates in Banal are deliberately designed to be copied and pasted into 
 
 1. In Banal, open the Prompt Templates panel and pick the one you need. (The top of the chat always shows the best zero-key tools with direct links.)
 2. Fill the blanks (or leave some as {{var}} — the AI will still help).
-3. Instead of sending inside Banal, copy the filled text from the chat history (it appears as your message).
+3. Copy the filled text with **Copy Filled**, then paste into your chosen free chat.
 4. Paste it into one of the zero-key tools (WebLLM/Perchance/HF) or any other free AI.
 5. If the result is good, copy it back into Banal's chat so you have a record, or save it yourself (or use Banal's offline export).
 
@@ -875,7 +883,7 @@ This is the feature that makes the power unkillable. Even if every free provider
 
 Sometimes even the best prompt template won't fix the big thing today. That is not failure. That is being a person in a hard world.
 
-This Academy and these tools exist to give you a little more air, a little more clarity, a little more dignity, a little more "I can do the next small thing."
+This guide and these tools exist to give you a little more air, a little more clarity, a little more dignity, a little more "I can do the next small thing."
 
 Love and Equality in this context means: the AI is here to support you, not to make you feel weak for needing support.
 
@@ -897,13 +905,13 @@ Pass it on when you can. The work multiplies through ordinary, imperfect, someti
 
 ---
 
-## Printing, Sharing, and Keeping This Academy
+## Printing, Sharing, and Keeping This Guide
 
 This document is meant to be printed or saved as a single file you can open on any computer with no internet.
 
 - On a library computer: open the raw .md file from your fork's GitHub (or wherever you host it), print the pages you need most.
 - Put a copy on a USB stick and give it to someone who has even less than you.
-- Host your own copy of the entire Banal project (see docs/DEPLOYMENT.md). The Academy lives in the docs/ folder of your fork. Change the words if your community needs different examples.
+- Host your own copy of the entire Banal project (see docs/DEPLOYMENT.md). This guide lives in the docs/ folder of your fork. Change the words if your community needs different examples.
 - QR code on a piece of paper at the library, the clinic, the food pantry, the shelter: "Free AI prompt templates for ordinary people — no account, no money. Scan or type this link."
 - Send the link or the file in group chats with the message: "This one is ours. It was made for people like us."
 
@@ -915,13 +923,13 @@ The more copies exist, the harder it is for anyone to take the power away.
 
 If you are forking Banal for your neighborhood, your language, your specific struggles:
 
-- The full Academy belongs in your docs/ folder too.
-- Translate the Guide the same way the original Prompt Templates were translated: by hand, from the emotional truth, for the actual poor and stressed people in your community. Never machine translate the examples or the dignity lines.
+- The full guide belongs in your docs/ folder too.
+- Translate the guide the same way the original prompt templates were translated: by hand, from the emotional truth, for the actual stressed people in your community. Never machine translate the examples or the dignity lines.
 - Add new prompt templates that your people actually need (see docs/EXTENDING.md).
 - Update the Learning Path with examples from your reality.
 - Keep the zero-shame, full-dignity standard. That is non-negotiable.
 
-This Academy is not a product. It is infrastructure for the rest of us.
+This guide is not a product. It is infrastructure for the rest of us.
 
 ---
 
@@ -930,41 +938,30 @@ This Academy is not a product. It is infrastructure for the rest of us.
 **You have the tests that tell you it is working.**  
 **You have the dignity lines.**
 
-The rich will keep buying better and better AI.
-
-We will keep making the best of what is free ordinary, beautiful, and unkillable — and we will keep giving it away.
-
-They have the money.
-
-We have the numbers.
-
-And now, we have the power.
-
-**Banal. Ordinary. Unstoppable.**  
-**For the people the market was never built to serve.**
+Use them. Pass them on when they help.
 
 ---
 
-_This document was written with the same obsessive care as the 9 Prompt Templates themselves. Every word was chosen so that a person on their worst day, with almost nothing, can still find one sentence that gives them a tiny piece of themselves back._
+_This document was written with the same care as the prompt templates themselves._
 
-_If it helped you even a little, pass it on. That is how the power spreads._
-
----
-
-**Version note:** This is the initial release of the Prompt Templates Guide, created as part of making the 9 Prompt Templates the best possible learning material for people who have nothing. English primary for the detailed guide and examples. Japanese written manually with full cultural and emotional calibration for the prompt templates (in-app) + Guide intro/summary. All examples assume the real constraints of library computers, shared phones, low battery, children present, exhaustion, and zero budget.
+_If it helped you even a little, pass it on._
 
 ---
 
-## スーパーパワー・アカデミー（日本語版）
+**Version note:** Guide covers core template themes; the in-app library has 52 templates across 10 categories. English primary for detailed examples. Japanese in-app templates are hand-crafted at full parity.
 
-**お金も時間もエネルギーもほとんどない人たちのための、9つのスーパーパワーのための世界最高水準の恥知らずで尊厳を大切にした完全ガイド。**
+---
+
+## プロンプトテンプレートガイド（日本語版）
+
+**お金も時間もエネルギーもほとんどない人たちのための、52のプロンプトテンプレート完全ガイド（尊厳を大切にした手作業版）。**
 
 あなたは遅れていない。  
 助けが必要だからといって壊れているわけでもない。  
 あなたはすでに、ほとんどの人が想像もできないようなことを生き抜いてきた大人だ。  
 このアカデミーは、金持ちが毎月何百ドルも払って手に入れている最高の思考ツールを、無料で、いつでも、どんなにしんどいときでも、あなたのものにするために存在する。
 
-ここに書かれていることは、スーパーパワーそのものと同じくらい丁寧に、手作業で書かれている。
+ここに書かれていることは、プロンプトテンプレートそのものと同じくらい丁寧に、手作業で書かれている。
 
 - 図書館のPCで15分しか時間がないのに、隣の通路で子どもが泣いている人。
 - スマホのバッテリーが9%で、生活保護の書類の締め切りが明日な人。
@@ -977,9 +974,9 @@ _If it helped you even a little, pass it on. That is how the power spreads._
 
 **英語が一次ソース。日本語はそれと完全に同等のプロ品質で、手作業で書かれている。役所向けには適切な敬語、低エネルギーの日には許可と柔らかい表現、決して上から目線ではない。機械翻訳は一切使われていない。**
 
-（以降の各セクションの詳細な実例・学習パス・自己チェックは英語が一次ソース。アプリ内の9スーパーパワーテンプレート自体は、英語と同等のプロ品質日本語（敬語・柔らか表現）で完全に提供されている。アカデミー文書としては、導入部と哲学の完全な手作業日本語版を最後に収録。実際の利用時には、英語版と並べて読み比べ、日本語話者の当事者視点でさらに改善してほしい。）
+（以降の各セクションの詳細な実例・学習パス・自己チェックは英語が一次ソース。アプリ内の52プロンプトテンプレート自体は、英語と同等のプロ品質日本語で完全に提供されている。）
 
-**学習パスの初心者向けの考え方や、9つの各スーパーパワーごとの実例の精神・自己チェックの精神・ベストプラクティスも、すべて同じ基準で日本語の力としてアプリで体現されている。**
+**学習パスの考え方や各テンプレートの実例・自己チェックの精神は、アプリ内の52テンプレートと同じ基準で日本語でも体現されている。**
 
 **印刷して、USBに入れて、図書館やクリニックや食料配給所で配って、グループチャットで「これは私たちのためのものだ」と送ってほしい。**
 
@@ -995,12 +992,12 @@ _If it helped you even a little, pass it on. That is how the power spreads._
 
 ---
 
-_このドキュメントは、9つのスーパーパワーと同じ執着心で書かれた。どんなに最悪の日に、ほとんど何もない状態でも、1文だけでも自分の一部を取り戻せるように、すべての言葉が選ばれている。_
+_このドキュメントは、プロンプトテンプレートと同じ丁寧さで書かれた。_
 
 _少しでも役に立ったなら、誰かに渡してほしい。それが力の広がり方だ。_
 
 ---
 
-**作成ノート:** これはPrompt Templates Guideの初回リリース版である。英語が一次ソースで、日本語は当事者視点で文化的・感情的に丁寧に調整した手作業によるもの。すべての実例は、図書館PC、共有スマホ、低バッテリー、子どもの存在、極度の疲労、予算ゼロという現実の制約を前提に書かれている。
+**作成ノート:** アプリ内ライブラリは52テンプレート。英語が一次ソース。日本語テンプレートは手作業で完全なパリティを維持している。
 
 **Banalプロジェクト — 2026年**
