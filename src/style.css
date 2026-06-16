@@ -1145,12 +1145,11 @@ main#app,
 }
 
 .sp-inline-form-title {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: rgba(196, 181, 253, 0.9);
-  margin-bottom: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  margin-bottom: 0.875rem;
+  letter-spacing: 0.02em;
 }
 
 .sp-inline-form-fields {
@@ -1274,36 +1273,14 @@ main#app,
     border-radius: 0 0 14px 14px;
   }
 
+  [data-theme='light'] .sp-inline-actions {
+    background: rgba(255, 255, 255, 0.98);
+    border-top: 1px solid var(--light-border);
+  }
+
   .pt-toast {
     bottom: 1rem;
   }
-}
-
-/* Light mode adjustments for inline form */
-[data-theme='light'] .sp-inline-form {
-  background: rgba(0, 0, 0, 0.03);
-  border-color: rgba(124, 58, 237, 0.3);
-}
-
-[data-theme='light'] .sp-form-input {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: rgba(0, 0, 0, 0.15);
-  color: #1a1a2e;
-}
-
-[data-theme='light'] .sp-form-input:focus {
-  border-color: rgba(124, 58, 237, 0.5);
-  background: rgba(124, 58, 237, 0.05);
-}
-
-[data-theme='light'] .sp-preview-area {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: rgba(0, 0, 0, 0.1);
-  color: #2a2a3e;
-}
-
-[data-theme='light'] .sp-inline-form-title {
-  color: rgba(124, 58, 237, 0.9);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1418,12 +1395,11 @@ main#app,
 }
 
 .sp-inline-form-title {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: rgba(196, 181, 253, 0.9);
-  margin-bottom: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  margin-bottom: 0.875rem;
+  letter-spacing: 0.02em;
 }
 
 .sp-inline-form-fields {
@@ -1434,8 +1410,9 @@ main#app,
 }
 
 .sp-form-field label {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .sp-preview-area {
@@ -1521,22 +1498,6 @@ main#app,
     max-height: 400px;
     flex-direction: column;
   }
-}
-
-/* Light mode adjustments */
-[data-theme='light'] .pt-category-button {
-  background: rgba(0, 0, 0, 0.03);
-  border-color: rgba(0, 0, 0, 0.08);
-  color: rgba(26, 26, 46, 0.8);
-}
-
-[data-theme='light'] .pt-category-button:hover {
-  background: rgba(0, 0, 0, 0.06);
-}
-
-[data-theme='light'] .pt-category-button.active {
-  background: rgba(124, 58, 237, 0.15);
-  color: #1a1a2e;
 }
 
 /* ============================================================
@@ -2803,9 +2764,29 @@ main#app,
   color: var(--light-text) !important;
 }
 
-[data-theme='light'] .sp-inline-form {
-  background: var(--light-card-solid) !important;
+[data-theme='light'] .prompt-accordion {
+  background: rgba(255, 255, 255, 0.98) !important;
   border-color: var(--light-active-border) !important;
+  box-shadow: 0 20px 50px -28px rgba(15, 23, 42, 0.12);
+}
+
+[data-theme='light'] .prompt-accordion-title {
+  color: var(--light-text) !important;
+}
+
+[data-theme='light'] .prompt-accordion .sp-inline-form {
+  background: var(--light-hover) !important;
+  border-color: var(--light-border) !important;
+}
+
+[data-theme='light'] .prompt-accordion-content .sp-inline-actions .sp-btn-ghost {
+  background: #ffffff !important;
+}
+
+[data-theme='light'] .sp-inline-form {
+  background: var(--light-hover) !important;
+  border-color: var(--light-border) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 [data-theme='light'] .sp-inline-form-title {
@@ -2813,18 +2794,31 @@ main#app,
 }
 
 [data-theme='light'] .sp-form-field label {
-  color: var(--light-text-muted) !important;
+  color: var(--light-text-strong) !important;
+  font-size: 0.8125rem;
 }
 
-[data-theme='light'] .sp-form-input {
-  background: var(--light-card-solid) !important;
+[data-theme='light'] .sp-form-input,
+[data-theme='light'] .sp-form-field input,
+[data-theme='light'] .sp-form-field textarea {
+  background: #ffffff !important;
   border-color: var(--light-border-strong) !important;
   color: var(--light-text) !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
-[data-theme='light'] .sp-form-input:focus {
-  background: var(--light-card-solid) !important;
+[data-theme='light'] .sp-form-input::placeholder,
+[data-theme='light'] .sp-form-field input::placeholder,
+[data-theme='light'] .sp-form-field textarea::placeholder {
+  color: var(--light-text-subtle) !important;
+}
+
+[data-theme='light'] .sp-form-input:focus,
+[data-theme='light'] .sp-form-field input:focus,
+[data-theme='light'] .sp-form-field textarea:focus {
+  background: #ffffff !important;
   border-color: var(--light-violet) !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.14);
 }
 
 [data-theme='light'] .sp-preview-area,
@@ -2890,24 +2884,20 @@ main#app,
   color: var(--light-violet) !important;
 }
 
-/* Keep dark modal islands readable when the page is in light mode. */
+/* Keep true dark overlays readable when the page is in light mode. */
 [data-theme='light'] .sp-modal-content,
 [data-theme='light'] .sp-modal-content *,
-[data-theme='light'] #prompt-templates-panel,
-[data-theme='light'] #prompt-templates-panel *,
 [data-theme='light'] #keys-modal,
 [data-theme='light'] #keys-modal * {
   color: rgba(255, 255, 255, 0.86) !important;
 }
 
 [data-theme='light'] .sp-modal-content .text-white\/40,
-[data-theme='light'] #prompt-templates-panel .text-white\/40,
 [data-theme='light'] #keys-modal .text-white\/40 {
   color: rgba(255, 255, 255, 0.48) !important;
 }
 
 [data-theme='light'] .sp-modal-content .text-white\/50,
-[data-theme='light'] #prompt-templates-panel .text-white\/50,
 [data-theme='light'] #keys-modal .text-white\/50 {
   color: rgba(255, 255, 255, 0.58) !important;
 }
@@ -3453,13 +3443,50 @@ main#app,
 
 .prompt-accordion-content {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr) minmax(9.5rem, 11.5rem);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.prompt-accordion .sp-inline-form {
+  margin-top: 0;
+  background: rgba(0, 0, 0, 0.28);
+  border-color: rgba(168, 85, 247, 0.28);
+}
+
+.prompt-accordion .sp-form-input {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.prompt-accordion .sp-form-input:focus {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(168, 85, 247, 0.55);
+}
+
+.prompt-accordion-content .sp-inline-actions {
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.prompt-accordion-content .sp-inline-actions .sp-btn {
+  flex: none;
+  width: 100%;
+  min-height: 44px;
 }
 
 @media (max-width: 768px) {
   .prompt-accordion-content {
     grid-template-columns: 1fr;
+  }
+
+  .prompt-accordion-content .sp-inline-actions {
+    flex-direction: row;
+  }
+
+  .prompt-accordion-content .sp-inline-actions .sp-btn {
+    flex: 1;
+    width: auto;
   }
 }
 
