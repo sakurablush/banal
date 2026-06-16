@@ -255,6 +255,7 @@ function renderStackCard(
   costSection.appendChild(costList);
   card.appendChild(costSection);
 
+  const footer = create('div', 'stack-card-footer');
   if (isCustom) {
     const actions = create('div', 'stack-card-actions');
     const editBtn = create('button', 'stack-customize-btn');
@@ -280,7 +281,7 @@ function renderStackCard(
       renderContent(state);
     });
     actions.append(editBtn, deleteBtn);
-    card.appendChild(actions);
+    footer.appendChild(actions);
   } else {
     const customizeBtn = create('button', 'stack-customize-btn');
     customizeBtn.type = 'button';
@@ -297,8 +298,9 @@ function renderStackCard(
         onCancel: () => {},
       });
     });
-    card.appendChild(customizeBtn);
+    footer.appendChild(customizeBtn);
   }
+  card.appendChild(footer);
 
   // Click to open detail view
   card.style.cursor = 'pointer';

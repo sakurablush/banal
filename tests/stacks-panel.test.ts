@@ -207,7 +207,23 @@ describe('Stacks Panel', () => {
     expect(container.querySelector('.stack-custom-badge')?.textContent).toBe('Custom');
     expect(container.querySelectorAll('.stacks-my-section .stack-card').length).toBe(1);
 
+    const customFooter = container.querySelector('.stacks-my-section .stack-card-footer');
+    expect(customFooter).toBeTruthy();
+    expect(customFooter?.querySelector('.stack-card-actions')).toBeTruthy();
+
     api.destroy();
     localStorage.clear();
+  });
+
+  it('should render a footer on every stack card for bottom-aligned actions', () => {
+    const api = renderStacksPanel(container, { lang: 'en' });
+    const cards = container.querySelectorAll('.stack-card');
+
+    expect(cards.length).toBeGreaterThan(0);
+    cards.forEach((card) => {
+      expect(card.querySelector(':scope > .stack-card-footer')).toBeTruthy();
+    });
+
+    api.destroy();
   });
 });
