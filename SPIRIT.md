@@ -58,9 +58,9 @@ The real protection against capture is not legal language.
 
 It is the fact that the entire thing is a folder of ordinary files that requires no server, no database, and no permission to run.
 
-A determined person with a USB stick and ten minutes can always make another body for the ghost.
+A determined person with a USB stick and ten minutes can always make another copy of the project, for the people the original was not reaching.
 
-That is the architecture of resistance.
+That is the architecture.
 
 ---
 
@@ -120,14 +120,19 @@ That is the entire work.
 
 ---
 
-**The ghost belongs to those who have nothing.**
+The high-leverage thinking tools — the ones that let a person write the
+letter that might keep their roof, turn their survival into a story that
+gets them the job, or negotiate debt without destroying themselves —
+should be available to anyone, regardless of budget or country of
+birth. The work in this repository is to make that true, and to keep
+making it true as conditions change.
 
-**We are simply returning what was taken.**
-
-**One fork at a time.**
+One fork at a time.
 
 ---
 
 _This spirit document can be copied, modified, and distributed freely alongside any version of Banal._
 
 _Its only purpose is to make it harder for anyone — including us — to forget why this exists._
+
+**Voice and copy standards:** see [MINDSET.md](./MINDSET.md) before changing UI text, meta tags, or section headers.

@@ -1,172 +1,186 @@
-# Banal Security
+# Security
 
-**Honest treatment of API keys, data, and trust. "Your keys never leave your browser."**
+This document describes Banal's actual security model, the data it does and
+does not handle, and the threats that remain after the architectural
+choices documented in [`docs/ARCHITECTURE.md`](ARCHITECTURE.md).
 
-Banal was built for people who already have reason to be wary of systems that ask for information or control. The security model is deliberately minimal, transparent, and local-first.
-
----
-
-## Your Keys Never Leave Your Browser
-
-This is not marketing. It is a literal fact of the architecture.
-
-- All API keys (for Groq, Gemini, Hugging Face) are stored **only** in your browser's `localStorage` under keys owned by the Banal origin (`banal-api-keys-v1`).
-- When you click "Send", the JavaScript running in _your_ browser reads the key from localStorage and puts it into the `Authorization` (or `?key=`) header of a direct `fetch()` call to the provider's public API endpoint.
-- Banal — the website, the maintainers, any fork you didn't create yourself — never receives your key. There is no server to receive it.
-- The same is true for your conversation history (`banal-chat-history-v1`) and current prompt template state. Everything lives and dies in your browser.
-- Exports (JSON and the self-contained HTML) are generated entirely in your browser using the `Blob` + download trick. No upload happens.
-
-You can verify this yourself: open the built site, open DevTools → Application → Local Storage, or just read the ~350 lines of `src/providers/index.ts`. The functions `loadKeys`, `saveKeys`, `storeApiKey`, `sendFreeMessage` contain the entire story.
-
-Because there is **no backend** (see ARCHITECTURE.md), the usual "we promise we don't log" claim is unnecessary. There is nowhere for us to log it.
+For a full adversarial review with threat modeling and concrete
+recommendations, see [`PENTEST_REPORT.md`](../PENTEST_REPORT.md) in the
+repository root.
 
 ---
 
-## What This Means in Practice
+## What Banal actually does
 
-- Paste a key → Save → it is now in your browser storage for this site.
-- Send a message → your browser talks straight to Groq (or Gemini or HF) using that key.
-- Close the tab or clear site data → the key is gone (until you paste it again).
-- Fork the repo, build your own copy, host it on your own GitHub Pages → the keys you save there live under _your_ hosted origin, completely separate.
+Banal is a static web app that renders a curated directory of 273 external
+tools and 9 prompt templates. When you click a tool, your browser opens
+that tool's own URL. Banal does not proxy, log, or process those requests
+in any way.
 
----
+The only network requests the Banal app itself makes on your behalf are:
 
-## Real Risks (No Sugarcoating)
+- loading its own static assets (HTML, CSS, JS, fonts),
+- the verifications run by the
+  [`verify-tools` workflow](../.github/workflows/verify-tools.yml), which
+  happen on CI infrastructure and never touch your browser.
 
-We will not pretend this is risk-free. Here is the honest list:
-
-1. **Your device or browser profile is compromised.**  
-   Anyone (or any malware) who can run code in the context of the Banal page, or who has access to the browser's storage files, can read the keys and the full chat history. This is true for _any_ web tool that uses keys client-side.
-
-2. **Shared or public computers (library, school, café, family device).**  
-   If you add keys and do not clear them, the next person who opens the same browser profile can see and use them. History of what you discussed is also visible.
-
-3. **Malicious browser extensions or injected scripts.**  
-   A rogue extension with broad "read all site data" permissions, or a compromised page that somehow runs code in the Banal context, could exfiltrate localStorage. (This is why we recommend reviewing any fork you run.)
-
-4. **You host a malicious fork.**  
-   If someone gives you a "Banal" link that is actually their modified version with a backdoor, your keys go wherever they told the code to send them. This is why forking and hosting _your own_ copy (or a fork from a source you trust) is powerful — you choose the code.
-
-5. **The AI providers themselves.**  
-   Once the request leaves your browser (with key + your prompt + history), Groq, Google, or Hugging Face receive it. They have their own logging, retention, and abuse policies. Banal adds no extra hop, but it also cannot protect you from the provider's side.
-
-6. **Physical device loss/theft.**  
-   If your phone or laptop is taken while keys are still saved, the new owner can potentially extract them until you revoke at the provider.
-
-7. **Browser sync / cloud profiles.**  
-   If your browser is set to sync data across devices (Chrome sync, Firefox, etc.), localStorage for the site may travel with your profile. This can be a feature or a risk depending on who else has access to your synced browsers.
-
-Comparison: Most "free AI chat" websites either (a) make you create an account (they see everything forever) or (b) proxy the request through their own servers (they see the prompt + often require you to paste the key to them). Banal removes that middle layer entirely. The remaining risks are the ones inherent to using any third-party AI at all, plus the local device surface.
+There is no Banal-controlled server in the request path. There is no Banal
+API. There is no analytics endpoint, no telemetry ping, no error reporter,
+no "phone home" on load or on error.
 
 ---
 
-## Best Practices (Especially for People Who Have Reason to Be Careful)
+## Data the browser stores locally
 
-- **On any shared/public machine:** After you are done, open the "Free keys & providers" modal and hit Clear on every key you added. Consider also using the browser's "Clear browsing data" → "Cookies and other site data" for the origin, or simply close the incognito/private window (localStorage in incognito is usually discarded when the window closes).
-- **On your personal device:** Treat saved keys like any other password. If the device is lost, stolen, or given away, immediately go to the provider consoles (links are right in the modal: console.groq.com, aistudio.google.com, huggingface.co/settings/tokens) and delete/rotate the keys.
-- **Paranoid but still want to use Banal:**
-  - Host your own fork (see DEPLOYMENT.md). Review `src/providers/index.ts` and `src/chat.ts` yourself (or have a trusted person do it). Build and serve from a domain/origin you control.
-  - Use the Prompt Templates panel to generate the filled prompt _locally_, copy the text from the chat history, and paste it into a different interface you trust more that day. No key is sent through Banal in that workflow.
-  - Create dedicated free keys just for Banal use (most providers let you make multiple).
-- **Regular hygiene:** Periodically clear keys you no longer use. The UI makes this one click.
-- **Exports:** The self-contained HTML file contains everything you wrote. Store or share it with the same care you would give a private journal entry.
-- **Multiple browsers/profiles:** If you are on a risky machine, do the sensitive work in a dedicated browser profile or even a different browser entirely, then clear it.
+The app uses `localStorage` and `sessionStorage` only for things that
+improve the experience of the same browser session. The full list:
 
-None of this is unique to Banal. It is the reality of client-side tools. Banal just makes the boundary extremely clear instead of hiding it behind a "we handle keys for you" story.
+| Key                                       | Storage        | Purpose                                      |
+|-------------------------------------------|----------------|----------------------------------------------|
+| `banal-lang`                              | localStorage   | Persisted language choice (en / ja).         |
+| `banal-theme`                             | sessionStorage | Light/dark override for this tab.            |
+| `savedModelFilters`                       | localStorage   | User-saved model-filter combinations.        |
+| `savedStackFilters`                       | localStorage   | User-saved tool-stack filter combinations.   |
+| `banal-saved-filters`                     | localStorage   | Saved directory filters.                     |
+| `banal-custom-stacks`                     | localStorage   | User-created tool stacks.                    |
+| `banal-filter-analytics`                  | localStorage   | Aggregated, anonymous filter usage counts.   |
+| `banal-prompt-form-<id>-<lang>`           | sessionStorage | Prompt-template form values, per template.   |
 
----
+`banal-filter-analytics` is the only entry that resembles "analytics". It
+counts how often a filter combination is applied, locally, so the UI can
+offer it as a one-click shortcut. The data never leaves the browser. It
+is the same class of "I added a counter" feature you would find in a
+client-side notebook; it is not telemetry.
 
-## What Banal Explicitly Does _Not_ Do
+You can inspect or delete any of these from the browser DevTools
+(Application → Storage) at any time.
 
-- No analytics, no telemetry, no pixels, no "anonymous usage stats".
-- No cookies that track you across visits (the language choice is localStorage; the rest is functional).
-- No server-side logging of prompts, keys, or even that you visited.
-- No "account" that could be subpoenaed or breached centrally.
-- No phone-home on error or export.
+The app does **not** store:
 
-The source is public, small, and intentionally simple. Anyone can read every place a key or a message is touched.
-
----
-
-## If You Suspect a Problem
-
-1. Clear all Banal keys and site data immediately.
-2. Revoke the keys at the providers.
-3. If you are running a fork you got from someone else, switch to the main repo or one you built yourself.
-4. Open an issue (or email the maintainers if the repo has contact info) with as much detail as you can safely share. We treat security reports with priority and will not shame you.
-
-Because the model is so minimal, most "issues" will actually be user-education or "I used it on a shared computer and forgot to clear."
+- API keys. There is no chat feature in the current release; nothing to
+  key.
+- Conversation history. The site does not maintain a chat log.
+- Personal information. The app does not ask for a name, email, or
+  account of any kind.
+- Authentication tokens. There is nothing to authenticate against.
 
 ---
 
-## Japanese Note
+## What leaves your browser
 
-All security messaging in the interface ("Keys never leave your phone or computer. Banal has no servers. This is the point." and the modal notes) is translated directly and without condescension, the same as every other part of the experience. The same localStorage reality applies whether you are using English or 日本語.
+When you click a tool in the directory, your browser performs a normal
+navigation (or opens a new tab) to the tool's own `url` field in
+`src/data/zero-key-tools.ts`. From that point on, you are subject to that
+tool's own privacy policy, terms of service, and data practices. Banal
+has no visibility into, and no control over, what happens there.
 
----
-
-Banal's security model is the same as its philosophy: remove unnecessary middlemen, make the remaining risks visible and manageable, and put the power (and the responsibility) in the hands of the person using it.
-
-If you need something with a different threat model (full E2E, on-prem only, air-gapped, etc.), Banal is probably not the right tool — and that's okay. It is optimized for the person who needs _something_ powerful today on the cracked phone with 30 minutes of free WiFi.
-
-Your keys stay with you. Your conversations stay with you. The code is yours to fork.
-
-That is the security guarantee we can actually keep.
-
----
-
-## Dependency & Supply Chain Security
-
-The built Banal site is 100% static files (HTML + CSS + JS in `dist/`). There are **no runtime Node.js dependencies** for end users. Vulnerabilities in devDependencies only affect people developing or building the project (contributors, forks, CI).
-
-We take this seriously anyway:
-
-- We use `overrides` in `package.json` to force secure versions of known vulnerable transitive dependencies (semver, braces, micromatch, word-wrap, tough-cookie, undici, cross-spawn, etc.).
-- `npm ci` + full `npm audit --audit-level=moderate` is part of the CI gate (`.github/workflows/ci.yml`). Any moderate+ vulnerability will fail the build.
-- Dependabot is configured (`.github/dependabot.yml`) to automatically open PRs for security updates on a weekly basis (and immediately for critical).
-- We prefer small, well-audited, popular packages and keep the dependency tree as flat and minimal as possible.
-- After any `npm install`, we expect `npm audit` to report 0 vulnerabilities. This is enforced.
-
-If a vulnerability appears that cannot be fixed by update/override without breaking compatibility, it will be documented here and a mitigation (or temporary exception with justification) added until resolved.
-
-You can always run `npm audit` yourself after cloning.
-
-A full adversarial penetration test (pentester-style, not just "no backend = safe") was performed. See `PENTEST_REPORT.md` in the project root for detailed findings, threat modeling specific to the "shared device + encouraged forking" use case, and prioritized recommendations.
-
-During that review the following were addressed:
-
-- Production source maps disabled (`vite.config.ts`).
-- Proper `escapeHtml` utility added and used in self-contained exports (`src/utils.ts` + `src/chat.ts`).
+For each tool we link to, the
+[`docs/verification/`](verification/) snapshots record the HTTP status,
+the response time, and the date. The verification is a one-shot HEAD or
+GET against the public URL; no body, no credentials, no follow-up.
 
 ---
 
-**You are carrying the fire.**  
-The fact that you can understand exactly where your words and your keys live — and that you can take them with you or delete them in one click — is itself the dignity this architecture returns. Print the "clear your keys on shared machines" part. Give the page to the next person who is scared of systems. The ghost travels light and leaves no trace except the power it gave.
+## Threat model
+
+### In scope
+
+- **A user runs Banal on a shared or public device** (library, school,
+  shelter, family computer) and leaves the browser open.
+- **A user runs a fork that has been modified by an untrusted party.**
+  The fork could embed additional scripts, change links, or exfiltrate
+  whatever the user types into a search box.
+- **A malicious browser extension** with broad site-data permissions
+  reads the entries in the table above.
+- **A compromised DNS or hosting provider** serves a modified copy of
+  the static files to a user who expected the main repo.
+
+### Out of scope
+
+- Compromise of the upstream tool providers themselves. When you click
+  through to a tool, you are subject to *their* security posture, not
+  ours.
+- Physical access to the device with disk-level forensics capability.
+  Anyone with that level of access can read anything in the browser
+  profile regardless of what we do.
+- The user themselves choosing to share their screen or hand their device
+  to another person.
+
+### Mitigations we apply
+
+- **No analytics, no telemetry, no third-party scripts.** The
+  `dist/` build has no remote calls in normal operation. You can verify
+  this in the browser's Network tab.
+- **Source maps disabled in production.** `vite.config.ts` ships with
+  `sourcemap: false`, so a hosted instance does not also publish the
+  full annotated TypeScript source.
+- **Strict Content Security Policy** is applied where supported by the
+  host. (See `vite.config.ts` and the build output for the current
+  meta-CSP.)
+- **`escapeHtml` is used everywhere user-controlled text is interpolated
+  into HTML** (`src/utils.ts` and the corresponding tests).
+- **`npm audit --audit-level=moderate` is part of CI.** Vulnerabilities
+  in dev dependencies are caught on every push.
+- **Dependabot is enabled** to open weekly PRs for security updates.
+- **The catalog is audited weekly** by
+  `.github/workflows/verify-tools.yml`. Broken tools are surfaced in
+  `docs/verification/YYYY-MM-DD.json` the next time the workflow runs.
+
+### Residual risks we name explicitly
+
+- **A hostile fork.** A motivated attacker can fork Banal, modify it to
+  exfiltrate whatever the user types, and host it on a similar-looking
+  domain. The only defenses here are: review the source of any fork you
+  trust with your data, prefer running your own copy, and recommend
+  forks to others only after you have read the code.
+- **Shared devices.** Anything in the table at the top of this document
+  is visible to the next person who opens the same browser profile.
+  Use a private/incognito window, or clear site data when you are done.
+- **Provider changes.** The 273 tools in the directory are third-party
+  sites. Any of them can change their terms, start requiring an account,
+  or disappear. The catalog is data in
+  `src/data/zero-key-tools.ts`; if a tool misbehaves, file an issue or
+  open a PR that removes it.
 
 ---
 
-## Critical Threat Model: Malicious Forks (The Highest Real Risk)
+## Reporting a security issue
 
-Because Banal's entire philosophy is "Fork it. Rename it. Host it. Give it to your people. A thousand fronts. A million bodies for the same ghost.", users are actively encouraged to run copies hosted by complete strangers.
+Please **do not** open a public GitHub issue for an unpatched
+vulnerability. Use one of the following instead:
 
-**A malicious fork can trivially steal everything:**
+- GitHub's private vulnerability reporting: **Security** tab →
+  **Report a vulnerability** on this repository.
+- If the repo does not yet have that feature enabled, contact the
+  maintainers via the email address in `package.json` (the
+  `bugs.url` field is also a reliable pointer to the issue tracker).
 
-- Modify the send path to exfiltrate your API keys + full conversation (including welfare letters, debt details, personal trauma, medical info, etc.) to an attacker server on every message.
-- Change the "Clear data" button to do nothing or lie.
-- Serve a slightly different UI that looks more "official".
-- Distribute via the exact recommended channels: USB sticks at shelters, QR codes in group chats, "improved community version" links.
+Please include:
 
-There is **no technical way** for a normal user to distinguish a legitimate fork from a malicious one when they just click a link or open an index.html from a USB.
+- a description of the vulnerability and the impact you observe,
+- the exact steps to reproduce,
+- the affected version or commit hash,
+- any suggested fix (optional, but appreciated).
 
-This is not a bug — it is the fundamental trade-off for making the power uncageable. But it must be stated loudly and clearly.
+We treat security reports with priority and aim to acknowledge within
+three working days. We will not ask you to keep a critical issue
+private forever; once a fix is shipped we will publish a postmortem in
+the same channel you reported through.
 
-**What you should do:**
+---
 
-- Only use forks from people or organizations you personally trust.
-- Before printing QR codes or handing out USBs for "your community", review the source (or have someone you trust review it).
-- After any use on a shared device, always use the "Clear ALL sensitive data" button in Settings.
-- Prefer running your own copy (GitHub Pages / Cloudflare / Netlify Drop / local USB) over random third-party links.
+## Security best practices for fork maintainers
 
-See the full adversarial analysis in `PENTEST_REPORT.md` (root of the project). It was written exactly for this threat model.
+If you maintain a fork that other people rely on:
 
-The "Clear all data" button and strong shared-device warnings were added as direct responses to this audit.
+- Keep the CI green. The `npm run ci` script catches dependency
+  vulnerabilities and lint regressions.
+- Do not add analytics, third-party scripts, or remote fonts without
+  documenting the change prominently in your README and the
+  verification snapshots.
+- Do not weaken the `escapeHtml` usage or the CSP.
+- If you must pin to an older dependency for compatibility, document
+  why and when it will be revisited.
+
+Forks are welcome to diverge in opinion. They are not welcome to silently
+make the site less safe.

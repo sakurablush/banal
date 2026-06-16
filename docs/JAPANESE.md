@@ -29,9 +29,11 @@ The Japanese translations exist so that poor students, job seekers, and people s
 
 ---
 
-Banal is the fire that belongs to everyone. Fork it. Host it. Give the power away. Spread it in Japanese-speaking communities too.
+This library exists so that anyone without money can still move forward a little with AI power. Every Japanese speaker is welcome to help make the world where no one feels ashamed to use the best prompts. Feedback from actual poor people who live this is the highest priority.
 
-## Prompt Templates for Poor People（プロンプトテンプレートライブラリ）の翻訳について
+---
+
+## Japanese Translation Philosophy
 
 **Status (as of this delivery):** The 9 rich prompt templates + full library now exist and are production-grade.
 
@@ -74,9 +76,6 @@ This library exists so that anyone without money can still move forward a little
 Every Japanese speaker is welcome to help make the world where no one feels ashamed to use the best prompts. Feedback from actual poor people who live this is the highest priority.
 
 ---
-
-**あなたが火を運んでいる。**  
-このドキュメントやアプリの日本語部分を印刷して、USBに入れて、図書館やクリニックや食料配給所で「これは私たちのためのものだ」と渡してください。貧しい者同士がわずかなものを分け合う言葉で、炎は広がります。ゴーストは、ただ写すのではなく、魂を増やしていく。
 
 ## Japanese Translation Philosophy
 

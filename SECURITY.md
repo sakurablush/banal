@@ -1,140 +1,138 @@
 # Security Policy
 
-## Threat Model
+## Threat model
 
-Banal AI is a frontend-only Single Page Application (SPA) designed for users on shared/library computers, old phones, and constrained environments. The application intentionally has **zero backend infrastructure** to eliminate attack surfaces and ensure forkability.
+Banal is a static web app. There is no backend, no database, and no
+authentication. The browser renders the catalog and the prompt
+templates; clicking a tool takes the user to that tool's own URL. The
+threat model is the one that actually applies to a forkable static
+site, not the one that applies to a SaaS product.
 
-### Key Threat Vectors
+The full version is in [`docs/SECURITY.md`](docs/SECURITY.md). This
+file is the short version that lives at the repository root because
+GitHub renders it under the **Security** tab.
 
-| Vector                                         | Description                                                       | Mitigation                                             |
-| ---------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------ |
-| **H1** - Shared device data leakage            | `localStorage` persists API keys and chat history across sessions | Clear-all button, ephemeral mode recommended, warnings |
-| **H3** - Malicious fork distribution           | Anyone can fork and host modified versions                        | Verify integrity, use trusted sources only             |
-| **M2** - API key visibility in browser history | Gemini API key visible in URL query params                        | Prefer header-auth providers, documented warnings      |
-| **M3** - XSS via innerHTML                     | Dynamic content injection could be exploited in forks             | CSP, escapeHtml everywhere, input sanitization         |
+### Key threat vectors
 
----
-
-## Shared Device Usage
-
-**This is critical for the target audience.** Many users access Banal from:
-
-- Library/public computers
-- Shared family devices
-- Cracked/feature phones
-- Constricted environments
-
-### How to Use Safely on Shared Devices
-
-1. **Always clear your data** after each session using the "Clear All Keys & History" button in Settings
-2. **Incognito/private browsing mode** if available (data clears when tab closes)
-3. **Never save passwords** in browser on shared devices
-4. **Sign out of any AI provider accounts** after getting your free API key (the key itself is sufficient)
-
-### Ephemeral Mode (Recommended)
-
-When using Banal on shared devices, consider enabling ephemeral mode:
-
-- Theme preference uses `sessionStorage` (auto-cleans on tab close)
-- API keys use `localStorage` but should be cleared after use
-- Chat history persists until manually cleared via "Clear All"
+| Vector                                            | Description                                                       | Mitigation                                                          |
+|---------------------------------------------------|-------------------------------------------------------------------|---------------------------------------------------------------------|
+| **Hostile fork** distributed by an untrusted party | A modified copy steals saved filters, custom stacks, or form data | Fork from a source you trust; review the code; host your own copy    |
+| **Shared-device data exposure**                   | localStorage keys persist across browser sessions                 | Use a private window; clear site data when you are done             |
+| **Compromised browser extension**                 | Reads `localStorage` or modifies the rendered DOM                 | Review extensions; prefer a minimal install                         |
+| **Compromised hosting or DNS**                    | A modified `dist/` is served to users expecting the main repo    | Pin the deploy to a known-good commit; verify hashes if available   |
+| **Catalog drift**                                 | A tool URL is taken over, parked, or shut down between audits    | Weekly `verify-tools` workflow writes a dated snapshot              |
 
 ---
 
-## Fork Verification Guide
+## Shared-device usage
 
-Since Banal is MIT licensed and forkable by design, **only download from trusted sources**.
+A meaningful share of the project's audience uses Banal on shared
+devices. If that is you:
 
-### Verifying Integrity
+- Open the site in a private/incognito window if the browser supports
+  it. Closing the window clears `localStorage` for the origin.
+- After your session, clear the site's data from the browser's
+  settings (Settings → Privacy → Clear browsing data → Cookies and
+  other site data, scoped to the Banal origin).
+- If you want a one-time use, the entire `dist/` folder can be opened
+  by double-clicking `index.html` from a USB stick, with no network
+  access required at all.
 
-**Option 1: Official Releases**
-
-- Download only from the official GitHub repository: `github.com/sakurablush/banal`
-- Verify GPG signatures if available
-- Check release checksums
-
-**Option 2: Hash Verification**
-
-```bash
-# Compare file hashes against known-good values
-sha256sum dist/assets/index-*.js
-sha256sum dist/assets/style-*.css
-```
-
-**Option 3: Source Comparison**
-
-- Review all changes in a fork before use
-- Check for modifications to:
-  - `src/providers/` (API key handling)
-  - `src/chat.ts` (localStorage usage)
-  - `src/utils.ts` (escapeHtml function)
-  - Any additions of external resources
-
-### Red Flags to Avoid
-
-- Forks that auto-submit data to external servers
-- Modified storage keys or exfiltration code
-- Removed "Clear All" functionality
-- Added analytics or tracking scripts
-- Modified CSP or removed security measures
+The app's data usage is documented in
+[`docs/SECURITY.md`](docs/SECURITY.md#data-the-browser-stores-locally).
+The short version: the only persistent state is the language choice,
+saved filter combinations, custom tool stacks, theme override, and
+prompt-template form values (the last two in `sessionStorage`). There
+are no API keys, no chat history, and no personal information
+collected.
 
 ---
 
-## Data Handling Disclosure
+## Fork verification
 
-### What We Store Locally
+The whole point of the project is to be forkable. That implies a
+shared responsibility: forks must be reviewable.
 
-| Data                | Storage Location | Purpose                    | Auto-Clear         |
-| ------------------- | ---------------- | -------------------------- | ------------------ |
-| API keys            | `localStorage`   | Enable chat with providers | No (use Clear All) |
-| Chat history        | `localStorage`   | Continue conversations     | No (use Clear All) |
-| Theme preference    | `sessionStorage` | Light/dark mode preference | Yes (on tab close) |
-| Language preference | `localStorage`   | EN/JA language             | No                 |
+### If you are using a fork
 
-### What We NEVER Do
+- Read the source before you trust it with anything you would not
+  print on a public wall. The whole project is small enough to read
+  in one sitting.
+- If you do not have time to read, host your own copy from a source
+  you already trust (the main repo on GitHub, or a known contributor's
+  fork).
+- If a "Banal" link arrives through a side channel (chat, QR code,
+  USB), the safest default is to ignore it and use a link you
+  already had.
 
-- **Never** send your data to a Banal server (there is none)
-- **Never** log your conversations
-- **Never** track your usage
-- **Never** require accounts or personal information
+### If you are a fork maintainer
 
-### What Providers See
-
-When you use chat features, your prompts are sent directly to:
-
-- Groq (`api.groq.com`)
-- Google Gemini (`generativelanguage.googleapis.com`)
-- Hugging Face (`router.huggingface.co`)
-- OVHcloud (`oai.endpoints.kepler.ai.cloud.ovh.net`)
-
-**Review each provider's terms** for their data handling policies.
-
----
-
-## Reporting Security Issues
-
-If you discover a security vulnerability:
-
-1. **Do not** open a public issue (for active vulnerabilities)
-2. Email security concerns to the maintainer or open a private discussion
-3. Include:
-   - Description of the vulnerability
-   - Steps to reproduce
-   - Potential impact
-   - Suggested fix (if any)
+- Keep `npm run ci` green. It runs lint, typecheck, the test suite,
+  and `npm audit --audit-level=moderate`.
+- Do not add analytics, third-party scripts, remote fonts, or any
+  network call that the original build does not make, without
+  documenting the change prominently.
+- Do not weaken the use of `escapeHtml` in `src/utils.ts` or remove
+  the `meta` Content Security Policy (when one is added — see the
+  current recommendations in
+  [`PENTEST_REPORT.md`](PENTEST_REPORT.md)).
+- If you must pin to an older dependency for compatibility, document
+  the reason and the revisit date in your README.
 
 ---
 
-## Security Best Practices for Forks
+## Data handling disclosure
 
-If you maintain a fork:
+The full disclosure is in
+[`docs/SECURITY.md`](docs/SECURITY.md#what-leaves-your-browser). The
+short version:
 
-1. **Keep CSP intact** - Do not remove or weaken Content Security Policy
-2. **Preserve escapeHtml** - Ensure all user content is properly escaped
-3. **Maintain Clear All** - The shared device hygiene feature must remain
-4. **Review dependencies** - Audit any added packages for security issues
-5. **Document changes** - Clearly state any modifications to security behavior
+- The app does not call any LLM provider.
+- The app does not store API keys.
+- The app does not maintain a chat history.
+- The app does not require an account, an email, or any personal
+  information.
+- The only outbound network requests in normal operation are the
+  navigation to the tool URLs the user clicks on. Each click takes
+  the user to the tool's own site; from that point on, that site's
+  own privacy policy applies.
+- The catalog is audited weekly by
+  [`.github/workflows/verify-tools.yml`](.github/workflows/verify-tools.yml).
+  Results are in [`docs/verification/`](docs/verification/).
 
 ---
 
-_This security policy reflects the audit findings and the project's commitment to serving vulnerable users with dignity and protection._
+## Reporting a security issue
+
+Please **do not** open a public GitHub issue for an unpatched
+vulnerability. Use one of these channels instead:
+
+- GitHub's private vulnerability reporting: **Security** tab →
+  **Report a vulnerability** on this repository.
+- If the repo does not yet have that feature, contact the maintainers
+  via the email or issue tracker linked from `package.json`.
+
+Please include:
+
+- a description of the vulnerability and the impact you observe,
+- the exact steps to reproduce,
+- the affected version or commit hash,
+- a suggested fix (optional but appreciated).
+
+We aim to acknowledge within three working days and to publish a
+postmortem once a fix is shipped.
+
+---
+
+## Security best practices for everyone
+
+- **Keep your browser up to date.** A current browser ships with the
+  most recent XSS, CSRF, and same-origin protections.
+- **Audit your extensions.** A browser extension with broad
+  permissions can read anything Banal stores in `localStorage`.
+- **Verify the URL.** Phishing sites that mimic the Banal look are
+  cheap to host. Type the URL yourself or use a bookmark you made,
+  not a link from a chat.
+- **If something is wrong, refresh.** The most common "the site is
+  broken" reports on forks are caused by a stale browser cache. A
+  hard refresh (Cmd/Ctrl+Shift+R) fixes almost all of them.

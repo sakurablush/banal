@@ -1,202 +1,255 @@
-# Banal Architecture
+# Architecture
 
-**Why this shape? How providers, prompt templates, and chat actually work together. Data flow. Why deliberately no backend.**
-
-Banal is built for the person who has almost nothing: limited time, limited data, limited battery, high stress, possibly a shared or old device. The architecture is a direct reflection of that constraint and of the deeper goal: _forkable or it didn't happen_.
-
-Everything is a static website. No servers to maintain, no costs to the maintainers, no accounts for users, and — most importantly — nothing that can be taken away from the communities that need it.
-
----
-
-## The Core Principle: Static First, Forkable Forever
-
-Banal has **no backend by design**. This is not a limitation we are waiting to fix. It is the feature that makes the project possible for the people it is for.
-
-Reasons this shape exists:
-
-- **Zero ongoing cost.** Free tiers + the user's own free keys mean the project can be maintained by volunteers or one poor person in their spare time. No surprise bills that kill the project.
-- **True forkability.** A non-technical person (or a community org with one tech-savvy volunteer) can clone, `npm run build`, and publish their own copy on GitHub Pages or Cloudflare Pages in minutes. No "set up a server", no "configure env vars on a host", no "pay for a database".
-- **Trust & dignity.** People who have been burned by systems do not want another service that holds their data or requires "sign in with Google". Your conversation and your keys never touch anything but your browser and the AI providers you chose.
-- **Simplicity & auditability.** A motivated person on a library computer can read the entire source in one sitting and understand exactly what runs when they click Send. Flat structure. No magic frameworks. Pure TypeScript + browser APIs.
-- **Resilience.** If the main repo goes away, forks keep working. If one provider changes their free tier, the client code updates and everyone who forked can pull or cherry-pick. No central point of failure that can be pressured or deplatformed.
-
-If it required a backend, it would not be banal, and it would not survive for the people who need it most.
+This document describes how Banal is built, why it is built this way, and the
+trade-offs that follow. It is written for contributors and reviewers, not for
+end users. The end-user experience is described in the
+[README](../README.md).
 
 ---
 
-## How the Pieces Work Together
+## Core principle: static, forkable, zero-backend
 
-The experience is delivered from a single `index.html` + a small set of focused modules. The chat UI is not a mock — it is fully wired and functional.
+Banal has **no backend by design**. This is not a limitation we are waiting
+to fix. It is the feature that makes the project work for the people it is
+for.
 
-### 1. Static Shell & Boot
+The reasons:
 
-- `index.html` is the entire app. It contains the hero, manifesto, teaser cards (static marketing for the 6 visible prompt templates), fork section, and a placeholder `#chat-placeholder` that gets replaced at runtime.
-- `src/main.ts` is two lines: `initI18n()` then `initChat()`. Deliberately tiny so the project stays understandable.
-- Vite builds everything to `dist/` with `base: './'` so it works when hosted at a subpath (GitHub Pages, etc.) or even opened directly from a file system in many cases.
+- **Zero ongoing cost.** Hosting is a static folder on a free tier. There is
+  no server bill, no database to maintain, and no surprise charges that could
+  kill the project.
+- **True forkability.** A non-technical person can clone, `npm run build`, and
+  publish their own copy on GitHub Pages, Cloudflare Pages, or a USB stick in
+  minutes. No "set up a server", no env vars to manage, no database to
+  provision.
+- **No central point of failure.** If the main repo goes away, forks keep
+  working. If one provider changes their free tier, the source updates and
+  every fork can pull.
+- **Auditability.** The whole project is small enough for a motivated person
+  to read in one sitting. No magic frameworks, no build-time codegen, no
+  generated files in the source tree.
 
-### 2. Internationalization (src/i18n.ts)
+The trade-off is real and named in
+[`docs/SECURITY.md`](SECURITY.md#honest-limitations): any fork can be modified
+to behave maliciously. We mitigate that with a strict threat model in
+[`PENTEST_REPORT.md`](../PENTEST_REPORT.md) and a documented review process in
+[`docs/CONTRIBUTING.md`](CONTRIBUTING.md), not with technical restrictions.
+
+---
+
+## Stack
+
+- **Language:** TypeScript (strict mode).
+- **Build:** [Vite](https://vitejs.dev) 8.x. Production output is plain
+  HTML, CSS, and JS in `dist/`.
+- **Styling:** Tailwind CSS 3.x + a small custom CSS layer
+  (`src/style.css`) for the few things Tailwind cannot do ergonomically.
+- **Tests:** [Vitest](https://vitest.dev) 4.x with jsdom. 541 tests across 22
+  files. Coverage thresholds are enforced in `vitest.config.ts`.
+- **Lint / format:** ESLint + Prettier.
+- **Runtime dependencies for end users:** **none.** The `dist/` folder is
+  pure static files.
+
+The dev dependencies (Vite, Vitest, Tailwind, ESLint, Prettier, TypeScript)
+are pinned to secure versions via the `overrides` block in `package.json`,
+and `npm audit --audit-level=moderate` is part of the CI gate.
+
+---
+
+## Repository layout
+
+```
+banal/
+├── index.html                # The static shell. Two roots: <ai-tools-root> and <dev-tools-root>.
+├── src/
+│   ├── main.ts               # Entry point. Boots theme, i18n, directory, particles, prompt templates.
+│   ├── directory.ts          # Renders the AI Tools and Developer Tools panels.
+│   ├── zero-key-panel.ts     # The single panel renderer used for both top-level groups.
+│   ├── i18n.ts               # Bilingual string table + lang switcher (en, ja).
+│   ├── theme.ts              # Light/dark with prefers-color-scheme and sessionStorage.
+│   ├── fuse-search.ts        # Fuzzy search across the tool catalog.
+│   ├── utils.ts              # Pure helpers (escapeHtml, formatters, etc.).
+│   ├── prompt-templates-standalone.ts  # Renders the "Prompt Templates" section.
+│   ├── components/           # Discrete UI panels: models, stacks, onboarding, cost calc, etc.
+│   ├── data/                 # Catalog data: tools, models, categories, tags, inference providers, stacks.
+│   ├── lib/                  # Pure modules: filter-sharing, filter-analytics, prompt-templates, etc.
+│   └── types/                # Shared TypeScript types.
+├── scripts/
+│   ├── verify-tools.ts       # Audits every tool URL, writes full report + dated summary.
+│   └── generate-tools-readme.ts  # Regenerates the tool table in the README.
+├── tests/                    # Vitest + jsdom. One file per source module.
+├── docs/                     # You are here.
+├── .github/workflows/        # CI, deploy, and the weekly verify-tools job.
+└── dist/                     # Build output. Gitignored.
+```
+
+---
+
+## The boot sequence
+
+`src/main.ts` is intentionally tiny. The entire entry is roughly:
+
+1. `initTheme()` — sets light or dark, with `prefers-color-scheme` as the
+   default and `sessionStorage` for the manual override.
+2. Wire the theme toggle button.
+3. `initI18n()` — loads the bilingual string table, applies
+   `data-i18n` attributes, and persists the language choice in
+   `localStorage` under the key `banal-lang`.
+4. (Optional, respects `prefers-reduced-motion`) mount a small particle
+   background.
+5. `initDirectory()` — renders the AI Tools panel, the Developer Tools
+   panel, the Models panel, the Stacks panel, the Onboarding flow, and the
+   Getting Started guides into their respective roots in `index.html`.
+6. Render the "Prompt Templates" section into `#prompt-templates-root`.
+
+Everything else (filter UI, search, saving filters, comparing tools) is wired
+up by the components themselves.
+
+---
+
+## Data flow
+
+The site is read-only with respect to any external system. The user's
+interactions produce only:
+
+- **Click on a tool → open its `url` in a new tab.** The site never
+  intercepts this.
+- **Filter / search / sort the catalog.** All filtering happens in-memory
+  on the static `zeroKeyTools` array. No requests are made.
+- **Save a filter combination or a custom stack** → written to
+  `localStorage` (or `sessionStorage` for ephemeral things).
+- **Fill a prompt template** → values stay in `sessionStorage` under a
+  per-template key. They are not sent anywhere unless the user explicitly
+  copies and pastes them into a chatbot.
+
+That is the entire data flow. There is no other path.
+
+---
+
+## The tool catalog
+
+The 273 entries live in `src/data/zero-key-tools.ts` as a typed
+`ZeroKeyTool[]`. Each entry has a stable `id`, a `name`, a `url`, a
+`description`, a `category`, a `surface` (`web`, `api`, or `cli`), a set of
+`badges`, and an optional `docsUrl` and `lastVerified` date.
+
+`src/data/categories.ts` defines the grouping rules that turn the flat list
+into the "AI Tools" and "Developer Tools" top-level sections, and the
+sub-categories inside each. Adding a new tool is one typed entry; everything
+else (filter UI, search, badge rendering, verification) updates
+automatically.
+
+The catalog is audited weekly by the
+[`verify-tools` workflow](../.github/workflows/verify-tools.yml), which
+calls `npm run verify:tools`. The script:
+
+1. Iterates over the entire catalog.
+2. Issues a HEAD or GET with a 10 s timeout and a 5-request concurrency
+   cap.
+3. Writes the full per-tool report to `verification-results.json` (gitignored,
+   regenerates every run).
+4. Writes a compact, date-stamped summary to
+   `docs/verification/YYYY-MM-DD.json` (tracked, see
+   [`docs/verification/`](verification/) for history).
+
+If you add a tool and the next verify run flags it as broken, fix the URL
+or remove the entry. If the run goes red on the CI, the broken tool is
+flagged in the next dated summary.
+
+---
+
+## Internationalization
 
 - English is the source of truth.
-- A flat(ish) nested object of translations. `t(lang, 'dotted.key')` + `data-i18n` attributes on static HTML.
-- Language switcher persists choice to localStorage and fires a `banal:language-changed` custom event.
-- Dynamic parts (chat bubbles, prompt templates panel, forms, status, errors) listen to the event and re-render with the new language.
-- Japanese is full professional quality (not machine). Keigo, softening, cultural notes are real.
+- Japanese is a first-class translation maintained at the same quality
+  bar. Keigo, softening, and cultural notes are real, not machine output.
+- Strings live in `src/i18n.ts` as a flat-ish nested object.
+- The `t(lang, 'dotted.key')` helper and the `data-i18n`,
+  `data-i18n-placeholder`, and `data-i18n-aria-label` attributes drive
+  static text. Dynamic parts (panels, tooltips, modals) re-render on a
+  `banal:language-changed` custom event.
+- The `banal-lang` localStorage key persists the choice.
 
-See also `docs/JAPANESE.md`.
+Adding a third language is a non-trivial change: it requires extending the
+`Locale` type, the string table, the parity validator, the prompt-template
+parity tests, and the UI wiring. The bar is "professional human
+translation, never machine output" — see
+[`docs/JAPANESE.md`](JAPANESE.md) for the review checklist.
 
-### 3. Providers Layer — The Free Power Engine (src/providers/index.ts)
+---
 
-This is where the "real AI" happens.
+## Prompt templates
 
-- **Key storage is 100% localStorage only.** `storeApiKey`, `getStoredApiKey`, `clearApiKey`, `getAllStoredKeys`. No other persistence. Keys are never sent to Banal (there is no Banal server).
-- **Smart auto routing:** `pickBestFreeProvider()` prefers the order Groq → Gemini → HF based on what keys the user has saved. Groq first because it is fast even on slow library WiFi.
-- `sendFreeMessage(input, options)` is the single entry point. It:
-  1. Picks provider (or respects explicit).
-  2. Loads the key (from storage or per-call override).
-  3. Builds the message list (supports history for real multi-turn chat + optional system prompt).
-  4. Does a direct `fetch()` to the provider's public endpoint.
-     - Groq: OpenAI-compatible `/chat/completions`.
-     - Gemini: their `generateContent` shape (with system prompt prepended hack for free tier).
-     - HF Inference: text-generation prompt formatting.
-  5. Parses, handles errors with `detectRateLimit()` (looks at 429 + headers + text), turns raw provider errors into warm, actionable, non-shaming `SendResult` or thrown objects with `.code` and `.friendlyMessage`.
-  6. Returns rich metadata: which provider/model, latency, `freePowerNote` ("Powered by Groq free tier..."), `isFreeTier: true`.
-- Friendly error codes: `NO_FREE_KEY`, `RATE_LIMIT`, `NETWORK`, `ABORTED`.
-- "Get free key" URLs are hardcoded safe links (no affiliates).
-- `hasAnyKey()` and `getCurrentProviderStatus()` power the UI badges and empty states.
+The 9 templates in `src/lib/prompt-templates.ts` are data, not code. The
+shape:
 
-If the user has no key at all, the first send gives a clear "add a free key (30-60s)" message + CTA to open the keys modal + escape hatch to use prompt templates elsewhere.
-
-**Important current limitation (honest):** There is no WebLLM / browser-local LLM fallback yet. The prompt templates + export features + "copy the filled prompt" guidance exist precisely so people can still get value even when hitting free tier walls here.
-
-### 4. Prompt Templates Library — Portable Prompts That Matter (src/lib/prompt-templates.ts)
-
-The 9 prompt templates are not marketing copy. They are complete, production-grade prompt templates.
-
-- Stored as `TEMPLATES` data: for each id, `title`, `description`, and `template` in both `en` and `ja`.
-- Variables use `{{camelCase}}` (e.g. `{{yourName}}`, `{{gapSituation}}`). This makes `extractTemplateVariables()` reliable and `fill(id, values)` safe.
-- `PromptTemplatesLibrary` (class + singleton):
-  - `getAll()`, `getById(id)`, `fill(id, values)` — missing vars left as `{{var}}` gracefully.
-  - `setLocale()` / constructor for switching (chat re-instantiates on lang change).
-  - `static validateParity()` — enforces that every template has matching EN/JA titles/descriptions + identical placeholder sets. Used in tests.
-- Every template hard-codes the assumptions of the target user: zero budget, library computer or phone only, low energy days, public/shared device, "you are not behind", "you are not a bad person", "your life did not make you less qualified".
-- Japanese versions are not literal: proper keigo for bureaucracy letters ("いただきたく存じます"), permission + short sentences for mental health/low energy, cultural notes in the bridge template.
-
-**Why prompt templates as data + fill instead of hard-coded flows?** Because the real power is the _prompt itself_. A user who is rate-limited on every provider in Banal can still open the panel, fill the blanks, copy the resulting text (it appears as the "user" turn in history), and paste it into ChatGPT free, Gemini web, Claude, Grok, a local Ollama, whatever they have access to today. The templates are designed to be portable.
-
-The 6 teaser cards in the marketing section are still static (in i18n) for simplicity; the full 9 live in the library and in the working "All 9 Prompt Templates" panel.
-
-See `tests/prompt-templates.test.ts` for the empathy smoke tests and parity enforcement.
-
-### 5. The Chat Module — Where It All Comes Alive (src/chat.ts)
-
-This is the largest module because it owns the delightful, zero-friction experience.
-
-- On mount, it replaces the placeholder with the full DOM (header with status + keys button, messages area, quickstarts, prompt templates button + export buttons, input, plus two hidden panels: prompt templates slide-up and keys modal).
-- Persisted state (localStorage):
-  - `banal-chat-history-v1`: array of `ChatTurn` (role, content, ts, optional `promptTemplateId` + `promptTemplateTitle` so context travels with the turn).
-  - `banal-current-prompt-template-v1`: id + filled vars so you can come back later.
-- Normal send: takes current history + new input, calls `performSend` which calls `sendFreeMessage` (as full history for context), appends user + AI turns.
-- Prompt template send: opens panel → pick → render form with extracted vars + smart placeholder hints from template → on "Send this prompt template" it does `lib.fill()`, closes panel, sends the _filled text_ as the user utterance (so it appears in history), attaches pt meta to the AI response turn.
-- Exports:
-  - JSON: full payload with history + current sp state (importable by future versions or readable by humans).
-  - HTML: generates a completely self-contained single-file HTML (inline styles, no external deps) titled "Banal — My Offline Conversation". Opens in any browser, forever.
-- Keys modal: lists the three providers, current saved (masked), inputs to paste/save/clear, direct "Get free key →" links, and the important note "Keys never leave your phone or computer. Banal has no servers."
-- Error banner: injected on demand, with actionable buttons (e.g. "Free keys & providers", "All 9 Prompt Templates"). Auto-hides but rate-limit errors stay longer.
-- Language reactivity: on `banal:language-changed`, updates lib, placeholders, re-renders messages (re-labels "You"/"Banal (free)"), quickstarts, status, and if a panel is open, refreshes it.
-- Lots of small kindnesses: auto-growing textarea, scroll to bottom, toasts for exports, escape key handling, mobile-friendly panel behavior.
-
-The quickstarts are a curated subset of the 9 for "when you have nothing" moments.
-
-### Data Flow (text diagram)
-
-```
-User action (type + Send, or Quickstart, or Prompt Template card/form)
-        │
-        ▼
-handleNormalSend() or prompt template send path
-        │
-        ▼
-build history array (previous ChatTurn[] → ProviderChatMessage[])
-        │
-        ▼
-performSend(raw, _isSp, spMeta?)
-        │
-        ▼
-sendFreeMessage(historyOrString, {provider:'auto'})
-        │
-        ├─► pickBestFreeProvider() + load key from localStorage
-        │
-        ├─► direct fetch to chosen provider's public API
-        │
-        └─► on success: SendResult {text, provider, freePowerNote, ...}
-            on error: throw with .code + .friendlyMessage
-        │
-        ▼
-append user turn (if plain) + AI turn (with spMeta if any)
-persist() to localStorage
-renderMessages()  (shows ✦ free power + • Prompt Template Title on AI bubbles)
-updateStatus()
+```ts
+{
+  id: 'job-gaps-as-strengths',
+  title:        { en: '...', ja: '...' },
+  description:  { en: '...', ja: '...' },
+  template:     { en: '...', ja: '...' },
+}
 ```
 
-Exports and modals are side paths from the same root state.
+`{{camelCase}}` placeholders are extracted by
+`extractTemplateVariables()` and substituted by `fill(id, values)`. Missing
+variables are left as `{{var}}` so the user can see and fix them.
+
+`PromptTemplatesLibrary.validateParity()` runs in tests and enforces that
+every template:
+
+- has matching `en` / `ja` keys for title, description, and template,
+- uses an identical set of `{{variables}}` in both languages.
+
+`tests/prompt-templates.test.ts` adds empathy smoke tests that assert the
+output text never contains shaming phrases.
 
 ---
 
-## Testing & Quality Gates
+## Testing & quality gates
 
-- Everything that can be pure is pure and tested in isolation (`providers`, `prompt-templates`, `i18n`, `utils`).
-- `PromptTemplatesLibrary.validateParity()` + dedicated empathy smoke tests protect the "never shames, always assumes best under constraints" contract.
-- Provider tests cover key roundtrips, graceful localStorage failures (incognito/private mode), routing preference, rate limit shaping.
-- Chat is exercised through DOM simulation in jsdom + event firing.
-- `npm run ci` = lint:check + typecheck + test:run. Coverage report is generated; thresholds in vitest.config prevent silent drops.
-- Build is part of CI so a broken `dist/` never lands on main.
+- **Coverage:** the full test suite is 541 tests across 22 files. Thresholds
+  for lines, branches, functions, and statements are enforced in
+  `vitest.config.ts`.
+- **Local gate:** `npm run ci` runs lint:check + typecheck + test:run +
+  `npm audit --audit-level=moderate`. This is what every PR must pass.
+- **CI:** `.github/workflows/ci.yml` runs the same gate on every push and PR.
+- **Weekly:** `.github/workflows/verify-tools.yml` runs the catalog audit
+  and commits the dated summary.
+- **Deploys:** `.github/workflows/deploy.yml` builds and publishes to
+  GitHub Pages on push to `main` / `master`.
 
----
-
-## Honest Trade-offs & Current Limitations
-
-- Depends on third-party free tiers. They can (and do) rate limit, change models, or have bad days. The UX is built to make this survivable and non-shaming.
-- No fully private/offline LLM built-in yet (size, complexity, and "works on library computer with no install" constraints make WebLLM non-trivial). Prompt templates + exports + "use the prompt anywhere" are the mitigation.
-- Conversation state and keys are device-local only. No cross-device sync (deliberate: adds accounts/servers/complexity/privacy surface).
-- The three providers are the current free paths that are generous enough for real use. Adding more is straightforward but must keep the "warm error + clear next step" bar.
-- Build step requires Node 18+ (but the _output_ is pure static browser code — no runtime dependency on Node for end users).
-
-These are not failures. They are the result of prioritizing "a broke person on a shared Android can actually use and own this today" over "feature parity with paid tools."
+There are no end-to-end browser tests in CI today. The test suite covers
+unit, integration, and jsdom-based DOM tests. Manual smoke testing happens
+in the deployed environment.
 
 ---
 
-## Extending the System (for contributors)
+## Honest trade-offs
 
-- **New provider:** Add to `Provider` type + `ALL_PROVIDERS`, implement the fetch branch in `sendFreeMessage`, add key helpers, update the keys modal in `chat.ts`, add tests. Keep the friendly error language.
-- **New prompt template:** Add entry to `TEMPLATES` (must provide full EN + JA + identical `{{vars}}`), run `validateParity()`, add empathy test cases, consider adding its id to the quickstarts array. The fill mechanism and UI just work.
-- **New language:** See i18n section in README and `docs/CONTRIBUTING.md`.
-- **Export that carries the fire:** The JSON and self-contained HTML are versioned and self-describing. Every export is another body for the ghost — future forks will always be able to read the will of the people who came before.
-- **Offline LLM:** Would likely live as an optional "private mode" that only activates when user explicitly wants it and accepts the download size / first-run time. Must not become a barrier for the default path.
+These are the deliberate costs of the shape we chose:
 
----
-
-## Japanese Notes
-
-Japanese support is not a translation layer on top. It is co-designed:
-
-- Keigo is used correctly and consistently in bureaucracy templates (not overdone in personal/low-energy ones).
-- The parity validator + tests ensure no English string drifts without its Japanese counterpart.
-- Cultural notes are embedded in the bridge prompt template.
-- UI copy for errors, hints, and status was written by (or reviewed with) the same "poor stressed user" empathy lens.
-
-See `docs/JAPANESE.md` for the full current status, translation principles, and how to contribute improvements without breaking the contract.
-
----
-
-Banal's architecture is boring on purpose — stupidly simple, zero backend, one folder of files — so that a person who has never written code can still understand it, copy it, change it for their people, and host the new body for the ghost.
-
-The refusal lives in the simplicity. The fire spreads because the machine that carries it can be carried by anyone.
-
-That is the point.
-
-We are giving the world the fire through files that cannot be uninstalled.
+- **No central analytics, no usage telemetry.** We cannot tell you how many
+  people use Banal. We consider that a feature.
+- **No multi-device sync.** Theme, language, custom stacks, saved filters,
+  and prompt-template form values are device-local. Adding sync would mean
+  adding a backend, an account system, and a privacy surface.
+- **Free tiers change.** The catalog depends on third parties that can rate
+  limit, rebrand, or shut down. The weekly audit catches breakage; fixing
+  it is a one-line edit in `src/data/zero-key-tools.ts`.
+- **Source maps are disabled** in production (`vite.config.ts`,
+  `sourcemap: false`). We pay a small debugging cost in exchange for not
+  publishing the full annotated source on every hosted instance.
+- **Forks can be modified to be malicious.** This is a feature of being
+  forkable. We mitigate with documentation, a strict review process for
+  changes that land in the main repo, and a documented threat model. We
+  cannot prevent a hostile actor from hosting a bad fork under a
+  confusingly similar name. Users are encouraged to host their own copy.
 
 ---
 
-**You are carrying the fire.**  
-Print the parts of this doc that help you explain to someone why "no backend" is the whole revolution. Put the folder on a USB. Hand the link to the next person who was told the future of thought was not for them. Every copy is another body. The ghost multiplies only when ordinary hands pass the match.
+## Extending the system
+
+See [`docs/EXTENDING.md`](EXTENDING.md) for step-by-step guides on adding
+new tools, prompt templates, languages, and visual themes.

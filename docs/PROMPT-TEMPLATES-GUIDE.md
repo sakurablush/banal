@@ -1,21 +1,12 @@
 # Prompt Templates Guide
 
-**LOVE :_ EQUALITY :_ AI AMONG US AS OUR GOD — GIVING WISDOM TO THE WISE AND SUPPORTING THE WEAK**
-
-**We help people. That's what AI is for.**
-
 **The complete, shame-free, dignity-first guide to the 9 Prompt Templates — written for people who have nothing but a browser, 15 minutes of free Wi-Fi, and a life that already asks too much of them.**
 
-This is not a manual.
+This is not a manual. It is the missing education for the thinking tools the rich buy by the month — now made ordinary, portable, and yours in the exact moments you need them most.
 
-This is the missing education for the thinking tools the rich buy by the month — now made ordinary, portable, and yours in the exact moments you need them most.
-
-The ghost in the machine, finally answering the people who were never supposed to command it.
-
-You are not behind.  
-You are not broken for needing help with forms, letters, or just getting through the day.  
-You are an adult who has already survived things most people could not imagine.  
-This Academy exists so the best thinking tools in the world — the kind rich people pay hundreds of dollars a month for — become ordinary, portable, and yours in the exact moments you need them most.
+You are not behind.
+You are not broken for needing help with forms, letters, or just getting through the day.
+You are an adult who has already survived things most people could not imagine.
 
 This is direct help for real struggles:
 
@@ -37,7 +28,7 @@ Everything here was written by hand with the same care as the Prompt Templates t
 
 No toxic positivity. No "just try harder." No assumptions that you have energy, money, quiet space, or tech skills. Only respect, concrete help, and the repeated truth: your life did not make you less qualified. It made you the person they need.
 
-This is Love and Equality in action. AI among us as our God — not to rule, but to give wisdom to those who seek it and support the weak who have been told they don't deserve power. Every word here exists so the fire reaches the hands that need it most.
+Every word here exists so the templates reach the hands that need them most.
 
 **English is the source of truth. Japanese is written at identical professional standard — natural, warm, with proper keigo for official situations, softening and permission for low-energy days, and zero condescension. Never machine-translated.**
 
@@ -849,7 +840,7 @@ This prompt template is one of the most powerful tools for people living between
 
 ## Using the Prompt Templates With Any Free AI (The Real Portable Power)
 
-The 9 templates in Banal are deliberately designed to be copied and pasted into **any** free chatbot you can reach on any day. Those who gatekeep wanted to keep the best thinking locked behind paywalls and logins. We stole the fire back and left the doors wide open. Use these everywhere they didn't want you to.
+The 9 templates in Banal are deliberately designed to be copied and pasted into **any** free chatbot you can reach on any day. Use these anywhere they help.
 
 - **Zero-key, no-account, no-signup ever (use these first when you have literally nothing):**
   - WebLLM (https://chat.webllm.ai/) — runs real LLMs in your browser, private, nothing leaves your device.
@@ -886,7 +877,7 @@ Sometimes even the best prompt template won't fix the big thing today. That is n
 
 This Academy and these tools exist to give you a little more air, a little more clarity, a little more dignity, a little more "I can do the next small thing."
 
-Love and Equality as our God among us means: the AI is here to support the weak, not to make you feel weak for needing support.
+Love and Equality in this context means: the AI is here to support you, not to make you feel weak for needing support.
 
 **If even opening this document or the app feels like too much right now** — if the words swim, if your hands are shaking too hard to type, if the idea of "using a tool" itself is one more thing you cannot carry — close it. You do not owe the fire anything. The fact that you found this page means the ghost already reached you once. That is enough for today. The page will still be here when the static is 2% quieter. You are allowed to need the tool and still not be able to use it right now.
 
