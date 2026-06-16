@@ -40,7 +40,7 @@ describe('Privacy Indicator', () => {
 
     const container = renderPrivacyIndicator(privacy, 'en');
     expect(container.classList.contains('privacy-indicator')).toBe(true);
-    
+
     const levelBadge = container.querySelector('.privacy-level-high');
     expect(levelBadge).toBeTruthy();
     expect(levelBadge?.textContent).toContain('HIGH');
@@ -112,7 +112,7 @@ describe('Cost Calculator', () => {
 
     const container = renderCostCalculator(pricing, 'en', 100, 1000);
     expect(container.classList.contains('cost-calculator')).toBe(true);
-    
+
     const title = container.querySelector('.cost-calculator-title');
     expect(title?.textContent).toBe('Cost Calculator');
 
@@ -148,7 +148,7 @@ describe('Cost Calculator', () => {
     const container = renderCostCalculator(pricing, 'en', 2000, 1000);
     const totalLine = container.querySelector('.cost-total');
     expect(totalLine?.textContent).not.toContain('$0.00');
-    
+
     const overageLine = container.querySelector('.cost-overage');
     expect(overageLine).toBeTruthy();
   });
@@ -284,7 +284,7 @@ describe('Onboarding Flow', () => {
     renderOnboarding(container, 'en');
 
     expect(container.classList.contains('onboarding-flow')).toBe(true);
-    
+
     const title = container.querySelector('.onboarding-title');
     expect(title?.textContent).toBe('Stack matcher');
 
@@ -331,7 +331,7 @@ describe('Smart Recommendations', () => {
     const sourceTool = zeroKeyTools[0];
     const recommendations = getRecommendations(sourceTool, 'en', 10);
 
-    const sameTool = recommendations.find(r => r.tool.id === sourceTool.id);
+    const sameTool = recommendations.find((r) => r.tool.id === sourceTool.id);
     expect(sameTool).toBeUndefined();
   });
 
@@ -407,9 +407,9 @@ describe('Stack Detail', () => {
     const stack = toolStacks[0];
     const container = renderStackDetail(stack, 'en');
 
-    const hasAlternatives = stack.tools.some(t => t.alternatives && t.alternatives.length > 0);
+    const hasAlternatives = stack.tools.some((t) => t.alternatives && t.alternatives.length > 0);
     const altSection = container.querySelector('.stack-detail-section:nth-of-type(5)');
-    
+
     if (hasAlternatives) {
       expect(altSection).toBeTruthy();
     }
@@ -508,7 +508,7 @@ describe('Model Detail', () => {
     if (model.availability.inferenceProviders.length > 0) {
       const providerGroups = container.querySelectorAll('.model-provider-group');
       expect(providerGroups.length).toBeGreaterThan(0);
-      
+
       // Check that provider chips exist (may include both inference providers and local runners)
       const providerChips = container.querySelectorAll('.provider-chip');
       expect(providerChips.length).toBeGreaterThan(0);
@@ -576,7 +576,7 @@ describe('Getting Started Guides', () => {
     const container = renderGettingStartedGuides('en');
 
     const guideCards = container.querySelectorAll('.guide-card');
-    expect(guideCards.length).toBeGreaterThan(0);
+    expect(guideCards.length).toBe(5);
   });
 
   it('should render guide titles and descriptions', () => {
@@ -587,6 +587,12 @@ describe('Getting Started Guides', () => {
 
     const guideDescs = container.querySelectorAll('.guide-card-desc');
     expect(guideDescs.length).toBeGreaterThan(0);
+  });
+
+  it('should render guide steps without dead action buttons', () => {
+    const container = renderGettingStartedGuides('en');
+    expect(container.querySelectorAll('.guide-step').length).toBe(25);
+    expect(container.querySelector('.guide-read-btn')).toBeNull();
   });
 
   it('should render in Japanese', () => {

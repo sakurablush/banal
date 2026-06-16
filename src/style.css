@@ -5407,22 +5407,6 @@ textarea.sp-form-input {
   line-height: 1.4;
 }
 
-.guide-read-btn {
-  padding: 0.5rem 1rem;
-  background: rgba(168, 85, 247, 0.15);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  border-radius: 0.375rem;
-  color: var(--neon-violet);
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.guide-read-btn:hover {
-  background: rgba(168, 85, 247, 0.25);
-}
-
 @media (max-width: 767px) {
   .guides-grid {
     grid-template-columns: 1fr;

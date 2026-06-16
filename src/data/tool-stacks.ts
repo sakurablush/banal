@@ -14,11 +14,26 @@ export const toolStacks: ToolStack[] = [
     audience: { type: 'developer', budget: 'zero', experience: 'intermediate' },
     useCase: 'Ship a web app or AI-powered product on free tiers',
     tools: [
-      { toolId: 'kilo-code', role: 'Daily coding (VS Code)', optional: false, alternatives: ['cline', 'aider'] },
-      { toolId: 'groq-api', role: 'Backup when Kilo caps', optional: false, alternatives: ['openrouter-free'] },
+      {
+        toolId: 'kilo-code',
+        role: 'Daily coding (VS Code)',
+        optional: false,
+        alternatives: ['cline', 'aider'],
+      },
+      {
+        toolId: 'groq-api',
+        role: 'Backup when Kilo caps',
+        optional: false,
+        alternatives: ['openrouter-free'],
+      },
       { toolId: 'google-antigravity', role: 'Plan & review (occasional)', optional: true },
       { toolId: 'supabase', role: 'Database & auth', optional: false, alternatives: ['neon'] },
-      { toolId: 'cloudflare-pages', role: 'Hosting', optional: false, alternatives: ['vercel-free'] },
+      {
+        toolId: 'cloudflare-pages',
+        role: 'Hosting',
+        optional: false,
+        alternatives: ['vercel-free'],
+      },
       { toolId: 'git', role: 'Version control', optional: false },
     ],
     workflow: [
@@ -40,7 +55,7 @@ export const toolStacks: ToolStack[] = [
         step: 3,
         title: 'Build day to day with Kilo',
         description:
-          'Ship features in small chunks. When Kilo returns HTTP 429, add a Groq API key (14k+ req/day on free tier, model-specific) and keep going. Quality on free models varies—review diffs before merging.',
+          'Ship features in small chunks. When Kilo returns HTTP 429, add a Groq API key (free tier is model-specific; many models allow ~14.4k requests/day) and keep going. Quality on free models varies—review diffs before merging.',
         tools: ['kilo-code', 'groq-api'],
       },
       {
@@ -54,7 +69,7 @@ export const toolStacks: ToolStack[] = [
         step: 5,
         title: 'Deploy',
         description:
-          'Connect GitHub to Cloudflare Pages (free unlimited sites on hobby tier). Set env vars for Supabase. Real traffic spikes may need paid tiers eventually.',
+          'Connect GitHub to Cloudflare Pages (generous hobby tier—not a license for unlimited traffic). Set env vars for Supabase. Real traffic spikes may need paid tiers eventually.',
         tools: ['cloudflare-pages', 'git'],
       },
     ],
@@ -62,7 +77,11 @@ export const toolStacks: ToolStack[] = [
       total: '$0/month (with limits)',
       breakdown: [
         { tool: 'kilo-code', cost: '$0', notes: 'Auto Free ~200 req/hr per IP; 429 when capped' },
-        { tool: 'groq-api', cost: '$0', notes: 'Free tier per model; not for high-volume prod' },
+        {
+          tool: 'groq-api',
+          cost: '$0',
+          notes: 'Free tier per model; ~14.4k req/day on many models',
+        },
         { tool: 'google-antigravity', cost: '$0', notes: 'Free in preview; may change' },
         { tool: 'supabase', cost: '$0', notes: '500 MB; pauses if idle 7 days' },
         { tool: 'cloudflare-pages', cost: '$0', notes: 'Hobby tier; fair-use limits' },
@@ -70,8 +89,16 @@ export const toolStacks: ToolStack[] = [
       ],
     },
     resources: [
-      { title: 'Kilo usage & free model limits', url: 'https://kilo.ai/docs/gateway/usage-and-billing', type: 'documentation' },
-      { title: 'Supabase free tier limits', url: 'https://supabase.com/pricing', type: 'documentation' },
+      {
+        title: 'Kilo usage & free model limits',
+        url: 'https://kilo.ai/docs/gateway/usage-and-billing',
+        type: 'documentation',
+      },
+      {
+        title: 'Supabase free tier limits',
+        url: 'https://supabase.com/pricing',
+        type: 'documentation',
+      },
     ],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
@@ -86,9 +113,25 @@ export const toolStacks: ToolStack[] = [
     audience: { type: 'freelancer', budget: 'low', experience: 'intermediate' },
     useCase: 'Deliver client websites and small web apps',
     tools: [
-      { toolId: 'kilo-code', role: 'Build & fix code', optional: false, alternatives: ['github-copilot-free'] },
+      {
+        toolId: 'kilo-code',
+        role: 'Build & fix code',
+        optional: false,
+        alternatives: ['github-copilot-free'],
+      },
+      {
+        toolId: 'groq-api',
+        role: 'When Kilo caps',
+        optional: true,
+        alternatives: ['openrouter-free'],
+      },
       { toolId: 'excalidraw', role: 'Wireframes', optional: true },
-      { toolId: 'vercel-free', role: 'Preview URLs', optional: false, alternatives: ['cloudflare-pages'] },
+      {
+        toolId: 'vercel-free',
+        role: 'Preview URLs',
+        optional: false,
+        alternatives: ['cloudflare-pages'],
+      },
       { toolId: 'supabase', role: 'Forms & data', optional: true, alternatives: ['neon'] },
       { toolId: 'git', role: 'Version control', optional: false },
     ],
@@ -112,7 +155,7 @@ export const toolStacks: ToolStack[] = [
         title: 'Implement with AI assistance',
         description:
           'Use Kilo for components and fixes. Rotate to Groq or OpenRouter when rate-limited. Bill clients for your time, not for Copilot Pro—unless they require a specific toolchain.',
-        tools: ['kilo-code'],
+        tools: ['kilo-code', 'groq-api'],
       },
       {
         step: 4,
@@ -126,6 +169,7 @@ export const toolStacks: ToolStack[] = [
       total: '$0/month to start',
       breakdown: [
         { tool: 'kilo-code', cost: '$0', notes: 'Free models rate-limited' },
+        { tool: 'groq-api', cost: '$0', notes: 'Optional backup; per-model daily caps' },
         { tool: 'vercel-free', cost: '$0', notes: 'Hobby; commercial use may need Pro' },
         { tool: 'supabase', cost: '$0', notes: 'Optional; 500 MB cap' },
         { tool: 'excalidraw', cost: '$0', notes: 'Open source' },
@@ -148,8 +192,18 @@ export const toolStacks: ToolStack[] = [
     audience: { type: 'developer', budget: 'zero', experience: 'intermediate' },
     useCase: 'Code and chat without sending data to the cloud',
     tools: [
-      { toolId: 'ollama', role: 'Run models locally', optional: false, alternatives: ['lm-studio', 'jan-ai'] },
-      { toolId: 'qwen-2.5', role: 'General 7B model', optional: false, alternatives: ['qwen3-coder'] },
+      {
+        toolId: 'ollama',
+        role: 'Run models locally',
+        optional: false,
+        alternatives: ['lm-studio', 'jan-ai'],
+      },
+      {
+        toolId: 'qwen-2.5',
+        role: 'General 7B model',
+        optional: false,
+        alternatives: ['qwen3-coder'],
+      },
       { toolId: 'open-webui', role: 'Browser chat UI', optional: true },
       { toolId: 'continue-dev', role: 'Editor integration', optional: true },
       { toolId: 'deepseek-r1', role: 'Harder reasoning (if GPU allows)', optional: true },
@@ -213,7 +267,12 @@ export const toolStacks: ToolStack[] = [
       { toolId: 'freecodecamp', role: 'Structured lessons', optional: false },
       { toolId: 'exercism', role: 'Practice with feedback', optional: true },
       { toolId: 'stackblitz', role: 'Browser IDE', optional: false, alternatives: ['replit'] },
-      { toolId: 'duck-ai', role: 'Ask when stuck', optional: true, alternatives: ['chatgpt-free', 'google-gemini'] },
+      {
+        toolId: 'duck-ai',
+        role: 'Ask when stuck',
+        optional: true,
+        alternatives: ['chatgpt-free', 'google-gemini'],
+      },
       { toolId: 'roadmap-sh', role: 'Skill roadmap', optional: true },
     ],
     workflow: [
@@ -253,10 +312,15 @@ export const toolStacks: ToolStack[] = [
         { tool: 'exercism', cost: '$0', notes: 'Free mentorship track' },
         { tool: 'stackblitz', cost: '$0', notes: 'Generous free tier' },
         { tool: 'duck-ai', cost: '$0', notes: 'No signup; shared rate limits' },
+        { tool: 'roadmap-sh', cost: '$0', notes: 'Free roadmaps' },
       ],
     },
     resources: [
-      { title: 'freeCodeCamp curriculum', url: 'https://www.freecodecamp.org/learn/', type: 'tutorial' },
+      {
+        title: 'freeCodeCamp curriculum',
+        url: 'https://www.freecodecamp.org/learn/',
+        type: 'tutorial',
+      },
     ],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
@@ -313,6 +377,7 @@ export const toolStacks: ToolStack[] = [
         { tool: 'capcut', cost: '$0', notes: 'Some exports watermarked' },
         { tool: 'canva-free', cost: '$0', notes: 'Limited templates' },
         { tool: 'suno', cost: '$0', notes: 'Daily credit allowance' },
+        { tool: 'deepl-translator', cost: '$0', notes: 'Character limits on free' },
         { tool: 'gamma', cost: '$0', notes: 'Limited AI credits' },
       ],
     },
@@ -324,14 +389,19 @@ export const toolStacks: ToolStack[] = [
   },
   {
     id: 'privacy-first',
-    name: 'Keep your data off other people\'s servers',
+    name: "Keep your data off other people's servers",
     description:
       'For health, legal, or personal work you do not want in a cloud training set. Local AI (Jan or Ollama), password manager you control, notes that sync only when you say so. Self-hosting takes an afternoon to set up—budget time, not money.',
     audience: { type: 'developer', budget: 'zero', experience: 'intermediate' },
     useCase: 'Handle sensitive files without cloud AI',
     tools: [
       { toolId: 'jan-ai', role: 'Offline chat', optional: false, alternatives: ['ollama'] },
-      { toolId: 'bitwarden-free', role: 'Passwords', optional: false, alternatives: ['vaultwarden'] },
+      {
+        toolId: 'bitwarden-free',
+        role: 'Passwords',
+        optional: false,
+        alternatives: ['vaultwarden'],
+      },
       { toolId: 'joplin-cloudless', role: 'Local notes', optional: false },
       { toolId: 'syncthing', role: 'File sync (P2P)', optional: true },
       { toolId: 'cryptpad', role: 'Shared docs', optional: true },
@@ -390,7 +460,12 @@ export const toolStacks: ToolStack[] = [
     audience: { type: 'job-seeker', budget: 'zero', experience: 'intermediate' },
     useCase: 'Land a dev job with proof of work',
     tools: [
-      { toolId: 'github-pages', role: 'Portfolio site', optional: false, alternatives: ['cloudflare-pages'] },
+      {
+        toolId: 'github-pages',
+        role: 'Portfolio site',
+        optional: false,
+        alternatives: ['cloudflare-pages'],
+      },
       { toolId: 'leetcode-free', role: 'Interview practice', optional: false },
       { toolId: 'roadmap-sh', role: 'Skills checklist', optional: false },
       { toolId: 'duck-ai', role: 'Resume wording', optional: true, alternatives: ['chatgpt-free'] },
@@ -433,6 +508,7 @@ export const toolStacks: ToolStack[] = [
         { tool: 'leetcode-free', cost: '$0', notes: 'Subset of problems' },
         { tool: 'roadmap-sh', cost: '$0', notes: 'Free' },
         { tool: 'duck-ai', cost: '$0', notes: 'Rate limited' },
+        { tool: 'git', cost: '$0', notes: 'Public repos free' },
       ],
     },
     resources: [],
@@ -449,7 +525,12 @@ export const toolStacks: ToolStack[] = [
     audience: { type: 'developer', budget: 'zero', experience: 'intermediate' },
     useCase: 'Explore data and train small models',
     tools: [
-      { toolId: 'google-colab', role: 'Notebooks + GPU', optional: false, alternatives: ['kaggle'] },
+      {
+        toolId: 'google-colab',
+        role: 'Notebooks + GPU',
+        optional: false,
+        alternatives: ['kaggle'],
+      },
       { toolId: 'kaggle', role: 'Datasets & competitions', optional: false },
       { toolId: 'uv', role: 'Fast Python env', optional: false },
       { toolId: 'desmos', role: 'Quick plots', optional: true },
@@ -489,8 +570,9 @@ export const toolStacks: ToolStack[] = [
       total: '$0/month (session limits)',
       breakdown: [
         { tool: 'google-colab', cost: '$0', notes: 'GPU not guaranteed; timeouts' },
-        { tool: 'kaggle', cost: '$0', notes: '30 GPU hrs/week on free' },
+        { tool: 'kaggle', cost: '$0', notes: '~30 GPU hrs/week; quota resets weekly' },
         { tool: 'uv', cost: '$0', notes: 'Open source' },
+        { tool: 'desmos', cost: '$0', notes: 'Free plotting' },
         { tool: 'wolfram-alpha', cost: '$0', notes: 'Limited free queries' },
       ],
     },
@@ -532,15 +614,13 @@ export const toolStacks: ToolStack[] = [
       {
         step: 3,
         title: 'Stop leaking API keys',
-        description:
-          'direnv loads .env when you cd into a project and unloads when you leave.',
+        description: 'direnv loads .env when you cd into a project and unloads when you leave.',
         tools: ['direnv'],
       },
       {
         step: 4,
         title: 'Move faster in the terminal',
-        description:
-          'fzf + zoxide are optional quality-of-life—install when basics work.',
+        description: 'fzf + zoxide are optional quality-of-life—install when basics work.',
         tools: ['fzf', 'zoxide'],
       },
     ],
@@ -570,7 +650,12 @@ export const toolStacks: ToolStack[] = [
     tools: [
       { toolId: 'git', role: 'Version control', optional: false },
       { toolId: 'gh-cli', role: 'GitHub from terminal', optional: false },
-      { toolId: 'kilo-code', role: 'Navigate unfamiliar code', optional: true, alternatives: ['github-copilot-free'] },
+      {
+        toolId: 'kilo-code',
+        role: 'Navigate unfamiliar code',
+        optional: true,
+        alternatives: ['github-copilot-free'],
+      },
       { toolId: 'playwright', role: 'Run UI tests', optional: true },
       { toolId: 'ruff', role: 'Python lint', optional: true, alternatives: ['biome'] },
     ],
@@ -593,7 +678,7 @@ export const toolStacks: ToolStack[] = [
         step: 3,
         title: 'Run what maintainers run',
         description:
-          'Tests and linters locally. CI failures waste everyone\'s time—including yours.',
+          "Tests and linters locally. CI failures waste everyone's time—including yours.",
         tools: ['playwright', 'ruff'],
       },
       {

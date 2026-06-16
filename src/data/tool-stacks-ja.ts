@@ -41,7 +41,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       {
         title: 'Kiloで毎日実装',
         description:
-          '小さく区切って出す。HTTP 429ならGroq APIキーを追加（無料枠はモデルごとに日次上限あり）して続行。無料モデルの品質はばらつく—マージ前に差分を確認。',
+          '小さく区切って出す。HTTP 429ならGroq APIキーを追加（無料枠はモデルごと；多くは約1.44万リクエスト/日）して続行。無料モデルの品質はばらつく—マージ前に差分を確認。',
       },
       {
         title: '定期的な設計レビュー',
@@ -51,23 +51,20 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       {
         title: 'デプロイ',
         description:
-          'GitHubをCloudflare Pagesに接続（ホビー無料）。Supabaseの環境変数を設定。本番トラフィックが増えたら有料枠が必要になることも。',
+          'GitHubをCloudflare Pagesに接続（ホビー無料・トラフィック無制限ではない）。Supabaseの環境変数を設定。本番トラフィックが増えたら有料枠が必要になることも。',
       },
     ],
     cost: {
       breakdown: [
         { notes: 'Auto Free 約200 req/時/IP；上限で429' },
-        { notes: '無料枠はモデル別；大量本番向きでない' },
+        { notes: '無料枠はモデル別；多くは約1.44万リクエスト/日' },
         { notes: 'プレビュー中無料；変更の可能性' },
         { notes: '500MB；7日放置で一時停止' },
         { notes: 'ホビー無料；フェアユースあり' },
         { notes: 'GitHubパブリックリポジトリ無料' },
       ],
     },
-    resources: [
-      { title: 'Kilo 利用料・無料モデル制限' },
-      { title: 'Supabase 無料枠' },
-    ],
+    resources: [{ title: 'Kilo 利用料・無料モデル制限' }, { title: 'Supabase 無料枠' }],
   },
 
   'freelance-web-dev': {
@@ -77,6 +74,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
     useCase: 'クライアント向けWebサイト・小規模アプリを納品する',
     tools: [
       { role: '実装・修正' },
+      { role: 'Kilo上限時の予備' },
       { role: 'ワイヤーフレーム' },
       { role: 'プレビューURL' },
       { role: 'フォーム・データ' },
@@ -96,7 +94,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       {
         title: 'AIで実装',
         description:
-          'Kiloでコンポーネントと修正。レート制限時はGroq/OpenRouterへ。Copilot Proはクライアント要件がなければ必須ではない。',
+          'Kiloでコンポーネントと修正。レート制限時はGroq APIキー（無料枠はモデルごと；多くは約1.44万リクエスト/日）かOpenRouterへ。Copilot Proはクライアント要件がなければ必須ではない。',
       },
       {
         title: 'プレビューから本番へ',
@@ -107,6 +105,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
     cost: {
       breakdown: [
         { notes: '無料モデルはレート制限あり' },
+        { notes: '任意の予備；モデルごとの日次上限' },
         { notes: 'ホビー；商用はProが必要な場合あり' },
         { notes: '任意；500MB上限' },
         { notes: 'オープンソース' },
@@ -141,8 +140,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
       {
         title: 'ブラウザでチャット',
-        description:
-          '任意：Open WebUIでlocalhost向けUI。クラウドより遅いがトークン上限なし。',
+        description: '任意：Open WebUIでlocalhost向けUI。クラウドより遅いがトークン上限なし。',
       },
       {
         title: 'エディタに接続',
@@ -177,8 +175,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
     workflow: [
       {
         title: '1つの道筋を選んで続ける',
-        description:
-          'freeCodeCampかroadmap.shから開始。毎週コースを変えると挫折しやすい。',
+        description: 'freeCodeCampかroadmap.shから開始。毎週コースを変えると挫折しやすい。',
       },
       {
         title: 'フィードバック付きで練習',
@@ -202,6 +199,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
         { notes: '無料メンタートラック' },
         { notes: '無料枠は寛容' },
         { notes: '登録不要；共有レート制限' },
+        { notes: '無料ロードマップ' },
       ],
     },
     resources: [{ title: 'freeCodeCamp カリキュラム' }],
@@ -222,18 +220,15 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
     workflow: [
       {
         title: '生成の前に骨子を書く',
-        description:
-          'Gammaやメモに箇条書き。AIスライドは下書き—キャプションは必ず手で直す。',
+        description: 'Gammaやメモに箇条書き。AIスライドは下書き—キャプションは必ず手で直す。',
       },
       {
         title: 'ビジュアル作成',
-        description:
-          'Canva無料でサムネと短い画像。PNGで書き出し—Canvaホスティングだけに頼らない。',
+        description: 'Canva無料でサムネと短い画像。PNGで書き出し—Canvaホスティングだけに頼らない。',
       },
       {
         title: '動画編集',
-        description:
-          'CapCutで自動字幕など。一部エクスポートに透かしがある場合あり—公開前に確認。',
+        description: 'CapCutで自動字幕など。一部エクスポートに透かしがある場合あり—公開前に確認。',
       },
       {
         title: '音楽と言語',
@@ -246,6 +241,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
         { notes: '一部エクスポートに透かし' },
         { notes: 'テンプレ制限' },
         { notes: '日次クレジット' },
+        { notes: '無料は文字数制限' },
         { notes: 'AIクレジット制限' },
       ],
     },
@@ -272,18 +268,15 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
       {
         title: 'パスワードを一箇所に',
-        description:
-          '多くの人はBitwarden無料で十分。家族共有を自前でならVaultwarden。',
+        description: '多くの人はBitwarden無料で十分。家族共有を自前でならVaultwarden。',
       },
       {
         title: 'メモは自分のもの',
-        description:
-          'JoplinはローカルMarkdown；同期は任意。医療・法律・日記向き。',
+        description: 'JoplinはローカルMarkdown；同期は任意。医療・法律・日記向き。',
       },
       {
         title: 'Dropboxなしで共有',
-        description:
-          'Syncthingは端末間同期。たまの共同作業はCryptpad。',
+        description: 'Syncthingは端末間同期。たまの共同作業はCryptpad。',
       },
     ],
     cost: {
@@ -323,13 +316,11 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
       {
         title: '問題練習',
-        description:
-          'LeetCode無料＋声に出して説明。理解した1問が、コピーした10問より価値がある。',
+        description: 'LeetCode無料＋声に出して説明。理解した1問が、コピーした10問より価値がある。',
       },
       {
         title: '応募文の仕上げ',
-        description:
-          'Duck.aiに「具体的に短く」と箇条書きを渡す。すべて事実か確認。',
+        description: 'Duck.aiに「具体的に短く」と箇条書きを渡す。すべて事実か確認。',
       },
     ],
     cost: {
@@ -338,6 +329,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
         { notes: '問題の一部が無料' },
         { notes: '無料' },
         { notes: 'レート制限あり' },
+        { notes: 'パブリックリポジトリ無料' },
       ],
     },
     resources: [],
@@ -358,8 +350,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
     workflow: [
       {
         title: 'データを探す',
-        description:
-          'Kaggleの他者ノートを読んでからコピー。商用利用のライセンスを確認。',
+        description: 'Kaggleの他者ノートを読んでからコピー。商用利用のライセンスを確認。',
       },
       {
         title: 'Colabで探索',
@@ -380,8 +371,9 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
     cost: {
       breakdown: [
         { notes: 'GPUは保証されずタイムアウト' },
-        { notes: '無料で週30GPU時間程度' },
+        { notes: '無料で週30GPU時間程度；週次リセット' },
         { notes: 'オープンソース' },
+        { notes: '無料プロット' },
         { notes: '無料クエリ数制限' },
       ],
     },
@@ -408,18 +400,15 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
       {
         title: 'コマンドを明確に',
-        description:
-          'justfileにtest/build/deploy。未来の自分がnpmスクリプトを推測しなくてよい。',
+        description: 'justfileにtest/build/deploy。未来の自分がnpmスクリプトを推測しなくてよい。',
       },
       {
         title: 'APIキーの漏洩を防ぐ',
-        description:
-          'direnvでcd時に.envを読み込み、出るとアンロード。',
+        description: 'direnvでcd時に.envを読み込み、出るとアンロード。',
       },
       {
         title: 'ターミナルを速く',
-        description:
-          'fzf＋zoxideは任意。基本が動いてからでよい。',
+        description: 'fzf＋zoxideは任意。基本が動いてからでよい。',
       },
     ],
     cost: {
@@ -454,18 +443,15 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
       {
         title: 'フォークとブランチ',
-        description:
-          '小さなブランチ、1 PR 1修正。巨大リファクタよりREADMEのtypo修正から。',
+        description: '小さなブランチ、1 PR 1修正。巨大リファクタよりREADMEのtypo修正から。',
       },
       {
         title: 'メンテナーと同じチェック',
-        description:
-          'ローカルでテストとLint。CI失敗は全員の時間の無駄。',
+        description: 'ローカルでテストとLint。CI失敗は全員の時間の無駄。',
       },
       {
         title: '明確なPR',
-        description:
-          'gh pr createで変更理由を書く。Issueをリンク。レビューコメントには丁寧に。',
+        description: 'gh pr createで変更理由を書く。Issueをリンク。レビューコメントには丁寧に。',
       },
     ],
     cost: {
