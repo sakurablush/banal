@@ -65,7 +65,7 @@ const COPY = {
 
 const AUDIENCE_LABELS: Record<string, { en: string; ja: string }> = {
   freelancer: { en: 'Freelancers', ja: 'フリーランサー' },
-  'indie-hacker': { en: 'Indie Hackers', ja: 'インディーハッカー' },
+  'indie-hacker': { en: 'Building your own app', ja: '自分でアプリを作る' },
   startup: { en: 'Startups', ja: 'スタートアップ' },
   student: { en: 'Students', ja: '学生' },
   'job-seeker': { en: 'Job Seekers', ja: '求職者' },

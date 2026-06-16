@@ -1,6 +1,6 @@
 /**
- * Tool Stacks — Curated tool combinations for zero-budget workflows.
- * Core data for the Workflow Discovery section.
+ * Tool Stacks — Honest, zero-budget workflows with real limits stated up front.
+ * Written for people who need tools that work all week, not demos that hit a paywall on day two.
  */
 
 import type { ToolStack } from '../types/tool';
@@ -8,324 +8,546 @@ import type { ToolStack } from '../types/tool';
 export const toolStacks: ToolStack[] = [
   {
     id: 'saas-mvp-zero',
-    name: 'Build SaaS MVP for $0',
+    name: 'Build a web app for $0',
     description:
-      'Everything needed to build and launch a SaaS MVP without spending a dollar. All tools have generous free tiers suitable for early-stage products.',
-    audience: { type: 'indie-hacker', budget: 'zero', experience: 'beginner' },
-    useCase: 'Build and launch a SaaS product',
+      'For developers building a web app, side project, or Gen AI product without paying monthly tool fees. Use Kilo Code daily (free models, ~200 requests/hour per IP). When you see rate-limit errors, switch to Groq or OpenRouter free the same day. Use Google Antigravity every few weeks for planning or a second opinion—not as your everyday editor.',
+    audience: { type: 'developer', budget: 'zero', experience: 'intermediate' },
+    useCase: 'Ship a web app or AI-powered product on free tiers',
     tools: [
-      { toolId: 'kilo-code', role: 'Code Editor', optional: false, alternatives: ['cline', 'cursor'] },
-      { toolId: 'openrouter-free', role: 'AI Models', optional: false, alternatives: ['groq-api', 'cerebras-inference'] },
-      { toolId: 'supabase', role: 'Database', optional: false, alternatives: ['neon', 'firebase-studio'] },
-      { toolId: 'cloudflare-pages', role: 'Hosting', optional: false, alternatives: ['vercel-free', 'github-pages'] },
-      { toolId: 'git', role: 'Version Control', optional: false },
+      { toolId: 'kilo-code', role: 'Daily coding (VS Code)', optional: false, alternatives: ['cline', 'aider'] },
+      { toolId: 'groq-api', role: 'Backup when Kilo caps', optional: false, alternatives: ['openrouter-free'] },
+      { toolId: 'google-antigravity', role: 'Plan & review (occasional)', optional: true },
+      { toolId: 'supabase', role: 'Database & auth', optional: false, alternatives: ['neon'] },
+      { toolId: 'cloudflare-pages', role: 'Hosting', optional: false, alternatives: ['vercel-free'] },
+      { toolId: 'git', role: 'Version control', optional: false },
     ],
     workflow: [
-      { step: 1, title: 'Setup Development Environment', description: 'Install Kilo Code extension in VS Code, configure OpenRouter API key (free tier), initialize Git repo.', tools: ['kilo-code', 'git'] },
-      { step: 2, title: 'Design Database Schema', description: 'Create Supabase project, design tables for users, projects, and features. Enable Row Level Security.', tools: ['supabase'] },
-      { step: 3, title: 'Build Frontend', description: 'Use Kilo Code with Claude 3.5 Sonnet (via OpenRouter) to generate React components, implement authentication, and build UI.', tools: ['kilo-code', 'openrouter-free'] },
-      { step: 4, title: 'Implement Backend', description: 'Build API endpoints using Supabase Edge Functions, implement AI features using OpenRouter API.', tools: ['kilo-code', 'supabase'] },
-      { step: 5, title: 'Deploy to Production', description: 'Connect GitHub repo to Cloudflare Pages, configure automatic deployments on push.', tools: ['cloudflare-pages', 'git'] },
+      {
+        step: 1,
+        title: 'Set up your repo and Kilo',
+        description:
+          'Install Kilo Code in VS Code, pick kilo-auto/free (no credit card). Initialize Git. Do not put secrets in Auto Free prompts—free routes may log data upstream.',
+        tools: ['kilo-code', 'git'],
+      },
+      {
+        step: 2,
+        title: 'Create the database',
+        description:
+          'Spin up Supabase (500 MB free). Design tables, enable Row Level Security. Free projects pause after 7 days of inactivity—log in weekly or you lose API access until you unpause.',
+        tools: ['supabase'],
+      },
+      {
+        step: 3,
+        title: 'Build day to day with Kilo',
+        description:
+          'Ship features in small chunks. When Kilo returns HTTP 429, add a Groq API key (14k+ req/day on free tier, model-specific) and keep going. Quality on free models varies—review diffs before merging.',
+        tools: ['kilo-code', 'groq-api'],
+      },
+      {
+        step: 4,
+        title: 'Periodic architecture review',
+        description:
+          'Every few weeks, paste your module list or a stuck file into Google Antigravity (free during public preview; pricing TBD later). Use it for roadmaps and reviews, not every autocomplete.',
+        tools: ['google-antigravity'],
+      },
+      {
+        step: 5,
+        title: 'Deploy',
+        description:
+          'Connect GitHub to Cloudflare Pages (free unlimited sites on hobby tier). Set env vars for Supabase. Real traffic spikes may need paid tiers eventually.',
+        tools: ['cloudflare-pages', 'git'],
+      },
     ],
     cost: {
-      total: '$0/month',
+      total: '$0/month (with limits)',
       breakdown: [
-        { tool: 'kilo-code', cost: '$0', notes: 'Free extension, BYOK' },
-        { tool: 'openrouter-free', cost: '$0', notes: 'Free tier: 1K req/day' },
-        { tool: 'supabase', cost: '$0', notes: 'Free tier: 500MB database' },
-        { tool: 'cloudflare-pages', cost: '$0', notes: 'Free tier: unlimited sites' },
-        { tool: 'git', cost: '$0', notes: 'Free for public repos' },
+        { tool: 'kilo-code', cost: '$0', notes: 'Auto Free ~200 req/hr per IP; 429 when capped' },
+        { tool: 'groq-api', cost: '$0', notes: 'Free tier per model; not for high-volume prod' },
+        { tool: 'google-antigravity', cost: '$0', notes: 'Free in preview; may change' },
+        { tool: 'supabase', cost: '$0', notes: '500 MB; pauses if idle 7 days' },
+        { tool: 'cloudflare-pages', cost: '$0', notes: 'Hobby tier; fair-use limits' },
+        { tool: 'git', cost: '$0', notes: 'Public repos free on GitHub' },
       ],
     },
     resources: [
-      { title: 'Supabase + OpenRouter Integration Guide', url: 'https://supabase.com/docs', type: 'documentation' },
-      { title: 'Cloudflare Pages Getting Started', url: 'https://developers.cloudflare.com/pages/', type: 'documentation' },
+      { title: 'Kilo usage & free model limits', url: 'https://kilo.ai/docs/gateway/usage-and-billing', type: 'documentation' },
+      { title: 'Supabase free tier limits', url: 'https://supabase.com/pricing', type: 'documentation' },
     ],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
-    updatedAt: '2026-06-15',
+    updatedAt: '2026-06-16',
     verified: true,
   },
   {
     id: 'freelance-web-dev',
-    name: 'Freelance Web Development',
+    name: 'Freelance client websites',
     description:
-      'Complete toolkit for freelance web developers. Build client sites efficiently with AI-assisted coding and free hosting.',
+      'Build client sites without stacking subscriptions. Kilo Code for implementation, Excalidraw for quick wireframes, Vercel or Cloudflare for previews. Free tiers are fine for demos and small sites; active clients with traffic usually need paid hosting or DB plans eventually.',
     audience: { type: 'freelancer', budget: 'low', experience: 'intermediate' },
-    useCase: 'Build client websites and web applications',
+    useCase: 'Deliver client websites and small web apps',
     tools: [
-      { toolId: 'github-copilot-free', role: 'AI Assistant', optional: false, alternatives: ['codeium', 'cline'] },
-      { toolId: 'vercel-free', role: 'Hosting', optional: false, alternatives: ['cloudflare-pages', 'netlify'] },
-      { toolId: 'supabase', role: 'Database', optional: false, alternatives: ['neon'] },
-      { toolId: 'excalidraw', role: 'Design', optional: true },
-      { toolId: 'git', role: 'Version Control', optional: false },
+      { toolId: 'kilo-code', role: 'Build & fix code', optional: false, alternatives: ['github-copilot-free'] },
+      { toolId: 'excalidraw', role: 'Wireframes', optional: true },
+      { toolId: 'vercel-free', role: 'Preview URLs', optional: false, alternatives: ['cloudflare-pages'] },
+      { toolId: 'supabase', role: 'Forms & data', optional: true, alternatives: ['neon'] },
+      { toolId: 'git', role: 'Version control', optional: false },
     ],
     workflow: [
-      { step: 1, title: 'Client Discovery & Design', description: 'Use Excalidraw for wireframes and mockups. Share with client for feedback.', tools: ['excalidraw'] },
-      { step: 2, title: 'Setup Project', description: 'Initialize Git repo, set up hosting on Vercel, configure Supabase database.', tools: ['git', 'vercel-free', 'supabase'] },
-      { step: 3, title: 'Build with AI', description: 'Use GitHub Copilot for code completion and AI-assisted development. Build components iteratively.', tools: ['github-copilot-free'] },
-      { step: 4, title: 'Deploy & Iterate', description: 'Deploy to Vercel with preview URLs for client review. Iterate based on feedback.', tools: ['vercel-free', 'git'] },
+      {
+        step: 1,
+        title: 'Agree on scope in plain language',
+        description:
+          'Sketch pages in Excalidraw (free, no account). Share a link—clients understand boxes better than Figma jargon.',
+        tools: ['excalidraw'],
+      },
+      {
+        step: 2,
+        title: 'Scaffold the project',
+        description:
+          'Git repo + Vercel hobby project. If the site needs a contact form or login, add Supabase free tier and note the 500 MB / idle-pause limits to the client.',
+        tools: ['git', 'vercel-free', 'supabase'],
+      },
+      {
+        step: 3,
+        title: 'Implement with AI assistance',
+        description:
+          'Use Kilo for components and fixes. Rotate to Groq or OpenRouter when rate-limited. Bill clients for your time, not for Copilot Pro—unless they require a specific toolchain.',
+        tools: ['kilo-code'],
+      },
+      {
+        step: 4,
+        title: 'Ship preview, then production',
+        description:
+          'Every push gets a Vercel preview URL for feedback. Move the client to a paid plan before launch if traffic or DB size will exceed free caps.',
+        tools: ['vercel-free', 'git'],
+      },
     ],
     cost: {
-      total: '$0/month',
+      total: '$0/month to start',
       breakdown: [
-        { tool: 'github-copilot-free', cost: '$0', notes: '2K completions/month free' },
-        { tool: 'vercel-free', cost: '$0', notes: 'Free tier for hobby projects' },
-        { tool: 'supabase', cost: '$0', notes: 'Free tier: 500MB' },
-        { tool: 'excalidraw', cost: '$0', notes: 'Open source, free' },
+        { tool: 'kilo-code', cost: '$0', notes: 'Free models rate-limited' },
+        { tool: 'vercel-free', cost: '$0', notes: 'Hobby; commercial use may need Pro' },
+        { tool: 'supabase', cost: '$0', notes: 'Optional; 500 MB cap' },
+        { tool: 'excalidraw', cost: '$0', notes: 'Open source' },
         { tool: 'git', cost: '$0', notes: 'Free' },
       ],
     },
     resources: [
-      { title: 'Vercel Deployment Guide', url: 'https://vercel.com/docs', type: 'documentation' },
+      { title: 'Vercel hobby vs Pro', url: 'https://vercel.com/docs/plans', type: 'documentation' },
     ],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
-    updatedAt: '2026-06-15',
+    updatedAt: '2026-06-16',
     verified: true,
   },
   {
     id: 'local-ai-dev',
-    name: 'Local AI Development',
+    name: 'Local AI on your own PC',
     description:
-      'Run AI models locally for complete privacy and zero cloud costs. Perfect for sensitive data and offline development.',
+      'Run models offline when cloud free tiers are not enough or data must stay on your machine. Realistic on 8–16 GB VRAM: 7B–8B quantized models only. A 70B model is not a laptop stack—ignore hype configs that need datacenter GPUs.',
     audience: { type: 'developer', budget: 'zero', experience: 'intermediate' },
-    useCase: 'Run AI models locally with full privacy',
+    useCase: 'Code and chat without sending data to the cloud',
     tools: [
-      { toolId: 'ollama', role: 'Model Runner', optional: false, alternatives: ['lm-studio', 'jan-ai'] },
-      { toolId: 'open-webui', role: 'Chat Interface', optional: true },
-      { toolId: 'continue-dev', role: 'IDE Integration', optional: true },
-      { toolId: 'qwen-2.5-7b', role: 'General Model', optional: false, alternatives: ['llama-3.1-8b'] },
-      { toolId: 'deepseek-r1-distill-70b', role: 'Coding Model', optional: true, alternatives: ['codestral'] },
+      { toolId: 'ollama', role: 'Run models locally', optional: false, alternatives: ['lm-studio', 'jan-ai'] },
+      { toolId: 'qwen-2.5', role: 'General 7B model', optional: false, alternatives: ['qwen3-coder'] },
+      { toolId: 'open-webui', role: 'Browser chat UI', optional: true },
+      { toolId: 'continue-dev', role: 'Editor integration', optional: true },
+      { toolId: 'deepseek-r1', role: 'Harder reasoning (if GPU allows)', optional: true },
     ],
     workflow: [
-      { step: 1, title: 'Install Ollama', description: 'Download and install Ollama for your OS. One command to get started.', tools: ['ollama'] },
-      { step: 2, title: 'Download Models', description: 'Pull Qwen 2.5 7B for general tasks and DeepSeek Coder for coding. Models download once and run offline.', tools: ['ollama'] },
-      { step: 3, title: 'Setup Chat UI', description: 'Install Open WebUI for a browser-based chat interface connected to your local models.', tools: ['open-webui'] },
-      { step: 4, title: 'IDE Integration', description: 'Install Continue.dev in VS Code for AI code completion using your local models.', tools: ['continue-dev'] },
+      {
+        step: 1,
+        title: 'Check your hardware honestly',
+        description:
+          '8 GB VRAM → stick to 7B Q4 models. 16 GB → 8B–14B comfortably. CPU-only works but is slow—fine for privacy, not for all-day coding.',
+        tools: ['ollama'],
+      },
+      {
+        step: 2,
+        title: 'Install and pull a small model',
+        description:
+          'Install Ollama, then pull qwen2.5:7b or similar. First download is large (several GB); after that it runs offline.',
+        tools: ['ollama', 'qwen-2.5'],
+      },
+      {
+        step: 3,
+        title: 'Chat in the browser',
+        description:
+          'Optional: Open WebUI for a ChatGPT-like UI pointed at localhost. Slower than cloud APIs but no token caps.',
+        tools: ['open-webui'],
+      },
+      {
+        step: 4,
+        title: 'Wire into your editor',
+        description:
+          'Continue.dev can call your local Ollama endpoint. Expect weaker completions than frontier cloud models—use for boilerplate and privacy-sensitive files.',
+        tools: ['continue-dev'],
+      },
     ],
     cost: {
-      total: '$0/month',
+      total: '$0/month (+ electricity)',
       breakdown: [
-        { tool: 'ollama', cost: '$0', notes: 'Open source, free forever' },
-        { tool: 'open-webui', cost: '$0', notes: 'Open source' },
+        { tool: 'ollama', cost: '$0', notes: 'Open source' },
+        { tool: 'qwen-2.5', cost: '$0', notes: '~4–6 GB VRAM for 7B Q4' },
+        { tool: 'open-webui', cost: '$0', notes: 'Self-hosted' },
         { tool: 'continue-dev', cost: '$0', notes: 'Open source' },
-        { tool: 'qwen-2.5-7b', cost: '$0', notes: 'Open weights, free' },
-        { tool: 'deepseek-r1-distill-70b', cost: '$0', notes: 'Open weights, free' },
+        { tool: 'deepseek-r1', cost: '$0', notes: 'Large quant only on big GPUs' },
       ],
     },
     resources: [
-      { title: 'Ollama Getting Started', url: 'https://ollama.com/', type: 'documentation' },
-      { title: 'Open WebUI Setup Guide', url: 'https://github.com/open-webui/open-webui', type: 'documentation' },
+      { title: 'Ollama model library', url: 'https://ollama.com/library', type: 'documentation' },
     ],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
-    updatedAt: '2026-06-15',
+    updatedAt: '2026-06-16',
     verified: true,
   },
   {
     id: 'student-learning',
-    name: 'Student Learning Stack',
+    name: 'Learn to code for $0',
     description:
-      'Free tools for students learning to code. Includes AI tutoring, practice platforms, and development environments.',
+      'Structured learning without bootcamp prices. freeCodeCamp for curriculum, Exercism for practice, browser IDEs so you do not need a powerful PC. ChatGPT or Duck.ai for stuck moments—free tiers cap messages per day, so use them for blockers, not lazy copy-paste.',
     audience: { type: 'student', budget: 'zero', experience: 'beginner' },
-    useCase: 'Learn programming and computer science',
+    useCase: 'Learn programming from scratch',
     tools: [
-      { toolId: 'freecodecamp', role: 'Curriculum', optional: false },
-      { toolId: 'exercism', role: 'Practice', optional: true, alternatives: ['leetcode-free'] },
-      { toolId: 'khan-academy', role: 'CS Fundamentals', optional: true },
-      { toolId: 'replit', role: 'Code Environment', optional: false, alternatives: ['stackblitz', 'codesandbox'] },
-      { toolId: 'chatgpt-free', role: 'AI Tutor', optional: true, alternatives: ['duck-ai', 'google-gemini'] },
+      { toolId: 'freecodecamp', role: 'Structured lessons', optional: false },
+      { toolId: 'exercism', role: 'Practice with feedback', optional: true },
+      { toolId: 'stackblitz', role: 'Browser IDE', optional: false, alternatives: ['replit'] },
+      { toolId: 'duck-ai', role: 'Ask when stuck', optional: true, alternatives: ['chatgpt-free', 'google-gemini'] },
+      { toolId: 'roadmap-sh', role: 'Skill roadmap', optional: true },
     ],
     workflow: [
-      { step: 1, title: 'Choose a Learning Path', description: 'Start with freeCodeCamp curriculum or Khan Academy CS fundamentals.', tools: ['freecodecamp', 'khan-academy'] },
-      { step: 2, title: 'Practice Daily', description: 'Solve coding challenges on Exercism with mentor feedback.', tools: ['exercism'] },
-      { step: 3, title: 'Build Projects', description: 'Use Replit to build projects in the browser without any setup.', tools: ['replit'] },
-      { step: 4, title: 'Get AI Help', description: 'Use ChatGPT or Duck.ai when stuck on concepts or debugging.', tools: ['chatgpt-free'] },
+      {
+        step: 1,
+        title: 'Pick one path and stay on it',
+        description:
+          'Start freeCodeCamp responsive web design or roadmap.sh for your goal. Switching courses every week is how people quit.',
+        tools: ['freecodecamp', 'roadmap-sh'],
+      },
+      {
+        step: 2,
+        title: 'Practice with feedback',
+        description:
+          'Exercism gives mentor-style feedback on small exercises. Do one exercise on bad days, three on good days.',
+        tools: ['exercism'],
+      },
+      {
+        step: 3,
+        title: 'Build in the browser',
+        description:
+          'StackBlitz or Replit free tiers run in the browser—no install. Replit free has usage limits; StackBlitz is lighter for static frontends.',
+        tools: ['stackblitz'],
+      },
+      {
+        step: 4,
+        title: 'Use AI like a tutor, not an answer key',
+        description:
+          'When stuck, explain what you tried in Duck.ai or ChatGPT free. If you hit the daily cap, sleep on it or read the docs—that is still learning.',
+        tools: ['duck-ai'],
+      },
     ],
     cost: {
       total: '$0/month',
       breakdown: [
-        { tool: 'freecodecamp', cost: '$0', notes: 'Completely free' },
-        { tool: 'exercism', cost: '$0', notes: 'Free with mentorship' },
-        { tool: 'replit', cost: '$0', notes: 'Free tier' },
-        { tool: 'chatgpt-free', cost: '$0', notes: 'Free tier' },
+        { tool: 'freecodecamp', cost: '$0', notes: 'Fully free' },
+        { tool: 'exercism', cost: '$0', notes: 'Free mentorship track' },
+        { tool: 'stackblitz', cost: '$0', notes: 'Generous free tier' },
+        { tool: 'duck-ai', cost: '$0', notes: 'No signup; shared rate limits' },
       ],
     },
     resources: [
-      { title: 'freeCodeCamp Curriculum', url: 'https://www.freecodecamp.org/learn/', type: 'tutorial' },
-      { title: 'roadmap.sh Developer Roadmaps', url: 'https://roadmap.sh/', type: 'article' },
+      { title: 'freeCodeCamp curriculum', url: 'https://www.freecodecamp.org/learn/', type: 'tutorial' },
     ],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
-    updatedAt: '2026-06-15',
+    updatedAt: '2026-06-16',
     verified: true,
   },
   {
     id: 'content-creator',
-    name: 'Content Creator Toolkit',
+    name: 'Make videos and posts for $0',
     description:
-      'Free AI tools for content creators: video editing, image generation, music, writing, and presentations.',
+      'Create YouTube, blog, and social content without Adobe subscriptions. CapCut and Canva free tiers are enough to start. Suno and Gamma give daily credits—not unlimited—so batch work on good days and export everything locally.',
     audience: { type: 'freelancer', budget: 'zero', experience: 'beginner' },
-    useCase: 'Create content for YouTube, blogs, and social media',
+    useCase: 'Publish content regularly on a zero budget',
     tools: [
-      { toolId: 'capcut', role: 'Video Editor', optional: false },
-      { toolId: 'canva-free', role: 'Design', optional: false, alternatives: ['microsoft-designer'] },
-      { toolId: 'suno', role: 'Music', optional: true, alternatives: ['udio'] },
-      { toolId: 'gamma', role: 'Presentations', optional: true },
-      { toolId: 'deepl-translator', role: 'Translation', optional: true },
+      { toolId: 'capcut', role: 'Video editing', optional: false },
+      { toolId: 'canva-free', role: 'Thumbnails & graphics', optional: false },
+      { toolId: 'gamma', role: 'Slide outlines', optional: true },
+      { toolId: 'suno', role: 'Background music', optional: true, alternatives: ['udio'] },
+      { toolId: 'deepl-translator', role: 'Translation check', optional: true },
     ],
     workflow: [
-      { step: 1, title: 'Plan Content', description: 'Use Gamma for presentation outlines and Canva for thumbnails.', tools: ['gamma', 'canva-free'] },
-      { step: 2, title: 'Create Visuals', description: 'Generate images with Canva AI, edit photos with Cleanup.Pictures.', tools: ['canva-free'] },
-      { step: 3, title: 'Edit Video', description: 'Use CapCut for video editing with AI auto-captions and effects.', tools: ['capcut'] },
-      { step: 4, title: 'Add Music', description: 'Generate background music with Suno or use royalty-free tracks.', tools: ['suno'] },
+      {
+        step: 1,
+        title: 'Outline before you generate',
+        description:
+          'Write bullet points in Gamma or a notes app. AI slides are a draft—you still edit every caption.',
+        tools: ['gamma'],
+      },
+      {
+        step: 2,
+        title: 'Make visuals',
+        description:
+          'Canva free for thumbnails and short graphics. Export PNG—do not rely on Canva hosting forever.',
+        tools: ['canva-free'],
+      },
+      {
+        step: 3,
+        title: 'Edit video',
+        description:
+          'CapCut desktop or mobile with auto-captions. Free tier adds watermarks on some exports—check before publishing.',
+        tools: ['capcut'],
+      },
+      {
+        step: 4,
+        title: 'Music and languages',
+        description:
+          'Suno free credits renew daily—generate a few tracks and keep the files. DeepL free has character limits; use for polish, not full book translation.',
+        tools: ['suno', 'deepl-translator'],
+      },
     ],
     cost: {
-      total: '$0/month',
+      total: '$0/month (daily caps)',
       breakdown: [
-        { tool: 'capcut', cost: '$0', notes: 'Free tier' },
-        { tool: 'canva-free', cost: '$0', notes: 'Free tier' },
-        { tool: 'suno', cost: '$0', notes: 'Daily free credits' },
-        { tool: 'gamma', cost: '$0', notes: 'Free tier' },
+        { tool: 'capcut', cost: '$0', notes: 'Some exports watermarked' },
+        { tool: 'canva-free', cost: '$0', notes: 'Limited templates' },
+        { tool: 'suno', cost: '$0', notes: 'Daily credit allowance' },
+        { tool: 'gamma', cost: '$0', notes: 'Limited AI credits' },
       ],
     },
     resources: [],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
-    updatedAt: '2026-06-15',
+    updatedAt: '2026-06-16',
     verified: true,
   },
   {
     id: 'privacy-first',
-    name: 'Privacy-First Stack',
+    name: 'Keep your data off other people\'s servers',
     description:
-      'Tools that respect your privacy. No telemetry, encrypted by default, self-hostable where possible.',
+      'For health, legal, or personal work you do not want in a cloud training set. Local AI (Jan or Ollama), password manager you control, notes that sync only when you say so. Self-hosting takes an afternoon to set up—budget time, not money.',
     audience: { type: 'developer', budget: 'zero', experience: 'intermediate' },
-    useCase: 'Work with sensitive data while maintaining privacy',
+    useCase: 'Handle sensitive files without cloud AI',
     tools: [
-      { toolId: 'jan-ai', role: 'Local AI', optional: false, alternatives: ['ollama'] },
-      { toolId: 'vaultwarden', role: 'Passwords', optional: false, alternatives: ['bitwarden-free'] },
-      { toolId: 'joplin-cloudless', role: 'Notes', optional: false, alternatives: ['logseq'] },
-      { toolId: 'syncthing', role: 'File Sync', optional: false },
-      { toolId: 'cryptpad', role: 'Collaboration', optional: true },
+      { toolId: 'jan-ai', role: 'Offline chat', optional: false, alternatives: ['ollama'] },
+      { toolId: 'bitwarden-free', role: 'Passwords', optional: false, alternatives: ['vaultwarden'] },
+      { toolId: 'joplin-cloudless', role: 'Local notes', optional: false },
+      { toolId: 'syncthing', role: 'File sync (P2P)', optional: true },
+      { toolId: 'cryptpad', role: 'Shared docs', optional: true },
     ],
     workflow: [
-      { step: 1, title: 'Setup Local AI', description: 'Install Jan for private AI chat with no data leaving your machine.', tools: ['jan-ai'] },
-      { step: 2, title: 'Secure Passwords', description: 'Self-host Vaultwarden for family/team password management.', tools: ['vaultwarden'] },
-      { step: 3, title: 'Private Notes', description: 'Use Joplin for local-first note-taking with optional sync.', tools: ['joplin-cloudless'] },
-      { step: 4, title: 'Encrypted Sync', description: 'Use Syncthing for peer-to-peer file sync without cloud intermediaries.', tools: ['syncthing'] },
+      {
+        step: 1,
+        title: 'Chat without uploading',
+        description:
+          'Jan or Ollama on your machine. Smaller models only on consumer hardware—trade quality for privacy.',
+        tools: ['jan-ai'],
+      },
+      {
+        step: 2,
+        title: 'Passwords in one place',
+        description:
+          'Bitwarden free is fine for most people. Vaultwarden if you want self-hosted family sharing.',
+        tools: ['bitwarden-free'],
+      },
+      {
+        step: 3,
+        title: 'Notes that stay yours',
+        description:
+          'Joplin stores markdown locally; sync is optional. Good for medical, legal, or journal content.',
+        tools: ['joplin-cloudless'],
+      },
+      {
+        step: 4,
+        title: 'Share files without Dropbox',
+        description:
+          'Syncthing syncs device to device. Cryptpad for occasional encrypted collaboration.',
+        tools: ['syncthing', 'cryptpad'],
+      },
     ],
     cost: {
       total: '$0/month',
       breakdown: [
-        { tool: 'jan-ai', cost: '$0', notes: 'Open source' },
-        { tool: 'vaultwarden', cost: '$0', notes: 'Self-hosted' },
+        { tool: 'jan-ai', cost: '$0', notes: 'Local only' },
+        { tool: 'bitwarden-free', cost: '$0', notes: 'Free personal vault' },
         { tool: 'joplin-cloudless', cost: '$0', notes: 'Open source' },
-        { tool: 'syncthing', cost: '$0', notes: 'Open source' },
+        { tool: 'syncthing', cost: '$0', notes: 'No cloud account' },
         { tool: 'cryptpad', cost: '$0', notes: 'Free tier' },
       ],
     },
     resources: [],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
-    updatedAt: '2026-06-15',
+    updatedAt: '2026-06-16',
     verified: true,
   },
   {
     id: 'job-seeker-portfolio',
-    name: 'Job Seeker Portfolio',
+    name: 'Get hired: portfolio & practice',
     description:
-      'Build a professional portfolio and prepare for technical interviews with free tools.',
+      'Show work on GitHub Pages, practice coding questions on LeetCode free set, use AI to tighten your resume—not to invent experience. Interview prep is repetition; free tools are enough if you show up daily.',
     audience: { type: 'job-seeker', budget: 'zero', experience: 'intermediate' },
-    useCase: 'Build portfolio and prepare for interviews',
+    useCase: 'Land a dev job with proof of work',
     tools: [
-      { toolId: 'github-pages', role: 'Portfolio Hosting', optional: false, alternatives: ['cloudflare-pages'] },
-      { toolId: 'leetcode-free', role: 'Interview Prep', optional: false, alternatives: ['exercism'] },
-      { toolId: 'roadmap-sh', role: 'Learning Path', optional: false },
-      { toolId: 'chatgpt-free', role: 'Resume Review', optional: true, alternatives: ['duck-ai'] },
-      { toolId: 'git', role: 'Version Control', optional: false },
+      { toolId: 'github-pages', role: 'Portfolio site', optional: false, alternatives: ['cloudflare-pages'] },
+      { toolId: 'leetcode-free', role: 'Interview practice', optional: false },
+      { toolId: 'roadmap-sh', role: 'Skills checklist', optional: false },
+      { toolId: 'duck-ai', role: 'Resume wording', optional: true, alternatives: ['chatgpt-free'] },
+      { toolId: 'git', role: 'Show real commits', optional: false },
     ],
     workflow: [
-      { step: 1, title: 'Plan Learning Path', description: 'Use roadmap.sh to identify skills needed for target roles.', tools: ['roadmap-sh'] },
-      { step: 2, title: 'Build Projects', description: 'Create portfolio projects and push to GitHub.', tools: ['git', 'github-pages'] },
-      { step: 3, title: 'Practice Interviews', description: 'Solve coding problems daily on LeetCode.', tools: ['leetcode-free'] },
-      { step: 4, title: 'Polish Resume', description: 'Use AI chat to review and improve resume and cover letters.', tools: ['chatgpt-free'] },
+      {
+        step: 1,
+        title: 'Know what the job asks for',
+        description:
+          'roadmap.sh for the role you want. Circle gaps—you only need 2–3 portfolio projects that prove those skills.',
+        tools: ['roadmap-sh'],
+      },
+      {
+        step: 2,
+        title: 'Ship projects publicly',
+        description:
+          'Push code to GitHub; host a simple portfolio on GitHub Pages. Employers click repos, not buzzwords.',
+        tools: ['git', 'github-pages'],
+      },
+      {
+        step: 3,
+        title: 'Practice problems',
+        description:
+          'LeetCode free problems + explain solutions out loud. Quality beats quantity—one problem understood beats ten copied.',
+        tools: ['leetcode-free'],
+      },
+      {
+        step: 4,
+        title: 'Polish application text',
+        description:
+          'Paste your resume bullet into Duck.ai: "Make this specific and shorter." Verify every claim is true.',
+        tools: ['duck-ai'],
+      },
     ],
     cost: {
       total: '$0/month',
       breakdown: [
-        { tool: 'github-pages', cost: '$0', notes: 'Free for public repos' },
-        { tool: 'leetcode-free', cost: '$0', notes: 'Many free problems' },
+        { tool: 'github-pages', cost: '$0', notes: 'Public repos' },
+        { tool: 'leetcode-free', cost: '$0', notes: 'Subset of problems' },
         { tool: 'roadmap-sh', cost: '$0', notes: 'Free' },
-        { tool: 'chatgpt-free', cost: '$0', notes: 'Free tier' },
+        { tool: 'duck-ai', cost: '$0', notes: 'Rate limited' },
       ],
     },
     resources: [],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
-    updatedAt: '2026-06-15',
+    updatedAt: '2026-06-16',
     verified: true,
   },
   {
     id: 'data-science',
-    name: 'Data Science Toolkit',
+    name: 'Data analysis without paying for GPUs',
     description:
-      'Free tools for data science and ML: notebooks, datasets, visualization, and GPU compute.',
+      'Kaggle and Google Colab free GPUs are enough for learning and small projects. Sessions disconnect, quotas change, and Colab free is not for 24/7 training—download checkpoints often.',
     audience: { type: 'developer', budget: 'zero', experience: 'intermediate' },
-    useCase: 'Analyze data and build ML models',
+    useCase: 'Explore data and train small models',
     tools: [
-      { toolId: 'google-colab', role: 'Notebooks', optional: false, alternatives: ['kaggle'] },
-      { toolId: 'kaggle', role: 'Datasets', optional: false },
-      { toolId: 'wolfram-alpha', role: 'Math', optional: true },
-      { toolId: 'desmos', role: 'Visualization', optional: true },
-      { toolId: 'uv', role: 'Python Packages', optional: false },
+      { toolId: 'google-colab', role: 'Notebooks + GPU', optional: false, alternatives: ['kaggle'] },
+      { toolId: 'kaggle', role: 'Datasets & competitions', optional: false },
+      { toolId: 'uv', role: 'Fast Python env', optional: false },
+      { toolId: 'desmos', role: 'Quick plots', optional: true },
+      { toolId: 'wolfram-alpha', role: 'Sanity-check math', optional: true },
     ],
     workflow: [
-      { step: 1, title: 'Find Datasets', description: 'Browse Kaggle for datasets relevant to your problem.', tools: ['kaggle'] },
-      { step: 2, title: 'Explore Data', description: 'Use Google Colab with free GPU for data exploration and visualization.', tools: ['google-colab'] },
-      { step: 3, title: 'Build Models', description: 'Train ML models in Colab using scikit-learn, PyTorch, or TensorFlow.', tools: ['google-colab', 'uv'] },
-      { step: 4, title: 'Verify Results', description: 'Use Wolfram Alpha and Desmos to verify mathematical results.', tools: ['wolfram-alpha', 'desmos'] },
+      {
+        step: 1,
+        title: 'Find data',
+        description:
+          'Kaggle datasets include notebooks from others—read before you copy. Check license for commercial use.',
+        tools: ['kaggle'],
+      },
+      {
+        step: 2,
+        title: 'Explore in Colab',
+        description:
+          'Free GPU sessions time out. Save to Drive or download CSV/models before the runtime dies.',
+        tools: ['google-colab'],
+      },
+      {
+        step: 3,
+        title: 'Reproducible Python',
+        description:
+          'Use uv for local venv when Colab is not enough. Same code should run locally on CPU for small data.',
+        tools: ['uv'],
+      },
+      {
+        step: 4,
+        title: 'Check your math',
+        description:
+          'Desmos for quick charts; Wolfram Alpha free for integrals and unit checks—not for cheating homework.',
+        tools: ['desmos', 'wolfram-alpha'],
+      },
     ],
     cost: {
-      total: '$0/month',
+      total: '$0/month (session limits)',
       breakdown: [
-        { tool: 'google-colab', cost: '$0', notes: 'Free GPU' },
-        { tool: 'kaggle', cost: '$0', notes: 'Free datasets + GPU' },
-        { tool: 'wolfram-alpha', cost: '$0', notes: 'Free answers' },
+        { tool: 'google-colab', cost: '$0', notes: 'GPU not guaranteed; timeouts' },
+        { tool: 'kaggle', cost: '$0', notes: '30 GPU hrs/week on free' },
         { tool: 'uv', cost: '$0', notes: 'Open source' },
+        { tool: 'wolfram-alpha', cost: '$0', notes: 'Limited free queries' },
       ],
     },
     resources: [],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
-    updatedAt: '2026-06-15',
+    updatedAt: '2026-06-16',
     verified: true,
   },
   {
     id: 'automation-productivity',
-    name: 'Automation & Productivity',
+    name: 'Automate boring computer tasks',
     description:
-      'Automate repetitive tasks and boost productivity with free workflow tools.',
+      'Self-hosted n8n replaces Zapier for personal workflows. Pair with just, direnv, and terminal tools so projects stay repeatable. You need a machine that stays on—or accept that automations pause when your laptop sleeps.',
     audience: { type: 'developer', budget: 'zero', experience: 'intermediate' },
-    useCase: 'Automate repetitive tasks and workflows',
+    useCase: 'Stop doing the same clicks every day',
     tools: [
-      { toolId: 'n8n', role: 'Workflow Automation', optional: false },
-      { toolId: 'just', role: 'Task Runner', optional: false },
-      { toolId: 'direnv', role: 'Environment', optional: false },
-      { toolId: 'fzf', role: 'Terminal Productivity', optional: true },
-      { toolId: 'zoxide', role: 'Directory Jumping', optional: true },
+      { toolId: 'n8n', role: 'Visual automation', optional: false },
+      { toolId: 'just', role: 'Project commands', optional: false },
+      { toolId: 'direnv', role: 'Per-folder env vars', optional: false },
+      { toolId: 'fzf', role: 'Fuzzy find files', optional: true },
+      { toolId: 'zoxide', role: 'Jump directories', optional: true },
     ],
     workflow: [
-      { step: 1, title: 'Setup Automation', description: 'Self-host n8n for workflow automation (Zapier alternative).', tools: ['n8n'] },
-      { step: 2, title: 'Project Tasks', description: 'Use just for clear, readable project commands (test, build, deploy).', tools: ['just'] },
-      { step: 3, title: 'Environment Safety', description: 'Use direnv to load per-project environment variables safely.', tools: ['direnv'] },
-      { step: 4, title: 'Terminal Speed', description: 'Use fzf and zoxide for faster terminal navigation.', tools: ['fzf', 'zoxide'] },
+      {
+        step: 1,
+        title: 'Automate one annoying thing',
+        description:
+          'Self-host n8n (Docker). Start with email → spreadsheet or webhook → notification. One working flow beats ten half-built ones.',
+        tools: ['n8n'],
+      },
+      {
+        step: 2,
+        title: 'Make commands obvious',
+        description:
+          'justfile with test, build, deploy recipes so future-you does not guess npm scripts.',
+        tools: ['just'],
+      },
+      {
+        step: 3,
+        title: 'Stop leaking API keys',
+        description:
+          'direnv loads .env when you cd into a project and unloads when you leave.',
+        tools: ['direnv'],
+      },
+      {
+        step: 4,
+        title: 'Move faster in the terminal',
+        description:
+          'fzf + zoxide are optional quality-of-life—install when basics work.',
+        tools: ['fzf', 'zoxide'],
+      },
     ],
     cost: {
-      total: '$0/month',
+      total: '$0/month (your hardware)',
       breakdown: [
-        { tool: 'n8n', cost: '$0', notes: 'Self-hosted' },
+        { tool: 'n8n', cost: '$0', notes: 'Self-hosted; fair-use on cloud' },
         { tool: 'just', cost: '$0', notes: 'Open source' },
         { tool: 'direnv', cost: '$0', notes: 'Open source' },
         { tool: 'fzf', cost: '$0', notes: 'Open source' },
@@ -335,35 +557,59 @@ export const toolStacks: ToolStack[] = [
     resources: [],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
-    updatedAt: '2026-06-15',
+    updatedAt: '2026-06-16',
     verified: true,
   },
   {
     id: 'open-source-contributor',
-    name: 'Open Source Contributor',
+    name: 'Contribute to open source',
     description:
-      'Tools for contributing to open source projects effectively. Code review, testing, and collaboration.',
+      'Find issues, fork, test, open a PR. No paid tools required—maintainers care about clear diffs and communication, not your IDE brand. Start with docs or typos if code feels scary.',
     audience: { type: 'developer', budget: 'zero', experience: 'intermediate' },
-    useCase: 'Contribute to open source projects',
+    useCase: 'Land your first merged pull request',
     tools: [
-      { toolId: 'git', role: 'Version Control', optional: false },
-      { toolId: 'gh-cli', role: 'GitHub CLI', optional: false },
-      { toolId: 'lazygit', role: 'Git TUI', optional: true },
-      { toolId: 'playwright', role: 'Testing', optional: true },
-      { toolId: 'ruff', role: 'Code Quality', optional: true, alternatives: ['biome'] },
+      { toolId: 'git', role: 'Version control', optional: false },
+      { toolId: 'gh-cli', role: 'GitHub from terminal', optional: false },
+      { toolId: 'kilo-code', role: 'Navigate unfamiliar code', optional: true, alternatives: ['github-copilot-free'] },
+      { toolId: 'playwright', role: 'Run UI tests', optional: true },
+      { toolId: 'ruff', role: 'Python lint', optional: true, alternatives: ['biome'] },
     ],
     workflow: [
-      { step: 1, title: 'Find Projects', description: 'Use GitHub CLI to search for good-first-issue labels in your language.', tools: ['gh-cli'] },
-      { step: 2, title: 'Fork & Branch', description: 'Fork the project, create a feature branch, and make changes.', tools: ['git', 'lazygit'] },
-      { step: 3, title: 'Test & Lint', description: 'Run tests and linting before submitting.', tools: ['playwright', 'ruff'] },
-      { step: 4, title: 'Submit PR', description: 'Create a pull request with clear description using GitHub CLI.', tools: ['gh-cli'] },
+      {
+        step: 1,
+        title: 'Find a welcoming issue',
+        description:
+          'gh search issues --label "good first issue" in a repo you already use. Read CONTRIBUTING.md before coding.',
+        tools: ['gh-cli'],
+      },
+      {
+        step: 2,
+        title: 'Fork and branch',
+        description:
+          'Small branches, one fix per PR. git switch -c fix-typo-in-readme beats giant refactors.',
+        tools: ['git'],
+      },
+      {
+        step: 3,
+        title: 'Run what maintainers run',
+        description:
+          'Tests and linters locally. CI failures waste everyone\'s time—including yours.',
+        tools: ['playwright', 'ruff'],
+      },
+      {
+        step: 4,
+        title: 'Open a clear PR',
+        description:
+          'gh pr create with what changed and why. Link the issue. Be polite when review comments arrive.',
+        tools: ['gh-cli', 'kilo-code'],
+      },
     ],
     cost: {
       total: '$0/month',
       breakdown: [
         { tool: 'git', cost: '$0', notes: 'Open source' },
         { tool: 'gh-cli', cost: '$0', notes: 'Open source' },
-        { tool: 'lazygit', cost: '$0', notes: 'Open source' },
+        { tool: 'kilo-code', cost: '$0', notes: 'Optional; free tier limits' },
         { tool: 'playwright', cost: '$0', notes: 'Open source' },
         { tool: 'ruff', cost: '$0', notes: 'Open source' },
       ],
@@ -371,7 +617,7 @@ export const toolStacks: ToolStack[] = [
     resources: [],
     createdBy: 'Banal Team',
     createdAt: '2026-06-15',
-    updatedAt: '2026-06-15',
+    updatedAt: '2026-06-16',
     verified: true,
   },
 ];

@@ -88,7 +88,7 @@ export const QUALITY_TAGS: TagDefinition[] = [
   { id: 'enterprise-ready', label: 'Enterprise Ready', category: 'quality', description: 'Suitable for enterprise', icon: '\u{1F3E2}' },
   { id: 'beginner-friendly', label: 'Beginner Friendly', category: 'quality', description: 'Easy for beginners', icon: '\u{1F331}' },
   { id: 'freelancer-friendly', label: 'Freelancer Friendly', category: 'quality', description: 'Good for freelancers', icon: '\u{1F4BC}' },
-  { id: 'indie-hacker', label: 'Indie Hacker', category: 'quality', description: 'Good for indie hackers', icon: '\u{1F680}' },
+  { id: 'indie-hacker', label: 'Ship your own app', category: 'quality', description: 'Good for solo app builders', icon: '\u{1F4BB}' },
 ];
 
 // ─── All Tags Combined ──────────────────────────────────────────────────────

@@ -444,7 +444,7 @@ describe('Stack Detail', () => {
 
     const title = container.querySelector('.stack-detail-title');
     expect(title?.textContent).not.toBe(stack.name);
-    expect(title?.textContent).toContain('SaaS');
+    expect(title?.textContent).toMatch(/Webアプリ|SaaS/);
   });
 });
 

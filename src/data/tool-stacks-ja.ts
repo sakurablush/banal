@@ -15,284 +15,283 @@ export interface ToolStackJa {
 
 export const toolStacksJa: Record<string, ToolStackJa> = {
   'saas-mvp-zero': {
-    name: '$0でSaaS MVPを構築',
+    name: '$0でWebアプリを作る',
     description:
-      '1ドルも使わずにSaaS MVPを構築・ローンチするために必要なすべてのツール。初期段階のプロダクトに適した寛大な無料枠を備えています。',
-    useCase: 'SaaSプロダクトを構築してローンチする',
+      'Webアプリ・副業プロジェクト・生成AIプロダクトを、月額ツール代なしで作る開発者向け。日常のコーディングはKilo Code（無料モデル、IPあたり約200リクエスト/時）。レート制限（429）が出たら同日中にGroqやOpenRouter無料枠へ切り替え。Google Antigravityは数週間に一度の設計・レビュー用—毎日のエディタではない。',
+    useCase: '無料枠でWebアプリやAIプロダクトを出す',
     tools: [
-      { role: 'コードエディタ' },
-      { role: 'AIモデル' },
-      { role: 'データベース' },
+      { role: '日常のコーディング（VS Code）' },
+      { role: 'Kilo上限時の予備' },
+      { role: '設計・レビュー（たまに）' },
+      { role: 'DB・認証' },
       { role: 'ホスティング' },
       { role: 'バージョン管理' },
     ],
     workflow: [
       {
-        title: '開発環境のセットアップ',
+        title: 'リポジトリとKiloの準備',
         description:
-          'VS CodeにKilo Code拡張をインストールし、OpenRouter APIキー（無料枠）を設定してGitリポジトリを初期化します。',
+          'VS CodeにKilo Codeを入れ、kilo-auto/freeを選択（クレカ不要）。Gitを初期化。Auto Freeには機密コードを入れない—無料ルートは上流でログされる場合あり。',
       },
       {
-        title: 'データベーススキーマの設計',
+        title: 'データベースを作る',
         description:
-          'Supabaseプロジェクトを作成し、ユーザー・プロジェクト・機能用のテーブルを設計します。Row Level Securityを有効にします。',
+          'Supabase無料枠（500MB）を作成。テーブル設計とRLSを有効化。7日間非アクティブでプロジェクトが一時停止—週1ログインしないとAPIが止まる。',
       },
       {
-        title: 'フロントエンドの構築',
+        title: 'Kiloで毎日実装',
         description:
-          'Kilo CodeとClaude 3.5 Sonnet（OpenRouter経由）でReactコンポーネントを生成し、認証を実装してUIを構築します。',
+          '小さく区切って出す。HTTP 429ならGroq APIキーを追加（無料枠はモデルごとに日次上限あり）して続行。無料モデルの品質はばらつく—マージ前に差分を確認。',
       },
       {
-        title: 'バックエンドの実装',
+        title: '定期的な設計レビュー',
         description:
-          'Supabase Edge FunctionsでAPIエンドポイントを構築し、OpenRouter APIでAI機能を実装します。',
+          '数週間ごとに、モジュール一覧や詰まったファイルをGoogle Antigravityへ（公開プレビュー中は無料、将来有料の可能性）。ロードマップとレビュー向き。',
       },
       {
-        title: '本番環境へのデプロイ',
+        title: 'デプロイ',
         description:
-          'GitHubリポジトリをCloudflare Pagesに接続し、プッシュ時の自動デプロイを設定します。',
+          'GitHubをCloudflare Pagesに接続（ホビー無料）。Supabaseの環境変数を設定。本番トラフィックが増えたら有料枠が必要になることも。',
       },
     ],
     cost: {
       breakdown: [
-        { notes: '無料拡張、BYOK' },
-        { notes: '無料枠：1日1,000リクエスト' },
-        { notes: '無料枠：500MBデータベース' },
-        { notes: '無料枠：サイト数無制限' },
-        { notes: 'パブリックリポジトリは無料' },
+        { notes: 'Auto Free 約200 req/時/IP；上限で429' },
+        { notes: '無料枠はモデル別；大量本番向きでない' },
+        { notes: 'プレビュー中無料；変更の可能性' },
+        { notes: '500MB；7日放置で一時停止' },
+        { notes: 'ホビー無料；フェアユースあり' },
+        { notes: 'GitHubパブリックリポジトリ無料' },
       ],
     },
     resources: [
-      { title: 'Supabase + OpenRouter 連携ガイド' },
-      { title: 'Cloudflare Pages はじめに' },
+      { title: 'Kilo 利用料・無料モデル制限' },
+      { title: 'Supabase 無料枠' },
     ],
   },
 
   'freelance-web-dev': {
-    name: 'フリーランスWeb開発',
+    name: 'フリーランス向けクライアントサイト',
     description:
-      'フリーランスWeb開発者向けの完全なツールキット。AI支援コーディングと無料ホスティングでクライアントサイトを効率的に構築します。',
-    useCase: 'クライアント向けWebサイト・アプリケーションを構築する',
+      'サブスクを積み上げずにクライアントサイトを納品。実装はKilo Code、ワイヤーはExcalidraw、プレビューはVercelかCloudflare。デモや小規模サイトは無料枠で足りるが、アクセスが増えたらホスティングやDBの有料化を前提に。',
+    useCase: 'クライアント向けWebサイト・小規模アプリを納品する',
     tools: [
-      { role: 'AIアシスタント' },
-      { role: 'ホスティング' },
-      { role: 'データベース' },
-      { role: 'デザイン' },
+      { role: '実装・修正' },
+      { role: 'ワイヤーフレーム' },
+      { role: 'プレビューURL' },
+      { role: 'フォーム・データ' },
       { role: 'バージョン管理' },
     ],
     workflow: [
       {
-        title: 'クライアントヒアリングとデザイン',
+        title: '平易な言葉で範囲を合意',
         description:
-          'Excalidrawでワイヤーフレームとモックアップを作成し、クライアントと共有してフィードバックを得ます。',
+          'Excalidrawでページ構成（無料・アカウント不要）。クライアントには箱よりFigma用語が伝わりやすい。',
       },
       {
-        title: 'プロジェクトのセットアップ',
+        title: 'プロジェクトの土台',
         description:
-          'Gitリポジトリを初期化し、Vercelでホスティングを設定してSupabaseデータベースを構成します。',
+          'Git＋Vercelホビー。フォームやログインが必要ならSupabase無料枠—500MBと放置停止の制限をクライアントに共有。',
       },
       {
-        title: 'AIで構築',
+        title: 'AIで実装',
         description:
-          'GitHub Copilotでコード補完とAI支援開発を行い、コンポーネントを反復的に構築します。',
+          'Kiloでコンポーネントと修正。レート制限時はGroq/OpenRouterへ。Copilot Proはクライアント要件がなければ必須ではない。',
       },
       {
-        title: 'デプロイと改善',
+        title: 'プレビューから本番へ',
         description:
-          'Vercelにデプロイし、プレビューURLでクライアントレビューを受けます。フィードバックに基づいて改善します。',
+          'プッシュごとにVercelプレビューURL。トラフィックやDBサイズが無料枠を超えるなら公開前に有料プランへ。',
       },
     ],
     cost: {
       breakdown: [
-        { notes: '月2,000回の補完が無料' },
-        { notes: 'ホビープロジェクト向け無料枠' },
-        { notes: '無料枠：500MB' },
-        { notes: 'オープンソース、無料' },
+        { notes: '無料モデルはレート制限あり' },
+        { notes: 'ホビー；商用はProが必要な場合あり' },
+        { notes: '任意；500MB上限' },
+        { notes: 'オープンソース' },
         { notes: '無料' },
       ],
     },
-    resources: [{ title: 'Vercel デプロイガイド' }],
+    resources: [{ title: 'Vercel ホビーとPro' }],
   },
 
   'local-ai-dev': {
-    name: 'ローカルAI開発',
+    name: '自分のPCでローカルAI',
     description:
-      '完全なプライバシーとクラウドコストゼロでAIモデルをローカル実行。機密データやオフライン開発に最適です。',
-    useCase: 'プライバシーを完全に保ちながらAIモデルをローカルで実行する',
+      'クラウド無料枠が足りない、またはデータを外に出したくないとき向け。8〜16GB VRAMなら7B〜8B量子化が現実的。70BはノートPC向けではない—データセンターGPU向けの話と混同しない。',
+    useCase: 'データをクラウドに送らずコーディング・チャット',
     tools: [
-      { role: 'モデルランナー' },
-      { role: 'チャットUI' },
-      { role: 'IDE連携' },
-      { role: '汎用モデル' },
-      { role: 'コーディングモデル' },
+      { role: 'ローカル実行' },
+      { role: '汎用7Bモデル' },
+      { role: 'ブラウザチャット' },
+      { role: 'エディタ連携' },
+      { role: '難しい推論（GPU次第）' },
     ],
     workflow: [
       {
-        title: 'Ollamaのインストール',
-        description: 'お使いのOS向けにOllamaをダウンロード・インストールします。1コマンドで始められます。',
+        title: 'ハードを正直に見積もる',
+        description:
+          'VRAM 8GB → 7B Q4まで。16GB → 8B〜14Bが現実的。CPUのみも可だが遅い—プライバシー向き、終日コーディング向きではない。',
       },
       {
-        title: 'モデルのダウンロード',
+        title: '小さいモデルをpull',
         description:
-          '汎用タスク用にQwen 2.5 7B、コーディング用にDeepSeek Coderをpullします。モデルは一度ダウンロードすればオフラインで実行できます。',
+          'Ollamaを入れ、qwen2.5:7bなどを取得。初回は数GBダウンロード、その後はオフライン。',
       },
       {
-        title: 'チャットUIのセットアップ',
+        title: 'ブラウザでチャット',
         description:
-          'Open WebUIをインストールし、ローカルモデルに接続するブラウザベースのチャットUIを構築します。',
+          '任意：Open WebUIでlocalhost向けUI。クラウドより遅いがトークン上限なし。',
       },
       {
-        title: 'IDE連携',
+        title: 'エディタに接続',
         description:
-          'VS CodeにContinue.devをインストールし、ローカルモデルでAIコード補完を利用します。',
+          'Continue.devからOllamaへ。フロンティアクラウドより弱い—定型コードと機密ファイル向き。',
       },
     ],
     cost: {
       breakdown: [
-        { notes: 'オープンソース、永久無料' },
         { notes: 'オープンソース' },
+        { notes: '7B Q4で約4〜6GB VRAM' },
+        { notes: 'セルフホスト' },
         { notes: 'オープンソース' },
-        { notes: 'オープンウェイト、無料' },
-        { notes: 'オープンウェイト、無料' },
+        { notes: '大容量量子化は大きいGPUのみ' },
       ],
     },
-    resources: [
-      { title: 'Ollama はじめに' },
-      { title: 'Open WebUI セットアップガイド' },
-    ],
+    resources: [{ title: 'Ollama モデル一覧' }],
   },
 
   'student-learning': {
-    name: '学習者向けスタック',
+    name: '$0でプログラミングを学ぶ',
     description:
-      'プログラミング学習者向けの無料ツール。AIチューター、練習プラットフォーム、開発環境を含みます。',
-    useCase: 'プログラミングとコンピュータサイエンスを学ぶ',
+      'ブートキャンプ料金なしで学ぶ。freeCodeCampでカリキュラム、Exercismで練習、ブラウザIDEで高スペックPC不要。ChatGPTやDuck.aiは行き詰まり用—無料枠は1日のメッセージ数に上限があるので、答えコピーではなくブロッカー解消に使う。',
+    useCase: 'ゼロからプログラミングを学ぶ',
     tools: [
-      { role: 'カリキュラム' },
-      { role: '練習' },
-      { role: 'CS基礎' },
-      { role: 'コーディング環境' },
-      { role: 'AIチューター' },
+      { role: '体系的なレッスン' },
+      { role: 'フィードバック付き練習' },
+      { role: 'ブラウザIDE' },
+      { role: '行き詰まり時の質問' },
+      { role: 'スキルロードマップ' },
     ],
     workflow: [
       {
-        title: '学習パスの選択',
+        title: '1つの道筋を選んで続ける',
         description:
-          'freeCodeCampのカリキュラムまたはKhan AcademyのCS基礎から始めます。',
+          'freeCodeCampかroadmap.shから開始。毎週コースを変えると挫折しやすい。',
       },
       {
-        title: '毎日の練習',
-        description: 'Exercismでコーディング課題を解き、メンターからフィードバックを受けます。',
-      },
-      {
-        title: 'プロジェクトの構築',
-        description: 'Replitでセットアップ不要のブラウザ内プロジェクトを構築します。',
-      },
-      {
-        title: 'AIの活用',
+        title: 'フィードバック付きで練習',
         description:
-          '概念やデバッグで行き詰まったときはChatGPTやDuck.aiを活用します。',
+          'Exercismは小さな課題にメンター的フィードバック。調子悪い日は1問、良い日は3問。',
+      },
+      {
+        title: 'ブラウザで作る',
+        description:
+          'StackBlitzやReplit無料枠。Replitは使用量制限あり；静的フロントならStackBlitzが軽い。',
+      },
+      {
+        title: 'AIは家庭教師として',
+        description:
+          '詰まったら試したことを書いてDuck.aiへ。日次上限なら寝かせるかドキュメントを読む—それも学習。',
       },
     ],
     cost: {
       breakdown: [
         { notes: '完全無料' },
-        { notes: 'メンター付き無料' },
-        { notes: '無料枠' },
-        { notes: '無料枠' },
+        { notes: '無料メンタートラック' },
+        { notes: '無料枠は寛容' },
+        { notes: '登録不要；共有レート制限' },
       ],
     },
-    resources: [
-      { title: 'freeCodeCamp カリキュラム' },
-      { title: 'roadmap.sh 開発者ロードマップ' },
-    ],
+    resources: [{ title: 'freeCodeCamp カリキュラム' }],
   },
 
   'content-creator': {
-    name: 'コンテンツクリエイターキット',
+    name: '$0で動画・投稿を作る',
     description:
-      'コンテンツクリエイター向けの無料AIツール：動画編集、画像生成、音楽、執筆、プレゼンテーション。',
-    useCase: 'YouTube、ブログ、SNS向けコンテンツを制作する',
+      'AdobeなしでYouTube・ブログ・SNS向けコンテンツ。CapCutとCanva無料枠で開始可能。SunoとGammaは日次クレジット制—調子の良い日にまとめ作業し、ファイルはローカルに保存。',
+    useCase: '予算ゼロで定期的にコンテンツを出す',
     tools: [
-      { role: '動画エディタ' },
-      { role: 'デザイン' },
-      { role: '音楽' },
-      { role: 'プレゼン' },
-      { role: '翻訳' },
+      { role: '動画編集' },
+      { role: 'サムネ・画像' },
+      { role: 'スライド構成' },
+      { role: 'BGM' },
+      { role: '翻訳チェック' },
     ],
     workflow: [
       {
-        title: 'コンテンツの企画',
+        title: '生成の前に骨子を書く',
         description:
-          'Gammaでプレゼン構成を作成し、Canvaでサムネイルを制作します。',
+          'Gammaやメモに箇条書き。AIスライドは下書き—キャプションは必ず手で直す。',
       },
       {
-        title: 'ビジュアルの作成',
+        title: 'ビジュアル作成',
         description:
-          'Canva AIで画像を生成し、Cleanup.Picturesで写真を編集します。',
+          'Canva無料でサムネと短い画像。PNGで書き出し—Canvaホスティングだけに頼らない。',
       },
       {
-        title: '動画の編集',
+        title: '動画編集',
         description:
-          'CapCutでAI自動字幕やエフェクト付きの動画編集を行います。',
+          'CapCutで自動字幕など。一部エクスポートに透かしがある場合あり—公開前に確認。',
       },
       {
-        title: '音楽の追加',
+        title: '音楽と言語',
         description:
-          'SunoでBGMを生成するか、ロイヤリティフリーのトラックを使用します。',
+          'Sunoは日次クレジット—数曲生成して保存。DeepL無料は文字数制限；全体翻訳ではなく仕上げ用。',
       },
     ],
     cost: {
       breakdown: [
-        { notes: '無料枠' },
-        { notes: '無料枠' },
-        { notes: '毎日無料クレジット' },
-        { notes: '無料枠' },
+        { notes: '一部エクスポートに透かし' },
+        { notes: 'テンプレ制限' },
+        { notes: '日次クレジット' },
+        { notes: 'AIクレジット制限' },
       ],
     },
     resources: [],
   },
 
   'privacy-first': {
-    name: 'プライバシー優先スタック',
+    name: 'データを他人のサーバーに載せない',
     description:
-      'プライバシーを尊重するツール群。テレメトリなし、デフォルトで暗号化、可能な限りセルフホスト対応。',
-    useCase: 'プライバシーを維持しながら機密データを扱う',
+      '健康・法律・個人の作業を学習データに入れたくないとき。ローカルAI（Jan/Ollama）、自分で管理するパスワード、同期は自分が選ぶメモ。セルフホストはお金より半日のセットアップ時間が必要。',
+    useCase: '機密ファイルをクラウドAIなしで扱う',
     tools: [
-      { role: 'ローカルAI' },
-      { role: 'パスワード管理' },
-      { role: 'メモ' },
-      { role: 'ファイル同期' },
-      { role: 'コラボレーション' },
+      { role: 'オフラインチャット' },
+      { role: 'パスワード' },
+      { role: 'ローカルメモ' },
+      { role: 'P2Pファイル同期' },
+      { role: '共有ドキュメント' },
     ],
     workflow: [
       {
-        title: 'ローカルAIのセットアップ',
+        title: 'アップロードなしでチャット',
         description:
-          'Janをインストールし、データが端末外に出ないプライベートなAIチャットを利用します。',
+          'JanまたはOllamaを自PCに。一般向けGPUでは小さいモデルのみ—品質とプライバシーのトレードオフ。',
       },
       {
-        title: 'パスワードの保護',
+        title: 'パスワードを一箇所に',
         description:
-          'Vaultwardenをセルフホストし、家族・チーム向けのパスワード管理を行います。',
+          '多くの人はBitwarden無料で十分。家族共有を自前でならVaultwarden。',
       },
       {
-        title: 'プライベートなメモ',
+        title: 'メモは自分のもの',
         description:
-          'Joplinでローカルファーストのメモを取り、必要に応じて同期します。',
+          'JoplinはローカルMarkdown；同期は任意。医療・法律・日記向き。',
       },
       {
-        title: '暗号化同期',
+        title: 'Dropboxなしで共有',
         description:
-          'Syncthingでクラウド仲介なしのP2Pファイル同期を行います。',
+          'Syncthingは端末間同期。たまの共同作業はCryptpad。',
       },
     ],
     cost: {
       breakdown: [
+        { notes: 'ローカルのみ' },
+        { notes: '個人無料枠' },
         { notes: 'オープンソース' },
-        { notes: 'セルフホスト' },
-        { notes: 'オープンソース' },
-        { notes: 'オープンソース' },
+        { notes: 'クラウドアカウント不要' },
         { notes: '無料枠' },
       ],
     },
@@ -300,130 +299,132 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
   },
 
   'job-seeker-portfolio': {
-    name: '就活・ポートフォリオ',
+    name: '就活：ポートフォリオと練習',
     description:
-      '無料ツールでプロフェッショナルなポートフォリオを構築し、技術面接の準備を行います。',
-    useCase: 'ポートフォリオを構築し、面接の準備をする',
+      'GitHub Pagesで作品を見せ、LeetCode無料問題で練習、AIは履歴書の言い回し用—経歴の捏造には使わない。面接対策は反復；毎日続ければ無料ツールで足りる。',
+    useCase: '作品で開発職に応募する',
     tools: [
-      { role: 'ポートフォリオホスティング' },
-      { role: '面接対策' },
-      { role: '学習ロードマップ' },
-      { role: '履歴書レビュー' },
-      { role: 'バージョン管理' },
+      { role: 'ポートフォリオサイト' },
+      { role: '面接練習' },
+      { role: 'スキルチェックリスト' },
+      { role: '履歴書の推敲' },
+      { role: '実コミットの証明' },
     ],
     workflow: [
       {
-        title: '学習ロードマップの策定',
+        title: '職種が求めることを把握',
         description:
-          'roadmap.shで目標職種に必要なスキルを特定します。',
+          'roadmap.shで目標職種の穴を洗い出す—証明に必要なポートフォリオは2〜3個でよい。',
       },
       {
-        title: 'プロジェクトの構築',
+        title: '公開リポジトリで出す',
         description:
-          'ポートフォリオ用プロジェクトを作成し、GitHubにプッシュします。',
+          'GitHubにpushし、GitHub Pagesで簡単なポートフォリオ。採用側は流行語よりリポジトリを見る。',
       },
       {
-        title: '面接練習',
-        description: 'LeetCodeで毎日コーディング問題を解きます。',
+        title: '問題練習',
+        description:
+          'LeetCode無料＋声に出して説明。理解した1問が、コピーした10問より価値がある。',
       },
       {
-        title: '履歴書の仕上げ',
+        title: '応募文の仕上げ',
         description:
-          'AIチャットで履歴書とカバーレターのレビュー・改善を行います。',
+          'Duck.aiに「具体的に短く」と箇条書きを渡す。すべて事実か確認。',
       },
     ],
     cost: {
       breakdown: [
-        { notes: 'パブリックリポジトリは無料' },
-        { notes: '多数の無料問題' },
+        { notes: 'パブリックリポジトリ' },
+        { notes: '問題の一部が無料' },
         { notes: '無料' },
-        { notes: '無料枠' },
+        { notes: 'レート制限あり' },
       ],
     },
     resources: [],
   },
 
   'data-science': {
-    name: 'データサイエンスキット',
+    name: 'GPU代なしでデータ分析',
     description:
-      'データサイエンス・ML向けの無料ツール：ノートブック、データセット、可視化、GPUコンピュート。',
-    useCase: 'データを分析しMLモデルを構築する',
+      'KaggleとGoogle Colab無料GPUは学習と小規模プロジェクト向け。セッション切断・クォータ変更あり。Colab無料は24時間学習用ではない—こまめにチェックポイント保存。',
+    useCase: 'データ探索と小さなモデル学習',
     tools: [
-      { role: 'ノートブック' },
+      { role: 'ノートブック＋GPU' },
       { role: 'データセット' },
-      { role: '数学' },
-      { role: '可視化' },
-      { role: 'Pythonパッケージ' },
+      { role: '高速Python環境' },
+      { role: '簡易グラフ' },
+      { role: '計算の確認' },
     ],
     workflow: [
       {
-        title: 'データセットの探索',
-        description: 'Kaggleで課題に関連するデータセットを探します。',
+        title: 'データを探す',
+        description:
+          'Kaggleの他者ノートを読んでからコピー。商用利用のライセンスを確認。',
       },
       {
-        title: 'データの探索',
+        title: 'Colabで探索',
         description:
-          'Google Colabの無料GPUでデータ探索と可視化を行います。',
+          '無料GPUセッションはタイムアウト。Drive保存かCSV/モデルのダウンロードを忘れない。',
       },
       {
-        title: 'モデルの構築',
+        title: '再現可能なPython',
         description:
-          'Colabでscikit-learn、PyTorch、TensorFlowを使いMLモデルを学習します。',
+          'Colabだけでは足りないときuvでローカルvenv。小データならCPUでも同じコードを回す。',
       },
       {
-        title: '結果の検証',
+        title: '計算の確認',
         description:
-          'Wolfram AlphaとDesmosで数学的結果を検証します。',
+          'Desmosで簡易プロット；Wolfram Alpha無料で積分・単位確認—宿題の丸写し用ではない。',
       },
     ],
     cost: {
       breakdown: [
-        { notes: '無料GPU' },
-        { notes: '無料データセット + GPU' },
-        { notes: '無料回答' },
+        { notes: 'GPUは保証されずタイムアウト' },
+        { notes: '無料で週30GPU時間程度' },
         { notes: 'オープンソース' },
+        { notes: '無料クエリ数制限' },
       ],
     },
     resources: [],
   },
 
   'automation-productivity': {
-    name: '自動化と生産性向上',
+    name: '面倒なPC作業を自動化',
     description:
-      '反復タスクの自動化と生産性向上のための無料ワークフローツール。',
-    useCase: '反復タスクとワークフローを自動化する',
+      'セルフホストn8nでZapier代替。just・direnv・ターミナルツールで再現性を上げる。常時起動マシンが必要—ノートPCがスリープすると自動化も止まる。',
+    useCase: '毎日同じクリックをやめる',
     tools: [
-      { role: 'ワークフロー自動化' },
-      { role: 'タスクランナー' },
-      { role: '環境管理' },
-      { role: 'ターミナル効率化' },
-      { role: 'ディレクトリ移動' },
+      { role: 'ビジュアル自動化' },
+      { role: 'プロジェクトコマンド' },
+      { role: 'フォルダ別環境変数' },
+      { role: 'ファジー検索' },
+      { role: 'ディレクトリジャンプ' },
     ],
     workflow: [
       {
-        title: '自動化のセットアップ',
+        title: '一番うざい作業を1つ',
         description:
-          'n8nをセルフホストし、ワークフロー自動化（Zapier代替）を構築します。',
+          'Dockerでn8nをセルフホスト。メール→表、Webhook→通知など。動く1本が未完成10本より価値がある。',
       },
       {
-        title: 'プロジェクトタスク',
+        title: 'コマンドを明確に',
         description:
-          'justで読みやすいプロジェクトコマンド（test、build、deploy）を定義します。',
+          'justfileにtest/build/deploy。未来の自分がnpmスクリプトを推測しなくてよい。',
       },
       {
-        title: '環境の安全な管理',
+        title: 'APIキーの漏洩を防ぐ',
         description:
-          'direnvでプロジェクトごとの環境変数を安全に読み込みます。',
+          'direnvでcd時に.envを読み込み、出るとアンロード。',
       },
       {
-        title: 'ターミナルの高速化',
+        title: 'ターミナルを速く',
         description:
-          'fzfとzoxideでターミナル操作を高速化します。',
+          'fzf＋zoxideは任意。基本が動いてからでよい。',
       },
     ],
     cost: {
       breakdown: [
-        { notes: 'セルフホスト' },
+        { notes: 'セルフホスト；クラウドはフェアユース' },
         { notes: 'オープンソース' },
         { notes: 'オープンソース' },
         { notes: 'オープンソース' },
@@ -434,43 +435,44 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
   },
 
   'open-source-contributor': {
-    name: 'オープンソース貢献者',
+    name: 'オープンソースに貢献する',
     description:
-      'オープンソースプロジェクトへの効果的な貢献のためのツール。コードレビュー、テスト、コラボレーション。',
-    useCase: 'オープンソースプロジェクトに貢献する',
+      'Issueを見つけ、フォークし、テストし、PRを出す。有料ツール不要—メンテナーが見るのは明確な差分とコミュニケーション。コードが怖ければドキュメントやtypoから。',
+    useCase: '初めてマージされるPRを出す',
     tools: [
       { role: 'バージョン管理' },
-      { role: 'GitHub CLI' },
-      { role: 'Git TUI' },
-      { role: 'テスト' },
-      { role: 'コード品質' },
+      { role: 'ターミナルからGitHub' },
+      { role: '見慣れないコードの理解' },
+      { role: 'UIテスト実行' },
+      { role: 'Python Lint' },
     ],
     workflow: [
       {
-        title: 'プロジェクトの探索',
+        title: '歓迎されるIssueを探す',
         description:
-          'GitHub CLIで使用言語のgood-first-issueラベル付きIssueを検索します。',
+          '普段使うリポジトリでgood first issue。コーディング前にCONTRIBUTING.mdを読む。',
       },
       {
         title: 'フォークとブランチ',
         description:
-          'プロジェクトをフォークし、フィーチャーブランチを作成して変更を加えます。',
+          '小さなブランチ、1 PR 1修正。巨大リファクタよりREADMEのtypo修正から。',
       },
       {
-        title: 'テストとLint',
-        description: '提出前にテストとLintを実行します。',
-      },
-      {
-        title: 'PRの提出',
+        title: 'メンテナーと同じチェック',
         description:
-          'GitHub CLIで明確な説明付きのプルリクエストを作成します。',
+          'ローカルでテストとLint。CI失敗は全員の時間の無駄。',
+      },
+      {
+        title: '明確なPR',
+        description:
+          'gh pr createで変更理由を書く。Issueをリンク。レビューコメントには丁寧に。',
       },
     ],
     cost: {
       breakdown: [
         { notes: 'オープンソース' },
         { notes: 'オープンソース' },
-        { notes: 'オープンソース' },
+        { notes: '任意；無料枠制限' },
         { notes: 'オープンソース' },
         { notes: 'オープンソース' },
       ],

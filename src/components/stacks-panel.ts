@@ -62,7 +62,7 @@ const COPY = {
 
 const AUDIENCE_LABELS: Record<StackAudience, { en: string; ja: string; icon: string }> = {
   freelancer: { en: 'Freelancers', ja: 'フリーランサー', icon: '\u{1F4BC}' },
-  'indie-hacker': { en: 'Indie Hackers', ja: 'インディーハッカー', icon: '\u{1F680}' },
+  'indie-hacker': { en: 'Building your own app', ja: '自分でアプリを作る', icon: '\u{1F4BB}' },
   startup: { en: 'Startups', ja: 'スタートアップ', icon: '\u{1F31F}' },
   student: { en: 'Students', ja: '学生', icon: '\u{1F393}' },
   'job-seeker': { en: 'Job Seekers', ja: '求職者', icon: '\u{1F50D}' },

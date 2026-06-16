@@ -18,11 +18,10 @@ const COPY = {
     step2Title: "What's your budget?",
     step3Title: 'What do you want to build?',
     step4Title: "What's your experience level?",
-    freelancer: 'Freelancer',
-    indieHacker: 'Indie Hacker',
+    freelancer: 'Freelancer (client work)',
+    appBuilder: 'I build apps or websites',
     student: 'Student',
-    jobSeeker: 'Job Seeker',
-    developer: 'Developer',
+    jobSeeker: 'Looking for a job',
     other: 'Other',
     zeroBudget: '$0 (No paid tools)',
     lowBudget: '$1–50/month (Light usage)',
@@ -52,11 +51,10 @@ const COPY = {
     step2Title: '予算は？',
     step3Title: '何を構築したいですか？',
     step4Title: '経験レベルは？',
-    freelancer: 'フリーランサー',
-    indieHacker: 'インディーハッカー',
+    freelancer: 'フリーランサー（クライアント案件）',
+    appBuilder: 'アプリやWebサイトを作っている',
     student: '学生',
-    jobSeeker: '求職者',
-    developer: '開発者',
+    jobSeeker: '就職・転職中',
     other: 'その他',
     zeroBudget: '$0（有料ツールなし）',
     lowBudget: '$1–50/月（軽い利用）',
@@ -198,10 +196,9 @@ function renderStep1(
   const options = create('div', 'onboarding-options');
   const roles: Array<{ value: StackAudience; label: string }> = [
     { value: 'freelancer', label: copy.freelancer },
-    { value: 'indie-hacker', label: copy.indieHacker },
+    { value: 'developer', label: copy.appBuilder },
     { value: 'student', label: copy.student },
     { value: 'job-seeker', label: copy.jobSeeker },
-    { value: 'developer', label: copy.developer },
   ];
 
   for (const role of roles) {
@@ -405,7 +402,8 @@ function findMatchingStacks(answers: OnboardingState['answers']): ToolStack[] {
     let totalCriteria = 0;
     if (answers.role) {
       totalCriteria++;
-      if (stack.audience.type === answers.role) score++;
+      const role = answers.role === 'indie-hacker' ? 'developer' : answers.role;
+      if (stack.audience.type === role) score++;
     }
     if (answers.budget) {
       totalCriteria++;

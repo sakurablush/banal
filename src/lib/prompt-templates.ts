@@ -10,6 +10,12 @@
 
 export type Locale = 'en' | 'ja';
 
+/** Appended to every template description so users know where to paste and what limits to expect. */
+const PASTE_NOTE: Record<Locale, string> = {
+  en: ' Paste into Duck.ai, ChatGPT free, or Gemini free. Free tiers cap messages per day—split big jobs across days.',
+  ja: ' Duck.ai、ChatGPT無料、Gemini無料などに貼り付け。無料枠は1日のメッセージ数に上限があるため、大きな作業は日を分ける。',
+};
+
 export interface PromptTemplate {
   id: string;
   title: string;
@@ -327,12 +333,12 @@ Keep response under 380 words. Be extremely clear and kind.`,
 
   'star-stories-caregiving': {
     title: {
-      en: 'STAR stories from caregiving & real life',
-      ja: '介護や実生活からSTARストーリーを作る',
+      en: 'Interview stories from real life',
+      ja: '実生活から面接で話せるエピソード',
     },
     description: {
-      en: 'Turn months/years of unpaid caregiving, parenting, household management, or volunteering into powerful, specific STAR (Situation-Task-Action-Result) stories for job interviews and applications.',
-      ja: '無償の介護・子育て・家事管理・ボランティアなどの経験を、就職面接・応募用の具体的で力強いSTAR（状況・課題・行動・結果）ストーリーに変換する。',
+      en: 'Turn caregiving, parenting, or household work into clear stories for job interviews—concrete facts, no corporate buzzwords.',
+      ja: '介護・子育て・家事などの経験を、面接で話せる具体的なエピソードに。事実ベースで、ビジネス用語は使わない。',
     },
     template: {
       en: `You are an expert at helping people with "non-traditional" experience (especially caregiving and survival) turn invisible labor into interview gold. You use the exact STAR method hiring managers are trained to look for. You make it concrete and measurable without exaggeration.
@@ -543,7 +549,7 @@ export class PromptTemplatesLibrary {
     return {
       id,
       title: data.title[loc],
-      description: data.description[loc],
+      description: data.description[loc] + PASTE_NOTE[loc],
       template: data.template[loc],
     };
   }

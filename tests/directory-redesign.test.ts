@@ -287,7 +287,7 @@ describe('Tool Stacks Data', () => {
   it('should get stack by ID', () => {
     const stack = getStackById('saas-mvp-zero');
     expect(stack).toBeDefined();
-    expect(stack?.name).toContain('SaaS');
+    expect(stack?.name.toLowerCase()).toMatch(/web app|saas/);
   });
 
   it('should get stacks by audience', () => {
