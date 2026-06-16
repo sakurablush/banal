@@ -24,6 +24,8 @@
   --header-height: 3.5rem;
   --scroll-offset: calc(var(--header-height) + 0.75rem);
   --hero-pad-y: clamp(1.25rem, 2.5vw, 1.75rem);
+  /* Small gap between scrollable content and vertical scrollbar */
+  --scroll-inset: 0.35rem;
   --text-primary: rgba(255, 255, 255, 0.9);
   --text-muted: rgba(255, 255, 255, 0.62);
   --text-subtle: rgba(255, 255, 255, 0.48);
@@ -85,6 +87,37 @@ main#app,
 .page-section {
   padding-block: clamp(1.75rem, 3.5vw, 2.75rem);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Shared vertical scroll panes — thin scrollbar + consistent inset from tiles */
+.zk2-layout > .zk2-sidebar,
+.zk2-layout > .zk2-horizontal-content,
+.stacks-content,
+.models-content,
+.tools-horizontal-scroll,
+.prompts-horizontal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
+  padding-right: var(--scroll-inset);
+}
+
+.zk2-layout > .zk2-sidebar::-webkit-scrollbar,
+.zk2-layout > .zk2-horizontal-content::-webkit-scrollbar,
+.stacks-content::-webkit-scrollbar,
+.models-content::-webkit-scrollbar,
+.tools-horizontal-scroll::-webkit-scrollbar,
+.prompts-horizontal-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.zk2-layout > .zk2-sidebar::-webkit-scrollbar-thumb,
+.zk2-layout > .zk2-horizontal-content::-webkit-scrollbar-thumb,
+.stacks-content::-webkit-scrollbar-thumb,
+.models-content::-webkit-scrollbar-thumb,
+.tools-horizontal-scroll::-webkit-scrollbar-thumb,
+.prompts-horizontal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 3px;
 }
 
 /* Respect user's motion preferences */
@@ -305,17 +338,6 @@ main#app,
   grid-row: 1 / -1;
   max-height: 700px;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
-}
-
-.zk2-layout > .zk2-sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.zk2-layout > .zk2-sidebar::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.3);
-  border-radius: 3px;
 }
 
 .zk2-layout > .quick-filters-row {
@@ -330,17 +352,6 @@ main#app,
   grid-row: 2;
   max-height: 650px;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
-}
-
-.zk2-layout > .zk2-horizontal-content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.zk2-layout > .zk2-horizontal-content::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.3);
-  border-radius: 3px;
 }
 
 @media (max-width: 900px) {
@@ -372,7 +383,6 @@ main#app,
   flex-direction: column;
   gap: 4px;
   overflow-y: auto;
-  padding-right: 0.35rem;
 }
 
 @media (max-width: 900px) {
@@ -2566,23 +2576,11 @@ main#app,
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
   padding: 24px 0 16px 24px;
-  padding-right: 8px;
   max-height: 420px;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
   scroll-padding-top: 60px;
   align-items: start;
-}
-
-.tools-horizontal-scroll::-webkit-scrollbar {
-  width: 6px;
-}
-
-.tools-horizontal-scroll::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.3);
-  border-radius: 3px;
 }
 
 /* Prompts scroll container - shows ~2 rows */
@@ -2591,21 +2589,9 @@ main#app,
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
   padding: 24px 0 16px 24px;
-  padding-right: 8px;
   max-height: 340px;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
-}
-
-.prompts-horizontal-scroll::-webkit-scrollbar {
-  width: 6px;
-}
-
-.prompts-horizontal-scroll::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.3);
-  border-radius: 3px;
 }
 
 /* Prompt card base styles - unified with tool cards */
@@ -2810,9 +2796,22 @@ main#app,
   color: var(--light-violet);
 }
 
+[data-theme='light'] .zk2-layout > .zk2-sidebar,
+[data-theme='light'] .zk2-layout > .zk2-horizontal-content,
+[data-theme='light'] .stacks-content,
+[data-theme='light'] .models-content,
 [data-theme='light'] .tools-horizontal-scroll,
 [data-theme='light'] .prompts-horizontal-scroll {
   scrollbar-color: var(--light-active-border) transparent;
+}
+
+[data-theme='light'] .zk2-layout > .zk2-sidebar::-webkit-scrollbar-thumb,
+[data-theme='light'] .zk2-layout > .zk2-horizontal-content::-webkit-scrollbar-thumb,
+[data-theme='light'] .stacks-content::-webkit-scrollbar-thumb,
+[data-theme='light'] .models-content::-webkit-scrollbar-thumb,
+[data-theme='light'] .tools-horizontal-scroll::-webkit-scrollbar-thumb,
+[data-theme='light'] .prompts-horizontal-scroll::-webkit-scrollbar-thumb {
+  background: var(--light-active-border);
 }
 
 [data-theme='light'] .tools-horizontal-scroll::before {
@@ -2823,19 +2822,11 @@ main#app,
   background: linear-gradient(to bottom, rgba(244, 246, 248, 0.95), transparent);
 }
 
-[data-theme='light'] .tools-horizontal-scroll::-webkit-scrollbar-thumb {
-  background: var(--light-active-border);
-}
-
 [data-theme='light'] .quick-filters-row {
   scrollbar-color: var(--light-active-border) transparent;
 }
 
 [data-theme='light'] .quick-filters-row::-webkit-scrollbar-thumb {
-  background: var(--light-active-border);
-}
-
-[data-theme='light'] .prompts-horizontal-scroll::-webkit-scrollbar-thumb {
   background: var(--light-active-border);
 }
 
@@ -3305,23 +3296,11 @@ main#app,
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
-  padding-right: 0.5rem;
-}
-
-.models-content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.models-content::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.3);
-  border-radius: 3px;
 }
 
 .models-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: 1rem;
 }
 
@@ -3636,23 +3615,11 @@ main#app,
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
-  padding-right: 0.5rem;
-}
-
-.stacks-content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.stacks-content::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.3);
-  border-radius: 3px;
 }
 
 .stacks-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
   gap: 1.25rem;
 }
 
