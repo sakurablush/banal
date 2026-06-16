@@ -9,6 +9,7 @@ import { join } from 'node:path';
 import { toolStacks } from '../src/data/tool-stacks';
 import { toolStacksJa } from '../src/data/tool-stacks-ja';
 import { zeroKeyTools } from '../src/data/zero-key-tools';
+import { zeroKeyToolsJa } from '../src/data/zero-key-tools-ja';
 import { getSiteStats } from '../src/data/site-stats';
 import {
   getGettingStartedGuidesMeta,
@@ -20,6 +21,7 @@ import {
   readmeVerificationPhrase,
 } from '../src/lib/latest-verification';
 import { generateReadmeToolsSection } from '../src/lib/tools-directory-markdown';
+import { missingOverlayKeys, extraOverlayKeys } from '../src/lib/locale-parity';
 import { translations } from '../src/i18n';
 import { PromptTemplatesLibrary, PROMPT_TEMPLATE_COUNT } from '../src/lib/prompt-templates';
 
@@ -109,13 +111,16 @@ describe('Tool stacks — Japanese parity', () => {
     expect(jaIds).toEqual(enIds);
   });
 
-  it('JA tools, workflow, and cost breakdown lengths match EN per stack', () => {
+  it('JA tools, workflow, cost breakdown lengths match EN per stack', () => {
     const issues: string[] = [];
     for (const stack of toolStacks) {
       const ja = toolStacksJa[stack.id];
       if (!ja) {
         issues.push(`missing JA entry for ${stack.id}`);
         continue;
+      }
+      if (!ja.cost.total) {
+        issues.push(`${stack.id}: missing JA cost.total`);
       }
       if (ja.tools.length !== stack.tools.length) {
         issues.push(`${stack.id}: tools EN=${stack.tools.length} JA=${ja.tools.length}`);
@@ -128,6 +133,11 @@ describe('Tool stacks — Japanese parity', () => {
           `${stack.id}: cost EN=${stack.cost.breakdown.length} JA=${ja.cost.breakdown.length}`
         );
       }
+      if (ja.resources.length !== stack.resources.length) {
+        issues.push(
+          `${stack.id}: resources EN=${stack.resources.length} JA=${ja.resources.length}`
+        );
+      }
     }
     expect(issues, issues.join('\n')).toEqual([]);
   });
@@ -136,6 +146,7 @@ describe('Tool stacks — Japanese parity', () => {
     for (const stack of toolStacks) {
       const localized = getLocalizedStack(stack, 'ja');
       expect(localized.name).toBe(toolStacksJa[stack.id].name);
+      expect(localized.cost.total).toBe(toolStacksJa[stack.id].cost.total);
       expect(localized.tools).toHaveLength(stack.tools.length);
       expect(localized.workflow).toHaveLength(stack.workflow.length);
       expect(localized.cost.breakdown).toHaveLength(stack.cost.breakdown.length);
@@ -143,6 +154,14 @@ describe('Tool stacks — Japanese parity', () => {
         expect(localized.tools[i].role).toBe(toolStacksJa[stack.id].tools[i].role);
       }
     }
+  });
+});
+
+describe('Zero-key tools — Japanese parity', () => {
+  it('JA overlay covers every tool id in the catalog', () => {
+    const ids = zeroKeyTools.map((tool) => tool.id);
+    expect(missingOverlayKeys(ids, zeroKeyToolsJa)).toEqual([]);
+    expect(extraOverlayKeys(ids, zeroKeyToolsJa)).toEqual([]);
   });
 });
 

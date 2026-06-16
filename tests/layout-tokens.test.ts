@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
+  GUIDES_PANEL_MIN_HEIGHT_PX,
+  GUIDES_SECTION_INTRINSIC_SIZE_PX,
   PANEL_TILES_CHROME_HEIGHT_PX,
   PANEL_TILES_INTRINSIC_SIZE_PX,
   PANEL_TILES_MIN_HEIGHT_PX,
@@ -20,5 +22,10 @@ describe('layout-tokens', () => {
 
   it('tracks deferred section intrinsic size buffer', () => {
     expect(PANEL_TILES_INTRINSIC_SIZE_PX).toBe(PANEL_TILES_MIN_HEIGHT_PX + 200);
+  });
+
+  it('keeps guides section compact — not tile-panel height', () => {
+    expect(GUIDES_PANEL_MIN_HEIGHT_PX).toBeLessThan(PANEL_TILES_MIN_HEIGHT_PX);
+    expect(GUIDES_SECTION_INTRINSIC_SIZE_PX).toBeLessThan(PANEL_TILES_INTRINSIC_SIZE_PX);
   });
 });

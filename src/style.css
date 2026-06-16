@@ -44,6 +44,8 @@
   );
   --panel-tiles-effective-min-height: var(--panel-tiles-min-height);
   --panel-tiles-effective-scroll-height: var(--panel-tiles-scroll-height);
+  --panel-compact-intrinsic-size: 720px;
+  --panel-guides-min-height: 360px;
   --zk2-nav-panel-pad: 0.6rem 0.55rem;
   --panel-stats-bg: #14111c;
   --panel-stats-border: rgba(168, 85, 247, 0.18);
@@ -376,9 +378,12 @@ main#app,
 .panel-root--tools,
 .panel-root--models,
 .panel-root--stacks,
-.panel-root--prompts,
-.panel-root--guides {
+.panel-root--prompts {
   min-height: var(--panel-tiles-effective-min-height);
+}
+
+.panel-root--guides {
+  min-height: 0;
 }
 
 .panel-root--onboarding {
@@ -419,7 +424,7 @@ main#app,
   border-radius: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.06);
   background: rgba(255, 255, 255, 0.02);
-  min-height: var(--panel-tiles-effective-min-height);
+  min-height: var(--panel-guides-min-height);
 }
 
 .panel-skeleton-search {
@@ -475,6 +480,10 @@ main#app,
 .page-section[data-deferred] {
   content-visibility: auto;
   contain-intrinsic-size: auto calc(var(--panel-tiles-min-height) + 200px);
+}
+
+.page-section--compact[data-deferred] {
+  contain-intrinsic-size: auto var(--panel-compact-intrinsic-size);
 }
 
 @media (max-width: 900px) {
@@ -4404,7 +4413,18 @@ textarea.sp-form-input {
   gap: 0.75rem;
 }
 
-.privacy-panel-intro,
+.privacy-panel-header .filter-modal-title {
+  margin: 0;
+  flex: 1;
+}
+
+.privacy-panel-intro {
+  margin: 1rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
 .privacy-panel-body,
 .privacy-panel-never {
   font-size: 0.85rem;

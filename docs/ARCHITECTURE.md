@@ -178,6 +178,18 @@ flagged in the next dated summary.
   `banal:language-changed` custom event.
 - The `banal-lang` localStorage key persists the choice.
 
+**Bilingual content overlays** (not in `i18n.ts`):
+
+| Layer | EN | JA | Merge |
+|-------|----|----|-------|
+| Tool directory copy | `zero-key-tools.ts` | `zero-key-tools-ja.ts` | `tool-localization.ts` |
+| Tool stacks | `tool-stacks.ts` | `tool-stacks-ja.ts` | `stack-localization.ts` (`getDisplayStack` for custom stacks) |
+| Prompt templates | `prompt-templates.ts` | inline `en` / `ja` per template | `validateParity()` |
+
+Parity tests live in `tests/content-integrity.test.ts`,
+`tests/stack-localization.test.ts`, and `tests/prompt-templates.test.ts`.
+See [`docs/JAPANESE.md`](JAPANESE.md) for the contributor checklist.
+
 Adding a third language is a non-trivial change: it requires extending the
 `Locale` type, the string table, the parity validator, the prompt-template
 parity tests, and the UI wiring. The bar is "professional human

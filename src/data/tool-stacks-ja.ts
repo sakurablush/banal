@@ -9,7 +9,7 @@ export interface ToolStackJa {
   useCase: string;
   tools: Array<{ role: string }>;
   workflow: Array<{ title: string; description: string }>;
-  cost: { breakdown: Array<{ notes: string }> };
+  cost: { total: string; breakdown: Array<{ notes: string }> };
   resources: Array<{ title: string }>;
 }
 
@@ -55,6 +55,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
     ],
     cost: {
+      total: '$0/月（制限あり）',
       breakdown: [
         { notes: 'Auto Free 約200 req/時/IP；上限で429' },
         { notes: '無料枠はモデル別；多くは約1.44万リクエスト/日' },
@@ -103,6 +104,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
     ],
     cost: {
+      total: '$0/月で開始',
       breakdown: [
         { notes: '無料モデルはレート制限あり' },
         { notes: '任意の予備；モデルごとの日次上限' },
@@ -149,6 +151,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
     ],
     cost: {
+      total: '$0/月（＋電気代）',
       breakdown: [
         { notes: 'オープンソース' },
         { notes: '7B Q4で約4〜6GB VRAM' },
@@ -194,6 +197,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
     ],
     cost: {
+      total: '$0/月',
       breakdown: [
         { notes: '完全無料' },
         { notes: '無料メンタートラック' },
@@ -237,6 +241,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
     ],
     cost: {
+      total: '$0/月（1日あたり上限あり）',
       breakdown: [
         { notes: '一部エクスポートに透かし' },
         { notes: 'テンプレ制限' },
@@ -280,6 +285,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
     ],
     cost: {
+      total: '$0/月',
       breakdown: [
         { notes: 'ローカルのみ' },
         { notes: '個人無料枠' },
@@ -324,6 +330,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
     ],
     cost: {
+      total: '$0/月',
       breakdown: [
         { notes: 'パブリックリポジトリ' },
         { notes: '問題の一部が無料' },
@@ -369,6 +376,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
     ],
     cost: {
+      total: '$0/月（セッション制限あり）',
       breakdown: [
         { notes: 'GPUは保証されずタイムアウト' },
         { notes: '無料で週30GPU時間程度；週次リセット' },
@@ -412,6 +420,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
     ],
     cost: {
+      total: '$0/月（自分のハードウェア）',
       breakdown: [
         { notes: 'セルフホスト；クラウドはフェアユース' },
         { notes: 'オープンソース' },
@@ -455,6 +464,7 @@ export const toolStacksJa: Record<string, ToolStackJa> = {
       },
     ],
     cost: {
+      total: '$0/月',
       breakdown: [
         { notes: 'オープンソース' },
         { notes: 'オープンソース' },

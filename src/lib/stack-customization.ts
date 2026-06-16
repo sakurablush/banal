@@ -6,6 +6,8 @@
 import type { ToolStack } from '../types/tool';
 import { zeroKeyTools } from '../data/zero-key-tools';
 import { validateCustomStacks } from './storage-schema';
+import type { Lang } from '../i18n';
+import { t } from '../i18n';
 
 const CUSTOM_STACKS_KEY = 'banal_custom_stacks';
 
@@ -69,13 +71,13 @@ export function deleteCustomStack(id: string): void {
 /**
  * Create a custom version of a predefined stack
  */
-export function customizeStack(baseStack: ToolStack): CustomStack {
+export function customizeStack(baseStack: ToolStack, lang: Lang = 'en'): CustomStack {
   const customId = `custom-${baseStack.id}-${Date.now()}`;
-  
+
   return {
     ...baseStack,
     id: customId,
-    name: `${baseStack.name} (Custom)`,
+    name: `${baseStack.name} ${t(lang, 'stacks.customNameSuffix')}`,
     baseStackId: baseStack.id,
     customizedAt: new Date().toISOString(),
     createdBy: 'User',
@@ -139,44 +141,46 @@ export function updateToolRole(stack: CustomStack, toolId: string, newRole: stri
 /**
  * Calculate total cost for a custom stack
  */
-export function calculateStackCost(stack: CustomStack): {
+export function calculateStackCost(
+  stack: CustomStack,
+  lang: Lang = 'en'
+): {
   total: string;
   breakdown: Array<{ tool: string; cost: string; notes?: string }>;
 } {
   const breakdown: Array<{ tool: string; cost: string; notes?: string }> = [];
   let totalMonthly = 0;
-  
+
   for (const stackTool of stack.tools) {
-    const tool = zeroKeyTools.find(t => t.id === stackTool.toolId);
+    const tool = zeroKeyTools.find((t) => t.id === stackTool.toolId);
     if (!tool) continue;
-    
+
     let cost = '$0';
     let notes = '';
-    
-    // Simple cost estimation based on access type
+
     if (tool.access === 'free-tier' || tool.access === 'free-key') {
       cost = '$0';
-      notes = 'Free tier';
+      notes = t(lang, 'stacks.costNote.freeTier');
     } else if (tool.access === 'no-login' || tool.access === 'public-api') {
       cost = '$0';
-      notes = 'Free';
+      notes = t(lang, 'stacks.costNote.free');
     } else if (tool.access === 'open-source' || tool.access === 'self-host') {
       cost = '$0';
-      notes = 'Self-hosted';
+      notes = t(lang, 'stacks.costNote.selfHosted');
     } else {
       cost = '$0';
-      notes = 'Free';
+      notes = t(lang, 'stacks.costNote.free');
     }
-    
+
     breakdown.push({
       tool: tool.name,
       cost,
       notes,
     });
   }
-  
+
   return {
-    total: totalMonthly > 0 ? `$${totalMonthly}/month` : '$0/month',
+    total: totalMonthly > 0 ? `$${totalMonthly}/month` : t(lang, 'stacks.costNote.totalPerMonth'),
     breakdown,
   };
 }

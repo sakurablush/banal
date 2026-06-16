@@ -97,7 +97,17 @@ the README tools catalog).
 The weekly CI workflow re-audits the catalog and updates `lastVerified`
 automatically. See
 [`docs/EXTENDING.md`](EXTENDING.md#adding-a-tool-to-the-directory) for
-the exact shape and the rules of thumb.
+the exact shape and the rules of thumb. **Japanese:** add the same `id` to
+`src/data/zero-key-tools-ja.ts` — see
+[`docs/JAPANESE.md`](JAPANESE.md#content-overlays-tools--stacks).
+
+### New or improved tool stacks
+
+Curated stacks live in `src/data/tool-stacks.ts` with Japanese overlays in
+`src/data/tool-stacks-ja.ts`. Custom stacks (user-saved) re-localize at
+display time via `getDisplayStack()`. When you change stack copy, update
+both files and run `npm run ci`. See
+[`docs/EXTENDING.md`](EXTENDING.md#adding-a-tool-stack).
 
 ### Bug reports from real devices
 

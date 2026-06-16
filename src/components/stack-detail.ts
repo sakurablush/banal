@@ -6,7 +6,7 @@
 import type { Lang } from '../i18n';
 import type { ToolStack } from '../types/tool';
 import { zeroKeyTools } from '../data/zero-key-tools';
-import { getLocalizedStack } from '../lib/stack-localization';
+import { getDisplayStack } from '../lib/stack-localization';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -103,7 +103,7 @@ export function renderStackDetail(
   onBack?: () => void
 ): HTMLElement {
   const copy = COPY[lang];
-  stack = getLocalizedStack(stack, lang);
+  stack = getDisplayStack(stack, lang);
   const container = create('div', 'stack-detail-page');
 
   // Back button
@@ -256,7 +256,7 @@ export function renderStackDetail(
   // Data rows
   for (const item of stack.cost.breakdown) {
     const row = create('div', 'cost-table-row');
-    row.appendChild(span('cost-cell', item.tool));
+    row.appendChild(span('cost-cell', zeroKeyTools.find((t) => t.id === item.tool)?.name ?? item.tool));
     row.appendChild(span('cost-cell cost-amount', item.cost));
     row.appendChild(span('cost-cell cost-notes', item.notes || ''));
     costTable.appendChild(row);

@@ -251,6 +251,11 @@ export const translations: Record<Lang, Translations> = {
     'stacks.editor.remove': 'Remove',
     'stacks.editor.noTools': 'Add at least one tool',
     'stacks.customizeTitle': 'Customize this stack',
+    'stacks.customNameSuffix': '(Custom)',
+    'stacks.costNote.freeTier': 'Free tier',
+    'stacks.costNote.free': 'Free',
+    'stacks.costNote.selfHosted': 'Self-hosted',
+    'stacks.costNote.totalPerMonth': '$0/month',
 
     // === Error states ===
     'error.unableToLoadAiTools': '⚠️ Unable to load AI tools',
@@ -536,6 +541,11 @@ export const translations: Record<Lang, Translations> = {
     'stacks.editor.remove': '削除',
     'stacks.editor.noTools': 'ツールを1つ以上追加してください',
     'stacks.customizeTitle': 'このスタックをカスタマイズ',
+    'stacks.customNameSuffix': '（カスタム）',
+    'stacks.costNote.freeTier': '無料枠',
+    'stacks.costNote.free': '無料',
+    'stacks.costNote.selfHosted': 'セルフホスト',
+    'stacks.costNote.totalPerMonth': '$0/月',
 
     // === Error states ===
     'error.unableToLoadAiTools': '⚠️ AIツールを読み込めませんでした',

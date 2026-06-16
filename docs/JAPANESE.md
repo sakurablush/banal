@@ -10,6 +10,45 @@ Banal was designed from day one with full professional Japanese support as a fir
 - Language switching is instant and persistent (localStorage)
 - English and Japanese live side-by-side in source for easy maintenance
 - Tests cover both languages
+- Curated **tools** and **tool stacks** use EN source files plus parallel
+  Japanese overlay files; runtime merge is handled by
+  `src/lib/tool-localization.ts` and `src/lib/stack-localization.ts`
+- Custom tool stacks (saved in `localStorage`) stay in English in storage
+  but re-localize on display when the UI language is Japanese
+
+## Content overlays (tools & stacks)
+
+Large bilingual datasets do **not** live inside `src/i18n.ts`. They follow one
+repeatable pattern:
+
+| Content | English (source) | Japanese (overlay) | Runtime API |
+|---------|------------------|--------------------|-------------|
+| Tool cards | `src/data/zero-key-tools.ts` | `src/data/zero-key-tools-ja.ts` | `getLocalizedToolCopy()`, lazy-loaded via `ensureJaLocaleLoaded()` |
+| Tool stacks | `src/data/tool-stacks.ts` | `src/data/tool-stacks-ja.ts` | `getLocalizedStack()` for curated stacks; `getDisplayStack()` for curated **and** custom stacks |
+| UI chrome | `src/i18n.ts` (`translations.en` / `.ja`) | same file | `t(lang, key)`, `data-i18n` |
+
+**Rules when editing overlays**
+
+1. Every new English `id` in the source file needs a matching key in the `*-ja.ts`
+   overlay with the **same array lengths** (tools, workflow steps, cost rows,
+   resources).
+2. Tool stacks must include `cost.total` in Japanese, not only breakdown notes.
+3. Custom stacks are stored in English (from the EN catalog). On render,
+   `getDisplayStack()` merges the user's saved stack onto the Japanese overlay
+   when `lang === 'ja'`, as long as `baseStackId` is set (always true for stacks
+   created via **Customize**).
+4. Parity is enforced in `tests/content-integrity.test.ts` and
+   `tests/stack-localization.test.ts`, using helpers in
+   `src/lib/locale-parity.ts`.
+
+**What stays English in Japanese mode (by design today)**
+
+- AI model benchmark tables (`src/data/ai-models.ts`) — technical reference data
+- Tool **brand names** in the catalog (Duck.ai, Kilo Code, etc.)
+- User-typed custom stack names and role labels they edited manually
+
+If you add Japanese for models later, use the same overlay pattern and extend
+the parity tests.
 
 ## Translation Quality Rules
 

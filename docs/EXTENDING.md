@@ -78,7 +78,11 @@ After editing:
 3. Run `npm run generate:tools-readme` to regenerate
    `docs/TOOLS-DIRECTORY.md` and sync the collapsible catalog in
    `README.md` from the catalog.
-4. Open a PR. The weekly CI run will re-audit and update
+4. Add a matching entry to `src/data/zero-key-tools-ja.ts` with the same
+   `id` key and Japanese `bestFor`, `qualityNote`, and optional `caveat`.
+   `tests/content-integrity.test.ts` fails if any tool id is missing from
+   the overlay.
+5. Open a PR. The weekly CI run will re-audit and update
    `lastVerified` automatically.
 
 ---
@@ -97,6 +101,23 @@ To add a new sub-category:
    `src/data/zero-key-tools.ts`. A category with zero tools is invisible
    anyway, but the schema tests check the structure.
 4. Run `npm run ci`.
+
+---
+
+## Adding a tool stack
+
+Stacks live in `src/data/tool-stacks.ts`. Each stack is a typed object with
+workflow steps, tool roles, and an honest cost breakdown.
+
+After editing the English stack:
+
+1. Add or update the matching key in `src/data/tool-stacks-ja.ts`. The
+   overlay must mirror array lengths (`tools`, `workflow`, `cost.breakdown`,
+   `resources`) and include `cost.total` in Japanese.
+2. Run `npm run ci`. `tests/content-integrity.test.ts` and
+   `tests/stack-localization.test.ts` enforce id parity and localized output.
+3. UI panels call `getDisplayStack(stack, lang)` so curated and custom stacks
+   both localize in Japanese. See [`docs/JAPANESE.md`](JAPANESE.md).
 
 ---
 

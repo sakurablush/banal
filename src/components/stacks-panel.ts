@@ -6,12 +6,13 @@
 import type { Lang } from '../i18n';
 import { t } from '../i18n';
 import { toolStacks, getStackAudiences } from '../data/tool-stacks';
+import { zeroKeyTools } from '../data/zero-key-tools';
 import type { ToolStack, StackAudience } from '../types/tool';
 import { renderStackDetail } from './stack-detail';
 import { trackFilterEvent } from '../lib/filter-analytics';
 import { customizeStack, getCustomStacks, deleteCustomStack, type CustomStack } from '../lib/stack-customization';
 import { openCustomStackEditor } from './custom-stack-editor';
-import { getLocalizedStack } from '../lib/stack-localization';
+import { getDisplayStack } from '../lib/stack-localization';
 import { getSectionParams } from '../lib/section-filter-url';
 import { renderFilterToolbar } from './filter-toolbar';
 import { createPanelStatsBar, mountPanelContent } from '../lib/panel-stats-bar';
@@ -156,9 +157,7 @@ function renderStackCard(
 ): HTMLElement {
   const copy = COPY[state.lang];
   const isCustom = options?.isCustom ?? false;
-  if (!isCustom) {
-    stack = getLocalizedStack(stack, state.lang);
-  }
+  stack = getDisplayStack(stack, state.lang);
   const card = create('article', 'stack-card');
 
   // Header
@@ -194,7 +193,8 @@ function renderStackCard(
   for (const tool of stack.tools) {
     const toolItem = create('div', 'stack-tool-item');
     toolItem.appendChild(span('stack-tool-role', tool.role));
-    toolItem.appendChild(span('stack-tool-id', tool.toolId));
+    const toolLabel = zeroKeyTools.find((entry) => entry.id === tool.toolId)?.name ?? tool.toolId;
+    toolItem.appendChild(span('stack-tool-id', toolLabel));
     if (tool.optional) {
       toolItem.appendChild(span('stack-tool-optional', copy.optional));
     }
@@ -245,7 +245,8 @@ function renderStackCard(
   const costList = create('div', 'stack-cost-list');
   for (const item of stack.cost.breakdown) {
     const costItem = create('div', 'stack-cost-item');
-    costItem.appendChild(span('cost-tool', item.tool));
+    const toolLabel = zeroKeyTools.find((entry) => entry.id === item.tool)?.name ?? item.tool;
+    costItem.appendChild(span('cost-tool', toolLabel));
     costItem.appendChild(span('cost-amount', item.cost));
     if (item.notes) {
       costItem.appendChild(span('cost-notes', item.notes));
@@ -292,7 +293,7 @@ function renderStackCard(
       e.stopPropagation();
       openCustomStackEditor({
         lang: state.lang,
-        stack: customizeStack(stack),
+        stack: customizeStack(stack, state.lang),
         isNew: true,
         onSaved: () => renderContent(state),
         onCancel: () => {},

@@ -220,11 +220,20 @@ describe('Stack Customization', () => {
     it('should return $0/month for free tools', () => {
       const baseStack = toolStacks[0];
       const customStack = customizeStack(baseStack);
-      
+
       const cost = calculateStackCost(customStack);
 
       // Most tools in predefined stacks are free
       expect(cost.total).toMatch(/\$0/);
+    });
+
+    it('returns Japanese cost notes when lang is ja', () => {
+      const customStack = customizeStack(toolStacks[0], 'ja');
+      const cost = calculateStackCost(customStack, 'ja');
+      expect(cost.total).toBe('$0/月');
+      for (const item of cost.breakdown) {
+        expect(item.notes).toMatch(/無料|セルフホスト/);
+      }
     });
   });
 
