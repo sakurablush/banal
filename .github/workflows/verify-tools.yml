@@ -1,0 +1,182 @@
+name: Verify Tools
+
+# Weekly health-check of all tool URLs in the database.
+# - Runs every Sunday 00:00 UTC.
+# - Can also be triggered manually from the Actions tab.
+# - Free for public repos; for private repos on the Free plan, scheduled
+#   jobs count toward the 2,000 min/month Actions budget.
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+# Needs issues: write to create the auto-issue; contents: read for checkout.
+permissions:
+  contents: read
+  issues: write
+
+# Prevent overlap between a manual run and a scheduled run hitting the same
+# upstream tools (and hammering their servers).
+concurrency:
+  group: verify-tools
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify tool URLs
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      # Do NOT use continue-on-error here: we WANT the job to fail when
+      # verification surfaces problems, so the issue-creation step below
+      # (gated on `if: failure()`) actually fires.
+      - name: Run tool verification
+        run: npm run verify:tools
+
+      - name: Upload verification results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-results
+          path: verification-results.json
+          retention-days: 90
+          if-no-files-found: warn
+
+      - name: Compute and report failure rate
+        if: always()
+        env:
+          RESULTS: verification-results.json
+        run: |
+          set -euo pipefail
+          if [ ! -s "$RESULTS" ]; then
+            echo "::warning::No verification results found — skipping rate analysis."
+            exit 0
+          fi
+          # Use jq (pre-installed on ubuntu-latest) for safe numeric math.
+          TOTAL=$(jq -r '.totalTools // 0' "$RESULTS")
+          FAILED=$(jq -r '.failed // 0' "$RESULTS")
+          ERRORS=$(jq -r '.errors // 0' "$RESULTS")
+          if [ "$TOTAL" -eq 0 ]; then
+            echo "::warning::Zero tools in report — check the verification script."
+            exit 0
+          fi
+          # awk for portable float math (avoids depending on `bc`).
+          RATE=$(awk -v f="$FAILED" -v e="$ERRORS" -v t="$TOTAL" 'BEGIN{printf "%.2f", ((f+e)/t)*100}')
+          echo "Failure rate: ${RATE}% (${FAILED} failed + ${ERRORS} errors of ${TOTAL})"
+          # Threshold: 15%. Emit a workflow warning (visible in the run UI
+          # and the badge) but do NOT fail the job.
+          THRESHOLD=15
+          if awk -v r="$RATE" -v th="$THRESHOLD" 'BEGIN{exit !(r+0 > th+0)}'; then
+            echo "::warning::High tool-verification failure rate: ${RATE}% (threshold ${THRESHOLD}%)"
+          fi
+
+      - name: Create or update issue on verification failure
+        # `failure()` is a coarse filter (any step in the job failed). The
+        # script below applies the precise gate: the JSON must exist AND
+        # contain non-zero failures. This prevents weekly issue spam from
+        # transient infrastructure failures (npm install flake, network
+        # timeout, jq parse error, 30-min job timeout) and from runs where
+        # verify:tools produced zero failures despite a non-zero exit code.
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'verification-results.json';
+
+            // Guard 1: missing file = verify step likely crashed (infra
+            // failure, not real verification failure). Don't open an issue.
+            if (!fs.existsSync(path)) {
+              core.warning(
+                'verification-results.json missing — verify step likely ' +
+                'crashed. No issue will be opened for infrastructure flakes.'
+              );
+              return;
+            }
+
+            const results = JSON.parse(fs.readFileSync(path, 'utf8'));
+            const failures = (results.results || []).filter(r => !r.ok);
+
+            // Guard 2: zero failures = nothing actionable, even if the
+            // script exited non-zero for some other reason.
+            if (failures.length === 0) {
+              core.notice(
+                'No tool failures reported — skipping issue creation.'
+              );
+              return;
+            }
+
+            const failedCount = (results.failed || 0) + (results.errors || 0);
+            const title = `🔴 Tool Verification: ${failedCount} tools need attention`;
+
+            const body = [
+              '## Tool Verification Report',
+              '',
+              `**Date:** ${results.timestamp}`,
+              `**Total tools:** ${results.totalTools}`,
+              `**Verified:** ${results.verified}`,
+              `**Failed:** ${results.failed}`,
+              `**Errors:** ${results.errors}`,
+              '',
+              '### Failed Tools',
+              '',
+              ...failures.slice(0, 30).map(
+                f => `- [ ] ${f.name}: ${f.url} (status: ${f.status})`
+              ),
+              failures.length > 30
+                ? `\n... and ${failures.length - 30} more\n`
+                : '',
+            ].join('\n');
+
+            // Dedup: look for an existing open, automated-labelled issue
+            // with the same title. If found, append a fresh comment
+            // instead of opening a duplicate (which would otherwise
+            // accumulate one new issue per weekly failure).
+            const existing = await github.paginate(
+              github.rest.issues.listForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                labels: 'automated',
+                per_page: 100,
+              }
+            );
+            const match = existing.find(i => i.title === title);
+            if (match) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: match.number,
+                body:
+                  body +
+                  '\n\n---\n_Auto-updated by the Verify Tools workflow._',
+              });
+              core.notice(
+                `Updated existing issue #${match.number} with a fresh failure report.`
+              );
+              return;
+            }
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: ['maintenance', 'tools', 'automated'],
+            });
+            core.notice('Created new issue for verification failure.');

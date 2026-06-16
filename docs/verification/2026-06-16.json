@@ -1,0 +1,163 @@
+{
+  "date": "2026-06-16",
+  "generatedAt": "2026-06-16T00:10:03.549Z",
+  "totalTools": 273,
+  "verified": 249,
+  "failed": 24,
+  "errors": 0,
+  "successRate": 0.912,
+  "lastVerifiedCoverage": {
+    "total": 273,
+    "withDate": 273,
+    "withoutDate": 0,
+    "percentage": 100
+  },
+  "failedTools": [
+    {
+      "id": "perchance-chat",
+      "name": "Perchance AI Chat",
+      "url": "https://perchance.org/ai-chat",
+      "status": 403
+    },
+    {
+      "id": "chatgpt-free",
+      "name": "ChatGPT Free",
+      "url": "https://chatgpt.com/",
+      "status": 403
+    },
+    {
+      "id": "meta-ai",
+      "name": "Meta AI",
+      "url": "https://www.meta.ai/",
+      "status": 403
+    },
+    {
+      "id": "pi-ai",
+      "name": "Pi AI",
+      "url": "https://pi.ai/",
+      "status": 403
+    },
+    {
+      "id": "grok",
+      "name": "Grok",
+      "url": "https://x.com/i/grok",
+      "status": 403
+    },
+    {
+      "id": "phind",
+      "name": "Phind",
+      "url": "https://www.phind.com/",
+      "status": 403
+    },
+    {
+      "id": "mistral-le-chat",
+      "name": "Mistral Le Chat",
+      "url": "https://chat.mistral.ai/",
+      "status": 403
+    },
+    {
+      "id": "poe",
+      "name": "Poe",
+      "url": "https://poe.com/",
+      "status": 403
+    },
+    {
+      "id": "perchance-image",
+      "name": "Perchance AI Image",
+      "url": "https://perchance.org/ai-text-to-image-generator",
+      "status": 403
+    },
+    {
+      "id": "craiyon",
+      "name": "Craiyon",
+      "url": "https://www.craiyon.com/",
+      "status": 403
+    },
+    {
+      "id": "canva-free",
+      "name": "Canva Free",
+      "url": "https://www.canva.com/",
+      "status": 403
+    },
+    {
+      "id": "leonardo-ai",
+      "name": "Leonardo.ai",
+      "url": "https://leonardo.ai/",
+      "status": 403
+    },
+    {
+      "id": "ideogram",
+      "name": "Ideogram",
+      "url": "https://ideogram.ai/",
+      "status": 403
+    },
+    {
+      "id": "perplexity-search",
+      "name": "Perplexity",
+      "url": "https://www.perplexity.ai/",
+      "status": 403
+    },
+    {
+      "id": "consensus",
+      "name": "Consensus",
+      "url": "https://consensus.app/",
+      "status": 403
+    },
+    {
+      "id": "wolfram-alpha",
+      "name": "Wolfram Alpha",
+      "url": "https://www.wolframalpha.com/",
+      "status": 404
+    },
+    {
+      "id": "gamma",
+      "name": "Gamma",
+      "url": "https://gamma.app/",
+      "status": 403
+    },
+    {
+      "id": "banana-dev",
+      "name": "Banana.dev",
+      "url": "https://app.banana.dev/",
+      "status": 526
+    },
+    {
+      "id": "kaggle",
+      "name": "Kaggle",
+      "url": "https://www.kaggle.com/",
+      "status": 404
+    },
+    {
+      "id": "midjourney-free",
+      "name": "Midjourney Free Trial",
+      "url": "https://www.midjourney.com/",
+      "status": 403
+    },
+    {
+      "id": "leetcode-free",
+      "name": "LeetCode Free",
+      "url": "https://leetcode.com/",
+      "status": 403
+    },
+    {
+      "id": "tensor-art",
+      "name": "Tensor.Art",
+      "url": "https://tensor.art/",
+      "status": 403
+    },
+    {
+      "id": "claude-free",
+      "name": "Claude Free",
+      "url": "https://claude.ai/",
+      "status": 403
+    },
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "url": "https://claude.ai/code",
+      "status": 403
+    }
+  ],
+  "duplicates": [],
+  "avgResponseTimeMs": 510
+}

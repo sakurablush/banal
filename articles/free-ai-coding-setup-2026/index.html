@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="en" id="top" class="dark" data-banal-article>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      data-i18n="article.kilo2026.meta.description"
+      content="Kilo Code runs proper agent modes on free gateway models in your existing IDE. Honest limits, BYOK upgrades, and how it compares to Cursor Hobby."
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://banal.dev/articles/free-ai-coding-setup-2026/" />
+    <meta
+      property="og:title"
+      content="Kilo Code: Professional AI Agent Coding for Free (or Very Cheap) | Banal"
+    />
+    <meta
+      property="og:description"
+      content="Kilo Code runs proper agent modes on free gateway models in your existing IDE. Honest limits, BYOK upgrades, and how it compares to Cursor Hobby."
+    />
+    <meta property="og:site_name" content="Banal" />
+    <link rel="canonical" href="https://banal.dev/articles/free-ai-coding-setup-2026/" />
+    <meta name="theme-color" content="#06060b" />
+    <title data-i18n="article.kilo2026.meta.title">
+      Kilo Code: Professional AI Agent Coding for Free (or Very Cheap) | Banal
+    </title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        try {
+          var t = sessionStorage.getItem('banal-theme');
+          if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="../../src/style.css" />
+  </head>
+  <body class="min-h-screen text-white/90 antialiased font-sans">
+    <div class="void-bg"></div>
+    <main id="app" class="article-page-main page-shell" role="main">
+      <article class="article-content">
+        <div class="article-toolbar">
+          <a href="../../" class="back-link" data-i18n="article.back">&#8592; Back to Banal</a>
+          <div class="article-toolbar-actions">
+            <button
+              type="button"
+              id="article-share-btn"
+              class="filter-share-btn"
+              data-i18n="article.shareLink"
+              data-i18n-title="article.shareTitle"
+            >
+              Share link
+            </button>
+            <button
+              type="button"
+              id="lang-toggle"
+              class="btn-header"
+              data-i18n-title="lang.toggleTitle"
+              data-i18n-aria-label="lang.toggle"
+            >
+              <span class="btn-header-icon">
+                <svg
+                  class="lang-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <clipPath id="lang-uk-half">
+                      <rect x="3" y="4" width="9" height="16" rx="2.5" />
+                    </clipPath>
+                    <clipPath id="lang-jp-half">
+                      <rect x="12" y="4" width="9" height="16" rx="2.5" />
+                    </clipPath>
+                    <linearGradient
+                      id="lang-fusion"
+                      x1="11"
+                      y1="4"
+                      x2="13"
+                      y2="20"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.15" />
+                      <stop offset="50%" stop-color="#d946ef" stop-opacity="0.95" />
+                      <stop offset="100%" stop-color="#a855f7" stop-opacity="0.15" />
+                    </linearGradient>
+                  </defs>
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="16"
+                    rx="3.5"
+                    stroke="currentColor"
+                    stroke-width="1.15"
+                    stroke-opacity="0.42"
+                  />
+                  <g clip-path="url(#lang-uk-half)">
+                    <rect x="3" y="4" width="9.5" height="16" fill="#012169" />
+                    <path fill="#fff" d="M3 11.2h9.5M7.75 4v16" />
+                    <path fill="#C8102E" d="M3 10h9.5v2.4H3zM6.55 4v16h2.4V4z" />
+                    <path fill="#fff" d="M3 4.2 12.2 19.8M12.2 4.2 3 19.8" opacity="0.92" />
+                    <path
+                      fill="none"
+                      stroke="#C8102E"
+                      stroke-width="0.85"
+                      d="M3 4.9 11.5 19.1M11.5 4.9 3 19.1"
+                    />
+                  </g>
+                  <g clip-path="url(#lang-jp-half)">
+                    <rect x="12" y="4" width="9.5" height="16" fill="#f9f9f9" />
+                    <circle cx="16.5" cy="12" r="3.15" fill="#BC002D" />
+                  </g>
+                  <path
+                    d="M11.7 5.4c1.35 2.1 1.35 11.1 0 13.2"
+                    stroke="url(#lang-fusion)"
+                    stroke-width="1.05"
+                    stroke-linecap="round"
+                  />
+                  <circle cx="12" cy="12" r="0.75" fill="#e879f9" />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </div>
+        <span class="article-badge article-badge--featured" data-i18n="article.featured"
+          >FEATURED</span
+        >
+
+        <div data-lang-only="en">
+          <h1>
+            Kilo Code: Professional AI Agent Coding for Free (or Very Cheap) — Without Feeling Left
+            Behind
+          </h1>
+          <hr />
+          <p>
+            In 2026, AI coding tools have come a long way. A couple of years ago you couldn't really
+            trust them with serious application work. Today, with the right agent setup, you
+            <em>can</em> build, refactor and maintain real projects. The bottleneck is no longer raw
+            capability. It's <strong>cost and access</strong>.
+          </p>
+          <p>
+            The very best models (latest
+            <a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a>, top-tier Sonnet,
+            GPT-5.5 etc.) get expensive fast when you use them properly with agents every day.
+            <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+            ><a
+              href="../../#ai-tools?q=Cursor"
+              class="article-banal-ref"
+              rel="noopener"
+              aria-label="Cursor on Banal"
+              title="Banal listing"
+              ><span aria-hidden="true">↗</span></a
+            >
+            Pro/Ultra or direct
+            <a href="https://www.anthropic.com/" rel="noopener noreferrer">Anthropic</a> API keys
+            quickly run into serious money. For freelancers, people whose life situation changed, or
+            anyone who's just starting to earn from AI-assisted development, that's simply not
+            realistic.
+          </p>
+          <p>
+            This is where
+            <strong
+              ><a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a
+              ><a
+                href="../../#ai-tools?q=Kilo%20Code"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="Kilo Code on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              ></strong
+            >
+            changes things.
+          </p>
+
+          <h2>What is Kilo Code?</h2>
+          <p>
+            It's an open-source (Apache 2.0) AI coding agent that installs as a normal extension in
+            your existing
+            <strong
+              ><a href="https://code.visualstudio.com/" rel="noopener noreferrer">VS Code</a> or
+              <a href="https://www.jetbrains.com/" rel="noopener noreferrer">JetBrains</a>
+              IDE</strong
+            >
+            (plus a CLI version). You don't have to switch to a forked editor like
+            <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+            ><a
+              href="../../#ai-tools?q=Cursor"
+              class="article-banal-ref"
+              rel="noopener"
+              aria-label="Cursor on Banal"
+              title="Banal listing"
+              ><span aria-hidden="true">↗</span></a
+            >. You keep all your extensions, shortcuts and workflow.
+          </p>
+          <p>
+            It has proper agent modes: Code, Plan, Debug, Architect, and Orchestrator (the last one
+            breaks big tasks into specialist sub-agents — genuinely useful). It supports 500+ models
+            from 60+ providers with <strong>zero markup</strong> — you pay the provider's exact
+            price, nothing extra.
+          </p>
+
+          <h2>The free tier — can you actually work professionally on it?</h2>
+          <p><strong>Yes.</strong> This is the part most tools get wrong.</p>
+          <p>Kilo's Gateway offers genuinely usable free models right now:</p>
+          <ul>
+            <li>
+              <strong
+                ><a href="https://poolside.ai/" rel="noopener noreferrer">Laguna M.1</a>
+                (Poolside)</strong
+              >
+              — one of the most used models in real agent workflows (Code, Plan, Debug)
+            </li>
+            <li>
+              <strong
+                ><a href="https://build.nvidia.com/" rel="noopener noreferrer">Nemotron 3 Ultra</a>
+                (NVIDIA)</strong
+              >
+              — strong performer in both benchmarks and daily use
+            </li>
+            <li>
+              <strong
+                ><a href="https://www.stepfun.com/" rel="noopener noreferrer"
+                  >StepFun Step 3.7 Flash</a
+                ></strong
+              >
+              and various MiniMax / GLM / Kimi free variants (availability rotates)
+            </li>
+            <li>
+              <code>kilo-auto/free</code> — automatically picks the best available free model for
+              your session
+            </li>
+          </ul>
+          <p>
+            There <em>is</em> a rate limit (roughly
+            <strong>200 requests per hour per IP</strong> for anonymous users). In practice, many
+            developers are using this every day for real work. The models are slower than the
+            absolute latest frontier ones and sometimes need clearer guidance or task splitting, but
+            they deliver professional results. You can actually spend full days working with agents
+            without hitting a wall that stops you.
+          </p>
+          <p>
+            For comparison: <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+            ><a
+              href="../../#ai-tools?q=Cursor"
+              class="article-banal-ref"
+              rel="noopener"
+              aria-label="Cursor on Banal"
+              title="Banal listing"
+              ><span aria-hidden="true">↗</span></a
+            >'s free Hobby tier gives you about
+            <strong>50 serious premium agent requests + 2000 completions per month</strong>. That's
+            enough to try the tool. It is <strong>not</strong> enough for daily professional agent
+            work. You hit the limit in a single focused session.
+          </p>
+          <p>
+            In Kilo on free models you can keep going. It's not "the absolute best possible", but
+            it's <strong>good enough that you don't feel excluded</strong> from modern agentic
+            workflows.
+          </p>
+
+          <h2>How to get better quality without spending a fortune</h2>
+          <ol>
+            <li>
+              <strong>Add your own API keys (Bring Your Own Key)</strong><br />In Kilo this is
+              simple and works for both agents and autocomplete.<br /><strong
+                ><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax</a
+                ><a
+                  href="../../#ai-tools?q=MiniMax"
+                  class="article-banal-ref"
+                  rel="noopener"
+                  aria-label="MiniMax on Banal"
+                  title="Banal listing"
+                  ><span aria-hidden="true">↗</span></a
+                ></strong
+              >
+              models (M2.x / V3) currently offer excellent price/performance — you can get
+              noticeably faster and stronger results for roughly <strong>$10–30/month</strong>.
+              <a href="https://chat.deepseek.com/" rel="noopener noreferrer">DeepSeek</a
+              ><a
+                href="../../#ai-tools?q=DeepSeek"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="DeepSeek on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >, certain Qwen and GLM variants are also strong value. You stay in full control and
+              only pay for what you actually use.
+            </li>
+            <li>
+              <strong>Cursor route (if you prefer the polished feel)</strong><br />If you like
+              <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+              ><a
+                href="../../#ai-tools?q=Cursor"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="Cursor on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >'s experience, get their Pro plan ($20/month) and use their Composer 2.5 (not the
+              Fast/Haiku version) or add a cheap
+              <a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax</a
+              ><a
+                href="../../#ai-tools?q=MiniMax"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="MiniMax on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >
+              key. Still far cheaper than burning top-tier tokens constantly.
+            </li>
+            <li>
+              <strong
+                ><a href="https://antigravity.google/" rel="noopener noreferrer"
+                  >Google Antigravity</a
+                ><a
+                  href="../../#ai-tools?q=Google%20Antigravity"
+                  class="article-banal-ref"
+                  rel="noopener"
+                  aria-label="Google Antigravity on Banal"
+                  title="Banal listing"
+                  ><span aria-hidden="true">↗</span></a
+                >
+                CLI as a powerful complement</strong
+              ><br /><a href="https://antigravity.google/" rel="noopener noreferrer"
+                >Google Antigravity</a
+              ><a
+                href="../../#ai-tools?q=Google%20Antigravity"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="Google Antigravity on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >
+              gives you very capable autonomous agents that can plan, execute code in a sandbox,
+              browse, etc. Their preview/free tiers often have generous enough quotas for heavy
+              planning sessions.<br />Use it occasionally for complex architecture or big-picture
+              planning with strong reasoning, then take that plan and execute/refine it in Kilo on
+              free or low-cost models. Excellent combo when you want occasional "high-end" thinking
+              without paying high-end prices every day.
+            </li>
+          </ol>
+
+          <h2>Honest truth (no marketing fluff)</h2>
+          <p>
+            Free models in Kilo will not feel exactly like running the latest Opus on every token.
+            You'll sometimes need to steer the agent more, break tasks down, or switch models. The
+            "magic" is a bit less automatic.
+          </p>
+          <p>
+            But the gap is smaller than the big companies want you to believe. With decent
+            prompting, good rules/skills setup, and Kilo's Orchestrator, the productivity jump over
+            working without agents is massive. You can build real features, ship things, learn
+            advanced workflows, and keep up.
+          </p>
+          <p>
+            Most importantly: <strong>you don't get left behind</strong>. You can learn and use
+            modern agentic development <em>today</em>, build a portfolio, take on paid work, and
+            earn. When money starts coming in, you can smoothly add $20–40/month and suddenly have
+            very fast, high-quality models (in Kilo or Cursor). No dramatic jump required.
+          </p>
+
+          <h2>Who this is perfect for</h2>
+          <ul>
+            <li>Developers who don't want (or can't) spend $100–200+ per month on tokens</li>
+            <li>People who want to stay in their current VS Code or JetBrains environment</li>
+            <li>
+              Anyone who values transparency (you can see exactly what gets sent to the model)
+            </li>
+            <li>Programmers who want model choice instead of being locked into one ecosystem</li>
+          </ul>
+
+          <p>
+            Just install the <a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a
+            ><a
+              href="../../#ai-tools?q=Kilo%20Code"
+              class="article-banal-ref"
+              rel="noopener"
+              aria-label="Kilo Code on Banal"
+              title="Banal listing"
+              ><span aria-hidden="true">↗</span></a
+            >
+            extension, open the model picker, type "free", pick one of the available models (check
+            the live
+            <a href="https://kilo.ai/leaderboard" rel="noopener noreferrer">leaderboard</a> for what
+            other devs are actually succeeding with right now), and try a small real task. You'll
+            quickly see what's possible.
+          </p>
+          <hr />
+          <p><strong>This isn't "free and perfect".</strong></p>
+          <p>
+            It's
+            <strong
+              >"free and good enough to do professional work, keep learning, and stay
+              competitive"</strong
+            >.
+          </p>
+          <p>
+            In 2026, that's already a lot. And for many people it's exactly what they need to move
+            forward without waiting until they can afford the most expensive setups.
+          </p>
+          <p>
+            Try it. Build something. You're not as far behind as the pricing pages make it seem.
+          </p>
+
+          <div class="tools-mentioned">
+            <h2>Tools mentioned</h2>
+            <p>
+              Matching entries in our <a href="../../#ai-tools" rel="noopener">tools directory</a>.
+            </p>
+            <ul>
+              <li>
+                <a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a> — AI coding agent
+              </li>
+              <li>
+                <a href="https://kilo.ai/gateway" rel="noopener noreferrer">Kilo Gateway</a> — model
+                routing
+              </li>
+              <li>
+                <a href="https://code.visualstudio.com/" rel="noopener noreferrer">VS Code</a> /
+                <a href="https://www.jetbrains.com/" rel="noopener noreferrer">JetBrains</a>
+              </li>
+              <li>
+                <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> — comparison
+              </li>
+              <li>
+                <a href="https://antigravity.google/" rel="noopener noreferrer"
+                  >Google Antigravity</a
+                >
+              </li>
+              <li>
+                <a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax</a>,
+                <a href="https://chat.deepseek.com/" rel="noopener noreferrer">DeepSeek</a>,
+                <a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a>
+              </li>
+              <li>
+                <a href="https://kilo.ai/leaderboard" rel="noopener noreferrer">Kilo leaderboard</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div data-lang-only="ja" hidden>
+          <h1>
+            Kilo Code：AIエージェントを使った本格的なプログラミングを無料（または格安）で —
+            取り残されることなく
+          </h1>
+          <hr />
+          <p>
+            2026年現在、AIによるコーディングツールは大きく進化しました。数年前までは、本格的なアプリケーション開発を任せるのは現実的ではありませんでした。しかし今は、適切なエージェントの使い方をすれば、実際に構築・リファクタリング・保守ができるレベルになっています。問題は「AIができるかどうか」ではなく、「いくらかかるか」と「誰が使えるか」です。
+          </p>
+          <p>
+            最高峰のモデル（最新の<a href="https://claude.ai/" rel="noopener noreferrer"
+              >Claude Opus</a
+            >、トップクラスのSonnet、GPT-5.5など）は、エージェントを毎日本気で使えばすぐに高額になります。<a
+              href="https://cursor.com/"
+              rel="noopener noreferrer"
+              >Cursor</a
+            ><a
+              href="../../#ai-tools?q=Cursor"
+              class="article-banal-ref"
+              rel="noopener"
+              aria-label="Cursor on Banal"
+              title="Banal listing"
+              ><span aria-hidden="true">↗</span></a
+            >のPro/Ultraプランや<a href="https://www.anthropic.com/" rel="noopener noreferrer"
+              >Anthropic</a
+            >への直接課金は、あっという間に大きな金額になります。フリーランスの人、生活環境が変わった人、AIを活用した開発で稼ぎ始めたばかりの人にとっては、現実的ではありません。
+          </p>
+          <p>
+            ここで登場するのが
+            <strong
+              ><a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a
+              ><a
+                href="../../#ai-tools?q=Kilo%20Code"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="Kilo Code on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              ></strong
+            >
+            です。
+          </p>
+
+          <h2>Kilo Codeとは？</h2>
+          <p>
+            Apache 2.0のオープンソースAIコーディングエージェントで、<strong
+              >既存の<a href="https://code.visualstudio.com/" rel="noopener noreferrer">VS Code</a
+              >や<a href="https://www.jetbrains.com/" rel="noopener noreferrer">JetBrains</a>
+              IDEに普通の拡張機能としてインストール</strong
+            >できます（CLI版もあり）。<a href="https://cursor.com/" rel="noopener noreferrer"
+              >Cursor</a
+            ><a
+              href="../../#ai-tools?q=Cursor"
+              class="article-banal-ref"
+              rel="noopener"
+              aria-label="Cursor on Banal"
+              title="Banal listing"
+              ><span aria-hidden="true">↗</span></a
+            >のようにVS
+            Codeのフォークに乗り換える必要はありません。今の環境のまま、すべての拡張機能・ショートカット・ワークフローをそのまま使えます。
+          </p>
+          <p>
+            エージェントモードも充実しています：Code、Plan、Debug、Architect、Orchestrator（最後のOrchestratorは大きなタスクを専門のサブエージェントに分解してくれる非常に実用的な機能です）。60以上のプロバイダーから500以上のモデルをサポートし、<strong>ゼロマークアップ</strong>（Kiloが上乗せせず、プロバイダーのそのままの料金で利用可能）です。
+          </p>
+
+          <h2>無料プランで本当に本格的に働けるのか？</h2>
+          <p><strong>はい。</strong>これがほとんどのツールが苦手とする部分です。</p>
+          <p>KiloのGatewayでは、現在実用レベルの無料モデルが使えます：</p>
+          <ul>
+            <li>
+              <strong
+                ><a href="https://poolside.ai/" rel="noopener noreferrer">Laguna M.1</a
+                >（Poolside）</strong
+              >
+              — 実際のエージェントワークフロー（Code、Plan、Debug）で最も使われているモデルの一つ
+            </li>
+            <li>
+              <strong
+                ><a href="https://build.nvidia.com/" rel="noopener noreferrer">Nemotron 3 Ultra</a
+                >（NVIDIA）</strong
+              >
+              — ベンチマークと日常使いの両方で強いパフォーマンス
+            </li>
+            <li>
+              <strong
+                ><a href="https://www.stepfun.com/" rel="noopener noreferrer"
+                  >StepFun Step 3.7 Flash</a
+                ></strong
+              >
+              や MiniMax / GLM / Kimi の無料版（利用可能状況は変動します）
+            </li>
+            <li>
+              <code>kilo-auto/free</code> — そのセッションで最も適した無料モデルを自動で選んでくれる
+            </li>
+          </ul>
+          <p>
+            レートリミットは存在します（匿名ユーザーでIPあたり約<strong>200リクエスト/時間</strong>程度）。しかし実際には、多くの開発者がこれを毎日本格的な作業に使っています。最新の最先端モデルよりは遅く、ときどきより明確な指示を出したりタスクを分割したりする必要がありますが、<strong>プロフェッショナルな成果を出せます</strong>。1日中エージェントとやり取りしながら作業を進められるレベルです。
+          </p>
+          <p>
+            比較として：<a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+            ><a
+              href="../../#ai-tools?q=Cursor"
+              class="article-banal-ref"
+              rel="noopener"
+              aria-label="Cursor on Banal"
+              title="Banal listing"
+              ><span aria-hidden="true">↗</span></a
+            >の無料プラン（Hobby）は、<strong>月50回程度のプレミアムエージェントリクエスト＋2000回のコード補完</strong>程度です。これはツールを試すには十分ですが、<strong>日常のプロフェッショナルなエージェント作業には全く足りません</strong>。集中して作業しているとすぐに上限に当たります。
+          </p>
+          <p>
+            Kiloの無料モデルなら、ずっと作業を続けられます。「最高峰ではないけど、ちゃんと仕事になる」——これが重要なポイントです。
+          </p>
+
+          <h2>品質を上げたいときの現実的な選択肢</h2>
+          <ol>
+            <li>
+              <strong>自分のAPIキーを追加する（Bring Your Own Key）</strong
+              ><br />Kiloでは非常に簡単で、エージェントもオートコンプリートも自分のキーで使えます。<br /><strong
+                ><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax</a
+                ><a
+                  href="../../#ai-tools?q=MiniMax"
+                  class="article-banal-ref"
+                  rel="noopener"
+                  aria-label="MiniMax on Banal"
+                  title="Banal listing"
+                  ><span aria-hidden="true">↗</span></a
+                ></strong
+              >モデル（M2.x /
+              V3系）は現在コスパが非常に良く、月<strong>10〜30ドル</strong>程度で明らかに速くて良い結果が出せます。<a
+                href="https://chat.deepseek.com/"
+                rel="noopener noreferrer"
+                >DeepSeek</a
+              ><a
+                href="../../#ai-tools?q=DeepSeek"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="DeepSeek on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >、特定のQwenやGLM系も価値が高いです。完全にコントロールでき、実際に使った分だけ支払う形です。
+            </li>
+            <li>
+              <strong>Cursorを使う場合</strong><br /><a
+                href="https://cursor.com/"
+                rel="noopener noreferrer"
+                >Cursor</a
+              ><a
+                href="../../#ai-tools?q=Cursor"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="Cursor on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >の洗練された体験がどうしても欲しいなら、Proプラン（月20ドル）を契約し、Composer
+              2.5（Fast/Haiku以外）や安い<a href="https://www.minimax.io/" rel="noopener noreferrer"
+                >MiniMax</a
+              ><a
+                href="../../#ai-tools?q=MiniMax"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="MiniMax on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >キーを組み合わせる方法もあります。それでも最上位モデルを常時使うよりはるかに安上がりです。
+            </li>
+            <li>
+              <strong
+                ><a href="https://antigravity.google/" rel="noopener noreferrer"
+                  >Google Antigravity</a
+                ><a
+                  href="../../#ai-tools?q=Google%20Antigravity"
+                  class="article-banal-ref"
+                  rel="noopener"
+                  aria-label="Google Antigravity on Banal"
+                  title="Banal listing"
+                  ><span aria-hidden="true">↗</span></a
+                >
+                CLIとの組み合わせ</strong
+              ><br /><a href="https://antigravity.google/" rel="noopener noreferrer"
+                >Google Antigravity</a
+              ><a
+                href="../../#ai-tools?q=Google%20Antigravity"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="Google Antigravity on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >はエージェント特化のCLI/プラットフォームで、プレビューや無料枠で、計画立案・サンドボックスでのコード実行・ウェブ閲覧などが可能な高度なエージェントが使えます。<br />複雑なアーキテクチャ設計や大きな計画立案をAntigravityで一度行い、その計画をKiloに持ち込んで無料〜格安モデルで実装・反復するという使い方が非常に効果的です。高額なモデルを毎日使う必要がなくなります。
+            </li>
+          </ol>
+
+          <h2>正直なところ（宣伝抜きで）</h2>
+          <p>
+            Kiloの無料モデルは、最新のOpusを毎回使ったときのような「魔法のような」体験はしにくいです。ときどきエージェントをより細かく導いたり、タスクを分割したり、モデルを切り替えたりする必要があります。「魔法」の度合いは少し控えめになります。
+          </p>
+          <p>
+            しかし、その差は大企業が宣伝するほど劇的なものではありません。良いプロンプト、しっかりしたルール/スキル設定、そしてKiloのOrchestratorを活用すれば、エージェントなしの作業と比べて<strong>生産性が劇的に向上</strong>します。実際に機能を作り、リリースし、高度なワークフローを学び、キャッチアップできます。
+          </p>
+          <p>
+            そして何より大事なのは、<strong>取り残されない</strong>ということです。今日から最新のエージェントワークフローを学び、ポートフォリオを築き、有料の仕事を受注して稼ぐことができます。お金が入り始めたら、月20〜40ドル程度を追加するだけで、かなり高速で高品質なモデルが使えるようになります。急激なジャンプは必要ありません。
+          </p>
+
+          <h2>こんな人におすすめ</h2>
+          <ul>
+            <li>月100〜200ドル以上をAIトークンに使いたくない人</li>
+            <li>今のVS CodeやJetBrains環境を離れたくない人</li>
+            <li>透明性（実際に何がモデルに送られているか確認できる）を重視する人</li>
+            <li>モデルを選べる自由が欲しい人</li>
+          </ul>
+
+          <p>
+            今すぐ試すなら、<a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a
+            ><a
+              href="../../#ai-tools?q=Kilo%20Code"
+              class="article-banal-ref"
+              rel="noopener"
+              aria-label="Kilo Code on Banal"
+              title="Banal listing"
+              ><span aria-hidden="true">↗</span></a
+            >の拡張機能をインストールして、モデルピッカーで「free」と入力し、使えるモデルを選んでみてください。リアルタイムの<a
+              href="https://kilo.ai/leaderboard"
+              rel="noopener noreferrer"
+              >リーダーボード</a
+            >も参考になります。
+          </p>
+          <hr />
+          <p><strong>これは「無料で完璧」ではありません。</strong></p>
+          <p><strong>「無料で十分に本格的で、ちゃんと前に進める」</strong>ツールです。</p>
+          <p>
+            2026年の今、それはすでに非常に大きな価値があります。そして多くの人にとって、「高額な環境が揃うまで待つ」必要なく前に進むために必要なものです。
+          </p>
+          <p>
+            試してみてください。何かを作ってみてください。料金表が思わせぶりにするほど、あなたは取り残されているわけではありません。
+          </p>
+
+          <div class="tools-mentioned">
+            <h2>掲載ツール一覧</h2>
+            <p><a href="../../#ai-tools" rel="noopener">ツール一覧</a>での該当エントリ。</p>
+            <ul>
+              <li><a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a></li>
+              <li><a href="https://kilo.ai/gateway" rel="noopener noreferrer">Kilo Gateway</a></li>
+              <li>
+                <a href="https://code.visualstudio.com/" rel="noopener noreferrer">VS Code</a> /
+                <a href="https://www.jetbrains.com/" rel="noopener noreferrer">JetBrains</a>
+              </li>
+              <li><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a></li>
+              <li>
+                <a href="https://antigravity.google/" rel="noopener noreferrer"
+                  >Google Antigravity</a
+                >
+              </li>
+              <li>
+                <a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax</a>、<a
+                  href="https://chat.deepseek.com/"
+                  rel="noopener noreferrer"
+                  >DeepSeek</a
+                >、<a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a>
+              </li>
+              <li>
+                <a href="https://kilo.ai/leaderboard" rel="noopener noreferrer"
+                  >Kiloリーダーボード</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </main>
+    <footer
+      class="relative mt-20 border-t border-white/10 bg-gradient-to-b from-transparent to-pink-500/[0.05] py-12"
+      aria-labelledby="site-footer-title"
+    >
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="grid gap-10 md:grid-cols-3 items-start">
+          <div>
+            <h2
+              id="site-footer-title"
+              class="text-2xl font-bold tracking-tight bg-gradient-to-r from-pink-300 via-fuchsia-300 to-pink-400 bg-clip-text text-transparent"
+            >
+              sakurablush<span class="text-pink-400">.banal</span>
+            </h2>
+            <p
+              class="mt-3 text-sm text-white/60 leading-relaxed max-w-xs"
+              data-i18n="footer.tagline"
+            >
+              Banal — tool reference. {total} listings. Limits labeled.
+            </p>
+            <p class="mt-4 text-xs text-pink-200/60 italic" data-i18n="footer.dedication">
+              Built with love by sakurablush.
+            </p>
+          </div>
+
+          <nav
+            class="flex flex-col gap-2 text-sm"
+            aria-label="Footer"
+            data-i18n-aria-label="footer.ariaLabel"
+          >
+            <a
+              href="https://github.com/sakurablush/banal"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.github"
+              >GitHub</a
+            >
+            <a
+              href="https://github.com/sakurablush/banal/issues"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.report"
+              >Report Issue</a
+            >
+            <a
+              href="https://github.com/sakurablush/banal/discussions"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.discuss"
+              >Discussions</a
+            >
+            <a
+              href="https://github.com/sakurablush/banal/blob/main/LICENSE"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.license"
+              >MIT License</a
+            >
+            <a
+              href="../../"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.storedData"
+              >Stored data</a
+            >
+            <a
+              href="#top"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.backToTop"
+              >Back to top</a
+            >
+          </nav>
+
+          <div class="text-sm text-white/60 md:text-right">
+            <p class="font-mono text-pink-200/80" data-i18n="footer.love">
+              made with love, for the ghost in every fork
+            </p>
+            <p class="mt-2 text-xs text-white/40">
+              © <span id="footer-year">2026</span> sakurablush · MIT
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script type="module" src="../../src/article-entry.ts"></script>
+  </body>
+</html>

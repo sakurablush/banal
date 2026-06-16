@@ -1,0 +1,1267 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="For engineers who fund their own AI stack: 273 tools (178 AI, 95 dev) with honest access labels — signup, API keys, rate limits. No affiliate links."
+    />
+    <meta name="theme-color" content="#06060b" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://banal.dev/" />
+    <meta property="og:title" content="Banal — Independent Builder Tool Reference (273 tools)" />
+    <meta
+      property="og:description"
+      content="For engineers who fund their own AI stack: 273 tools with honest access labels — signup, limits, inference caveats. No affiliate links."
+    />
+    <meta property="og:image" content="https://banal.dev/og-image.png" />
+    <meta property="og:site_name" content="Banal" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://banal.dev/" />
+    <meta name="twitter:title" content="Banal — Independent Builder Tool Reference (273 tools)" />
+    <meta
+      name="twitter:description"
+      content="For engineers who fund their own AI stack: 273 tools with honest access labels — signup, limits, inference caveats. No affiliate links."
+    />
+    <meta name="twitter:image" content="https://banal.dev/og-image.png" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://banal.dev/" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Banal",
+        "url": "https://banal.dev/",
+        "description": "Independent builder reference for AI and developer tools with honest access labels and caveats",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://banal.dev/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+    <!-- CSP for security hardening - protects against XSS in forks and inline injection -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    />
+    <title>Banal — Independent Builder Tool Reference (273 tools)</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      (function () {
+        try {
+          var t = sessionStorage.getItem('banal-theme');
+          if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="modulepreload" href="/src/main.ts" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+
+  <body class="min-h-screen text-white/90 antialiased font-sans">
+    <!-- Skip to main content link for keyboard users -->
+    <a
+      href="#app"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-violet-600 focus:text-white focus:rounded-lg focus:outline-none"
+      data-i18n="a11y.skip"
+    >
+      Skip to main content
+    </a>
+
+    <!-- Simple Navigation Header -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-[#06060b]/80 border-b border-white/5">
+      <nav
+        aria-label="Main navigation"
+        data-i18n-aria-label="nav.ariaLabel"
+        class="page-shell flex items-center justify-between h-14"
+      >
+        <a
+          href="/"
+          class="font-black text-lg tracking-tight text-white hover:text-violet-400 transition-colors"
+        >
+          BANAL
+        </a>
+        <div class="hidden sm:flex gap-6 text-sm">
+          <a
+            href="#ai-tools"
+            class="text-white/60 hover:text-white transition-colors"
+            data-i18n="nav.aiTools"
+            >AI Tools</a
+          >
+          <a
+            href="#dev-tools"
+            class="text-white/60 hover:text-white transition-colors"
+            data-i18n="nav.devTools"
+            >Dev Tools</a
+          >
+          <a
+            href="#ai-models"
+            class="text-white/60 hover:text-white transition-colors"
+            data-i18n="nav.aiModels"
+            >AI Models</a
+          >
+          <a
+            href="#tool-stacks"
+            class="text-white/60 hover:text-white transition-colors"
+            data-i18n="nav.stacks"
+            >Stacks</a
+          >
+          <a
+            href="#guides"
+            class="text-white/60 hover:text-white transition-colors"
+            data-i18n="nav.guides"
+            >Guides</a
+          >
+          <a
+            href="#prompt-templates"
+            class="text-white/60 hover:text-white transition-colors"
+            data-i18n="nav.promptTemplates"
+            >Prompt Templates</a
+          >
+          <a
+            href="#articles"
+            class="text-white/60 hover:text-white transition-colors"
+            data-i18n="nav.articles"
+            >Articles</a
+          >
+        </div>
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            id="privacy-panel-toggle"
+            class="btn-header"
+            data-privacy-panel
+            data-i18n-title="footer.storedData"
+            data-i18n-aria-label="footer.storedData"
+          >
+            <span class="btn-header-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="width: 20px; height: 20px"
+              >
+                <ellipse cx="12" cy="5" rx="9" ry="3" />
+                <path d="M3 5v6c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+                <path d="M3 11v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6" />
+              </svg>
+            </span>
+          </button>
+          <button
+            id="theme-toggle"
+            class="btn-header"
+            data-i18n-title="theme.toggle"
+            data-i18n-aria-label="theme.toggle"
+            aria-pressed="false"
+          >
+            <span id="theme-icon" class="btn-header-icon">
+              <svg
+                class="theme-icon-moon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="width: 20px; height: 20px"
+              >
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 1 0 21 12.79z" />
+              </svg>
+              <svg
+                class="theme-icon-sun"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="display: none; width: 20px; height: 20px"
+              >
+                <circle cx="12" cy="12" r="5" />
+                <path
+                  d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                />
+              </svg>
+            </span>
+          </button>
+          <button
+            id="lang-toggle"
+            class="btn-header"
+            data-i18n-title="lang.toggleTitle"
+            data-i18n-aria-label="lang.toggle"
+          >
+            <span class="btn-header-icon">
+              <svg
+                class="lang-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <defs>
+                  <clipPath id="lang-uk-half">
+                    <rect x="3" y="4" width="9" height="16" rx="2.5" />
+                  </clipPath>
+                  <clipPath id="lang-jp-half">
+                    <rect x="12" y="4" width="9" height="16" rx="2.5" />
+                  </clipPath>
+                  <linearGradient
+                    id="lang-fusion"
+                    x1="11"
+                    y1="4"
+                    x2="13"
+                    y2="20"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop offset="0%" stop-color="#a855f7" stop-opacity="0.15" />
+                    <stop offset="50%" stop-color="#d946ef" stop-opacity="0.95" />
+                    <stop offset="100%" stop-color="#a855f7" stop-opacity="0.15" />
+                  </linearGradient>
+                </defs>
+                <rect
+                  x="3"
+                  y="4"
+                  width="18"
+                  height="16"
+                  rx="3.5"
+                  stroke="currentColor"
+                  stroke-width="1.15"
+                  stroke-opacity="0.42"
+                />
+                <g clip-path="url(#lang-uk-half)">
+                  <rect x="3" y="4" width="9.5" height="16" fill="#012169" />
+                  <path fill="#fff" d="M3 11.2h9.5M7.75 4v16" />
+                  <path fill="#C8102E" d="M3 10h9.5v2.4H3zM6.55 4v16h2.4V4z" />
+                  <path fill="#fff" d="M3 4.2 12.2 19.8M12.2 4.2 3 19.8" opacity="0.92" />
+                  <path
+                    fill="none"
+                    stroke="#C8102E"
+                    stroke-width="0.85"
+                    d="M3 4.9 11.5 19.1M11.5 4.9 3 19.1"
+                  />
+                </g>
+                <g clip-path="url(#lang-jp-half)">
+                  <rect x="12" y="4" width="9.5" height="16" fill="#f9f9f9" />
+                  <circle cx="16.5" cy="12" r="3.15" fill="#BC002D" />
+                </g>
+                <path
+                  d="M11.7 5.4c1.35 2.1 1.35 11.1 0 13.2"
+                  stroke="url(#lang-fusion)"
+                  stroke-width="1.05"
+                  stroke-linecap="round"
+                />
+                <circle cx="12" cy="12" r="0.75" fill="#e879f9" />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </nav>
+      <!-- Mobile nav (hamburger not needed — just show all links stacked) -->
+      <div
+        class="sm:hidden border-t border-white/5 page-shell py-2 flex gap-4 text-xs overflow-x-auto"
+      >
+        <a
+          href="#ai-tools"
+          class="text-white/60 hover:text-white whitespace-nowrap"
+          data-i18n="nav.aiTools"
+          >AI Tools</a
+        >
+        <a
+          href="#dev-tools"
+          class="text-white/60 hover:text-white whitespace-nowrap"
+          data-i18n="nav.devTools"
+          >Dev Tools</a
+        >
+        <a
+          href="#prompt-templates"
+          class="text-white/60 hover:text-white whitespace-nowrap"
+          data-i18n="nav.promptTemplates"
+          >Prompt Templates</a
+        >
+        <a
+          href="#articles"
+          class="text-white/60 hover:text-white whitespace-nowrap"
+          data-i18n="nav.articles"
+          >Articles</a
+        >
+      </div>
+    </header>
+
+    <!-- Ambient aurora background (CSS-only, decorative) -->
+    <div class="void-bg" aria-hidden="true"></div>
+
+    <main id="app" role="main">
+      <!-- HERO -->
+      <section class="hero-section relative">
+        <div class="hero-mesh" aria-hidden="true">
+          <canvas class="hero-mesh-canvas"></canvas>
+        </div>
+        <div class="page-shell text-center relative z-10">
+          <!-- Removed: ⚡ VERIFIED FREE AI DIRECTORY (clean header per redesign plan) -->
+
+          <h1
+            class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.95] mb-4"
+          >
+            <span class="gradient-neon glitch-hover" data-i18n="hero.title1"
+              >AI tools directory.</span
+            >
+            <br />
+            <span class="text-white/90 glitch-hover" data-i18n="hero.title2"
+              >Independent builder reference.</span
+            >
+          </h1>
+
+          <p
+            class="text-lg sm:text-xl hero-subtitle max-w-3xl mx-auto mb-6 leading-relaxed"
+            data-i18n="hero.subtitle"
+          >
+            273 tools: 178 AI, 95 dev. Inference and API costs add up on real work. Each listing
+            shows access type, signup requirements, and limits.
+          </p>
+          <p class="text-sm hero-disclaimer max-w-xl mx-auto mb-2" data-i18n="hero.disclaimer">
+            Free here means one of: no login, free API key, freemium tier, or self-host. Stated on
+            each card before you click.
+          </p>
+
+          <!-- GIANT SEARCH -->
+          <div class="search-giant-wrapper mb-6">
+            <input
+              type="text"
+              id="hero-search"
+              class="search-giant"
+              placeholder="Search 273 tools — chat, image, PDF, code..."
+              autocomplete="off"
+              data-i18n-placeholder="search.placeholder"
+            />
+            <span class="search-giant-icon">⌕</span>
+          </div>
+
+          <!-- NO RESULTS MESSAGE (hidden by default) -->
+          <div id="hero-no-results" class="hero-no-results" style="display: none">
+            <div class="hero-no-results-icon">🔍</div>
+            <p class="hero-no-results-text" data-i18n="hero.noResults.text">
+              No tools found. Try browsing our
+            </p>
+            <div class="hero-no-results-links">
+              <a href="#ai-tools" class="hero-no-results-link" data-i18n="hero.noResults.aiTools"
+                >🤖 AI Tools</a
+              >
+              <span class="hero-no-results-separator" data-i18n="hero.noResults.or">or</span>
+              <a href="#dev-tools" class="hero-no-results-link" data-i18n="hero.noResults.devTools"
+                >💻 Dev Tools</a
+              >
+            </div>
+          </div>
+
+          <!-- STATS -->
+          <div class="stats-void">
+            <div class="stat-void">
+              <div class="stat-number-void" id="stat-tools">273</div>
+              <div class="stat-label-void" data-i18n="stats.tools">Tools listed</div>
+            </div>
+            <div class="stat-void">
+              <div class="stat-number-void" id="stat-ai">178</div>
+              <div class="stat-label-void" data-i18n="stats.ai">AI tools</div>
+            </div>
+            <div class="stat-void">
+              <div class="stat-number-void" id="stat-dev">95</div>
+              <div class="stat-label-void" data-i18n="stats.dev">Dev tools</div>
+            </div>
+            <div class="stat-void">
+              <div class="stat-number-void">$0</div>
+              <div class="stat-label-void" data-i18n="stats.siteCost">To use Banal</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ONBOARDING QUIZ -->
+      <section id="onboarding" class="page-section page-shell" data-deferred>
+        <div id="onboarding-root" class="panel-root panel-root--onboarding">
+          <div class="panel-skeleton onboarding-panel-skeleton" aria-hidden="true">
+            <div class="skeleton-bar medium"></div>
+            <div class="skeleton-bar long"></div>
+            <div class="skeleton-grid">
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI TOOLS DIRECTORY -->
+      <section id="ai-tools" class="page-section page-shell">
+        <div class="text-center mb-12">
+          <div class="eyebrow-void" data-i18n="section.aiTools.eyebrow">🤖 AI TOOLS</div>
+          <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+            <span class="gradient-neon" data-i18n="section.aiTools.title1">178 AI tools.</span>
+            <span class="text-white/80" data-i18n="section.aiTools.title2"
+              >Listed with access type and limits.</span
+            >
+          </h2>
+          <p
+            class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base"
+            data-i18n="section.aiTools.desc"
+          >
+            Chat, image, video, coding, PDF, research. Each card shows signup, API keys, and rate
+            limits before you click.
+          </p>
+        </div>
+
+        <div id="ai-tools-root" class="panel-root panel-root--tools" data-category-prefix="ai">
+          <div class="panel-skeleton zk2-panel-skeleton" aria-hidden="true">
+            <div class="panel-skeleton-search">
+              <div class="skeleton-bar long" style="height: 100%"></div>
+            </div>
+            <div class="panel-skeleton-layout">
+              <div class="panel-skeleton-sidebar">
+                <div class="skeleton-bar long"></div>
+                <div class="skeleton-bar medium"></div>
+                <div class="skeleton-bar medium"></div>
+                <div class="skeleton-bar short"></div>
+              </div>
+              <div class="panel-skeleton-main">
+                <div class="skeleton-grid">
+                  <div class="skeleton-card"></div>
+                  <div class="skeleton-card"></div>
+                  <div class="skeleton-card"></div>
+                  <div class="skeleton-card"></div>
+                  <div class="skeleton-card"></div>
+                  <div class="skeleton-card"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DEV TOOLS DIRECTORY -->
+      <section id="dev-tools" class="page-section page-shell" data-deferred>
+        <div class="text-center mb-12">
+          <div class="eyebrow-void" data-i18n="section.devTools.eyebrow">💻 DEVELOPER TOOLS</div>
+          <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+            <span class="gradient-neon" data-i18n="section.devTools.title1">95 dev tools.</span>
+            <span class="text-white/80" data-i18n="section.devTools.title2"
+              >Listed with access type and limits.</span
+            >
+          </h2>
+          <p
+            class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base"
+            data-i18n="section.devTools.desc"
+          >
+            CLI, APIs, automation, security, learning. Each card shows access and limits before you
+            click.
+          </p>
+        </div>
+
+        <div id="dev-tools-root" class="panel-root panel-root--tools" data-category-prefix="dev">
+          <div class="panel-skeleton zk2-panel-skeleton" aria-hidden="true">
+            <div class="panel-skeleton-search">
+              <div class="skeleton-bar long" style="height: 100%"></div>
+            </div>
+            <div class="panel-skeleton-layout">
+              <div class="panel-skeleton-sidebar">
+                <div class="skeleton-bar long"></div>
+                <div class="skeleton-bar medium"></div>
+                <div class="skeleton-bar medium"></div>
+                <div class="skeleton-bar short"></div>
+              </div>
+              <div class="panel-skeleton-main">
+                <div class="skeleton-grid">
+                  <div class="skeleton-card"></div>
+                  <div class="skeleton-card"></div>
+                  <div class="skeleton-card"></div>
+                  <div class="skeleton-card"></div>
+                  <div class="skeleton-card"></div>
+                  <div class="skeleton-card"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI MODELS DIRECTORY -->
+      <section id="ai-models" class="page-section page-shell" data-deferred>
+        <div class="text-center mb-12">
+          <div class="eyebrow-void" data-i18n="section.aiModels.eyebrow">🌟 AI MODELS</div>
+          <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+            <span class="gradient-neon" data-i18n="section.aiModels.title1">38 open models.</span>
+            <span class="text-white/80" data-i18n="section.aiModels.title2"
+              >VRAM, benchmarks, inference options.</span
+            >
+          </h2>
+          <p
+            class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base"
+            data-i18n="section.aiModels.desc"
+          >
+            Model weights with hardware requirements, benchmark notes, and free inference providers
+            where we found them.
+          </p>
+        </div>
+
+        <div id="ai-models-root" class="panel-root panel-root--models">
+          <div class="panel-skeleton models-panel-skeleton" aria-hidden="true">
+            <div class="panel-skeleton-search">
+              <div class="skeleton-bar long" style="height: 100%"></div>
+            </div>
+            <div class="panel-skeleton-main">
+              <div class="skeleton-grid">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOOL STACKS -->
+      <section
+        id="tool-stacks"
+        class="page-section page-shell bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
+        data-deferred
+      >
+        <div class="text-center mb-12">
+          <div class="eyebrow-void" data-i18n="section.stacks.eyebrow">🛠️ TOOL STACKS</div>
+          <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+            <span class="gradient-neon" data-i18n="section.stacks.title1">10 tool stacks.</span>
+            <span class="text-white/80" data-i18n="section.stacks.title2"
+              >Monthly cost stated.</span
+            >
+          </h2>
+          <p
+            class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base"
+            data-i18n="section.stacks.desc"
+          >
+            Tool combinations for client work, learning, and side projects. Monthly cost and caveats
+            on each stack.
+          </p>
+        </div>
+
+        <div id="tool-stacks-root" class="panel-root panel-root--stacks">
+          <div class="panel-skeleton stacks-panel-skeleton" aria-hidden="true">
+            <div class="panel-skeleton-search">
+              <div class="skeleton-bar long" style="height: 100%"></div>
+            </div>
+            <div class="panel-skeleton-main">
+              <div class="skeleton-grid">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GETTING STARTED GUIDES -->
+      <section id="guides" class="page-section page-shell page-section--compact" data-deferred>
+        <div id="guides-root" class="panel-root panel-root--guides">
+          <div class="panel-skeleton guides-panel-skeleton" aria-hidden="true">
+            <div class="skeleton-bar short"></div>
+            <div class="skeleton-bar long"></div>
+            <div class="skeleton-row">
+              <div class="skeleton-bar long"></div>
+              <div class="skeleton-pill"></div>
+            </div>
+            <div class="skeleton-row">
+              <div class="skeleton-bar medium"></div>
+              <div class="skeleton-pill"></div>
+            </div>
+            <div class="skeleton-row">
+              <div class="skeleton-bar long"></div>
+              <div class="skeleton-pill"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROMPT TEMPLATES -->
+      <section
+        id="prompt-templates"
+        class="page-section bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
+        data-deferred
+      >
+        <div class="page-shell">
+          <div class="text-center mb-12">
+            <div class="eyebrow-void" data-i18n="section.promptTemplates.eyebrow">
+              9 PROMPT TEMPLATES
+            </div>
+            <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+              <span class="gradient-neon" data-i18n="section.promptTemplates.title1"
+                >9 prompt templates.</span
+              >
+              <span class="text-white/80" data-i18n="section.promptTemplates.title2"
+                >Copy, fill, run.</span
+              >
+            </h2>
+            <p
+              class="text-white/40 max-w-lg mx-auto text-sm sm:text-base"
+              data-i18n="section.promptTemplates.desc"
+            >
+              Templates for jobs, debt letters, doctor visits, code reviews, hard days, and EN↔JA
+              translation. Paste into any chat tool listed above.
+            </p>
+          </div>
+
+          <div id="prompt-templates-howto" class="mb-8 max-w-3xl mx-auto">
+            <details class="glass-card p-5 sm:p-6" open>
+              <summary class="cursor-pointer list-none flex items-center justify-between gap-4">
+                <span
+                  class="text-base sm:text-lg font-semibold gradient-neon"
+                  data-i18n="promptTemplates.howTo.heading"
+                  >How to get value from these in 5 minutes</span
+                >
+                <span class="text-white/40 text-sm" data-i18n="promptTemplates.howTo.summary"
+                  >5 steps to use</span
+                >
+              </summary>
+              <ol
+                class="mt-4 space-y-2 text-sm sm:text-base text-white/80 list-decimal pl-5"
+                aria-label="Steps to use a prompt template"
+              >
+                <li data-i18n="promptTemplates.howTo.step1">
+                  Pick a chat from the chips below — Duck.ai, Copilot, or Meta AI need no account.
+                </li>
+                <li data-i18n="promptTemplates.howTo.step2">
+                  Pick a card. Filter by category on the left, or just scroll.
+                </li>
+                <li data-i18n="promptTemplates.howTo.step3">
+                  Fill what feels true. Leave the rest — the AI will help you finish it.
+                </li>
+                <li data-i18n="promptTemplates.howTo.step4">
+                  Click "Copy Filled" and paste the whole block into your chat.
+                </li>
+                <li data-i18n="promptTemplates.howTo.step5">
+                  Talk back. "Shorter", "Add a JA version with keigo", "Verify every number". Most
+                  of the value is in the follow-up.
+                </li>
+              </ol>
+              <div class="mt-4">
+                <div
+                  class="text-xs uppercase tracking-wider text-white/40 mb-2"
+                  data-i18n="promptTemplates.howTo.chipsLabel"
+                >
+                  Recommended free AI chats
+                </div>
+                <div id="prompt-templates-chips" class="flex flex-wrap gap-2"></div>
+              </div>
+              <p class="mt-4 text-xs text-white/50" data-i18n="promptTemplates.howTo.privacy">
+                Drafts are saved in this tab only and disappear when you close it. Do not paste
+                secrets.
+              </p>
+              <div class="mt-3 text-right">
+                <a
+                  href="#ai-tools"
+                  class="text-sm text-violet-300 hover:text-violet-200 underline-offset-4 hover:underline"
+                  data-i18n="promptTemplates.howTo.moreChats"
+                  >See all AI chat tools →</a
+                >
+              </div>
+            </details>
+          </div>
+
+          <div id="prompt-templates-root" class="panel-root panel-root--prompts">
+            <div class="panel-skeleton prompts-panel-skeleton" aria-hidden="true">
+              <div class="skeleton-grid">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ARTICLES -->
+      <section
+        id="articles"
+        class="page-section bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
+      >
+        <div class="page-shell">
+          <div class="text-center mb-12">
+            <div class="eyebrow-void" data-i18n="section.articles.eyebrow">ARTICLES</div>
+            <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">
+              <span class="gradient-neon" data-i18n="section.articles.title1">Articles.</span>
+              <span class="text-white/80" data-i18n="section.articles.title2"
+                >Setup notes and reviews.</span
+              >
+            </h2>
+            <p class="text-white/40 max-w-md mx-auto text-sm" data-i18n="section.articles.desc">
+              Long-form notes on tools and workflows tested on real projects.
+            </p>
+          </div>
+
+          <!-- Featured: Kilo article -->
+          <div class="grid gap-6 lg:grid-cols-2 items-stretch">
+            <article class="article-card-void group" style="border-color: rgba(168, 85, 247, 0.25)">
+              <div
+                class="article-badge-void"
+                style="
+                  background: rgba(168, 85, 247, 0.15);
+                  border-color: rgba(168, 85, 247, 0.4);
+                  color: #c4b5fd;
+                "
+                data-i18n="article.featured"
+              >
+                FEATURED
+              </div>
+              <h3
+                class="article-title-void"
+                style="font-size: 1.35rem"
+                data-i18n="article.featured.title"
+              >
+                Kilo Code: Professional AI Agent Coding for Free (or Very Cheap) — Without Feeling
+                Left Behind
+              </h3>
+              <p class="article-excerpt-void" data-i18n="article.featured.excerpt">
+                Real agent workflows on free models — stay in VS Code or JetBrains, skip the
+                $100+/month token bill, and still ship professional work.
+              </p>
+              <div class="article-meta-void">
+                <span>9 <span data-i18n="article.minRead">min read</span></span>
+                <span>·</span>
+                <span class="text-violet-400/60" data-i18n="article.practicalGuide"
+                  >Practical guide</span
+                >
+                <span>·</span>
+                <span data-i18n="article.honestReview">Honest review</span>
+              </div>
+              <a
+                href="./articles/free-ai-coding-setup-2026/"
+                class="cta-neon cta-neon--inline"
+                data-i18n="article.readFullGuide"
+              >
+                Read the full guide → <span aria-hidden="true">⌕</span>
+              </a>
+            </article>
+
+            <article class="article-card-void group" style="border-color: rgba(34, 211, 238, 0.2)">
+              <div
+                class="article-badge-void"
+                style="
+                  background: rgba(34, 211, 238, 0.12);
+                  border-color: rgba(34, 211, 238, 0.35);
+                  color: #67e8f9;
+                "
+                data-i18n="article.agents2026.badge"
+              >
+                COST GUIDE
+              </div>
+              <h3
+                class="article-title-void"
+                style="font-size: 1.35rem"
+                data-i18n="article.agents2026.card.title"
+              >
+                The Honest Truth About AI Coding Agents in 2026
+              </h3>
+              <p class="article-excerpt-void" data-i18n="article.agents2026.card.excerpt">
+                I burned thousands on agent sessions before the bill made sense. What top models
+                actually cost, which cheaper models handle daily work, and when to switch up.
+              </p>
+              <div class="article-meta-void">
+                <span>7 <span data-i18n="article.minRead">min read</span></span>
+                <span>·</span>
+                <span class="text-cyan-400/60" data-i18n="article.costGuide">Cost guide</span>
+                <span>·</span>
+                <span data-i18n="article.honestReview">Honest review</span>
+              </div>
+              <a
+                href="./articles/honest-truth-ai-coding-agents-2026/"
+                class="cta-neon cta-neon--inline"
+                data-i18n="article.readFullGuide"
+              >
+                Read the full guide → <span aria-hidden="true">⌕</span>
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- HONEST LIMITATIONS -->
+      <section class="page-section">
+        <div class="page-shell">
+          <div class="text-center mb-10">
+            <div class="eyebrow-void" data-i18n="section.limitations.eyebrow">TRANSPARENCY</div>
+            <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">
+              <span class="gradient-neon" data-i18n="section.limitations.title"
+                >What "free" means here</span
+              >
+            </h2>
+            <p
+              class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base"
+              data-i18n="section.limitations.desc"
+            >
+              How we label access type and limits on every listing.
+            </p>
+          </div>
+
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="glass-card p-6">
+              <div class="text-2xl mb-3">🔍</div>
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.0.title">
+                "Free" means different things
+              </h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.0.desc">
+                Some tools are truly free (no key, no limits). Others require a free API key (no
+                credit card). Others have rate limits or daily quotas. We mark every tool clearly.
+              </p>
+            </div>
+
+            <div class="glass-card p-6">
+              <div class="text-2xl mb-3">🤖</div>
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.1.title">
+                AI output can be wrong
+              </h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.1.desc">
+                Models hallucinate, refuse valid requests, or return outdated information. Verify
+                anything important yourself.
+              </p>
+            </div>
+
+            <div class="glass-card p-6">
+              <div class="text-2xl mb-3">⏱️</div>
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.2.title">
+                Rate limits apply
+              </h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.2.desc">
+                Free tiers share capacity. When you hit a limit, wait, switch tools, or pay for more
+                capacity.
+              </p>
+            </div>
+
+            <div class="glass-card p-6">
+              <div class="text-2xl mb-3">🔒</div>
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.3.title">
+                Privacy matters
+              </h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.3.desc">
+                Do not treat any hosted AI as confidential legal, medical, or financial counsel.
+                Your prompts may be logged or used for training.
+              </p>
+            </div>
+
+            <div class="glass-card p-6">
+              <div class="text-2xl mb-3">🔄</div>
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.4.title">
+                Tools change
+              </h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.4.desc">
+                Free tiers can be reduced or removed. We verify regularly, but always test yourself.
+                If something breaks, let us know on GitHub.
+              </p>
+            </div>
+
+            <div class="glass-card p-6">
+              <div class="text-2xl mb-3">✅</div>
+              <h3 class="text-white font-semibold mb-2" data-i18n="limitations.5.title">
+                Every listing is labeled
+              </h3>
+              <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.5.desc">
+                Access type and caveats are on the card. Check them before you click.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-8 text-center">
+            <p class="text-white/50 text-sm">
+              <span data-i18n="limitations.reportOutdated">Found outdated information?</span>
+              <a
+                href="https://github.com/sakurablush/banal/issues/new?title=Outdated%20information&body=URL%3A%0A%0AWhat%20is%20outdated%3F%0A%0ASuggested%20fix%3A"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-violet-400 hover:text-violet-300 underline"
+                data-i18n="limitations.reportLink"
+              >
+                Report it on GitHub →
+              </a>
+              <span data-i18n="limitations.linkSeparator"> · </span>
+              <a
+                href="https://github.com/sakurablush/banal/discussions"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-violet-400 hover:text-violet-300 underline"
+                data-i18n="limitations.discussLink"
+              >
+                Discuss on GitHub →
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- MISSION -->
+      <section class="page-section">
+        <div class="page-shell text-center">
+          <div class="eyebrow-void" data-i18n="mission.eyebrow">WHY WE EXIST</div>
+          <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-8">
+            <span class="gradient-neon" data-i18n="mission.title1">Self-funded tooling.</span>
+            <br />
+            <span class="text-white/90" data-i18n="mission.title2">Stated access and limits.</span>
+          </h2>
+          <p
+            class="text-lg text-white/50 max-w-3xl mx-auto leading-relaxed mb-12"
+            data-i18n="mission.desc"
+          >
+            Companies buy pooled inference, enterprise seats, and approved vendors. Independent
+            builders pay for tokens, APIs, and licenses themselves. Banal lists tools with access
+            type and limits on every card.
+          </p>
+
+          <div class="grid sm:grid-cols-3 gap-5">
+            <div class="glass-card p-7 text-left">
+              <div class="text-cyan-400 font-bold text-sm mb-2 tracking-wide">01</div>
+              <div class="text-white font-semibold mb-1" data-i18n="mission.0.title">
+                Access labeled
+              </div>
+              <div class="text-white/40 text-sm" data-i18n="mission.0.desc">
+                Each card states signup, API key, or payment requirements.
+              </div>
+            </div>
+            <div class="glass-card p-7 text-left">
+              <div class="text-fuchsia-400 font-bold text-sm mb-2 tracking-wide">02</div>
+              <div class="text-white font-semibold mb-1" data-i18n="mission.1.title">
+                Limits stated
+              </div>
+              <div class="text-white/40 text-sm" data-i18n="mission.1.desc">
+                Rate limits and caveats on every listing. No affiliate links.
+              </div>
+            </div>
+            <div class="glass-card p-7 text-left">
+              <div class="text-cyan-400 font-bold text-sm mb-2 tracking-wide">03</div>
+              <div class="text-white font-semibold mb-1" data-i18n="mission.2.title">
+                Open source
+              </div>
+              <div class="text-white/40 text-sm" data-i18n="mission.2.desc">
+                MIT license. Fork, host, or send a pull request on GitHub.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FORK & CONTRIBUTE -->
+      <section class="page-section">
+        <div class="page-shell">
+          <div class="text-center mb-10">
+            <div class="eyebrow-void" data-i18n="section.fork.eyebrow">FORK & CONTRIBUTE</div>
+            <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+              <span class="gradient-neon" data-i18n="section.fork.title1">Open source.</span>
+              <span class="text-white/90" data-i18n="section.fork.title2">MIT license.</span>
+            </h2>
+            <p
+              class="text-white/40 max-w-lg mx-auto text-sm sm:text-base"
+              data-i18n="section.fork.desc"
+            >
+              Fork, translate, add regional tools, or host your own copy.
+            </p>
+          </div>
+
+          <div class="max-w-2xl mx-auto">
+            <div class="glass-card p-6 sm:p-8 text-white/70 mb-6">
+              <p class="mb-4" data-i18n="section.fork.listIntro">You can:</p>
+              <ul class="list-disc list-inside space-y-2 text-white/60 text-sm sm:text-base">
+                <li data-i18n="section.fork.list1">
+                  Fork the repo and customize for your community
+                </li>
+                <li data-i18n="section.fork.list2">Add tools (including local or regional ones)</li>
+                <li data-i18n="section.fork.list3">Translate to your language</li>
+                <li data-i18n="section.fork.list4">Host your own instance</li>
+              </ul>
+              <p class="mt-4 text-white/40 text-sm" data-i18n="section.fork.note">
+                Contributing back via pull request is welcome but not required.
+              </p>
+            </div>
+
+            <div
+              class="glass-card p-6 sm:p-8 font-mono text-sm text-white/70 border border-white/10 rounded-2xl"
+            >
+              <pre class="overflow-x-auto"><code>git clone https://github.com/sakurablush/banal.git
+cd banal
+npm install
+npm run build</code></pre>
+            </div>
+
+            <div class="fork-actions">
+              <a
+                href="https://github.com/sakurablush/banal"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="cta-neon"
+                data-i18n="footer.viewOnGithub"
+              >
+                View on GitHub →
+              </a>
+              <a
+                href="https://github.com/sakurablush/banal/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="cta-neon-secondary"
+                data-i18n="footer.reportIssue"
+              >
+                Report Issue →
+              </a>
+              <a
+                href="https://github.com/sakurablush/banal/discussions"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="cta-neon-secondary"
+                data-i18n="footer.discussCta"
+              >
+                Discussions →
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- OPTIONAL SUPPORT -->
+      <section
+        id="support"
+        class="page-section bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
+      >
+        <div class="page-shell">
+          <div class="text-center mb-10">
+            <div class="eyebrow-void" data-i18n="section.support.eyebrow">KEEP BUILDING</div>
+            <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+              <span class="gradient-neon" data-i18n="section.support.title1"
+                >Optional support.</span
+              >
+              <span class="text-white/90" data-i18n="section.support.title2">
+                Same honesty as the catalog.
+              </span>
+            </h2>
+            <p
+              class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed"
+              data-i18n="section.support.desc"
+            >
+              Banal is free to use — no paywall, no accounts, no ads. Building and maintaining it
+              takes real time and model tokens, from one self-funded stack.
+            </p>
+          </div>
+
+          <div class="max-w-2xl mx-auto space-y-5">
+            <div class="glass-card p-6 sm:p-8 text-left">
+              <h3 class="text-white font-semibold mb-2" data-i18n="section.support.contributeTitle">
+                Contribute in code
+              </h3>
+              <p
+                class="text-white/60 text-sm sm:text-base leading-relaxed"
+                data-i18n="section.support.contributeDesc"
+              >
+                Public repo on a personal account — no collaborator invite needed. Report broken
+                links or ideas in
+                <a
+                  href="https://github.com/sakurablush/banal/issues"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-violet-400 hover:text-violet-300 underline"
+                  >Issues</a
+                >
+                or
+                <a
+                  href="https://github.com/sakurablush/banal/discussions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-violet-400 hover:text-violet-300 underline"
+                  >Discussions</a
+                >. To change code, fork and open a pull request — I review and merge when it fits.
+              </p>
+            </div>
+
+            <div class="glass-card p-6 sm:p-8 text-left">
+              <h3 class="text-white font-semibold mb-2" data-i18n="section.support.tipTitle">
+                Chip in financially
+              </h3>
+              <p
+                class="text-white/60 text-sm sm:text-base leading-relaxed mb-5"
+                data-i18n="section.support.tipDesc"
+              >
+                Only if Banal saved you time or money and you want to help cover the next round of
+                research and inference — creation or upkeep. No tiers, no perks, no obligation.
+              </p>
+
+              <ul class="support-crypto-list" aria-label="Cryptocurrency addresses">
+                <li class="support-crypto-row">
+                  <span class="support-crypto-coin" data-i18n="section.support.bitcoin"
+                    >Bitcoin</span
+                  >
+                  <code class="support-crypto-addr"
+                    >bc1qcrj9wreunffxm75fcz0a2gjkw87jshcwvmxv68</code
+                  >
+                  <button
+                    type="button"
+                    class="support-crypto-copy"
+                    data-copy="bc1qcrj9wreunffxm75fcz0a2gjkw87jshcwvmxv68"
+                    data-i18n="section.support.copy"
+                  >
+                    Copy
+                  </button>
+                </li>
+                <li class="support-crypto-row">
+                  <span class="support-crypto-coin" data-i18n="section.support.ethereum"
+                    >Ethereum</span
+                  >
+                  <code class="support-crypto-addr"
+                    >0x3A265D72AB43f9C55bD71E0FD5c1b3304601ce33</code
+                  >
+                  <button
+                    type="button"
+                    class="support-crypto-copy"
+                    data-copy="0x3A265D72AB43f9C55bD71E0FD5c1b3304601ce33"
+                    data-i18n="section.support.copy"
+                  >
+                    Copy
+                  </button>
+                </li>
+                <li class="support-crypto-row">
+                  <span class="support-crypto-coin" data-i18n="section.support.litecoin"
+                    >Litecoin</span
+                  >
+                  <code class="support-crypto-addr"
+                    >ltc1q0nsarncmnz8vk34dav7l0vgu9m5k48drr8z6js</code
+                  >
+                  <button
+                    type="button"
+                    class="support-crypto-copy"
+                    data-copy="ltc1q0nsarncmnz8vk34dav7l0vgu9m5k48drr8z6js"
+                    data-i18n="section.support.copy"
+                  >
+                    Copy
+                  </button>
+                </li>
+                <li class="support-crypto-row">
+                  <span class="support-crypto-coin" data-i18n="section.support.dogecoin"
+                    >Dogecoin</span
+                  >
+                  <code class="support-crypto-addr">D6YGoYWpFZxW8JXvEfT5iB9uNXcs8AeY7L</code>
+                  <button
+                    type="button"
+                    class="support-crypto-copy"
+                    data-copy="D6YGoYWpFZxW8JXvEfT5iB9uNXcs8AeY7L"
+                    data-i18n="section.support.copy"
+                  >
+                    Copy
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer
+      class="relative mt-20 border-t border-white/10 bg-gradient-to-b from-transparent to-pink-500/[0.05] py-12"
+      aria-labelledby="site-footer-title"
+    >
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="grid gap-10 md:grid-cols-3 items-start">
+          <!-- Brand -->
+          <div>
+            <h2
+              id="site-footer-title"
+              class="text-2xl font-bold tracking-tight bg-gradient-to-r from-pink-300 via-fuchsia-300 to-pink-400 bg-clip-text text-transparent"
+            >
+              sakurablush<span class="text-pink-400">.banal</span>
+            </h2>
+            <p
+              class="mt-3 text-sm text-white/60 leading-relaxed max-w-xs"
+              data-i18n="footer.tagline"
+            >
+              Banal — tool reference. {total} listings. Limits labeled.
+            </p>
+            <p class="mt-4 text-xs text-pink-200/60 italic" data-i18n="footer.dedication">
+              Built with love by sakurablush.
+            </p>
+          </div>
+
+          <!-- Links -->
+          <nav
+            class="flex flex-col gap-2 text-sm"
+            aria-label="Footer"
+            data-i18n-aria-label="footer.ariaLabel"
+          >
+            <a
+              href="https://github.com/sakurablush/banal"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.github"
+              >GitHub</a
+            >
+            <a
+              href="https://github.com/sakurablush/banal/issues"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.report"
+              >Report Issue</a
+            >
+            <a
+              href="https://github.com/sakurablush/banal/discussions"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.discuss"
+              >Discussions</a
+            >
+            <a
+              href="https://github.com/sakurablush/banal/blob/main/LICENSE"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.license"
+              >MIT License</a
+            >
+            <a
+              href="#"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.storedData"
+              data-privacy-panel
+              >Stored data</a
+            >
+            <a
+              href="#top"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.backToTop"
+              >Back to top</a
+            >
+          </nav>
+
+          <!-- Signature -->
+          <div class="text-sm text-white/60 md:text-right">
+            <p class="font-mono text-pink-200/80" data-i18n="footer.love">
+              made with love, for the ghost in every fork
+            </p>
+            <p class="mt-2 text-xs text-white/40">
+              © <span id="footer-year">2026</span> sakurablush · MIT
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
