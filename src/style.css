@@ -5504,19 +5504,25 @@ textarea.sp-form-input {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
   gap: 0.5rem;
+  align-items: stretch;
 }
 
 .onboarding-option {
-  padding: 0.55rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: 0.65rem 0.75rem;
   background: var(--chip-bg);
   border: 1px solid var(--glass-border);
   border-radius: 0.5rem;
   color: var(--text-muted);
   font-size: 0.8rem;
-  line-height: 1.3;
+  line-height: 1.35;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
+  user-select: none;
 }
 
 .onboarding-option:hover {
@@ -5530,6 +5536,11 @@ textarea.sp-form-input {
   background: var(--chip-bg-selected);
   color: var(--neon-violet);
   font-weight: 600;
+}
+
+.onboarding-option:focus-visible {
+  outline: 2px solid var(--neon-violet);
+  outline-offset: 2px;
 }
 
 .onboarding-navigation {
@@ -5567,8 +5578,14 @@ textarea.sp-form-input {
   margin-left: auto;
 }
 
-.nav-btn-next:hover {
+.nav-btn-next:hover:not(:disabled) {
   opacity: 0.9;
+}
+
+.nav-btn-next:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(0.35);
 }
 
 .results-title {

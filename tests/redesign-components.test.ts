@@ -296,9 +296,10 @@ describe('Onboarding Flow', () => {
     const container = document.createElement('div');
     renderOnboarding(container, 'en');
 
-    const nextBtn = container.querySelector('.nav-btn-next');
+    const nextBtn = container.querySelector('.nav-btn-next') as HTMLButtonElement;
     expect(nextBtn).toBeTruthy();
-    expect(nextBtn?.textContent).toBe('Next');
+    expect(nextBtn.textContent).toBe('Next');
+    expect(nextBtn.disabled).toBe(true);
   });
 
   it('should render in Japanese', () => {

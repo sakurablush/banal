@@ -84,13 +84,31 @@ const COPY = {
 interface OnboardingState {
   lang: Lang;
   currentStep: number;
-  answers: {
-    role?: StackAudience;
-    budget?: StackBudget;
-    goals?: string[];
-    experience?: StackExperience;
-  };
+  answers: OnboardingAnswers;
   container: HTMLElement | null;
+}
+
+export type OnboardingAnswers = {
+  role?: StackAudience;
+  budget?: StackBudget;
+  goals?: string[];
+  experience?: StackExperience;
+};
+
+/** Whether the user can advance from a given quiz step. Exported for tests. */
+export function isOnboardingStepComplete(step: number, answers: OnboardingAnswers): boolean {
+  switch (step) {
+    case 1:
+      return !!answers.role;
+    case 2:
+      return !!answers.budget;
+    case 3:
+      return (answers.goals?.length ?? 0) > 0;
+    case 4:
+      return !!answers.experience;
+    default:
+      return true;
+  }
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -202,8 +220,7 @@ function renderStep1(
   ];
 
   for (const role of roles) {
-    const option = createOption(role.label, state.answers.role === role.value);
-    option.addEventListener('click', () => {
+    const option = createOption(role.label, state.answers.role === role.value, () => {
       state.answers.role = role.value;
       renderStep(state);
     });
@@ -232,8 +249,7 @@ function renderStep2(
   ];
 
   for (const budget of budgets) {
-    const option = createOption(budget.label, state.answers.budget === budget.value);
-    option.addEventListener('click', () => {
+    const option = createOption(budget.label, state.answers.budget === budget.value, () => {
       state.answers.budget = budget.value;
       renderStep(state);
     });
@@ -264,11 +280,10 @@ function renderStep3(
 
   for (const goal of goals) {
     const isSelected = state.answers.goals?.includes(goal.value) || false;
-    const option = createOption(goal.label, isSelected);
-    option.addEventListener('click', () => {
+    const option = createOption(goal.label, isSelected, () => {
       if (!state.answers.goals) state.answers.goals = [];
       if (isSelected) {
-        state.answers.goals = state.answers.goals.filter(g => g !== goal.value);
+        state.answers.goals = state.answers.goals.filter((g) => g !== goal.value);
       } else {
         state.answers.goals.push(goal.value);
       }
@@ -298,8 +313,7 @@ function renderStep4(
   ];
 
   for (const exp of experiences) {
-    const option = createOption(exp.label, state.answers.experience === exp.value);
-    option.addEventListener('click', () => {
+    const option = createOption(exp.label, state.answers.experience === exp.value, () => {
       state.answers.experience = exp.value;
       renderStep(state);
     });
@@ -360,6 +374,10 @@ function renderResults(
   container.appendChild(actions);
 }
 
+function isStepAnswered(state: OnboardingState): boolean {
+  return isOnboardingStepComplete(state.currentStep, state.answers);
+}
+
 function renderNavigation(
   container: HTMLElement,
   state: OnboardingState,
@@ -369,6 +387,7 @@ function renderNavigation(
   
   if (state.currentStep > 1) {
     const backBtn = create('button', 'nav-btn nav-btn-back');
+    backBtn.type = 'button';
     backBtn.textContent = copy.back;
     backBtn.addEventListener('click', () => {
       state.currentStep--;
@@ -378,8 +397,12 @@ function renderNavigation(
   }
 
   const nextBtn = create('button', 'nav-btn nav-btn-next');
+  nextBtn.type = 'button';
   nextBtn.textContent = state.currentStep === 4 ? copy.finish : copy.next;
+  const canAdvance = isStepAnswered(state);
+  nextBtn.disabled = !canAdvance;
   nextBtn.addEventListener('click', () => {
+    if (!isStepAnswered(state)) return;
     state.currentStep++;
     renderStep(state);
   });
@@ -388,13 +411,26 @@ function renderNavigation(
   container.appendChild(nav);
 }
 
-function createOption(label: string, isSelected: boolean): HTMLElement {
+function createOption(label: string, isSelected: boolean, onSelect: () => void): HTMLElement {
   const option = create('div', `onboarding-option ${isSelected ? 'selected' : ''}`);
+  option.setAttribute('role', 'button');
+  option.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+  option.tabIndex = 0;
   option.textContent = label;
+
+  const activate = () => onSelect();
+  option.addEventListener('click', activate);
+  option.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      activate();
+    }
+  });
+
   return option;
 }
 
-function findMatchingStacks(answers: OnboardingState['answers']): ToolStack[] {
+function findMatchingStacks(answers: OnboardingAnswers): ToolStack[] {
   // Score each stack by how many criteria match, then sort best-first.
   // This ensures we always return results even when no exact match exists.
   const scored = toolStacks.map(stack => {
