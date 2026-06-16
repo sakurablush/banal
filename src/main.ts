@@ -70,5 +70,15 @@ try {
   console.error('Prompt Templates section failed to initialize:', error);
 }
 
+// Footer: stamp the current year so the copyright line is never stale.
+try {
+  const yearEl = document.getElementById('footer-year');
+  if (yearEl) {
+    yearEl.textContent = String(new Date().getFullYear());
+  }
+} catch {
+  // Non-critical — leave the static fallback year in place if anything goes wrong.
+}
+
 // Extremely small core — everything else lives in focused, tested modules.
 // This keeps the project forkable by anyone on a library computer.
