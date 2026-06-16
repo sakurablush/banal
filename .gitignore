@@ -39,6 +39,8 @@ html-report/
 # Temporary
 tmp/
 *.tmp
+tools-en-export.json
+tools-en-compact.json
 
 # TypeScript
 *.tsbuildinfo
