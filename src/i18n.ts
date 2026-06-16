@@ -43,7 +43,10 @@ export const translations: Record<Lang, Translations> = {
     'nav.primary': 'Primary navigation',
     'nav.ariaLabel': 'Main navigation',
     'theme.toggle': 'Toggle light/dark mode',
+    'lang.toggle': 'Switch language between English and Japanese',
+    'lang.toggleTitle': 'Change language (EN/JA)',
     'nav.language': 'Language',
+    'footer.ariaLabel': 'Footer',
     'nav.why': 'Why',
     'nav.experience': 'Experience',
     'nav.fork': 'Fork & Host',
@@ -252,7 +255,10 @@ export const translations: Record<Lang, Translations> = {
     'nav.primary': 'メインのナビゲーション',
     'nav.ariaLabel': 'メインナビゲーション',
     'theme.toggle': 'ライト/ダークモード切替',
+    'lang.toggle': '英語と日本語を切り替え',
+    'lang.toggleTitle': '言語を変更（EN/JA）',
     'nav.language': '言語',
+    'footer.ariaLabel': 'フッター',
     'nav.why': 'なぜ',
     'nav.experience': '体験する',
     'nav.fork': 'フォークしてホスト',
@@ -553,6 +559,13 @@ export function applyTranslations(
     if (!key) return;
     const translated = t(lang, key);
     el.setAttribute('aria-label', translated);
+  });
+
+  scope.querySelectorAll<HTMLElement>('[data-i18n-title]').forEach((el) => {
+    const key = el.getAttribute('data-i18n-title');
+    if (!key) return;
+    const translated = t(lang, key);
+    el.setAttribute('title', translated);
   });
 
   // Page title and meta description — browser tab / share experience also localized.
