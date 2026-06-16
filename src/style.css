@@ -11,7 +11,7 @@
 :root {
   /* === Base Colors (Dark Mode) === */
   --void: #06060b;
-  --void-light: #0c0c16;
+  --void-light: #0a0910;
   --glass-bg: rgba(255, 255, 255, 0.02);
   --glass-border: rgba(255, 255, 255, 0.06);
   --glass-hover: rgba(255, 255, 255, 0.05);
@@ -41,13 +41,15 @@
   --chip-bg-hover: rgba(255, 255, 255, 0.05);
   --chip-bg-selected: rgba(168, 85, 247, 0.15);
   --elevated-surface: rgba(255, 255, 255, 0.02);
+  --section-band: rgba(76, 29, 149, 0.07);
   color-scheme: dark;
 }
 
 /* Light mode variables - base overrides */
 [data-theme='light'] {
-  --void: #f4f6f8;
-  --void-light: #f9fafb;
+  --void: #f6f7fa;
+  --void-light: #fcfbff;
+  --void-bottom: #eef1f6;
   --glass-bg: rgba(255, 255, 255, 0.6);
   --glass-border: rgba(0, 0, 0, 0.08);
   --glass-hover: rgba(0, 0, 0, 0.04);
@@ -65,7 +67,7 @@
 }
 
 [data-theme='light'] body {
-  background: #f4f6f8 !important;
+  background: var(--void) !important;
   color: var(--light-text) !important;
 }
 
@@ -91,7 +93,17 @@ main#app,
 
 .page-section {
   padding-block: clamp(1.75rem, 3.5vw, 2.75rem);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Soft section bands — stacks, guides, articles */
+.bg-gradient-to-b.from-transparent.via-violet-950\/5.to-transparent {
+  background-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--section-band) 46%,
+    transparent 100%
+  ) !important;
 }
 
 /* Shared vertical scroll panes — thin scrollbar + consistent inset from tiles */
@@ -147,10 +159,12 @@ main#app,
   pointer-events: none;
   z-index: -1;
   overflow: hidden;
-  background: radial-gradient(ellipse 130% 90% at 50% -10%, #0c0a14 0%, var(--void) 55%);
+  background:
+    radial-gradient(ellipse 115% 72% at 50% -18%, #14101f 0%, transparent 52%),
+    linear-gradient(180deg, #08070d 0%, var(--void) 58%, #040408 100%);
 }
 
-/* Slow aurora washes — CSS only, no canvas, respects reduced motion */
+/* Slow aurora washes — CSS only, respects reduced motion */
 .void-bg::before,
 .void-bg::after {
   content: '';
@@ -160,19 +174,22 @@ main#app,
 }
 
 .void-bg::before {
+  filter: blur(52px);
   background:
-    radial-gradient(ellipse 58% 48% at 18% 28%, rgba(124, 58, 237, 0.26), transparent 72%),
-    radial-gradient(ellipse 52% 42% at 78% 22%, rgba(34, 211, 238, 0.13), transparent 68%),
-    radial-gradient(ellipse 64% 52% at 52% 88%, rgba(168, 85, 247, 0.1), transparent 74%);
+    radial-gradient(ellipse 82% 62% at 20% 18%, rgba(109, 40, 217, 0.19), transparent 70%),
+    radial-gradient(ellipse 72% 58% at 82% 14%, rgba(34, 211, 238, 0.085), transparent 68%),
+    radial-gradient(ellipse 88% 68% at 48% 96%, rgba(124, 58, 237, 0.075), transparent 74%);
   animation: void-aurora-a 32s ease-in-out infinite alternate;
+  opacity: 0.88;
 }
 
 .void-bg::after {
+  filter: blur(60px);
   background:
-    radial-gradient(ellipse 48% 44% at 72% 62%, rgba(217, 70, 239, 0.16), transparent 70%),
-    radial-gradient(ellipse 42% 38% at 28% 72%, rgba(124, 58, 237, 0.09), transparent 66%);
+    radial-gradient(ellipse 68% 58% at 68% 54%, rgba(192, 38, 211, 0.11), transparent 72%),
+    radial-gradient(ellipse 58% 52% at 16% 62%, rgba(67, 56, 202, 0.065), transparent 70%);
   animation: void-aurora-b 40s ease-in-out infinite alternate;
-  opacity: 0.9;
+  opacity: 0.72;
 }
 
 @keyframes void-aurora-a {
@@ -197,6 +214,7 @@ main#app,
   .void-bg::before,
   .void-bg::after {
     animation: none;
+    filter: none;
   }
 
   [data-theme='light'] .void-bg::before,
@@ -1558,6 +1576,7 @@ main#app,
   --light-surface-panel: rgba(255, 255, 255, 0.94);
   --light-pink: #9d174d;
   --light-pink-muted: rgba(157, 23, 77, 0.78);
+  --section-band: rgba(237, 233, 254, 0.38);
   --light-footer-title-gradient: linear-gradient(
     90deg,
     var(--light-pink) 0%,
@@ -1703,30 +1722,29 @@ main#app,
 }
 
 /* Global page shells, glass, stats, header, and hero. */
-[data-theme='light'] body {
-  background: #f4f6f8 !important;
-  color: var(--light-text) !important;
-}
-
 [data-theme='light'] .void-bg {
-  background: linear-gradient(180deg, #faf8ff 0%, #f4f6f8 42%, #f1f5f9 100%);
+  background:
+    radial-gradient(ellipse 105% 68% at 50% -14%, var(--void-light) 0%, transparent 48%),
+    linear-gradient(180deg, var(--void-light) 0%, var(--void) 42%, var(--void-bottom) 100%);
 }
 
 [data-theme='light'] .void-bg::before,
 [data-theme='light'] .void-bg::after {
-  filter: blur(72px);
+  filter: blur(84px);
 }
 
 [data-theme='light'] .void-bg::before {
   background:
-    radial-gradient(ellipse 95% 75% at 15% 10%, rgba(124, 58, 237, 0.07), transparent 68%),
-    radial-gradient(ellipse 85% 70% at 88% 85%, rgba(34, 211, 238, 0.04), transparent 65%);
-  opacity: 0.75;
+    radial-gradient(ellipse 92% 72% at 10% 6%, rgba(167, 139, 250, 0.11), transparent 68%),
+    radial-gradient(ellipse 82% 68% at 94% 90%, rgba(125, 211, 252, 0.07), transparent 66%);
+  opacity: 0.62;
 }
 
 [data-theme='light'] .void-bg::after {
-  background: radial-gradient(ellipse 90% 80% at 55% 45%, rgba(192, 38, 211, 0.035), transparent 72%);
-  opacity: 0.5;
+  background:
+    radial-gradient(ellipse 88% 78% at 56% 40%, rgba(244, 114, 182, 0.045), transparent 72%),
+    radial-gradient(ellipse 74% 64% at 32% 74%, rgba(196, 181, 253, 0.06), transparent 70%);
+  opacity: 0.42;
 }
 
 [data-theme='light'] .page-section {
@@ -1757,7 +1775,7 @@ main#app,
 .hero-section {
   position: relative;
   padding-block: var(--hero-pad-y);
-  background: var(--void);
+  background: transparent;
 }
 
 .hero-section > .page-shell {
@@ -2037,9 +2055,9 @@ main#app,
 [data-theme='light'] .stats-void {
   background: linear-gradient(
     135deg,
-    rgba(237, 233, 254, 0.55) 0%,
-    rgba(248, 250, 252, 0.9) 48%,
-    rgba(224, 242, 254, 0.4) 100%
+    rgba(237, 233, 254, 0.38) 0%,
+    rgba(255, 255, 255, 0.92) 50%,
+    rgba(224, 231, 255, 0.32) 100%
   ) !important;
   border: 1px solid var(--light-border) !important;
   border-radius: 1rem;
