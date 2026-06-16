@@ -3,6 +3,8 @@
  * Stores analytics in localStorage and provides insights
  */
 
+import { validateFilterEvents } from './storage-schema';
+
 export interface FilterEvent {
   timestamp: number;
   action: 'apply' | 'remove' | 'clear';
@@ -44,7 +46,8 @@ export function trackFilterEvent(event: Omit<FilterEvent, 'timestamp'>): void {
 export function getFilterAnalytics(): FilterEvent[] {
   try {
     const data = localStorage.getItem(ANALYTICS_KEY);
-    return data ? JSON.parse(data) : [];
+    if (!data) return [];
+    return validateFilterEvents(JSON.parse(data)) as FilterEvent[];
   } catch (error) {
     console.warn('Failed to get filter analytics:', error);
     return [];

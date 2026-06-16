@@ -39,19 +39,52 @@ improve the experience of the same browser session. The full list:
 |-------------------------------------------|----------------|----------------------------------------------|
 | `banal-lang`                              | localStorage   | Persisted language choice (en / ja).         |
 | `banal-theme`                             | sessionStorage | Light/dark override for this tab.            |
-| `banal-saved-filters`                     | localStorage   | Saved directory filters.                     |
-| `banal-custom-stacks`                     | localStorage   | User-created tool stacks.                    |
-| `banal-filter-analytics`                  | localStorage   | Aggregated, anonymous filter usage counts.   |
-| `banal-prompt-form-<id>-<lang>`           | sessionStorage | Prompt-template form values, per template.   |
+| `banal_saved_filters`                     | localStorage   | Named filter presets per section (models, stacks, etc.). |
+| `banal_custom_stacks`                     | localStorage   | User-created tool stacks.                    |
+| `banal_filter_analytics`                  | localStorage   | Anonymous local filter-usage counts for suggestions. |
+| `banal-pt-<id>-<lang>`                    | sessionStorage | Prompt-template form values (cleared when tab closes). |
+| `banal-privacy-banner-dismissed`          | sessionStorage | Prompt-templates privacy banner dismissed for this tab. |
 
-`banal-filter-analytics` is the only entry that resembles "analytics". It
+Use **Stored data** in the site footer or header to open the Privacy panel: review what
+stays in this tab vs on this device, and clear prompt drafts, saved filters,
+custom stacks, or everything in one place.
+
+`banal_filter_analytics` is the only entry that resembles "analytics". It
 counts how often a filter combination is applied, locally, so the UI can
 offer it as a one-click shortcut. The data never leaves the browser. It
 is the same class of "I added a counter" feature you would find in a
 client-side notebook; it is not telemetry.
 
+### Tab close with prompt drafts
+
+If you have typed in a prompt template form this tab, Banal registers a
+best-effort `beforeunload` handler so the browser may show a generic
+"leave site?" prompt. Browsers do not allow custom text for that dialog.
+The primary UX is the Privacy panel and the dismissible banner above
+Prompt Templates after your first keystroke.
+
 You can inspect or delete any of these from the browser DevTools
 (Application → Storage) at any time.
+
+---
+
+## Storage policy (portfolio summary)
+
+**What we store**
+
+| Tier | Keys | Why |
+|------|------|-----|
+| This tab only | `banal-theme`, `banal-pt-*`, `banal-privacy-banner-dismissed` | Ephemeral UX: theme override, prompt drafts, banner dismiss |
+| This device | `banal-lang`, `banal_saved_filters`, `banal_custom_stacks`, `banal_filter_analytics` | Language, named filter presets, custom stacks, anonymous suggestion counts |
+
+**What we never store or send**
+
+- API keys, chat history, accounts, or analytics to Banal servers (there is no backend).
+
+**How to clear**
+
+- Footer or header **Stored data** → Privacy panel → scoped or **Clear everything**.
+- Private/incognito window for one-off use on a shared device.
 
 The app does **not** store:
 

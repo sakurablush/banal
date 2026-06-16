@@ -9,7 +9,14 @@ import type { AIModel } from '../types/tool';
 import { renderModelDetail } from './model-detail';
 import { trackFilterEvent } from '../lib/filter-analytics';
 import { localizeUseCase } from '../lib/model-localization';
-import { createShareFiltersButton, getSectionParams } from '../lib/section-filter-url';
+import { getSectionParams } from '../lib/section-filter-url';
+import { renderFilterToolbar } from './filter-toolbar';
+import {
+  applyModelsFilterValues,
+  countModelsForValues,
+} from '../lib/apply-section-filters';
+import { getRawSuggestionsForSection } from '../lib/filter-suggestions';
+import type { FilterSuggestion } from '../lib/filter-suggestions';
 
 const MODEL_USE_CASES = [
   'coding',
@@ -24,15 +31,42 @@ const MODEL_USE_CASES = [
 ] as const;
 
 function applyModelsUrlState(state: ModelsPanelState): void {
-  const fromUrl = getSectionParams('models');
-  const families = new Set(getModelFamilies());
-  const licenses = new Set(aiModels.map((m) => m.license.type));
-  const useCases = new Set<string>(MODEL_USE_CASES);
+  applyModelsFilterValues(state, getSectionParams('models'));
+}
 
-  if (fromUrl.family && families.has(fromUrl.family)) state.familyFilter = fromUrl.family;
-  if (fromUrl.useCase && useCases.has(fromUrl.useCase)) state.useCaseFilter = fromUrl.useCase;
-  if (fromUrl.license && licenses.has(fromUrl.license)) state.licenseFilter = fromUrl.license;
-  if (fromUrl.q) state.query = fromUrl.q.slice(0, 200);
+function buildModelsSuggestions(lang: Lang): FilterSuggestion[] {
+  const raw = getRawSuggestionsForSection('models', 8);
+  const out: FilterSuggestion[] = [];
+  for (const { values, analyticsKey } of raw) {
+    if (countModelsForValues(values) === 0) continue;
+    let label = '';
+    if (values.useCase) label = localizeUseCase(values.useCase, lang);
+    else if (values.family) label = values.family;
+    else if (values.license) label = values.license;
+    else if (values.q) label = `"${values.q}"`;
+    else continue;
+    out.push({ label, values, analyticsKey });
+    if (out.length >= 3) break;
+  }
+  return out;
+}
+
+function refreshModelsFilterBar(state: ModelsPanelState): void {
+  const container = state.container;
+  if (!container) return;
+  const old = container.querySelector('.models-filter-bar');
+  const newBar = renderFilterBar(state);
+  if (old) old.replaceWith(newBar);
+}
+
+function applyModelsFilters(state: ModelsPanelState, values: Record<string, string>): void {
+  applyModelsFilterValues(state, values);
+  const searchInput = state.container?.querySelector(
+    '.models-search-input'
+  ) as HTMLInputElement | null;
+  if (searchInput) searchInput.value = state.query;
+  refreshModelsFilterBar(state);
+  renderContent(state);
 }
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
@@ -493,22 +527,20 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   }
   bar.appendChild(quickChips);
 
-  // Share link button
-  const actionsRow = create('div', 'models-filter-actions');
-  actionsRow.appendChild(
-    createShareFiltersButton({
+  bar.appendChild(
+    renderFilterToolbar({
       section: 'models',
       lang: state.lang,
-      className: 'models-filter-btn',
       getValues: () => ({
         family: state.familyFilter,
         useCase: state.useCaseFilter,
         license: state.licenseFilter,
         q: state.query.trim() || null,
       }),
+      onApply: (values) => applyModelsFilters(state, values),
+      suggestions: buildModelsSuggestions(state.lang),
     })
   );
-  bar.appendChild(actionsRow);
 
   return bar;
 }

@@ -4,13 +4,19 @@
  */
 
 import type { Lang } from '../i18n';
+import { t } from '../i18n';
 import { toolStacks, getStackAudiences } from '../data/tool-stacks';
 import type { ToolStack, StackAudience } from '../types/tool';
 import { renderStackDetail } from './stack-detail';
 import { trackFilterEvent } from '../lib/filter-analytics';
-import { customizeStack, saveCustomStack } from '../lib/stack-customization';
+import { customizeStack, getCustomStacks, deleteCustomStack, type CustomStack } from '../lib/stack-customization';
+import { openCustomStackEditor } from './custom-stack-editor';
 import { getLocalizedStack } from '../lib/stack-localization';
-import { createShareFiltersButton, getSectionParams } from '../lib/section-filter-url';
+import { getSectionParams } from '../lib/section-filter-url';
+import { renderFilterToolbar } from './filter-toolbar';
+import { applyStacksFilterValues } from '../lib/apply-section-filters';
+import { getRawSuggestionsForSection } from '../lib/filter-suggestions';
+import type { FilterSuggestion } from '../lib/filter-suggestions';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -35,6 +41,12 @@ const COPY = {
     showing: (n: number) => `${n} stacks`,
     noMatches: 'No stacks match this audience',
     optional: 'optional',
+    myStacks: 'My Stacks',
+    customBadge: 'Custom',
+    customize: 'Customize',
+    edit: 'Edit',
+    delete: 'Delete',
+    deleteConfirm: 'Delete this custom stack?',
   },
   ja: {
     title: 'ツールスタック',
@@ -56,6 +68,12 @@ const COPY = {
     showing: (n: number) => `${n}スタック`,
     noMatches: '一致するスタックがありません',
     optional: 'オプション',
+    myStacks: 'マイスタック',
+    customBadge: 'カスタム',
+    customize: 'カスタマイズ',
+    edit: '編集',
+    delete: '削除',
+    deleteConfirm: 'このカスタムスタックを削除しますか？',
   },
 } satisfies Record<Lang, Record<string, string | ((...args: number[]) => string)>>;
 
@@ -88,11 +106,58 @@ function span(className: string, text: string): HTMLSpanElement {
   return el;
 }
 
+function buildStacksSuggestions(lang: Lang): FilterSuggestion[] {
+  const raw = getRawSuggestionsForSection('stacks', 8);
+  const out: FilterSuggestion[] = [];
+  for (const { values, analyticsKey } of raw) {
+    if (!values.audience) continue;
+    const aud = values.audience as StackAudience;
+    const labelDef = AUDIENCE_LABELS[aud];
+    if (!labelDef) continue;
+    const count = toolStacks.filter((s) => s.audience.type === aud).length;
+    if (count === 0) continue;
+    out.push({
+      label: `${labelDef.icon} ${labelDef[lang]}`,
+      values,
+      analyticsKey,
+    });
+    if (out.length >= 3) break;
+  }
+  return out;
+}
+
+function refreshStacksAudienceChips(state: StacksPanelState): void {
+  const chips = state.container?.querySelectorAll('.stacks-audience-chip');
+  if (!chips) return;
+  const audiences = getStackAudiences();
+  chips.forEach((chip, i) => {
+    if (i === 0) {
+      chip.classList.toggle('active', state.audienceFilter === null);
+    } else {
+      const aud = audiences[i - 1];
+      chip.classList.toggle('active', state.audienceFilter === aud);
+    }
+  });
+}
+
+function applyStacksFilters(state: StacksPanelState, values: Record<string, string>): void {
+  applyStacksFilterValues(state, values);
+  refreshStacksAudienceChips(state);
+  renderContent(state);
+}
+
 // ─── Render: Stack Card ─────────────────────────────────────────────────────
 
-function renderStackCard(state: StacksPanelState, stack: ToolStack): HTMLElement {
+function renderStackCard(
+  state: StacksPanelState,
+  stack: ToolStack,
+  options?: { isCustom?: boolean }
+): HTMLElement {
   const copy = COPY[state.lang];
-  stack = getLocalizedStack(stack, state.lang);
+  const isCustom = options?.isCustom ?? false;
+  if (!isCustom) {
+    stack = getLocalizedStack(stack, state.lang);
+  }
   const card = create('article', 'stack-card');
 
   // Header
@@ -100,6 +165,11 @@ function renderStackCard(state: StacksPanelState, stack: ToolStack): HTMLElement
   const name = create('h3', 'stack-card-name');
   name.textContent = stack.name;
   header.appendChild(name);
+
+  if (isCustom) {
+    const badge = span('stack-custom-badge', typeof copy.customBadge === 'string' ? copy.customBadge : 'Custom');
+    header.appendChild(badge);
+  }
 
   const meta = create('div', 'stack-card-meta');
   const audienceLabel = AUDIENCE_LABELS[stack.audience.type];
@@ -184,21 +254,50 @@ function renderStackCard(state: StacksPanelState, stack: ToolStack): HTMLElement
   costSection.appendChild(costList);
   card.appendChild(costSection);
 
-  // Customize button
-  const customizeBtn = create('button', 'stack-customize-btn');
-  customizeBtn.type = 'button';
-  customizeBtn.textContent = state.lang === 'ja' ? '🔧 カスタマイズ' : '🔧 Customize';
-  customizeBtn.title = state.lang === 'ja' ? 'このスタックをカスタマイズ' : 'Customize this stack';
-  customizeBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent opening detail view
-    const customStack = customizeStack(stack);
-    saveCustomStack(customStack);
-    customizeBtn.textContent = state.lang === 'ja' ? '✓ 保存しました！' : '✓ Saved!';
-    setTimeout(() => {
-      customizeBtn.textContent = state.lang === 'ja' ? '🔧 カスタマイズ' : '🔧 Customize';
-    }, 2000);
-  });
-  card.appendChild(customizeBtn);
+  if (isCustom) {
+    const actions = create('div', 'stack-card-actions');
+    const editBtn = create('button', 'stack-customize-btn');
+    editBtn.type = 'button';
+    editBtn.textContent = typeof copy.edit === 'string' ? copy.edit : 'Edit';
+    editBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openCustomStackEditor({
+        lang: state.lang,
+        stack: stack as CustomStack,
+        onSaved: () => renderContent(state),
+        onCancel: () => {},
+      });
+    });
+    const deleteBtn = create('button', 'stack-delete-btn');
+    deleteBtn.type = 'button';
+    deleteBtn.textContent = typeof copy.delete === 'string' ? copy.delete : 'Delete';
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const msg = typeof copy.deleteConfirm === 'string' ? copy.deleteConfirm : 'Delete?';
+      if (!window.confirm(msg)) return;
+      deleteCustomStack(stack.id);
+      renderContent(state);
+    });
+    actions.append(editBtn, deleteBtn);
+    card.appendChild(actions);
+  } else {
+    const customizeBtn = create('button', 'stack-customize-btn');
+    customizeBtn.type = 'button';
+    customizeBtn.textContent =
+      typeof copy.customize === 'string' ? `🔧 ${copy.customize}` : '🔧 Customize';
+    customizeBtn.title = t(state.lang, 'stacks.customizeTitle');
+    customizeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openCustomStackEditor({
+        lang: state.lang,
+        stack: customizeStack(stack),
+        isNew: true,
+        onSaved: () => renderContent(state),
+        onCancel: () => {},
+      });
+    });
+    card.appendChild(customizeBtn);
+  }
 
   // Click to open detail view
   card.style.cursor = 'pointer';
@@ -250,7 +349,21 @@ function renderContent(state: StacksPanelState): void {
   contentArea.innerHTML = '';
   const copy = COPY[state.lang];
 
-  // Filter stacks
+  const customStacks = getCustomStacks();
+  if (customStacks.length > 0) {
+    const mySection = create('div', 'stacks-my-section');
+    const myTitle = create('h3', 'stacks-my-title');
+    myTitle.textContent = typeof copy.myStacks === 'string' ? copy.myStacks : 'My Stacks';
+    mySection.appendChild(myTitle);
+    const myGrid = create('div', 'stacks-grid');
+    for (const stack of customStacks) {
+      myGrid.appendChild(renderStackCard(state, stack, { isCustom: true }));
+    }
+    mySection.appendChild(myGrid);
+    contentArea.appendChild(mySection);
+  }
+
+  // Filter curated stacks
   let stacks = [...toolStacks];
   if (state.audienceFilter) {
     stacks = stacks.filter((s) => s.audience.type === state.audienceFilter);
@@ -374,19 +487,15 @@ export function renderStacksPanel(
   }
   audienceRow.appendChild(chips);
 
-  // Share link button
-  const actionsRow = create('div', 'stacks-filter-actions');
-  actionsRow.appendChild(
-    createShareFiltersButton({
+  audienceRow.appendChild(
+    renderFilterToolbar({
       section: 'stacks',
       lang: state.lang,
-      className: 'stacks-filter-btn',
-      getValues: () => ({
-        audience: state.audienceFilter,
-      }),
+      getValues: () => ({ audience: state.audienceFilter }),
+      onApply: (values) => applyStacksFilters(state, values),
+      suggestions: buildStacksSuggestions(state.lang),
     })
   );
-  audienceRow.appendChild(actionsRow);
   container.appendChild(audienceRow);
 
   // Content area

@@ -329,3 +329,26 @@ describe('initI18n (wires buttons + initial apply)', () => {
     expect(localStorage.getItem('banal-lang')).toBe('ja');
   });
 });
+
+describe('filters and privacy i18n keys', () => {
+  const filterKeys = [
+    'filters.shareLink',
+    'filters.save',
+    'filters.savedMenu',
+    'filters.oftenUsed',
+    'footer.storedData',
+    'privacy.title',
+    'privacy.clearAll',
+    'privacy.banner',
+    'stacks.editor.titleNew',
+    'stacks.customizeTitle',
+    'privacy.close',
+  ];
+
+  for (const key of filterKeys) {
+    it(`has EN and JA for ${key}`, () => {
+      expect(t('en', key)).not.toBe(key);
+      expect(t('ja', key)).not.toBe(key);
+    });
+  }
+});

@@ -5,6 +5,7 @@
 
 import type { ToolStack } from '../types/tool';
 import { zeroKeyTools } from '../data/zero-key-tools';
+import { validateCustomStacks } from './storage-schema';
 
 const CUSTOM_STACKS_KEY = 'banal_custom_stacks';
 
@@ -19,7 +20,8 @@ export interface CustomStack extends ToolStack {
 export function getCustomStacks(): CustomStack[] {
   try {
     const data = localStorage.getItem(CUSTOM_STACKS_KEY);
-    return data ? JSON.parse(data) : [];
+    if (!data) return [];
+    return validateCustomStacks(JSON.parse(data)) as CustomStack[];
   } catch (error) {
     console.warn('Failed to get custom stacks:', error);
     return [];
@@ -29,7 +31,7 @@ export function getCustomStacks(): CustomStack[] {
 /**
  * Save a custom stack to localStorage
  */
-export function saveCustomStack(stack: CustomStack): void {
+export function saveCustomStack(stack: CustomStack): boolean {
   try {
     const stacks = getCustomStacks();
     const existingIndex = stacks.findIndex(s => s.id === stack.id);
@@ -37,12 +39,18 @@ export function saveCustomStack(stack: CustomStack): void {
     if (existingIndex >= 0) {
       stacks[existingIndex] = stack;
     } else {
+      if (stacks.length >= 20) {
+        console.warn('Custom stack limit reached (20)');
+        return false;
+      }
       stacks.push(stack);
     }
     
     localStorage.setItem(CUSTOM_STACKS_KEY, JSON.stringify(stacks));
+    return true;
   } catch (error) {
     console.warn('Failed to save custom stack:', error);
+    return false;
   }
 }
 

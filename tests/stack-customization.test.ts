@@ -62,6 +62,17 @@ describe('Stack Customization', () => {
       expect(stacks).toHaveLength(1);
       expect(stacks[0].name).toBe('Updated Name');
     });
+
+    it('should refuse more than 20 custom stacks', () => {
+      const baseStack = toolStacks[0];
+      for (let i = 0; i < 21; i++) {
+        const stack = { ...customizeStack(baseStack), id: `custom-test-${i}` };
+        const ok = saveCustomStack(stack);
+        if (i < 20) expect(ok).toBe(true);
+        else expect(ok).toBe(false);
+      }
+      expect(getCustomStacks()).toHaveLength(20);
+    });
   });
 
   describe('deleteCustomStack', () => {

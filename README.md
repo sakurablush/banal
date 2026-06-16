@@ -117,7 +117,7 @@ Full instructions, real-life examples, and self-checks live in
 - **No runtime npm dependencies** for end users. Dependencies only affect
   contributors and CI.
 - **Test gate:** `npm run ci` runs lint, typecheck, and the full Vitest suite
-  (currently 541 tests across 22 files). Coverage is enforced.
+  (currently 618 tests across 29 files). Coverage is enforced.
 - **CI:** lint + typecheck + test + audit on every push, plus a weekly
   [`verify-tools`](.github/workflows/verify-tools.yml) workflow that audits
   every tool URL and writes a date-stamped summary to

@@ -178,6 +178,65 @@ export const translations: Record<Lang, Translations> = {
     // === Footer buttons ===
     'footer.viewOnGithub': 'View on GitHub →',
     'footer.reportIssue': 'Report Issue →',
+    'footer.storedData': 'Stored data',
+
+    // === Filters toolbar ===
+    'filters.shareLink': 'Share link',
+    'filters.shareCopied': 'Copied!',
+    'filters.shareError': 'Copy failed',
+    'filters.shareTitle': 'Copy a link to this filtered view',
+    'filters.save': 'Save filter',
+    'filters.saved': 'Saved!',
+    'filters.savedMenu': 'Saved filters',
+    'filters.savedEmpty': 'No saved filters yet',
+    'filters.saveTitle': 'Save current filters',
+    'filters.saveNameLabel': 'Name',
+    'filters.saveNamePlaceholder': 'My filter',
+    'filters.saveConfirm': 'Save',
+    'filters.cancel': 'Cancel',
+    'filters.delete': 'Delete',
+    'filters.oftenUsed': 'Often used:',
+    'filters.apply': 'Apply',
+
+    // === Privacy ===
+    'privacy.title': 'Stored data on this device',
+    'privacy.intro':
+      'Banal does not send your filters, stacks, or form drafts to any server. Here is what stays in your browser and how to clear it.',
+    'privacy.sessionTitle': 'This tab only',
+    'privacy.sessionBody':
+      'Prompt form drafts and theme choice clear when you close this tab. Use a private window on shared computers.',
+    'privacy.localTitle': 'This device',
+    'privacy.localBody':
+      'Saved filters, custom stacks, language preference, and anonymous filter-usage counts (for “Often used” suggestions) stay until you clear them below.',
+    'privacy.neverSent': 'Nothing listed here is uploaded to Banal or third parties.',
+    'privacy.clearPrompts': 'Clear prompt drafts',
+    'privacy.clearPromptsConfirm': 'Remove all prompt form text saved in this tab?',
+    'privacy.clearFilters': 'Clear saved filters',
+    'privacy.clearFiltersConfirm': 'Remove all saved filter presets from this device?',
+    'privacy.clearStacks': 'Clear custom stacks',
+    'privacy.clearStacksConfirm': 'Remove all custom tool stacks from this device?',
+    'privacy.clearAll': 'Clear everything',
+    'privacy.clearAllConfirm':
+      'Remove all Banal data from this browser (filters, stacks, filter suggestions, prompts in this tab, language, theme)?',
+    'privacy.close': 'Close',
+    'privacy.done': 'Done',
+    'privacy.banner':
+      'Your prompt answers stay in this tab only — they clear when you close it. Shared computer? Clear them anytime.',
+    'privacy.bannerLink': 'Stored data',
+    'privacy.bannerDismiss': 'Got it',
+
+    // === Custom stacks editor ===
+    'stacks.editor.titleEdit': 'Edit custom stack',
+    'stacks.editor.titleNew': 'Customize stack',
+    'stacks.editor.nameLabel': 'Stack name',
+    'stacks.editor.toolsLabel': 'Tools',
+    'stacks.editor.rolePlaceholder': 'Role in stack',
+    'stacks.editor.addTool': 'Add tool',
+    'stacks.editor.searchTools': 'Search tools…',
+    'stacks.editor.save': 'Save',
+    'stacks.editor.remove': 'Remove',
+    'stacks.editor.noTools': 'Add at least one tool',
+    'stacks.customizeTitle': 'Customize this stack',
 
     // === Error states ===
     'error.unableToLoadAiTools': '⚠️ Unable to load AI tools',
@@ -390,6 +449,65 @@ export const translations: Record<Lang, Translations> = {
     // === Footer buttons ===
     'footer.viewOnGithub': 'GitHubで見る →',
     'footer.reportIssue': '問題を報告 →',
+    'footer.storedData': 'データの保存',
+
+    // === Filters toolbar ===
+    'filters.shareLink': 'リンクを共有',
+    'filters.shareCopied': 'コピーしました！',
+    'filters.shareError': 'コピーに失敗しました',
+    'filters.shareTitle': 'この絞り込み状態のリンクをコピー',
+    'filters.save': 'フィルターを保存',
+    'filters.saved': '保存しました！',
+    'filters.savedMenu': '保存済み',
+    'filters.savedEmpty': '保存済みフィルターはありません',
+    'filters.saveTitle': '現在のフィルターを保存',
+    'filters.saveNameLabel': '名前',
+    'filters.saveNamePlaceholder': 'マイフィルター',
+    'filters.saveConfirm': '保存',
+    'filters.cancel': 'キャンセル',
+    'filters.delete': '削除',
+    'filters.oftenUsed': 'よく使う:',
+    'filters.apply': '適用',
+
+    // === Privacy ===
+    'privacy.title': 'この端末に保存されたデータ',
+    'privacy.intro':
+      'Banalはフィルター、スタック、フォームの下書きをサーバーに送信しません。ブラウザに残る内容と削除方法です。',
+    'privacy.sessionTitle': 'このタブのみ',
+    'privacy.sessionBody':
+      'プロンプトの下書きとテーマはタブを閉じると消えます。共有PCではプライベートウィンドウをご利用ください。',
+    'privacy.localTitle': 'この端末に残るもの',
+    'privacy.localBody':
+      '保存したフィルター、カスタムスタック、言語設定、および「よく使う」候補用の匿名フィルター利用回数は、下のボタンで消すまで残ります。',
+    'privacy.neverSent': 'ここに表示されるデータはBanalや第三者にアップロードされません。',
+    'privacy.clearPrompts': 'プロンプト下書きを消す',
+    'privacy.clearPromptsConfirm': 'このタブのプロンプト入力をすべて削除しますか？',
+    'privacy.clearFilters': '保存フィルターを消す',
+    'privacy.clearFiltersConfirm': 'この端末の保存済みフィルターをすべて削除しますか？',
+    'privacy.clearStacks': 'カスタムスタックを消す',
+    'privacy.clearStacksConfirm': 'この端末のカスタムスタックをすべて削除しますか？',
+    'privacy.clearAll': 'すべて消す',
+    'privacy.clearAllConfirm':
+      'このブラウザのBanalデータをすべて削除しますか？（フィルター、スタック、フィルター候補、このタブのプロンプト、言語、テーマ）',
+    'privacy.close': '閉じる',
+    'privacy.done': '完了',
+    'privacy.banner':
+      'プロンプトの回答はこのタブだけに保存されます。タブを閉じると消えます。共有PCの場合はいつでも消せます。',
+    'privacy.bannerLink': 'データの保存',
+    'privacy.bannerDismiss': '了解',
+
+    // === Custom stacks editor ===
+    'stacks.editor.titleEdit': 'カスタムスタックを編集',
+    'stacks.editor.titleNew': 'スタックをカスタマイズ',
+    'stacks.editor.nameLabel': 'スタック名',
+    'stacks.editor.toolsLabel': 'ツール',
+    'stacks.editor.rolePlaceholder': 'スタック内の役割',
+    'stacks.editor.addTool': 'ツールを追加',
+    'stacks.editor.searchTools': 'ツールを検索…',
+    'stacks.editor.save': '保存',
+    'stacks.editor.remove': '削除',
+    'stacks.editor.noTools': 'ツールを1つ以上追加してください',
+    'stacks.customizeTitle': 'このスタックをカスタマイズ',
 
     // === Error states ===
     'error.unableToLoadAiTools': '⚠️ AIツールを読み込めませんでした',

@@ -24,7 +24,7 @@ principles behind the project are in [`SPIRIT.md`](../SPIRIT.md).
   quality and a parity test gate.
 - **A weekly catalog audit** that verifies every tool URL and writes a
   date-stamped summary to [`docs/verification/`](../docs/verification/).
-- **A complete CI gate**: lint, typecheck, 541 tests across 22 files,
+- **A complete CI gate**: lint, typecheck, 618 tests across 29 files,
   and `npm audit --audit-level=moderate` on every push.
 - **MIT license.** Fork, rename, host, give away.
 
@@ -42,7 +42,7 @@ voice in the user-facing copy met the editorial test in
 - The number of prompt templates in the README matches the `TEMPLATES`
   object in `src/lib/prompt-templates.ts` (9).
 - The test counts in the documentation match the output of
-  `npm run test:run` (541 tests across 22 files).
+  `npm run test:run` (618 tests across 29 files).
 - The tool URLs in the README are a real subset of the entries in the
   catalog data file. No marketing-only entries.
 - Every user-facing string has parallel English and Japanese

@@ -40,11 +40,12 @@ devices. If that is you:
 
 The app's data usage is documented in
 [`docs/SECURITY.md`](docs/SECURITY.md#data-the-browser-stores-locally).
-The short version: the only persistent state is the language choice,
-saved filter combinations, custom tool stacks, theme override, and
-prompt-template form values (the last two in `sessionStorage`). There
-are no API keys, no chat history, and no personal information
-collected.
+The short version: persistent state on this device includes language,
+saved filter presets, custom tool stacks, and anonymous filter-usage
+counts. This tab only holds theme override and prompt-template form
+drafts (`sessionStorage`). Use the footer or header **Stored data** link to review
+or clear any of it. There are no API keys, no chat history, and no
+personal information collected by Banal itself.
 
 ---
 

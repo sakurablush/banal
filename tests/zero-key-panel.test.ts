@@ -714,6 +714,10 @@ describe('zero-key panel API methods', () => {
       const typeBadge = card.querySelector('.zk2-access-ai');
       expect(typeBadge).toBeTruthy();
     }
+
+    const toolbar = root.querySelector('.filter-toolbar');
+    expect(toolbar).toBeTruthy();
+    expect(toolbar?.querySelectorAll('.filter-toolbar-actions .filter-share-btn').length).toBeGreaterThanOrEqual(3);
   });
 
   it('renders with categoryPrefix dev showing only Dev tools', () => {

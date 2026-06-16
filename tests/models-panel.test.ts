@@ -64,11 +64,13 @@ describe('Models Panel', () => {
     api.destroy();
   });
 
-  it('should render filter action buttons', () => {
+  it('should render unified filter toolbar', () => {
     const api = renderModelsPanel(container, { lang: 'en' });
 
-    const actionBtns = container.querySelectorAll('.models-filter-btn');
-    expect(actionBtns.length).toBe(1);
+    const toolbar = container.querySelector('.filter-toolbar');
+    expect(toolbar).toBeTruthy();
+    const shareSave = toolbar?.querySelectorAll('.filter-toolbar-actions .filter-share-btn');
+    expect(shareSave?.length).toBeGreaterThanOrEqual(3);
 
     api.destroy();
   });

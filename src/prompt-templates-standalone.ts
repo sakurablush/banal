@@ -16,7 +16,13 @@
 
 import { PromptTemplatesLibrary, type Locale, type PromptTemplate } from './lib/prompt-templates';
 import { createCloseButton } from './lib/close-button';
-import { createShareFiltersButton, getSectionParams } from './lib/section-filter-url';
+import { getSectionParams } from './lib/section-filter-url';
+import { renderFilterToolbar } from './components/filter-toolbar';
+import { applyPromptsFilterValues } from './lib/apply-section-filters';
+import { getRawSuggestionsForSection } from './lib/filter-suggestions';
+import type { FilterSuggestion } from './lib/filter-suggestions';
+import { trackFilterEvent } from './lib/filter-analytics';
+import { onPromptFormInput } from './lib/privacy-banner';
 
 const STORAGE_PREFIX = 'banal-pt-';
 
@@ -97,6 +103,55 @@ interface PromptAccordionResult {
   focusCleanup: () => void;
 }
 
+function getCategoryLabel(catId: string, lang: Locale): string {
+  const cat = PROMPT_CATEGORIES.find((c) => c.id === catId);
+  if (!cat) return catId;
+  return lang === 'ja' ? cat.labelJa : cat.labelEn;
+}
+
+function buildPromptSuggestions(state: PromptTemplatesViewState): FilterSuggestion[] {
+  const raw = getRawSuggestionsForSection('prompts', 8);
+  const validCategories = new Set(
+    PROMPT_CATEGORIES.map((c) => c.id).filter((id) => id !== 'all')
+  );
+  const out: FilterSuggestion[] = [];
+  for (const { values, analyticsKey } of raw) {
+    if (!values.cat || !validCategories.has(values.cat)) continue;
+    const count = getPromptsForCategory(values.cat, state.prompts).length;
+    if (count === 0) continue;
+    out.push({
+      label: getCategoryLabel(values.cat, state.lang),
+      values,
+      analyticsKey,
+    });
+    if (out.length >= 3) break;
+  }
+  return out;
+}
+
+
+function selectPromptCategory(state: PromptTemplatesViewState, catId: string): void {
+  const prev = state.selectedCategory;
+  state.selectedCategory = catId;
+  const count = getPromptsForCategory(catId, state.prompts).length;
+  if (catId === 'all') {
+    trackFilterEvent({
+      action: 'remove',
+      filterType: 'category',
+      filterValue: `cat:${prev}`,
+      resultCount: count,
+    });
+  } else {
+    trackFilterEvent({
+      action: 'apply',
+      filterType: 'category',
+      filterValue: `cat:${catId}`,
+      resultCount: count,
+    });
+  }
+  reRenderHorizontal(state);
+}
+
 // ─── SessionStorage Helpers ──────────────────────────────────────────────────────
 
 function getSavedValues(templateId: string, lang: Locale): Record<string, string> {
@@ -112,6 +167,7 @@ function getSavedValues(templateId: string, lang: Locale): Record<string, string
 function saveValues(templateId: string, lang: Locale, values: Record<string, string>): void {
   try {
     sessionStorage.setItem(STORAGE_PREFIX + templateId + '-' + lang, JSON.stringify(values));
+    onPromptFormInput(lang, values);
   } catch {
     // ignore storage errors
   }
@@ -202,7 +258,7 @@ function renderHorizontalLayout(state: PromptTemplatesViewState): void {
   // Quick filters row
   const filtersRow = createQuickFilters(state);
   layout.appendChild(filtersRow);
-  layout.appendChild(createShareActions(state));
+  layout.appendChild(createFilterToolbar(state));
 
   // Content area with grid
   const content = document.createElement('div');
@@ -255,8 +311,7 @@ function createSidebar(state: PromptTemplatesViewState): HTMLElement {
       state.lang === 'ja' ? `${labelText}でフィルター` : `Filter by ${labelText}`
     );
     item.addEventListener('click', () => {
-      state.selectedCategory = cat.id;
-      reRenderHorizontal(state);
+      selectPromptCategory(state, cat.id);
     });
     sidebar.appendChild(item);
   }
@@ -298,8 +353,7 @@ function createQuickFilters(state: PromptTemplatesViewState): HTMLElement {
       state.lang === 'ja' ? `${label}でフィルター` : `Filter by ${label}`
     );
     chip.addEventListener('click', () => {
-      state.selectedCategory = cat.id;
-      reRenderHorizontal(state);
+      selectPromptCategory(state, cat.id);
     });
     row.appendChild(chip);
   }
@@ -307,19 +361,24 @@ function createQuickFilters(state: PromptTemplatesViewState): HTMLElement {
   return row;
 }
 
-function createShareActions(state: PromptTemplatesViewState): HTMLElement {
-  const shareRow = document.createElement('div');
-  shareRow.className = 'filter-share-actions';
-  shareRow.appendChild(
-    createShareFiltersButton({
-      section: 'prompts',
-      lang: state.lang,
-      getValues: () => ({
-        cat: state.selectedCategory !== 'all' ? state.selectedCategory : null,
-      }),
-    })
+function createFilterToolbar(state: PromptTemplatesViewState): HTMLElement {
+  const validCategories = new Set(
+    PROMPT_CATEGORIES.map((c) => c.id).filter((id) => id !== 'all')
   );
-  return shareRow;
+  validCategories.add('all');
+
+  return renderFilterToolbar({
+    section: 'prompts',
+    lang: state.lang,
+    getValues: () => ({
+      cat: state.selectedCategory !== 'all' ? state.selectedCategory : null,
+    }),
+    onApply: (values) => {
+      applyPromptsFilterValues(state, values, validCategories);
+      reRenderHorizontal(state);
+    },
+    suggestions: buildPromptSuggestions(state),
+  });
 }
 
 function createPromptGridContainer(state: PromptTemplatesViewState): HTMLElement {

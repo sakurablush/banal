@@ -44,7 +44,7 @@ to behave maliciously. We mitigate that with a strict threat model in
   HTML, CSS, and JS in `dist/`.
 - **Styling:** Tailwind CSS 3.x + a small custom CSS layer
   (`src/style.css`) for the few things Tailwind cannot do ergonomically.
-- **Tests:** [Vitest](https://vitest.dev) 4.x with jsdom. 541 tests across 22
+- **Tests:** [Vitest](https://vitest.dev) 4.x with jsdom. 618 tests across 29
   files. Coverage thresholds are enforced in `vitest.config.ts`.
 - **Lint / format:** ESLint + Prettier.
 - **Runtime dependencies for end users:** **none.** The `dist/` folder is
@@ -62,7 +62,7 @@ and `npm audit --audit-level=moderate` is part of the CI gate.
 banal/
 ├── index.html                # The static shell. Two roots: <ai-tools-root> and <dev-tools-root>.
 ├── src/
-│   ├── main.ts               # Entry point. Boots theme, i18n, hero mesh, directory, prompt templates.
+│   ├── main.ts               # Entry point. Boots theme, storage migration, privacy guard, i18n, directory, prompts.
 │   ├── directory.ts          # Renders the AI Tools and Developer Tools panels.
 │   ├── zero-key-panel.ts     # The single panel renderer used for both top-level groups.
 │   ├── i18n.ts               # Bilingual string table + lang switcher (en, ja).
@@ -70,9 +70,9 @@ banal/
 │   ├── fuse-search.ts        # Fuzzy search across the tool catalog.
 │   ├── utils.ts              # Pure helpers (escapeHtml, formatters, etc.).
 │   ├── prompt-templates-standalone.ts  # Renders the "Prompt Templates" section.
-│   ├── components/           # Discrete UI panels: models, stacks, onboarding, cost calc, etc.
+│   ├── components/           # Discrete UI panels: models, stacks, filter-toolbar, privacy-panel, etc.
 │   ├── data/                 # Catalog data: tools, models, categories, tags, inference providers, stacks.
-│   ├── lib/                  # Pure modules: filter-sharing, filter-analytics, prompt-templates, etc.
+│   ├── lib/                  # Pure modules: saved-section-filters, filter-analytics, storage-cleanup, etc.
 │   └── types/                # Shared TypeScript types.
 ├── scripts/
 │   ├── verify-tools.ts       # Audits every tool URL, writes full report + dated summary.
@@ -104,7 +104,11 @@ banal/
 6. Render the "Prompt Templates" section into `#prompt-templates-root`.
 
 Everything else (filter UI, search, saving filters, comparing tools) is wired
-up by the components themselves.
+up by the components themselves. Filter modules share a compact
+`filter-toolbar` component (`Share link`, `Save`, `Saved` menu, optional
+suggestion chips). Saved presets live in `saved-section-filters.ts`; the
+Privacy panel and `storage-cleanup.ts` expose what is stored and how to
+clear it.
 
 ---
 
@@ -210,7 +214,7 @@ output text never contains shaming phrases.
 
 ## Testing & quality gates
 
-- **Coverage:** the full test suite is 541 tests across 22 files. Thresholds
+- **Coverage:** the full test suite is 618 tests across 29 files. Thresholds
   for lines, branches, functions, and statements are enforced in
   `vitest.config.ts`.
 - **Local gate:** `npm run ci` runs lint:check + typecheck + test:run +

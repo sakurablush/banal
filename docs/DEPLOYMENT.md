@@ -174,8 +174,9 @@ After the site is live:
 4. Open the browser DevTools → Application → Local Storage. You should
    see only the keys documented in
    [`docs/SECURITY.md`](SECURITY.md#data-the-browser-stores-locally)
-   (`banal-lang`, `banal-saved-filters`, `banal-custom-stacks`, etc.).
-   Anything else under this origin is unexpected.
+   (`banal-lang`, `banal_saved_filters`, `banal_custom_stacks`,
+   `banal_filter_analytics`, plus `banal-pt-*` and `banal-theme` in
+   sessionStorage). Anything else under this origin is unexpected.
 
 If any of those fail, the most likely cause is a stale build or a custom
 domain with caching that is serving the previous version. Force-refresh

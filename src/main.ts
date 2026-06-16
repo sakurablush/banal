@@ -14,9 +14,14 @@ import { initTheme, setTheme } from './theme';
 import { initDirectory } from './directory';
 import { renderPromptTemplatesStandalone } from './prompt-templates-standalone';
 import { initHeroMesh } from './lib/hero-mesh';
+import { migrateLegacyStorage } from './lib/storage-cleanup';
+import { initPrivacyExitGuard } from './lib/privacy-exit-guard';
+import { wirePrivacyPanelTriggers } from './components/privacy-panel';
 
 // Boot theme first (before any rendering so CSS variables are correct)
 initTheme();
+migrateLegacyStorage();
+initPrivacyExitGuard();
 
 // Wire theme toggle button (setTheme is already available via static import)
 const themeToggleBtn = document.getElementById('theme-toggle');
@@ -30,6 +35,7 @@ if (themeToggleBtn) {
 
 // Boot i18n first (lang switcher + data-i18n + events for dynamic parts)
 initI18n();
+wirePrivacyPanelTriggers();
 
 // Hero horizon mesh (canvas, pauses off-screen / reduced motion)
 initHeroMesh();

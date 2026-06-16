@@ -16,7 +16,12 @@ import {
   type ZeroKeyTool,
 } from './data/zero-key-tools';
 import { getLocalizedToolCopy, localizeBadge } from './lib/tool-localization';
-import { createShareFiltersButton, getSectionParams, type SectionFilterId } from './lib/section-filter-url';
+import { getSectionParams, type SectionFilterId } from './lib/section-filter-url';
+import { renderFilterToolbar } from './components/filter-toolbar';
+import { applyZeroKeyFilterValues, type ZeroKeyFilterState } from './lib/apply-section-filters';
+import { getRawSuggestionsForSection } from './lib/filter-suggestions';
+import type { FilterSuggestion } from './lib/filter-suggestions';
+import { trackFilterEvent } from './lib/filter-analytics';
 export type { ZeroKeyCategory };
 import { type SearchResult, searchTools } from './fuse-search';
 
@@ -393,6 +398,15 @@ function performSearch(state: PanelState): void {
   results = applyLifeFilters(state, results);
   state.results = results;
 
+  if (query.trim()) {
+    trackFilterEvent({
+      action: 'apply',
+      filterType: 'search',
+      filterValue: query.trim().slice(0, 120),
+      resultCount: results.length,
+    });
+  }
+
   updateSidebarActiveState(state);
   renderContent(state);
 
@@ -473,12 +487,19 @@ function renderQuickFilters(state: PanelState): HTMLElement {
       state.lang === 'ja' ? `${def.label}でフィルター` : `Filter by ${def.label}`
     );
     chip.addEventListener('click', () => {
-      if (state.lifeFilters.has(def.id)) {
+      const wasActive = state.lifeFilters.has(def.id);
+      if (wasActive) {
         state.lifeFilters.delete(def.id);
       } else {
         state.lifeFilters.add(def.id);
       }
       performSearch(state);
+      trackFilterEvent({
+        action: wasActive ? 'remove' : 'apply',
+        filterType: 'tag',
+        filterValue: `life:${def.id}`,
+        resultCount: state.results.length,
+      });
     });
     row.appendChild(chip);
   }
@@ -492,23 +513,94 @@ function getPanelSectionId(categoryPrefix?: 'ai' | 'dev'): SectionFilterId | nul
   return null;
 }
 
-function renderShareActions(state: PanelState): HTMLElement | null {
+function countZeroKeyForValues(state: PanelState, values: Record<string, string>): number {
+  const validCategories = new Set(state.allTools.map((t) => t.category));
+  const validLifeIds = new Set(getLifeFilters(state.lang).map((f) => f.id));
+  const temp: ZeroKeyFilterState = {
+    query: '',
+    activeCategory: null,
+    lifeFilters: new Set(),
+  };
+  applyZeroKeyFilterValues(temp, values, validCategories, validLifeIds);
+
+  let results: SearchResult[];
+  if (!temp.query.trim()) {
+    results = state.allTools.map((tool) => ({ tool, score: 0, matches: {} }));
+  } else {
+    results = searchTools(state.allTools, temp.query, MAX_RESULTS);
+  }
+  if (temp.activeCategory) {
+    results = results.filter((r) => r.tool.category === temp.activeCategory);
+  }
+  if (temp.lifeFilters.size > 0) {
+    const filters = getLifeFilters(state.lang);
+    const activeFilterDefs = filters.filter((f) => temp.lifeFilters.has(f.id));
+    const haystacks = results.map((r) => ({
+      ...r,
+      haystack: buildHaystack(r.tool).toLowerCase(),
+    }));
+    results = haystacks
+      .filter(({ tool, haystack }) =>
+        activeFilterDefs.every((def) => def.predicate(tool, haystack))
+      )
+      .map(({ tool, score, matches }) => ({ tool, score, matches }));
+  }
+  return results.length;
+}
+
+function buildZeroKeySuggestions(state: PanelState): FilterSuggestion[] {
+  const section = getPanelSectionId(state.categoryPrefix);
+  if (!section) return [];
+  const raw = getRawSuggestionsForSection(section, 8);
+  const catLabels = state.lang === 'ja' ? categoryLabelsJa : categoryLabels;
+  const lifeDefs = getLifeFilters(state.lang);
+  const out: FilterSuggestion[] = [];
+
+  for (const { values, analyticsKey } of raw) {
+    if (countZeroKeyForValues(state, values) === 0) continue;
+    let label = '';
+    if (values.cat) {
+      label = catLabels[values.cat as ZeroKeyCategory] || values.cat;
+    } else if (values.life) {
+      const def = lifeDefs.find((f) => f.id === values.life);
+      label = def?.label || values.life;
+    } else if (values.q) {
+      label = `"${values.q}"`;
+    } else {
+      continue;
+    }
+    out.push({ label, values, analyticsKey });
+    if (out.length >= 3) break;
+  }
+  return out;
+}
+
+function applyZeroKeyFilters(state: PanelState, values: Record<string, string>): void {
+  const validCategories = new Set(state.allTools.map((t) => t.category));
+  const validLifeIds = new Set(getLifeFilters(state.lang).map((f) => f.id));
+  applyZeroKeyFilterValues(state, values, validCategories, validLifeIds);
+  const panelInput = state.container ? getPanelSearchInput(state.container) : null;
+  const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
+  if (panelInput) panelInput.value = state.query;
+  if (heroInput) heroInput.value = state.query;
+  performSearch(state);
+}
+
+function renderFilterToolbarRow(state: PanelState): HTMLElement | null {
   const section = getPanelSectionId(state.categoryPrefix);
   if (!section) return null;
 
-  const row = create('div', 'filter-share-actions');
-  row.appendChild(
-    createShareFiltersButton({
-      section,
-      lang: state.lang,
-      getValues: () => ({
-        cat: state.activeCategory,
-        q: state.query.trim() || null,
-        life: state.lifeFilters.size > 0 ? [...state.lifeFilters].join(',') : null,
-      }),
-    })
-  );
-  return row;
+  return renderFilterToolbar({
+    section,
+    lang: state.lang,
+    getValues: () => ({
+      cat: state.activeCategory,
+      q: state.query.trim() || null,
+      life: state.lifeFilters.size > 0 ? [...state.lifeFilters].join(',') : null,
+    }),
+    onApply: (values) => applyZeroKeyFilters(state, values),
+    suggestions: buildZeroKeySuggestions(state),
+  });
 }
 
 // ─── Render: Horizontal Tool Card ───────────────────────────────────────────
@@ -727,6 +819,12 @@ function renderSidebar(state: PanelState): HTMLElement {
     state.activeCategory = null;
     updateSidebarActiveState(state);
     performSearch(state);
+    trackFilterEvent({
+      action: 'remove',
+      filterType: 'category',
+      filterValue: 'all',
+      resultCount: state.results.length,
+    });
   });
   sidebar.appendChild(allBtn);
 
@@ -741,6 +839,12 @@ function renderSidebar(state: PanelState): HTMLElement {
       state.activeCategory = cat;
       updateSidebarActiveState(state);
       performSearch(state);
+      trackFilterEvent({
+        action: 'apply',
+        filterType: 'category',
+        filterValue: cat,
+        resultCount: state.results.length,
+      });
     });
     sidebar.appendChild(btn);
   }
@@ -922,8 +1026,8 @@ export function renderZeroKeyPowerPanel(
   const filtersRow = renderQuickFilters(state);
   layout.appendChild(filtersRow);
 
-  const shareActions = renderShareActions(state);
-  if (shareActions) layout.appendChild(shareActions);
+  const toolbar = renderFilterToolbarRow(state);
+  if (toolbar) layout.appendChild(toolbar);
 
   // Horizontal content area
   const content = create('div', 'zk2-horizontal-content');

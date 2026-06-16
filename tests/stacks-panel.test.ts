@@ -1,5 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { renderStacksPanel } from '../src/components/stacks-panel';
+import { customizeStack, saveCustomStack } from '../src/lib/stack-customization';
+import { toolStacks } from '../src/data/tool-stacks';
 
 describe('Stacks Panel', () => {
   let container: HTMLElement;
@@ -45,11 +47,13 @@ describe('Stacks Panel', () => {
     api.destroy();
   });
 
-  it('should render filter action buttons', () => {
+  it('should render unified filter toolbar', () => {
     const api = renderStacksPanel(container, { lang: 'en' });
 
-    const actionBtns = container.querySelectorAll('.stacks-filter-btn');
-    expect(actionBtns.length).toBe(1);
+    const toolbar = container.querySelector('.filter-toolbar');
+    expect(toolbar).toBeTruthy();
+    const shareSave = toolbar?.querySelectorAll('.filter-toolbar-actions .filter-share-btn');
+    expect(shareSave?.length).toBeGreaterThanOrEqual(3);
 
     api.destroy();
   });
@@ -190,5 +194,20 @@ describe('Stacks Panel', () => {
     expect(activeChip?.textContent).toBe('All');
     
     api.destroy();
+  });
+
+  it('should render My Stacks section when custom stacks exist', () => {
+    localStorage.clear();
+    const custom = customizeStack(toolStacks[0]);
+    saveCustomStack(custom);
+
+    const api = renderStacksPanel(container, { lang: 'en' });
+
+    expect(container.querySelector('.stacks-my-section')).toBeTruthy();
+    expect(container.querySelector('.stack-custom-badge')?.textContent).toBe('Custom');
+    expect(container.querySelectorAll('.stacks-my-section .stack-card').length).toBe(1);
+
+    api.destroy();
+    localStorage.clear();
   });
 });

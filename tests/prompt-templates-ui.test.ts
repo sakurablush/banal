@@ -38,6 +38,13 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     expect(el.classList.contains('pt-horizontal-shell')).toBe(true);
   });
 
+  it('renders unified filter toolbar', () => {
+    const el = setup();
+    const toolbar = el.querySelector('.filter-toolbar');
+    expect(toolbar).toBeTruthy();
+    expect(toolbar?.querySelectorAll('.filter-toolbar-actions .filter-share-btn').length).toBeGreaterThanOrEqual(3);
+  });
+
   it('renders horizontal scroll container for prompt cards', () => {
     const el = setup();
     const scrollContainer = el.querySelector('.zk2-grid');
