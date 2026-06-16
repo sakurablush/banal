@@ -10,6 +10,10 @@ const MAX_DPR = 1.25;
 const FRAME_MS = 1000 / 30;
 const HORIZON_RATIO = 0.52;
 const SUN_BANDS = 13;
+/** How far below the horizon the sun center sits (fraction of radius). */
+const SUN_SET_DEPTH = 0.1;
+/** Minimum perspective spread so the mesh does not collapse to a single point. */
+const HORIZON_SPREAD = 0.11;
 
 export type MeshPalette = {
   line: string;
@@ -20,7 +24,6 @@ export type MeshPalette = {
   sunGlow: string;
   sunGlowMid: string;
   sunGlowEdge: string;
-  sunFloor: string;
 };
 
 export type SunLayout = {
@@ -42,7 +45,6 @@ export function getMeshPalette(theme: MeshTheme): MeshPalette {
       sunGlow: 'rgba(168, 85, 247, 0.22)',
       sunGlowMid: 'rgba(124, 58, 237, 0.08)',
       sunGlowEdge: 'rgba(124, 58, 237, 0)',
-      sunFloor: 'rgba(168, 85, 247, 0.14)',
     };
   }
   return {
@@ -54,7 +56,6 @@ export function getMeshPalette(theme: MeshTheme): MeshPalette {
     sunGlow: 'rgba(192, 132, 252, 0.28)',
     sunGlowMid: 'rgba(168, 85, 247, 0.08)',
     sunGlowEdge: 'rgba(168, 85, 247, 0)',
-    sunFloor: 'rgba(192, 132, 252, 0.18)',
   };
 }
 
@@ -67,15 +68,26 @@ export function getHorizonY(height: number): number {
 export function getSunLayout(width: number, height: number): SunLayout {
   const horizon = getHorizonY(height);
   const radius = Math.min(width * 0.17, height * 0.34, 148);
-  return { cx: width * 0.5, cy: horizon, radius };
+  return { cx: width * 0.5, cy: horizon + radius * SUN_SET_DEPTH, radius };
+}
+
+/** Perspective spread factor — keeps the far mesh row wide like a road, not a point. */
+export function meshSpread(depth: number): number {
+  return HORIZON_SPREAD + depth * (1 - HORIZON_SPREAD);
+}
+
+/** Y coordinate used for sun glow / mesh lighting (the visible horizon line). */
+export function sunLightY(sun: SunLayout): number {
+  return sun.cy - sun.radius * SUN_SET_DEPTH;
 }
 
 /** 0–1 falloff from the digital sun; cheap per-line lighting for mesh strokes. */
 export function sunIllumination(x: number, y: number, sun: SunLayout): number {
   const reachX = sun.radius * 2.85;
   const reachY = sun.radius * 1.35;
+  const lightY = sunLightY(sun);
   const dx = (x - sun.cx) / reachX;
-  const dy = (y - sun.cy) / reachY;
+  const dy = (y - lightY) / reachY;
   const dist2 = dx * dx + dy * dy;
   if (dist2 >= 1) return 0;
   const core = 1 - dist2;
@@ -84,14 +96,13 @@ export function sunIllumination(x: number, y: number, sun: SunLayout): number {
 
 /** Lateral dimming for columns away from the vanishing point / sun axis. */
 export function columnSunLit(u: number, sun: SunLayout): number {
-  const base = sunIllumination(sun.cx, sun.cy, sun);
+  const base = sunIllumination(sun.cx, sunLightY(sun), sun);
   return base * (1 - Math.abs(u) * 0.38);
 }
 
 type SunPaintCache = {
   key: string;
   glow: CanvasGradient;
-  floor: CanvasGradient;
 };
 
 let sunPaintCache: SunPaintCache | null = null;
@@ -100,11 +111,9 @@ function getSunPaintCache(
   ctx: CanvasRenderingContext2D,
   sun: SunLayout,
   palette: MeshPalette,
-  width: number,
-  height: number,
   theme: MeshTheme
 ): SunPaintCache {
-  const key = `${theme}|${width}|${height}|${sun.cx}|${sun.cy}|${sun.radius}`;
+  const key = `${theme}|${sun.cx}|${sun.cy}|${sun.radius}`;
   if (sunPaintCache?.key === key) return sunPaintCache;
 
   const glow = ctx.createRadialGradient(
@@ -119,13 +128,26 @@ function getSunPaintCache(
   glow.addColorStop(0.45, palette.sunGlowMid);
   glow.addColorStop(1, palette.sunGlowEdge);
 
-  const floor = ctx.createLinearGradient(0, sun.cy, 0, height);
-  floor.addColorStop(0, palette.sunFloor);
-  floor.addColorStop(0.55, palette.sunGlowMid);
-  floor.addColorStop(1, palette.sunGlowEdge);
-
-  sunPaintCache = { key, glow, floor };
+  sunPaintCache = { key, glow };
   return sunPaintCache;
+}
+
+function clipAboveHorizon(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  horizon: number
+): void {
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(width, 0);
+  ctx.lineTo(width, horizon);
+  ctx.lineTo(0, horizon);
+  ctx.closePath();
+  ctx.clip();
+}
+
+function meshRowY(horizon: number, height: number, depth: number): number {
+  return horizon + (height - horizon) * depth * depth;
 }
 
 function drawDigitalSun(
@@ -139,16 +161,18 @@ function drawDigitalSun(
   const { cx, cy, radius } = sun;
   if (radius < 8) return;
 
-  const paint = getSunPaintCache(ctx, sun, palette, width, height, theme);
+  const horizon = getHorizonY(height);
+  const paint = getSunPaintCache(ctx, sun, palette, theme);
+
+  ctx.save();
+  clipAboveHorizon(ctx, width, horizon);
 
   ctx.fillStyle = paint.glow;
   ctx.globalAlpha = 1;
-  ctx.fillRect(cx - radius * 3.2, cy - radius * 2.4, radius * 6.4, radius * 3.6);
+  ctx.fillRect(cx - radius * 3.2, cy - radius * 2.8, radius * 6.4, radius * 3.8);
 
-  ctx.save();
   ctx.beginPath();
-  ctx.arc(cx, cy, radius, Math.PI, 0);
-  ctx.closePath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
   ctx.clip();
 
   const bandH = radius / SUN_BANDS;
@@ -164,19 +188,6 @@ function drawDigitalSun(
   }
 
   ctx.restore();
-
-  ctx.globalAlpha = 0.5;
-  ctx.strokeStyle = palette.sunCore;
-  ctx.lineWidth = 1.25;
-  ctx.beginPath();
-  ctx.moveTo(cx - radius * 1.08, cy);
-  ctx.lineTo(cx + radius * 1.08, cy);
-  ctx.stroke();
-
-  ctx.globalAlpha = 0.22;
-  ctx.fillStyle = paint.floor;
-  ctx.fillRect(0, cy, width, height - cy);
-
   ctx.globalAlpha = 1;
 }
 
@@ -213,9 +224,8 @@ function drawMesh(
 
   for (let r = 0; r <= ROWS; r++) {
     const depth = r / ROWS;
-    const yBase = horizon + (height - horizon) * depth * depth;
-    const y = yBase + waveOffset(0, depth, time);
-    const lit = sunIllumination(vanishX, y, sun);
+    const yBase = meshRowY(horizon, height, depth);
+    const lit = sunIllumination(vanishX, yBase, sun);
     const alpha = Math.min(1, (0.08 + depth * 0.92) * (1 + lit * 0.75) + lit * 0.18);
 
     ctx.beginPath();
@@ -223,9 +233,10 @@ function drawMesh(
     ctx.globalAlpha = alpha;
     ctx.lineWidth = depth < 0.2 ? 0.6 : 1;
 
+    const spread = meshSpread(depth);
     for (let c = 0; c <= COLS; c++) {
       const u = c / COLS - 0.5;
-      const x = vanishX + u * span * depth;
+      const x = vanishX + u * span * spread;
       const yPt = yBase + waveOffset(u, depth, time);
       if (c === 0) ctx.moveTo(x, yPt);
       else ctx.lineTo(x, yPt);
@@ -247,8 +258,8 @@ function drawMesh(
 
     for (let r = 0; r <= ROWS; r++) {
       const depth = r / ROWS;
-      const yBase = horizon + (height - horizon) * depth * depth;
-      const x = vanishX + u * span * depth;
+      const yBase = meshRowY(horizon, height, depth);
+      const x = vanishX + u * span * meshSpread(depth);
       const y = yBase + waveOffset(u, depth, time);
       if (r === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
@@ -387,6 +398,7 @@ export function initHeroMesh(root: ParentNode = document): () => void {
 
   return () => {
     stop();
+    sunPaintCache = null;
     observer.disconnect();
     resizeObserver.disconnect();
     themeObserver.disconnect();

@@ -7,8 +7,10 @@ import {
   getMeshPalette,
   getSunLayout,
   initHeroMesh,
+  meshSpread,
   prefersReducedMotion,
   sunIllumination,
+  sunLightY,
   waveOffset,
 } from '../src/lib/hero-mesh';
 
@@ -115,23 +117,39 @@ describe('hero-mesh', () => {
       expect(light.line).toContain('124, 58, 237');
       expect(light.lineFar).toContain('0.08');
       expect(light.sunBand).toContain('124, 58, 237');
+      expect(light).not.toHaveProperty('sunFloor');
     });
   });
 
   describe('getSunLayout', () => {
-    it('anchors the sun on the horizon center', () => {
+    it('places the sun center below the horizon for a natural sunset arc', () => {
       const sun = getSunLayout(960, 520);
+      const horizon = getHorizonY(520);
       expect(sun.cx).toBe(480);
-      expect(sun.cy).toBe(getHorizonY(520));
+      expect(sun.cy).toBeGreaterThan(horizon);
+      expect(sun.cy - horizon).toBeCloseTo(sun.radius * 0.1, 5);
       expect(sun.radius).toBeGreaterThan(0);
+    });
+
+    it('aligns sun glow with the mesh horizon line', () => {
+      const sun = getSunLayout(960, 520);
+      expect(sunLightY(sun)).toBeCloseTo(getHorizonY(520), 5);
+    });
+  });
+
+  describe('meshSpread', () => {
+    it('keeps a minimum width at the horizon instead of a single point', () => {
+      expect(meshSpread(0)).toBeGreaterThan(0.1);
+      expect(meshSpread(1)).toBe(1);
+      expect(meshSpread(0.5)).toBeGreaterThan(meshSpread(0));
     });
   });
 
   describe('sunIllumination', () => {
-    it('peaks at the sun center and falls off with distance', () => {
+    it('peaks on the mesh horizon under the sun and falls off with distance', () => {
       const sun = getSunLayout(960, 520);
-      const center = sunIllumination(sun.cx, sun.cy, sun);
-      const far = sunIllumination(0, sun.cy, sun);
+      const center = sunIllumination(sun.cx, sunLightY(sun), sun);
+      const far = sunIllumination(0, sunLightY(sun), sun);
       expect(center).toBeGreaterThan(far);
       expect(center).toBeGreaterThan(0.2);
       expect(far).toBe(0);
