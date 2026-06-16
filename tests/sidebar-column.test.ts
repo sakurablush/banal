@@ -33,26 +33,28 @@ describe('createSidebarColumn', () => {
 
     const categories = column.querySelector('.zk2-sidebar-categories');
     expect(categories).toBeTruthy();
-    expect(categories?.getAttribute('role')).toBe('navigation');
-    expect(categories?.getAttribute('aria-labelledby')).toBe('test-categories');
+    const categoriesBody = categories?.querySelector('.zk2-sidebar-nav-panel');
+    expect(categoriesBody?.getAttribute('role')).toBe('navigation');
+    expect(categoriesBody?.getAttribute('aria-labelledby')).toBe('test-categories');
     expect(categories?.querySelector('.zk2-sidebar-categories-heading')?.textContent).toBe(
       'Categories'
     );
-    expect(categories?.querySelector('.zk2-sidebar')).toBe(sidebar);
+    expect(categoriesBody?.querySelector('.zk2-sidebar')).toBe(sidebar);
 
     const panel = column.querySelector('.zk2-sidebar-filters');
     expect(panel).toBeTruthy();
     expect(column.children[0]).toBe(categories);
     expect(column.children[1]).toBe(panel);
 
-    expect(panel?.getAttribute('role')).toBe('region');
-    expect(panel?.getAttribute('aria-label')).toBe('Refine results');
-    expect(panel?.getAttribute('aria-labelledby')).toBe('test-filters');
+    const filtersBody = panel?.querySelector('.zk2-sidebar-nav-panel');
+    expect(filtersBody?.getAttribute('role')).toBe('region');
+    expect(filtersBody?.getAttribute('aria-label')).toBe('Refine results');
+    expect(filtersBody?.getAttribute('aria-labelledby')).toBe('test-filters');
     const heading = panel?.querySelector('.zk2-sidebar-filters-heading');
     expect(heading?.textContent).toBe('Refine');
-    expect(panel?.querySelector('.quick-filters-row')).toBeTruthy();
-    expect(panel?.querySelector('.filter-toolbar--sidebar')).toBeTruthy();
-    expect(panel?.querySelector('.zk2-sidebar-filters-divider')).toBeTruthy();
+    expect(filtersBody?.querySelector('.quick-filters-row')).toBeTruthy();
+    expect(filtersBody?.querySelector('.filter-toolbar--sidebar')).toBeTruthy();
+    expect(filtersBody?.querySelector('.zk2-sidebar-filters-divider')).toBeTruthy();
   });
 
   it('uses single column when filters panel is omitted', () => {
@@ -75,9 +77,10 @@ describe('createSidebarColumn', () => {
     toolbar.className = 'filter-toolbar';
 
     const panel = buildSidebarFiltersPanel({ quickFilters, toolbar });
-    expect(panel?.querySelector('.quick-filters-row')).toBeNull();
-    expect(panel?.querySelector('.zk2-sidebar-filters-divider')).toBeNull();
-    expect(panel?.querySelector('.filter-toolbar--sidebar')).toBeTruthy();
+    const body = panel?.querySelector('.zk2-sidebar-nav-panel');
+    expect(body?.querySelector('.quick-filters-row')).toBeNull();
+    expect(body?.querySelector('.zk2-sidebar-filters-divider')).toBeNull();
+    expect(body?.querySelector('.filter-toolbar--sidebar')).toBeTruthy();
   });
 });
 
@@ -85,6 +88,9 @@ describe('syncQuickFiltersInPanel', () => {
   it('replaces chips and removes divider when filters disappear', () => {
     const panel = document.createElement('div');
     panel.className = 'zk2-sidebar-filters';
+
+    const body = document.createElement('div');
+    body.className = 'zk2-sidebar-nav-panel';
 
     const oldFilters = document.createElement('div');
     oldFilters.className = 'quick-filters-row';
@@ -96,13 +102,14 @@ describe('syncQuickFiltersInPanel', () => {
     const toolbar = document.createElement('div');
     toolbar.className = 'filter-toolbar';
 
-    panel.append(oldFilters, divider, toolbar);
+    body.append(oldFilters, divider, toolbar);
+    panel.appendChild(body);
 
     syncQuickFiltersInPanel(panel, null);
 
-    expect(panel.querySelector('.quick-filters-row')).toBeNull();
-    expect(panel.querySelector('.zk2-sidebar-filters-divider')).toBeNull();
-    expect(panel.querySelector('.filter-toolbar')).toBeTruthy();
+    expect(body.querySelector('.quick-filters-row')).toBeNull();
+    expect(body.querySelector('.zk2-sidebar-filters-divider')).toBeNull();
+    expect(body.querySelector('.filter-toolbar')).toBeTruthy();
   });
 
   it('inserts divider before toolbar when chips are added', () => {
@@ -113,9 +120,14 @@ describe('syncQuickFiltersInPanel', () => {
     heading.className = 'zk2-sidebar-filters-heading';
     panel.appendChild(heading);
 
+    const body = document.createElement('div');
+    body.className = 'zk2-sidebar-nav-panel';
+
     const toolbar = document.createElement('div');
     toolbar.className = 'filter-toolbar';
-    panel.appendChild(toolbar);
+    body.appendChild(toolbar);
+
+    panel.appendChild(body);
 
     const nextFilters = document.createElement('div');
     nextFilters.className = 'quick-filters-row';
@@ -123,9 +135,8 @@ describe('syncQuickFiltersInPanel', () => {
 
     syncQuickFiltersInPanel(panel, nextFilters);
 
-    const children = Array.from(panel.children).map((el) => el.className);
+    const children = Array.from(body.children).map((el) => el.className);
     expect(children).toEqual([
-      'zk2-sidebar-filters-heading',
       'quick-filters-row',
       'zk2-sidebar-filters-divider',
       'filter-toolbar',

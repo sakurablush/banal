@@ -11,7 +11,7 @@ import { trackFilterEvent } from '../lib/filter-analytics';
 import { localizeUseCase } from '../lib/model-localization';
 import { getSectionParams } from '../lib/section-filter-url';
 import { renderFilterToolbar } from './filter-toolbar';
-import { createPanelStatsBar } from '../lib/panel-stats-bar';
+import { createPanelStatsBar, mountPanelContent } from '../lib/panel-stats-bar';
 import {
   applyModelsFilterValues,
   countModelsForValues,
@@ -611,22 +611,19 @@ function renderComparison(state: ModelsPanelState): HTMLElement | null {
 }
 
 function updateComparisonBar(state: ModelsPanelState): void {
-  const contentArea = state.container?.querySelector('.models-content') as HTMLElement | null;
-  if (!contentArea) return;
+  const scroll = state.container?.querySelector(
+    '.models-content .panel-content-scroll'
+  ) as HTMLElement | null;
+  if (!scroll) return;
 
-  const existing = contentArea.querySelector('.models-comparison');
+  const existing = scroll.querySelector('.models-comparison');
   const comparison = renderComparison(state);
 
   if (comparison) {
     if (existing) {
       existing.replaceWith(comparison);
     } else {
-      const stats = contentArea.querySelector('.models-stats-bar');
-      if (stats) {
-        stats.insertAdjacentElement('afterend', comparison);
-      } else {
-        contentArea.prepend(comparison);
-      }
+      scroll.insertBefore(comparison, scroll.firstChild);
     }
     return;
   }
@@ -654,30 +651,29 @@ function renderContent(state: ModelsPanelState): void {
     'models-stats-bar',
     typeof copy.showing === 'function' ? copy.showing(models.length, aiModels.length) : `${models.length} / ${aiModels.length} models`
   );
-  contentArea.appendChild(stats);
 
-  // Comparison view (if 2+ selected)
   const comparison = renderComparison(state);
-  if (comparison) {
-    contentArea.appendChild(comparison);
-  }
 
-  // Empty state
-  if (models.length === 0) {
-    const empty = create('div', 'models-empty');
-    empty.textContent = typeof copy.noMatches === 'string' ? copy.noMatches : 'No models match';
-    contentArea.appendChild(empty);
-    return;
-  }
+  mountPanelContent(contentArea, stats, (scroll) => {
+    if (comparison) {
+      scroll.appendChild(comparison);
+    }
 
-  // Model cards grid
-  const grid = create('div', 'models-grid');
-  const fragment = document.createDocumentFragment();
-  for (const model of models) {
-    fragment.appendChild(renderModelCard(state, model));
-  }
-  grid.appendChild(fragment);
-  contentArea.appendChild(grid);
+    if (models.length === 0) {
+      const empty = create('div', 'models-empty');
+      empty.textContent = typeof copy.noMatches === 'string' ? copy.noMatches : 'No models match';
+      scroll.appendChild(empty);
+      return;
+    }
+
+    const grid = create('div', 'models-grid');
+    const fragment = document.createDocumentFragment();
+    for (const model of models) {
+      fragment.appendChild(renderModelCard(state, model));
+    }
+    grid.appendChild(fragment);
+    scroll.appendChild(grid);
+  });
 }
 
 // ─── Public API ─────────────────────────────────────────────────────────────

@@ -19,7 +19,8 @@ import { createCloseButton } from './lib/close-button';
 import { getSectionParams } from './lib/section-filter-url';
 import { renderFilterToolbar } from './components/filter-toolbar';
 import { createSidebarColumn } from './lib/sidebar-column';
-import { createPanelStatsBar } from './lib/panel-stats-bar';
+import { createPanelStatsBar, mountPanelContent } from './lib/panel-stats-bar';
+import { bindZk2LayoutHeightSync, syncZk2LayoutHeight } from './lib/sync-zk2-layout-height';
 import { t } from './i18n';
 import { applyPromptsFilterValues } from './lib/apply-section-filters';
 import { getRawSuggestionsForSection } from './lib/filter-suggestions';
@@ -95,6 +96,7 @@ interface PromptTemplatesViewState {
   languageCleanup: (() => void) | null;
   accordionCleanup: (() => void) | null;
   focusCleanup: (() => void) | null;
+  layoutHeightCleanup: (() => void) | null;
 }
 
 interface PromptTemplatesContainer extends HTMLElement {
@@ -208,6 +210,7 @@ export function renderPromptTemplatesStandalone(options: {
       languageCleanup: null,
       accordionCleanup: null,
       focusCleanup: null,
+      layoutHeightCleanup: null,
     };
 
     const fromUrl = getSectionParams('prompts');
@@ -277,11 +280,14 @@ function renderHorizontalLayout(state: PromptTemplatesViewState): void {
     'zk2-stats-bar',
     t(state.lang, 'prompts.showing').replace('{count}', String(filteredPrompts.length))
   );
-  content.appendChild(statsBar);
 
-  // Grid container for prompt cards
-  const gridContainer = createPromptGridContainer(state);
-  content.appendChild(gridContainer);
+  mountPanelContent(content, statsBar, (scroll) => {
+    scroll.appendChild(createPromptGridContainer(state));
+  });
+
+  state.layoutHeightCleanup?.();
+  state.layoutHeightCleanup = bindZk2LayoutHeightSync(layout);
+  syncZk2LayoutHeight(layout);
 }
 
 function createSidebar(state: PromptTemplatesViewState): HTMLElement {
@@ -778,6 +784,9 @@ function reRenderHorizontal(state: PromptTemplatesViewState): void {
   const container = state.container;
   if (!container) return;
 
+  state.layoutHeightCleanup?.();
+  state.layoutHeightCleanup = null;
+
   // Clear and re-render
   container.innerHTML = '';
   renderHorizontalLayout(state);
@@ -805,6 +814,8 @@ function listenForLanguageChanges(state: PromptTemplatesViewState): void {
   window.addEventListener('banal:language-changed', handler);
   state.languageCleanup = () => window.removeEventListener('banal:language-changed', handler);
   (state.container as PromptTemplatesContainer).__ptCleanup = () => {
+    state.layoutHeightCleanup?.();
+    state.layoutHeightCleanup = null;
     cleanupLanguageListener(state);
     cleanupKeyboardShortcut(state);
     closePromptAccordion();

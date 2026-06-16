@@ -20,7 +20,8 @@ import { appendChildrenBatched } from './lib/batch-dom';
 import { getSectionParams, type SectionFilterId } from './lib/section-filter-url';
 import { renderFilterToolbar } from './components/filter-toolbar';
 import { createSidebarColumn, syncQuickFiltersInPanel } from './lib/sidebar-column';
-import { createPanelStatsBar } from './lib/panel-stats-bar';
+import { createPanelStatsBar, mountPanelContent } from './lib/panel-stats-bar';
+import { bindZk2LayoutHeightSync, syncZk2LayoutHeight } from './lib/sync-zk2-layout-height';
 import { applyZeroKeyFilterValues, type ZeroKeyFilterState } from './lib/apply-section-filters';
 import { getRawSuggestionsForSection } from './lib/filter-suggestions';
 import type { FilterSuggestion } from './lib/filter-suggestions';
@@ -266,6 +267,7 @@ interface PanelState {
   heroAbortController: AbortController;
   hasRenderedOnce: boolean;
   renderGeneration: number;
+  layoutHeightCleanup: (() => void) | null;
 }
 
 // Per-panel state storage using WeakMap
@@ -315,6 +317,7 @@ function getState(container: HTMLElement): PanelState {
       container: null,
       hasRenderedOnce: false,
       renderGeneration: 0,
+      layoutHeightCleanup: null,
     };
     panelStateMap.set(container, state);
   }
@@ -919,34 +922,38 @@ function renderContent(state: PanelState): void {
     catLabel.textContent = ` \u2022 ${categoryIcons[state.activeCategory]} ${categoryLabels[state.activeCategory]}`;
     statsBar.appendChild(catLabel);
   }
-  contentArea.appendChild(statsBar);
 
-  // Empty state
-  if (results.length === 0) {
-    contentArea.appendChild(renderEmptyState(state));
-    return;
+  mountPanelContent(contentArea, statsBar, (scroll) => {
+    if (results.length === 0) {
+      scroll.appendChild(renderEmptyState(state));
+      return;
+    }
+
+    const gridContainer = create('div', 'zk2-grid');
+    const animateCards = state.hasRenderedOnce;
+    state.hasRenderedOnce = true;
+    const generation = ++state.renderGeneration;
+
+    appendChildrenBatched(
+      gridContainer,
+      results,
+      (result, i) => {
+        const card = renderHorizontalToolCard(state, result);
+        if (animateCards) {
+          card.style.animationDelay = `${Math.min(i * 20, 400)}ms`;
+        }
+        return card;
+      },
+      20,
+      () => generation === state.renderGeneration
+    );
+    scroll.appendChild(gridContainer);
+  });
+
+  const layout = container.querySelector('.zk2-layout') as HTMLElement | null;
+  if (layout) {
+    syncZk2LayoutHeight(layout);
   }
-
-  // Grid container (instead of horizontal scroll)
-  const gridContainer = create('div', 'zk2-grid');
-  const animateCards = state.hasRenderedOnce;
-  state.hasRenderedOnce = true;
-  const generation = ++state.renderGeneration;
-
-  appendChildrenBatched(
-    gridContainer,
-    results,
-    (result, i) => {
-      const card = renderHorizontalToolCard(state, result);
-      if (animateCards) {
-        card.style.animationDelay = `${Math.min(i * 20, 400)}ms`;
-      }
-      return card;
-    },
-    20,
-    () => generation === state.renderGeneration
-  );
-  contentArea.appendChild(gridContainer);
 }
 
 // ─── Keyboard Navigation ─────────────────────────────────────────────────────
@@ -1060,6 +1067,9 @@ export function renderZeroKeyPowerPanel(
   const content = create('div', 'zk2-horizontal-content');
   layout.appendChild(content);
 
+  state.layoutHeightCleanup?.();
+  state.layoutHeightCleanup = bindZk2LayoutHeightSync(layout);
+
   // Wire hero search (each panel gets its own listener)
   const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
   if (heroInput) {
@@ -1130,6 +1140,8 @@ export function renderZeroKeyPowerPanel(
       performSearch(state);
     },
     destroy: () => {
+      state.layoutHeightCleanup?.();
+      state.layoutHeightCleanup = null;
       state.heroAbortController.abort();
       state.lifeFilters.clear();
       if (state.debounceTimer) {

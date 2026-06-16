@@ -14,7 +14,7 @@ import { openCustomStackEditor } from './custom-stack-editor';
 import { getLocalizedStack } from '../lib/stack-localization';
 import { getSectionParams } from '../lib/section-filter-url';
 import { renderFilterToolbar } from './filter-toolbar';
-import { createPanelStatsBar } from '../lib/panel-stats-bar';
+import { createPanelStatsBar, mountPanelContent } from '../lib/panel-stats-bar';
 import { applyStacksFilterValues } from '../lib/apply-section-filters';
 import { getRawSuggestionsForSection } from '../lib/filter-suggestions';
 import type { FilterSuggestion } from '../lib/filter-suggestions';
@@ -359,36 +359,36 @@ function renderContent(state: StacksPanelState): void {
     'stacks-stats',
     typeof copy.showing === 'function' ? copy.showing(stacks.length) : `${stacks.length} stacks`
   );
-  contentArea.appendChild(stats);
 
   const customStacks = getCustomStacks();
-  if (customStacks.length > 0) {
-    const mySection = create('div', 'stacks-my-section');
-    const myTitle = create('h3', 'stacks-my-title');
-    myTitle.textContent = typeof copy.myStacks === 'string' ? copy.myStacks : 'My Stacks';
-    mySection.appendChild(myTitle);
-    const myGrid = create('div', 'stacks-grid');
-    for (const stack of customStacks) {
-      myGrid.appendChild(renderStackCard(state, stack, { isCustom: true }));
+
+  mountPanelContent(contentArea, stats, (scroll) => {
+    if (customStacks.length > 0) {
+      const mySection = create('div', 'stacks-my-section');
+      const myTitle = create('h3', 'stacks-my-title');
+      myTitle.textContent = typeof copy.myStacks === 'string' ? copy.myStacks : 'My Stacks';
+      mySection.appendChild(myTitle);
+      const myGrid = create('div', 'stacks-grid');
+      for (const stack of customStacks) {
+        myGrid.appendChild(renderStackCard(state, stack, { isCustom: true }));
+      }
+      mySection.appendChild(myGrid);
+      scroll.appendChild(mySection);
     }
-    mySection.appendChild(myGrid);
-    contentArea.appendChild(mySection);
-  }
 
-  // Empty state
-  if (stacks.length === 0) {
-    const empty = create('div', 'stacks-empty');
-    empty.textContent = typeof copy.noMatches === 'string' ? copy.noMatches : 'No stacks match';
-    contentArea.appendChild(empty);
-    return;
-  }
+    if (stacks.length === 0) {
+      const empty = create('div', 'stacks-empty');
+      empty.textContent = typeof copy.noMatches === 'string' ? copy.noMatches : 'No stacks match';
+      scroll.appendChild(empty);
+      return;
+    }
 
-  // Stack cards grid
-  const grid = create('div', 'stacks-grid');
-  for (const stack of stacks) {
-    grid.appendChild(renderStackCard(state, stack));
-  }
-  contentArea.appendChild(grid);
+    const grid = create('div', 'stacks-grid');
+    for (const stack of stacks) {
+      grid.appendChild(renderStackCard(state, stack));
+    }
+    scroll.appendChild(grid);
+  });
 }
 
 // ─── Public API ─────────────────────────────────────────────────────────────

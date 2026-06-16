@@ -32,6 +32,16 @@ function createFiltersDivider(): HTMLElement {
   return divider;
 }
 
+function createNavPanelBody(): HTMLElement {
+  const body = document.createElement('div');
+  body.className = 'zk2-sidebar-nav-panel';
+  return body;
+}
+
+function getNavPanelBody(panel: HTMLElement): HTMLElement {
+  return panel.querySelector(':scope > .zk2-sidebar-nav-panel') ?? panel;
+}
+
 function createNavHeading(
   label: string,
   className: string,
@@ -51,31 +61,37 @@ export function buildSidebarFiltersPanel(options: SidebarFiltersOptions): HTMLEl
 
   const panel = document.createElement('div');
   panel.className = 'zk2-sidebar-filters';
-  panel.setAttribute('role', 'region');
 
+  let heading: HTMLElement | null = null;
   if (options.heading) {
-    const heading = createNavHeading(options.heading, 'zk2-sidebar-filters-heading', options.headingId);
+    heading = createNavHeading(options.heading, 'zk2-sidebar-filters-heading', options.headingId);
     panel.appendChild(heading);
-    panel.setAttribute('aria-labelledby', heading.id);
   }
 
+  const body = createNavPanelBody();
+  body.setAttribute('role', 'region');
   const ariaLabel = options.ariaLabel ?? options.heading;
   if (ariaLabel) {
-    panel.setAttribute('aria-label', ariaLabel);
+    body.setAttribute('aria-label', ariaLabel);
+  }
+  if (heading) {
+    body.setAttribute('aria-labelledby', heading.id);
   }
 
   if (quickFilters) {
-    panel.appendChild(quickFilters);
+    body.appendChild(quickFilters);
   }
 
   if (quickFilters && toolbar) {
-    panel.appendChild(createFiltersDivider());
+    body.appendChild(createFiltersDivider());
   }
 
   if (toolbar) {
     toolbar.classList.add('filter-toolbar--sidebar');
-    panel.appendChild(toolbar);
+    body.appendChild(toolbar);
   }
+
+  panel.appendChild(body);
 
   return panel;
 }
@@ -83,19 +99,25 @@ export function buildSidebarFiltersPanel(options: SidebarFiltersOptions): HTMLEl
 function createCategoriesWrap(options: SidebarColumnOptions): HTMLElement {
   const wrap = document.createElement('div');
   wrap.className = 'zk2-sidebar-categories';
-  wrap.setAttribute('role', 'navigation');
 
+  let heading: HTMLElement | null = null;
   if (options.categoriesHeading) {
-    const heading = createNavHeading(
+    heading = createNavHeading(
       options.categoriesHeading,
       'zk2-sidebar-categories-heading',
       options.categoriesHeadingId
     );
     wrap.appendChild(heading);
-    wrap.setAttribute('aria-labelledby', heading.id);
   }
 
-  wrap.appendChild(options.sidebar);
+  const body = createNavPanelBody();
+  body.setAttribute('role', 'navigation');
+  if (heading) {
+    body.setAttribute('aria-labelledby', heading.id);
+  }
+  body.appendChild(options.sidebar);
+  wrap.appendChild(body);
+
   return wrap;
 }
 
@@ -104,11 +126,12 @@ export function syncQuickFiltersInPanel(
   panel: HTMLElement,
   quickFilters: HTMLElement | null
 ): void {
+  const body = getNavPanelBody(panel);
   const nextFilters = hasFilterContent(quickFilters) ? quickFilters : null;
-  panel.querySelector('.quick-filters-row')?.remove();
+  body.querySelector('.quick-filters-row')?.remove();
 
-  const toolbar = panel.querySelector('.filter-toolbar');
-  const divider = panel.querySelector('.zk2-sidebar-filters-divider');
+  const toolbar = body.querySelector('.filter-toolbar');
+  const divider = body.querySelector('.zk2-sidebar-filters-divider');
 
   if (!nextFilters) {
     divider?.remove();
@@ -118,15 +141,15 @@ export function syncQuickFiltersInPanel(
   const insertBefore = divider ?? toolbar ?? null;
 
   if (insertBefore) {
-    panel.insertBefore(nextFilters, insertBefore);
-    if (toolbar && !panel.querySelector('.zk2-sidebar-filters-divider')) {
-      panel.insertBefore(createFiltersDivider(), toolbar);
+    body.insertBefore(nextFilters, insertBefore);
+    if (toolbar && !body.querySelector('.zk2-sidebar-filters-divider')) {
+      body.insertBefore(createFiltersDivider(), toolbar);
     }
     return;
   }
 
   divider?.remove();
-  panel.appendChild(nextFilters);
+  body.appendChild(nextFilters);
 }
 
 export function createSidebarColumn(options: SidebarColumnOptions): HTMLElement {

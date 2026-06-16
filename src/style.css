@@ -34,8 +34,13 @@
     0 0 1px color-mix(in srgb, var(--void) 62%, transparent);
   /* Small gap between scrollable content and vertical scrollbar */
   --scroll-inset: 0.35rem;
-  --panel-stats-bg: #08060e;
-  --panel-stats-border: rgba(168, 85, 247, 0.14);
+  --zk2-nav-panel-pad: 0.6rem 0.55rem;
+  --panel-stats-bg: #14111c;
+  --panel-stats-border: rgba(168, 85, 247, 0.18);
+  --panel-stats-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.03) inset,
+    0 4px 10px -7px rgba(6, 6, 11, 0.72),
+    0 2px 4px -3px rgba(76, 29, 149, 0.1);
   --text-primary: rgba(255, 255, 255, 0.9);
   --text-muted: rgba(255, 255, 255, 0.62);
   --text-subtle: rgba(255, 255, 255, 0.48);
@@ -73,7 +78,10 @@
   --neon-amber: #d97706;
   --glow-violet: rgba(124, 58, 237, 0.2);
   --glow-fuchsia: rgba(192, 38, 211, 0.15);
-  --panel-stats-bg: #f4f6f8;
+  --panel-stats-bg: #f0edf8;
+  --panel-stats-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 3px 8px -6px rgba(79, 70, 229, 0.1);
   color-scheme: light;
 }
 
@@ -118,6 +126,7 @@ main#app,
 }
 
 /* Shared vertical scroll panes — thin scrollbar + consistent inset from tiles */
+.panel-content-scroll,
 .zk2-layout > .zk2-horizontal-content,
 .stacks-content,
 .models-content,
@@ -125,9 +134,13 @@ main#app,
 .prompts-horizontal-scroll {
   scrollbar-width: thin;
   scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
+}
+
+.panel-content-scroll {
   padding-right: var(--scroll-inset);
 }
 
+.panel-content-scroll::-webkit-scrollbar,
 .zk2-layout > .zk2-horizontal-content::-webkit-scrollbar,
 .stacks-content::-webkit-scrollbar,
 .models-content::-webkit-scrollbar,
@@ -136,6 +149,7 @@ main#app,
   width: 6px;
 }
 
+.panel-content-scroll::-webkit-scrollbar-thumb,
 .zk2-layout > .zk2-horizontal-content::-webkit-scrollbar-thumb,
 .stacks-content::-webkit-scrollbar-thumb,
 .models-content::-webkit-scrollbar-thumb,
@@ -522,6 +536,8 @@ main#app,
 .zk2-layout {
   --zk2-layout-min-height: 700px;
   --zk2-content-max-height: min(80vh, 900px);
+  /* Default cap; sync-zk2-layout-height.ts may raise --zk2-layout-height inline */
+  --zk2-layout-height: max(var(--zk2-layout-min-height), var(--zk2-content-max-height));
   --zk2-nav-width: minmax(300px, 400px);
   display: grid;
   grid-template-columns: var(--zk2-nav-width) 1fr;
@@ -535,56 +551,78 @@ main#app,
   grid-column: 1;
   grid-row: 1;
   align-self: start;
+  min-height: var(--zk2-layout-height);
 }
 
 .zk2-layout > .zk2-horizontal-content {
   grid-column: 2;
   grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  height: var(--zk2-layout-height);
   min-height: var(--zk2-layout-min-height);
-  max-height: var(--zk2-content-max-height);
-  overflow-y: auto;
-  contain: layout style;
+  max-height: var(--zk2-layout-height);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .zk2-sidebar-column {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-  gap: 0.6rem;
-  align-items: start;
+  grid-template-rows: auto minmax(0, 1fr);
+  column-gap: 0.6rem;
+  row-gap: 0.35rem;
+  align-items: stretch;
   min-width: 0;
 }
 
-.zk2-sidebar-categories {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  padding: 0.55rem 0.45rem;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.018);
-  border: 1px solid rgba(168, 85, 247, 0.1);
-}
-
-.zk2-sidebar-categories > .zk2-sidebar {
-  flex: 0 0 auto;
-  overflow: visible;
-}
-
+.zk2-sidebar-categories,
 .zk2-sidebar-filters {
-  flex: 0 0 auto;
+  display: contents;
+}
+
+.zk2-sidebar-nav-panel {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
   min-width: 0;
-  padding: 0.7rem 0.65rem;
+  min-height: 0;
+  padding: var(--zk2-nav-panel-pad);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.028);
-  border: 1px solid rgba(168, 85, 247, 0.14);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 8px 24px -12px rgba(124, 58, 237, 0.2);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  overflow: visible;
+  background: rgba(255, 255, 255, 0.022);
+  border: 1px solid rgba(168, 85, 247, 0.12);
+  overflow: hidden;
+}
+
+.zk2-sidebar-categories-heading {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.zk2-sidebar-categories > .zk2-sidebar-nav-panel {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: stretch;
+}
+
+.zk2-sidebar-filters-heading {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.zk2-sidebar-filters > .zk2-sidebar-nav-panel {
+  grid-column: 2;
+  grid-row: 2;
+  gap: 0.55rem;
+  align-self: stretch;
+  overflow-y: auto;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+}
+
+.zk2-sidebar-nav-panel > .zk2-sidebar {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .zk2-sidebar-column--categories-only {
@@ -594,13 +632,14 @@ main#app,
 .zk2-sidebar-categories-heading,
 .zk2-sidebar-filters-heading {
   margin: 0;
-  padding: 0 0.1rem 0.15rem;
+  padding: 0 0.05rem;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(196, 181, 253, 0.82);
   line-height: 1.2;
+  align-self: end;
 }
 
 .zk2-sidebar-filters-divider {
@@ -637,11 +676,28 @@ main#app,
 
   .zk2-sidebar-column {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    grid-template-rows: auto auto auto auto;
+    row-gap: 0.35rem;
   }
 
-  .zk2-sidebar-filters {
-    order: -1;
+  .zk2-sidebar-filters-heading {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .zk2-sidebar-filters > .zk2-sidebar-nav-panel {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .zk2-sidebar-categories-heading {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .zk2-sidebar-categories > .zk2-sidebar-nav-panel {
+    grid-column: 1;
+    grid-row: 4;
   }
 
   .zk2-sidebar-filters .quick-filters-row {
@@ -670,7 +726,6 @@ main#app,
   display: flex;
   flex-direction: column;
   gap: 4px;
-  overflow-y: auto;
 }
 
 @media (max-width: 900px) {
@@ -750,22 +805,50 @@ main#app,
   text-align: right;
 }
 
-/* Stats bar — sticky narrow row at top of scrollable module content */
+/* Stats row — fixed head above scrollable tiles */
+.panel-content-head {
+  flex: 0 0 auto;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 0.55rem;
+}
+
+.panel-content-head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 6px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--void) 28%, transparent),
+    transparent
+  );
+}
+
+.panel-content-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  contain: layout style;
+}
+
 .zk2-stats-bar,
 .models-stats-bar,
 .stacks-stats {
-  position: sticky;
-  top: 0;
-  z-index: 20;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.25rem 0.45rem;
   width: 100%;
   box-sizing: border-box;
-  margin: 0 0 0.75rem;
-  padding: 0.32rem 0.7rem;
-  min-height: 1.85rem;
+  margin: 0;
+  padding: 0.3rem 0.65rem;
+  min-height: 1.75rem;
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.015em;
@@ -774,16 +857,9 @@ main#app,
   border-radius: 10px;
   border: 1px solid var(--panel-stats-border);
   background: var(--panel-stats-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 8px 20px -6px rgba(0, 0, 0, 0.55);
-  isolation: isolate;
-  transform: translateZ(0);
+  box-shadow: var(--panel-stats-shadow);
 }
 
-/* Scrollable module bodies slide beneath the sticky stats row */
 .zk2-grid,
 .models-grid,
 .stacks-grid,
@@ -793,7 +869,6 @@ main#app,
 .models-empty,
 .stacks-empty {
   position: relative;
-  z-index: 0;
 }
 
 .zk2-stats-category {
@@ -807,6 +882,7 @@ main#app,
   flex-direction: column;
   min-width: 0;
   width: 100%;
+  min-height: 0;
 }
 
 /* Grid */
@@ -2624,9 +2700,15 @@ textarea.sp-form-input {
   color: var(--light-text-muted) !important;
   background: var(--panel-stats-bg) !important;
   border-color: var(--light-border) !important;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.95) inset,
-    0 6px 16px -6px rgba(79, 70, 229, 0.12) !important;
+  box-shadow: var(--panel-stats-shadow) !important;
+}
+
+[data-theme='light'] .panel-content-head::after {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--void) 18%, transparent),
+    transparent
+  );
 }
 
 [data-theme='light'] .zk2-sidebar-categories-heading,
@@ -3426,6 +3508,7 @@ textarea.sp-form-input {
   color: var(--light-violet);
 }
 
+[data-theme='light'] .panel-content-scroll,
 [data-theme='light'] .zk2-layout > .zk2-horizontal-content,
 [data-theme='light'] .stacks-content,
 [data-theme='light'] .models-content,
@@ -3434,6 +3517,7 @@ textarea.sp-form-input {
   scrollbar-color: var(--light-active-border) transparent;
 }
 
+[data-theme='light'] .panel-content-scroll::-webkit-scrollbar-thumb,
 [data-theme='light'] .zk2-layout > .zk2-horizontal-content::-webkit-scrollbar-thumb,
 [data-theme='light'] .stacks-content::-webkit-scrollbar-thumb,
 [data-theme='light'] .models-content::-webkit-scrollbar-thumb,
@@ -3450,15 +3534,13 @@ textarea.sp-form-input {
   background: linear-gradient(to bottom, rgba(244, 246, 248, 0.95), transparent);
 }
 
-[data-theme='light'] .zk2-sidebar-categories {
+[data-theme='light'] .zk2-sidebar-nav-panel {
   background: var(--light-card);
   border-color: var(--light-border);
 }
 
-[data-theme='light'] .zk2-sidebar-filters {
-  background: var(--light-card);
-  border-color: var(--light-border);
-  box-shadow: 0 4px 16px -8px rgba(124, 58, 237, 0.12);
+[data-theme='light'] .zk2-sidebar-filters > .zk2-sidebar-nav-panel {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
 }
 
 [data-theme='light'] .zk2-sidebar-filters-divider {
@@ -3834,6 +3916,10 @@ textarea.sp-form-input {
 
 .models-panel.is-detail-view .models-content {
   flex: none;
+  overflow: visible;
+}
+
+.models-panel.is-detail-view .panel-content-scroll {
   overflow: visible;
 }
 
@@ -4340,9 +4426,10 @@ textarea.sp-form-input {
 
 .models-content {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  contain: layout style;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .models-grid {
@@ -4585,6 +4672,10 @@ textarea.sp-form-input {
   overflow: visible;
 }
 
+.stacks-panel.is-detail-view .panel-content-scroll {
+  overflow: visible;
+}
+
 .stacks-panel-header {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -4657,9 +4748,10 @@ textarea.sp-form-input {
 
 .stacks-content {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  contain: layout style;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .stacks-grid {
