@@ -34,9 +34,16 @@
     0 0 1px color-mix(in srgb, var(--void) 62%, transparent);
   /* Small gap between scrollable content and vertical scrollbar */
   --scroll-inset: 0.35rem;
-  /* Tile/grid panels — match directories viewport (~2 card rows visible) */
-  --panel-tiles-min-height: 700px;
-  --panel-tiles-scroll-height: calc(var(--panel-tiles-min-height) - 280px);
+  /* Tile/grid panels — match directories viewport (~4 card rows visible).
+     Keep numeric values in sync with src/lib/layout-tokens.ts */
+  --panel-tiles-min-height: 1400px;
+  --panel-tiles-chrome-height: 280px;
+  --panel-tiles-mobile-max-height: 85vh;
+  --panel-tiles-scroll-height: calc(
+    var(--panel-tiles-min-height) - var(--panel-tiles-chrome-height)
+  );
+  --panel-tiles-effective-min-height: var(--panel-tiles-min-height);
+  --panel-tiles-effective-scroll-height: var(--panel-tiles-scroll-height);
   --zk2-nav-panel-pad: 0.6rem 0.55rem;
   --panel-stats-bg: #14111c;
   --panel-stats-border: rgba(168, 85, 247, 0.18);
@@ -371,7 +378,7 @@ main#app,
 .panel-root--stacks,
 .panel-root--prompts,
 .panel-root--guides {
-  min-height: var(--panel-tiles-min-height);
+  min-height: var(--panel-tiles-effective-min-height);
 }
 
 .panel-root--onboarding {
@@ -390,7 +397,7 @@ main#app,
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  min-height: var(--panel-tiles-min-height);
+  min-height: var(--panel-tiles-effective-min-height);
 }
 
 .onboarding-panel-skeleton {
@@ -412,7 +419,7 @@ main#app,
   border-radius: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.06);
   background: rgba(255, 255, 255, 0.02);
-  min-height: var(--panel-tiles-min-height);
+  min-height: var(--panel-tiles-effective-min-height);
 }
 
 .panel-skeleton-search {
@@ -426,7 +433,7 @@ main#app,
   grid-template-columns: minmax(190px, 250px) 1fr;
   gap: var(--module-gap, 1rem);
   flex: 1;
-  min-height: calc(var(--panel-tiles-min-height) - 80px);
+  min-height: calc(var(--panel-tiles-effective-min-height) - 80px);
 }
 
 .panel-skeleton-sidebar {
@@ -467,13 +474,24 @@ main#app,
 
 .page-section[data-deferred] {
   content-visibility: auto;
-  contain-intrinsic-size: auto 800px;
+  contain-intrinsic-size: auto calc(var(--panel-tiles-min-height) + 200px);
 }
 
 @media (max-width: 900px) {
+  :root {
+    --panel-tiles-effective-min-height: min(
+      var(--panel-tiles-min-height),
+      var(--panel-tiles-mobile-max-height)
+    );
+    --panel-tiles-effective-scroll-height: min(
+      var(--panel-tiles-scroll-height),
+      calc(var(--panel-tiles-mobile-max-height) - var(--panel-tiles-chrome-height))
+    );
+  }
+
   .panel-skeleton-layout {
     grid-template-columns: 1fr;
-    min-height: 560px;
+    min-height: calc(var(--panel-tiles-effective-min-height) * 0.8);
   }
 }
 
@@ -540,7 +558,8 @@ main#app,
 /* Layout: two-column nav (categories | filters) + content */
 .zk2-layout {
   --zk2-layout-min-height: var(--panel-tiles-min-height);
-  --zk2-content-max-height: min(80vh, 900px);
+  /* 1800px — see ZK2_CONTENT_MAX_HEIGHT_PX in src/lib/layout-tokens.ts */
+  --zk2-content-max-height: min(80vh, 1800px);
   /* Default cap; sync-zk2-layout-height.ts may raise --zk2-layout-height inline */
   --zk2-layout-height: max(var(--zk2-layout-min-height), var(--zk2-content-max-height));
   --zk2-nav-width: minmax(300px, 400px);
@@ -3333,7 +3352,7 @@ textarea.sp-form-input {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
   padding: 24px 0 16px 24px;
-  max-height: var(--panel-tiles-scroll-height);
+  max-height: var(--panel-tiles-effective-scroll-height);
   overflow-y: auto;
   overflow-x: hidden;
   scroll-padding-top: 60px;
@@ -3346,7 +3365,7 @@ textarea.sp-form-input {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
   padding: 24px 0 16px 24px;
-  max-height: var(--panel-tiles-scroll-height);
+  max-height: var(--panel-tiles-effective-scroll-height);
   overflow-y: auto;
   overflow-x: hidden;
   align-items: stretch;
@@ -3943,8 +3962,8 @@ textarea.sp-form-input {
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: var(--panel-tiles-min-height);
-  min-height: var(--panel-tiles-min-height);
+  height: var(--panel-tiles-effective-min-height);
+  min-height: var(--panel-tiles-effective-min-height);
 }
 
 .models-panel.is-detail-view {
@@ -4676,8 +4695,8 @@ textarea.sp-form-input {
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: var(--panel-tiles-min-height);
-  min-height: var(--panel-tiles-min-height);
+  height: var(--panel-tiles-effective-min-height);
+  min-height: var(--panel-tiles-effective-min-height);
 }
 
 .stacks-panel.is-detail-view {
@@ -5079,7 +5098,6 @@ textarea.sp-form-input {
   .models-panel,
   .stacks-panel {
     height: auto;
-    min-height: var(--panel-tiles-min-height);
   }
 
   .models-grid {

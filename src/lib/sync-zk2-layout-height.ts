@@ -3,6 +3,11 @@
  * sidebar (categories + filters) is taller than that cap.
  */
 
+import {
+  PANEL_TILES_MIN_HEIGHT_PX,
+  ZK2_CONTENT_MAX_HEIGHT_PX,
+} from './layout-tokens';
+
 /** Keep in sync with `@media (max-width: 900px)` in style.css */
 export const ZK2_LAYOUT_MOBILE_BREAKPOINT_PX = 900;
 
@@ -67,8 +72,8 @@ export function syncZk2LayoutHeight(layout: HTMLElement): void {
   const sidebar = layout.querySelector('.zk2-sidebar-column') as HTMLElement | null;
   if (!sidebar) return;
 
-  const minHeight = readPxVar(layout, MIN_HEIGHT_VAR, 700);
-  const maxHeight = readPxVar(layout, MAX_HEIGHT_VAR, 900);
+  const minHeight = readPxVar(layout, MIN_HEIGHT_VAR, PANEL_TILES_MIN_HEIGHT_PX);
+  const maxHeight = readPxVar(layout, MAX_HEIGHT_VAR, ZK2_CONTENT_MAX_HEIGHT_PX);
   const sidebarHeight = measureZk2SidebarNaturalHeight(sidebar);
   const height = computeZk2LayoutHeight(minHeight, maxHeight, sidebarHeight);
   const next = `${height}px`;
