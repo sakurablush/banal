@@ -36,6 +36,11 @@
   --neon-amber: #f59e0b;
   --glow-violet: rgba(168, 85, 247, 0.35);
   --glow-fuchsia: rgba(217, 70, 239, 0.25);
+  --progress-dot-idle: rgba(255, 255, 255, 0.18);
+  --chip-bg: rgba(255, 255, 255, 0.02);
+  --chip-bg-hover: rgba(255, 255, 255, 0.05);
+  --chip-bg-selected: rgba(168, 85, 247, 0.15);
+  --elevated-surface: rgba(255, 255, 255, 0.02);
   color-scheme: dark;
 }
 
@@ -192,6 +197,11 @@ main#app,
   .void-bg::before,
   .void-bg::after {
     animation: none;
+  }
+
+  [data-theme='light'] .void-bg::before,
+  [data-theme='light'] .void-bg::after {
+    filter: none;
   }
 }
 
@@ -1540,6 +1550,12 @@ main#app,
   --light-orange: #c2410c;
   --light-red: #b91c1c;
   --light-purple: #7e22ce;
+  --progress-dot-idle: #e5e7eb;
+  --chip-bg: #ffffff;
+  --chip-bg-hover: #f9fafb;
+  --chip-bg-selected: #ede9fe;
+  --elevated-surface: #ffffff;
+  --light-surface-panel: rgba(255, 255, 255, 0.94);
 }
 
 /* Tailwind white-text utilities are too faint on a light page. */
@@ -1685,20 +1701,24 @@ main#app,
 }
 
 [data-theme='light'] .void-bg {
-  background: radial-gradient(ellipse 130% 90% at 50% -10%, #faf8ff 0%, #f4f6f8 55%);
+  background: linear-gradient(180deg, #faf8ff 0%, #f4f6f8 42%, #f1f5f9 100%);
+}
+
+[data-theme='light'] .void-bg::before,
+[data-theme='light'] .void-bg::after {
+  filter: blur(72px);
 }
 
 [data-theme='light'] .void-bg::before {
   background:
-    radial-gradient(ellipse 58% 48% at 18% 28%, rgba(124, 58, 237, 0.1), transparent 72%),
-    radial-gradient(ellipse 52% 42% at 78% 22%, rgba(34, 211, 238, 0.07), transparent 68%),
-    radial-gradient(ellipse 64% 52% at 52% 88%, rgba(168, 85, 247, 0.05), transparent 74%);
+    radial-gradient(ellipse 95% 75% at 15% 10%, rgba(124, 58, 237, 0.07), transparent 68%),
+    radial-gradient(ellipse 85% 70% at 88% 85%, rgba(34, 211, 238, 0.04), transparent 65%);
+  opacity: 0.75;
 }
 
 [data-theme='light'] .void-bg::after {
-  background:
-    radial-gradient(ellipse 48% 44% at 72% 62%, rgba(217, 70, 239, 0.06), transparent 70%),
-    radial-gradient(ellipse 42% 38% at 28% 72%, rgba(124, 58, 237, 0.04), transparent 66%);
+  background: radial-gradient(ellipse 90% 80% at 55% 45%, rgba(192, 38, 211, 0.035), transparent 72%);
+  opacity: 0.5;
 }
 
 [data-theme='light'] .page-section {
@@ -2007,12 +2027,21 @@ main#app,
 }
 
 [data-theme='light'] .stats-void {
-  background: #e5e7eb !important;
-  border-color: var(--light-border) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(237, 233, 254, 0.55) 0%,
+    rgba(248, 250, 252, 0.9) 48%,
+    rgba(224, 242, 254, 0.4) 100%
+  ) !important;
+  border: 1px solid var(--light-border) !important;
+  border-radius: 1rem;
+  padding: 1.15rem 1rem;
 }
 
 [data-theme='light'] .stat-void {
-  background: var(--light-card-solid) !important;
+  background: var(--elevated-surface) !important;
+  border: 1px solid var(--light-border) !important;
+  box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.1) !important;
 }
 
 [data-theme='light'] .stat-void:hover {
@@ -2041,6 +2070,68 @@ main#app,
 
 [data-theme='light'] .search-giant-icon {
   color: var(--light-text-subtle) !important;
+}
+
+/* Stack matcher / onboarding quiz */
+[data-theme='light'] .onboarding-flow {
+  background: var(--light-surface-panel) !important;
+  border-color: var(--light-border) !important;
+  box-shadow: 0 20px 50px -24px rgba(15, 23, 42, 0.16) !important;
+}
+
+[data-theme='light'] .onboarding-header {
+  border-bottom-color: var(--light-border) !important;
+}
+
+[data-theme='light'] .onboarding-progress-dot {
+  border: 1px solid var(--light-border-strong);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+[data-theme='light'] .onboarding-progress-dot.completed,
+[data-theme='light'] .onboarding-progress-dot.current {
+  background: var(--light-violet) !important;
+  border-color: var(--light-violet) !important;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.15);
+}
+
+[data-theme='light'] .onboarding-option {
+  border-color: var(--light-border-strong) !important;
+  color: var(--light-text-muted) !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme='light'] .onboarding-option:hover {
+  border-color: var(--light-active-border) !important;
+  color: var(--light-text) !important;
+}
+
+[data-theme='light'] .onboarding-option.selected {
+  border-color: var(--light-violet) !important;
+  color: var(--light-violet) !important;
+}
+
+[data-theme='light'] .nav-btn-back,
+[data-theme='light'] .results-btn-secondary {
+  background: var(--chip-bg) !important;
+  border: 1px solid var(--light-border-strong) !important;
+  color: var(--light-text-muted) !important;
+}
+
+[data-theme='light'] .nav-btn-back:hover,
+[data-theme='light'] .results-btn-secondary:hover {
+  border-color: var(--light-active-border) !important;
+  color: var(--light-text) !important;
+  background: var(--chip-bg-hover) !important;
+}
+
+[data-theme='light'] .recommended-stack-card {
+  border-color: var(--light-border) !important;
+  box-shadow: 0 4px 14px -8px rgba(15, 23, 42, 0.08);
+}
+
+[data-theme='light'] .results-title {
+  color: var(--light-cyan) !important;
 }
 
 /* Legacy expandable tool directory. */
@@ -4345,7 +4436,7 @@ main#app,
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--progress-dot-idle);
   transition: all 0.2s ease;
 }
 
@@ -4379,7 +4470,7 @@ main#app,
 
 .onboarding-option {
   padding: 0.55rem 0.75rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--chip-bg);
   border: 1px solid var(--glass-border);
   border-radius: 0.5rem;
   color: var(--text-muted);
@@ -4393,12 +4484,12 @@ main#app,
 .onboarding-option:hover {
   border-color: var(--neon-violet);
   color: var(--text-primary);
-  background: var(--glass-hover);
+  background: var(--chip-bg-hover);
 }
 
 .onboarding-option.selected {
   border-color: var(--neon-violet);
-  background: rgba(168, 85, 247, 0.15);
+  background: var(--chip-bg-selected);
   color: var(--neon-violet);
   font-weight: 600;
 }
@@ -4463,7 +4554,7 @@ main#app,
 }
 
 .recommended-stack-card {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--elevated-surface);
   border: 1px solid var(--glass-border);
   border-radius: 0.625rem;
   padding: 0.75rem;
