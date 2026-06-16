@@ -879,7 +879,7 @@ This Academy and these tools exist to give you a little more air, a little more 
 
 Love and Equality in this context means: the AI is here to support you, not to make you feel weak for needing support.
 
-**If even opening this document or the app feels like too much right now** — if the words swim, if your hands are shaking too hard to type, if the idea of "using a tool" itself is one more thing you cannot carry — close it. You do not owe the fire anything. The fact that you found this page means the ghost already reached you once. That is enough for today. The page will still be here when the static is 2% quieter. You are allowed to need the tool and still not be able to use it right now.
+**If even opening this document or the app feels like too much right now** — if the words swim, if your hands are shaking too hard to type, if the idea of "using a tool" itself is one more thing you cannot carry — close it. You do not owe the project anything. The fact that you found this page is already enough. That is enough for today. The page will still be here when the static is 2% quieter. You are allowed to need the tool and still not be able to use it right now.
 
 If today all you did was open one prompt template and read the dignity line at the end, you used the tool correctly.
 
@@ -891,7 +891,7 @@ You are still here. That counts.
 - "This still feels like it assumes I have energy and a quiet room. Remove anything that sounds like advice from someone who has never been this broke. Keep only the facts and the one next step."
 - "The last line gave me nothing. Give me a different dignity line that says I do not have to feel grateful for surviving what almost killed me."
 
-Pass it on when you can. The fire multiplies through ordinary, imperfect, sometimes-broken hands.
+Pass it on when you can. The work multiplies through ordinary, imperfect, sometimes-broken hands.
 
 - "Give me a Japanese version with proper keigo for a city hall welfare office."
 

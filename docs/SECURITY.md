@@ -114,9 +114,12 @@ GET against the public URL; no body, no credentials, no follow-up.
 - **Source maps disabled in production.** `vite.config.ts` ships with
   `sourcemap: false`, so a hosted instance does not also publish the
   full annotated TypeScript source.
-- **Strict Content Security Policy** is applied where supported by the
-  host. (See `vite.config.ts` and the build output for the current
-  meta-CSP.)
+- **Content Security Policy is not yet shipped.** The
+  `index.html` template does not include a meta-tag CSP today; adding
+  one is the highest-priority hardening item in
+  [`PENTEST_REPORT.md`](../PENTEST_REPORT.md#h3-no-content-security-policy-in-the-static-shell).
+  Until it lands, the other mitigations in this section carry the
+  defensive load.
 - **`escapeHtml` is used everywhere user-controlled text is interpolated
   into HTML** (`src/utils.ts` and the corresponding tests).
 - **`npm audit --audit-level=moderate` is part of CI.** Vulnerabilities
@@ -152,8 +155,8 @@ vulnerability. Use one of the following instead:
 - GitHub's private vulnerability reporting: **Security** tab →
   **Report a vulnerability** on this repository.
 - If the repo does not yet have that feature enabled, contact the
-  maintainers via the email address in `package.json` (the
-  `bugs.url` field is also a reliable pointer to the issue tracker).
+  maintainers via the issue tracker listed in the `bugs` field of
+  `package.json` (a GitHub issues URL by default).
 
 Please include:
 
@@ -178,7 +181,10 @@ If you maintain a fork that other people rely on:
 - Do not add analytics, third-party scripts, or remote fonts without
   documenting the change prominently in your README and the
   verification snapshots.
-- Do not weaken the `escapeHtml` usage or the CSP.
+- Do not weaken the `escapeHtml` usage in `src/utils.ts`. If a future
+  change adds a Content Security Policy (the recommended hardening in
+  [`PENTEST_REPORT.md`](../PENTEST_REPORT.md#h3-no-content-security-policy-in-the-static-shell)),
+  do not remove it without discussion.
 - If you must pin to an older dependency for compatibility, document
   why and when it will be revisited.
 

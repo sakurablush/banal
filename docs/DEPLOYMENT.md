@@ -171,8 +171,11 @@ After the site is live:
    works.
 3. Toggle the theme. Reload. The theme should remember your choice for the
    session.
-4. Open the browser DevTools → Application → Local Storage. You should see
-   one Banal-related key (`banal-lang`) and nothing else.
+4. Open the browser DevTools → Application → Local Storage. You should
+   see only the keys documented in
+   [`docs/SECURITY.md`](SECURITY.md#data-the-browser-stores-locally)
+   (`banal-lang`, `banal-saved-filters`, `banal-custom-stacks`, etc.).
+   Anything else under this origin is unexpected.
 
 If any of those fail, the most likely cause is a stale build or a custom
 domain with caching that is serving the previous version. Force-refresh

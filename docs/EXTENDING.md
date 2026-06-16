@@ -21,7 +21,12 @@ for any user-facing copy are in
   the normal `npm run dev`.
 - **Edit the homepage hero copy.** The hero text is in `index.html` and
   `src/i18n.ts`. Keep the changes in both English and Japanese.
-- **Edit prompt templates.** See below.
+- **Add a new tool to the catalog.** See the next section.
+- **Add a new category.** See "Adding a category" below.
+- **Edit prompt templates.** See "Adding a prompt template" below — it
+  is not quite a one-line edit because the parity validator and the
+  empathy smoke tests will reject sloppy changes, but it is still
+  contained to one file plus one test file.
 
 ---
 
@@ -53,7 +58,7 @@ Rules of thumb:
 - The `category` must already exist in `src/data/categories.ts`. If you
   need a new category, see the "Adding a category" section below.
 - Pick the most honest `badges` you can. The four tags are defined in
-  [`MINDSET.md`](MINDSET.md#3-what-free-means-here). A tool can
+  [`MINDSET.md`](MINDSET.md#what-banal-is-and-is-not). A tool can
   have more than one.
 - Keep `description` to one short sentence in plain English. Long
   marketing copy does not belong in a directory entry.
@@ -197,4 +202,5 @@ Once you have a fork that does something useful for your community:
 3. If any of the changes are general enough to benefit the main
    project, open a PR. We review external contributions with the
    process in [`docs/CONTRIBUTING.md`](CONTRIBUTING.md).
+
 

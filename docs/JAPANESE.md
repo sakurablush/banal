@@ -33,19 +33,42 @@ This library exists so that anyone without money can still move forward a little
 
 ---
 
-## Japanese Translation Philosophy
+## Prompt templates in Japanese
 
-**Status (as of this delivery):** The 9 rich prompt templates + full library now exist and are production-grade.
+The 9 templates in `src/lib/prompt-templates.ts` are the heart of the
+Japanese localization work. Each one has parallel `en` and `ja`
+content, an identical set of `{{variables}}` in both languages, and
+matches the same dignity bar in both.
 
-- 6 static marketing cards (titles + short descriptions) live in `src/i18n.ts` (en/ja) and are rendered in `index.html` as the "Prompt Templates that actually matter..." teaser section. These remain the visible entry point.
-- The real heart — exactly 9 high-quality, empathetic, shame-free prompt templates — is implemented in the new `src/lib/prompt-templates.ts` (PromptTemplatesLibrary class + `promptTemplatesLibrary` singleton, `getAll()`, `getById()`, `fill(id, values)`, `extractTemplateVariables`, `validateParity()`, locale switching).
-- Full parallel natural Japanese (proper keigo for bureaucracy letters, softening + permission for low-energy/mental health ones, cultural notes inside the EN↔JA bridge template). English is the source of truth.
-- Templates target the exact "poor stressed user": job gaps reframed as strengths (caregiving, health, unemployment), zero-budget learning plans (free resources + teach-back), $0 micro-hustles with first-3-steps, calm bureaucracy letters (rights + facts, no aggression), 5-min grounding scripts, form/letter decoder with next actions, STAR stories from real-life caregiving, dignity-preserving debt/hardship phone+email scripts, EN/JA communication bridge with register + keigo guidance.
-- Every template hard-codes "zero budget / free only / library computer / low energy / no judgment" assumptions. Ready to paste into any free AI today.
-- `tests/prompt-templates.test.ts` provides exhaustive coverage (instantiation, locale, all getters/fill edges, variable extraction, EN/JA parity validator, singleton, empathy smoke tests for shame-free language and keigo). 100% thresholds enforced in vitest.config.
-- As part of delivery, the root cause of `t()` / dotted-key i18n breakage (affecting prompt templates strings and more) was also fixed in `src/i18n.ts` so all current and future nested-style keys work.
+What ships in the bilingual template library:
 
-The UI cards are still static marketing (no one-click fill yet — that is future integration work per README "next slices"). The library stands alone and immediately usable.
+- 9 production-grade templates covering job gaps as strengths, zero-budget
+  learning plans, $0 micro-hustles with first-3-steps, calm bureaucracy
+  letters, 5-minute grounding scripts, form/letter decoders, STAR
+  stories from unpaid caregiving, dignity-preserving debt scripts, and
+  EN↔JA communication bridges.
+- Proper keigo for bureaucracy letters (です・ます, いただきたく存じます,
+  いただけますと幸いです), explicit permission and short lines for
+  low-energy/mental-health templates, and cultural notes inside the
+  EN↔JA bridge template.
+- Identical `{{variable}}` placeholders across both languages, enforced
+  by `PromptTemplatesLibrary.validateParity()` in
+  `tests/prompt-templates.test.ts`. Coverage thresholds in
+  `vitest.config.ts` enforce 100% on the library.
+- Empathy smoke tests that assert the output never contains shaming
+  phrases, in either language.
+
+Templates target real situations: job gaps (caregiving, health,
+unemployment), zero-budget learning plans (free resources + teach-back),
+calm bureaucracy letters (rights + facts, no aggression), 5-minute
+grounding scripts, form/letter decoders with next actions, STAR
+stories from real caregiving, dignity-preserving debt/hardship phone
+and email scripts, and EN/JA communication bridges with register and
+keigo guidance.
+
+Every template hard-codes the same audience assumptions: zero budget,
+free only, library computer, low energy, no judgment. The user can paste
+the filled text into any free chatbot.
 
 ### Translation Quality & Implementation Points (Already Shipped)
 
@@ -58,10 +81,10 @@ The UI cards are still static marketing (no one-click fill yet — that is futur
 ### How to Add or Improve Languages (Correct Process)
 
 1. Do not add new language entries inside `src/lib/prompt-templates.ts` TEMPLATES for existing 9 — improve the current ones first. New locale support (e.g. ko, fr) requires separate design (current is en/ja only).
-2. When improving an existing template's title / description / template: keep English as the source of truth, never touch {{vars}}, write Japanese from a native + poor-person-lived-experience perspective.
+2. When improving an existing template's title / description / template: keep English as the source of truth, never touch {{vars}}, write Japanese from a native + lived-experience perspective.
 3. `PromptTemplatesLibrary.validateParity()` and the empathy smoke tests in `tests/prompt-templates.test.ts` automatically guard completeness. Always run `npm run test:run` (or coverage) and pass.
 4. Touching the 6 static UI cards in `src/i18n.ts` should be minimal; preserve data-i18n key consistency.
-5. In PR descriptions, prioritize: "Can a stressed poor person actually copy this prompt and be helped today?" No machine-translation traces. No pressure language.
+5. In PR descriptions, prioritize: "Can a stressed person actually copy this prompt and be helped today?" No machine-translation traces. No pressure language.
 
 PR reviews must include this checklist:
 
@@ -72,37 +95,84 @@ PR reviews must include this checklist:
 
 ---
 
-This library exists so that anyone without money can still move forward a little with AI power.
-Every Japanese speaker is welcome to help make the world where no one feels ashamed to use the best prompts. Feedback from actual poor people who live this is the highest priority.
+## Translation principles
 
----
+All Japanese user-facing text (UI strings, errors, status, nav, manifesto, and especially the 9 prompt templates) is written by hand with deep care for the target audience: ordinary Japanese people who are under-resourced, stressed, exhausted, dealing with job loss, caregiving, debt, welfare offices, scary forms, or just trying to survive on shared phones and 5 minutes of free Wi-Fi.
 
-## Japanese Translation Philosophy
+Standards used (non-negotiable, matching the English peer-grade bar):
 
-All Japanese user-facing text (UI strings, errors, status, nav, manifesto, chat, exports, and especially the 9 Prompt Templates) was written by hand with deep care for the target audience: ordinary Japanese people who are poor, stressed, broke, exhausted, dealing with job loss, caregiving, debt, welfare offices, scary forms, or just trying to survive on shared phones and 5 minutes of free Wi-Fi.
+- Natural, warm, adult-to-adult Japanese. Short clear sentences on the
+  worst days. 「あなた」used with gentleness, never condescending.
+- Keigo is precise and empowering, not stiff: in bureaucracy/debt/letters
+  prompt templates and forms, proper です・ます + いただく / 存じます /
+  申し上げます / いただけますと幸いです to show respect while firmly
+  asserting rights. Never overly humble or corporate.
+- Low-energy / grounding / mental health templates use heavy permission
+  and softening: 「〜しなくて大丈夫」「それだけで十分だ」「罪悪感なくスキップして良い」「あなたは『良くなっている』と感じなくても、ケアされる価値がある」. No "頑張れ", no toxic positivity, no "just".
+- Every error, placeholder, success toast, and prompt-template end-line
+  preserves dignity in Japanese: 「あなたは何も悪くありません」「みんなでこの制限を分け合っています」「これで十分」.
+- The cultural bridge prompt template explains register/keigo choices
+  with concrete examples that help real users avoid offense without
+  losing meaning or sounding foreign.
+- Every template ends with a quiet dignity-restoring line, translated to
+  feel like a calm friend sitting with you.
+- English remains the source of truth for all keys, structure,
+  variables, and new features. Japanese is maintained in parallel at
+  identical quality — never machine, never afterthought, never "good
+  enough".
+- The i18n system (`src/i18n.ts`) ensures Japanese works fully and
+  instantly everywhere, including dynamic UI, a11y, browser tab title,
+  and post-mount language switches.
 
-Standards used (non-negotiable, matching the English obsessive bar):
-
-- Natural, warm, adult-to-adult Japanese. Short clear sentences on the worst days. "あなた" used with gentleness, never condescending.
-- Keigo is precise and empowering, not stiff: in bureaucracy/debt/letters prompt templates and forms, proper です・ます + いただく / 存じます / 申し上げます / いただけますと幸いです to show respect while firmly asserting rights ("あなたは必要なことを求める権利があります"). Never overly humble or corporate.
-- Low-energy / grounding / mental health templates use heavy permission and softening: 「〜しなくて大丈夫」「それだけで十分だ」「罪悪感なくスキップして良い」「あなたは『良くなっている』と感じなくても、ケアされる価値がある」. No "頑張れ", no toxic positivity, no "just".
-- Branding phrases ("stupidly simple", "proudly banal", "Robinhood of AI") translated to retain the defiant warmth and reclaimed ordinariness: 「バカみたいにシンプル」「誇り高く凡庸」「AI版ロビンフッド」. "凡庸" reclaimed as strength, not mediocrity.
-- Zero shame, maximum dignity in every error, placeholder, success toast, prompt template end-line: "あなたは何も悪くありません", "みんなでこの制限を分け合っています", "永遠にあなたのものです", "これで十分".
-- Cultural bridge prompt template explains register/keigo choices with concrete examples that help real users avoid offense without losing meaning or sounding foreign.
-- Every template ends with a quiet dignity-restoring line, translated to feel like a calm friend sitting with you.
-- English remains the source of truth for all keys, structure, variables {{ }}, and new features. Japanese is maintained in parallel at identical quality — never machine, never afterthought, never "good enough".
-- New i18n system extensions (data-i18n-placeholder, data-i18n-aria-label, root-scoped apply, title/meta sync, post-mount + lang-change re-apply in chat) ensure Japanese works fully and instantly everywhere, including dynamic UI, a11y, browser tab, and offline exports.
-
-This was done by first absorbing the emotional intent and constraints of the English (low energy, no shame, zero budget, full adult respect), then writing what a caring, experienced Japanese social worker, friend, or advocate would actually say to someone on their hardest day. No Google Translate, no literal calques, no pressure language.
-
-The result must feel like it was made _for_ poor Japanese people, with love and zero pity.
+The result must feel like it was made *for* Japanese readers with zero
+pity, peer-grade respect, and a sharp eye for what an experienced
+Japanese advocate would actually say on someone's hardest day.
 
 ---
 
 ## The Prompt Templates Guide and Japanese
 
-The full Prompt Templates Guide (`docs/PROMPT-TEMPLATES-GUIDE.md`) is the living companion to the 9 templates. It contains complete instructions, dozens of real-life examples, self-checks, and best practices in English (primary) — with hand-crafted Japanese titles, dignity lines, and a complete Japanese introduction/summary section at the end, at the exact same obsessive standard as the fully bilingual templates themselves (proper keigo for official letters and bureaucracy, heavy permission and softening for grounding/low-energy days, natural "poor stressed adult" register, zero machine translation, zero condescension). The actual runnable templates in the app are fully JA.
+The full Prompt Templates Guide (`docs/PROMPT-TEMPLATES-GUIDE.md`) is the
+living companion to the 9 templates. It contains complete instructions,
+dozens of real-life examples, self-checks, and best practices in English
+(primary) — with hand-crafted Japanese titles, dignity lines, and a
+complete Japanese introduction/summary section at the end, at the same
+obsessive standard as the fully bilingual templates themselves. The
+actual runnable templates in the app are fully JA.
 
-When improving or extending Japanese in Banal, the Academy is the place to do the deepest work. The examples there (the welfare letter at midnight on the library computer, the single parent with a crying child and 15 minutes left, the person translating between two countries with nothing but a cracked phone) are the ultimate test of whether the Japanese feels like it was written by a caring, experienced Japanese advocate who has actually sat with people in those exact situations.
+When improving or extending Japanese in Banal, the Academy is the place
+to do the deepest work. Maintain the Academy at the same quality bar as
+the source templates. That is how Japanese stays first-class.
 
-Maintain the Academy at the same quality bar as the source templates. That is how Japanese stays first-class forever.
+---
+
+## Translating the documentation itself
+
+The `.md` files in this folder and the repository root are written in
+English by default. This is the convention for open-source projects on
+GitHub: the canonical docs are in English, with translations either
+co-located in the same file (rare), split into
+`docs/<lang>/...` (the `transifex` / `weblate` pattern), or maintained
+by the community in forks.
+
+For Banal specifically, the **practical approach** is:
+
+1. **UI strings** live in `src/i18n.ts` and have full Japanese
+   translations. Adding a new UI string requires a Japanese version or
+   a clear reason in the PR description.
+2. **The 9 prompt templates** live in `src/lib/prompt-templates.ts`
+   and have full parallel `en` / `ja` content, validated by the
+   `validateParity()` test.
+3. **The Markdown docs** (this file, `docs/ARCHITECTURE.md`, etc.) are
+   English-only in the main repo today. The intent is for them to be
+   readable by any contributor regardless of their native language.
+   If you would like to translate them, the recommended pattern is to
+   open a PR that:
+   - creates `docs/ja/<file>.md` for each translated document,
+   - adds a small "🌐 日本語" link from the top of the English file
+     pointing to the translation,
+   - keeps the English file as the source of truth for content changes
+     (the translation is then updated separately).
+4. **Quality bar for any Japanese contribution** is the same as for
+   English: professional human translation, no machine output, the
+   editorial test in `MINDSET.md` applied.

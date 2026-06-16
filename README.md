@@ -2,10 +2,14 @@
 
 **Free, forkable, professional-grade AI and developer tools, curated for the people who pay for their own stack out of pocket.**
 
-Banal is a single static website that bundles a curated directory of 273 tools that
-work in a browser without an account or a credit card, plus 9 high-leverage
-prompt templates written for the real situations independent builders, students,
-caregivers, career-changers, and solo founders face.
+Banal is a single static website that bundles a curated directory of 273
+tools that work in a browser without payment, plus 9 high-leverage prompt
+templates written for the real situations independent builders, students,
+caregivers, career-changers, and solo founders face. Each tool is tagged
+honestly: some require a free account (`free-tier`), some are open-source
+with local setup, some are public APIs. See
+[the voice guide](MINDSET.md#what-banal-is-and-is-not) for the four
+definitions.
 
 No backend. No accounts. No installs. No telemetry. One folder you can clone,
 host for free, copy to a USB, or open directly from disk.
@@ -57,7 +61,7 @@ diagramming, and docs/knowledge APIs.
 
 Each entry shows: name, what it is, the real URL, and the four honest "free"
 tags (`no-login`, `public-api`, `open-source`, `free-tier`) — see
-[the voice guide](MINDSET.md#3-what-free-means-here) for definitions.
+[the voice guide](MINDSET.md#what-banal-is-and-is-not) for definitions.
 
 ---
 
@@ -150,7 +154,8 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full picture.
 
 ## License
 
-MIT. See [`LICENSE`](LICENSE) if present, or the `license` field in
+MIT. See [`LICENSE`](LICENSE) or the `license` field in
 [`package.json`](package.json).
 
 Fork it. Host it. Give it to the next person who needs it.
+

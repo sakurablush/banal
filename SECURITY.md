@@ -110,7 +110,8 @@ vulnerability. Use one of these channels instead:
 - GitHub's private vulnerability reporting: **Security** tab →
   **Report a vulnerability** on this repository.
 - If the repo does not yet have that feature, contact the maintainers
-  via the email or issue tracker linked from `package.json`.
+  via the issue tracker listed in the `bugs` field of `package.json`
+  (a GitHub issues URL by default).
 
 Please include:
 
