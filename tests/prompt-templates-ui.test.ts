@@ -2,6 +2,8 @@
  * Tests for redesigned prompt template UI — Horizontal Scroller
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { renderPromptTemplatesStandalone } from '../src/prompt-templates-standalone';
 
 describe('Prompt Templates — horizontal scroller UI behavior', () => {
@@ -655,10 +657,31 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     card.click();
     vi.advanceTimersByTime(150);
 
-    const textareas = document.querySelectorAll(
-      '.sp-form-input textarea, .sp-inline-form textarea'
-    );
+    const textareas = document.querySelectorAll('textarea.sp-form-input');
     // Should have at least one textarea for long fields
     expect(textareas.length).toBeGreaterThan(0);
+  });
+});
+
+describe('Prompt templates — light-mode CSS regressions', () => {
+  const css = readFileSync(resolve(__dirname, '../src/style.css'), 'utf8');
+
+  it('does not force white text on #prompt-templates-panel in light mode', () => {
+    expect(css).not.toMatch(/\[data-theme='light'\]\s*#prompt-templates-panel/);
+  });
+
+  it('keeps dark-island text overrides scoped to modal overlays only', () => {
+    const block =
+      css.match(
+        /\/\* Keep true dark overlays[\s\S]*?\/\* =+/
+      )?.[0] ?? '';
+    expect(block).toContain('#keys-modal');
+    expect(block).toContain('.sp-modal-content');
+    expect(block).not.toContain('#prompt-templates-panel');
+  });
+
+  it('defines light-mode form input styles for prompt accordion fields', () => {
+    expect(css).toContain("[data-theme='light'] .sp-form-input");
+    expect(css).toContain("[data-theme='light'] .prompt-accordion-title");
   });
 });
