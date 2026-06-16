@@ -179,11 +179,17 @@ export const translations: Record<Lang, Translations> = {
     'loading.promptTemplates': 'Loading prompt templates...',
 
     // === Article labels ===
+    'article.back': '← Back to Banal',
+    'article.shareLink': 'Share link',
+    'article.shareCopied': 'Copied!',
+    'article.shareError': 'Copy failed',
+    'article.shareTitle': 'Copy a link to this article',
     'article.featured': 'FEATURED',
     'article.minRead': 'min read',
     'article.practicalGuide': 'Practical guide',
     'article.honestReview': 'Honest review',
     'article.readFullGuide': 'Read the full guide →',
+    'article.costGuide': 'Cost guide',
 
     // === Footer buttons ===
     'footer.viewOnGithub': 'View on GitHub →',
@@ -266,10 +272,26 @@ export const translations: Record<Lang, Translations> = {
     'error.pleaseRefresh': 'Please refresh the page.',
     'error.refreshPage': 'Refresh Page',
 
-    // === Featured article ===
-    'article.featured.title': 'The Only Free AI Coding Setup That Actually Works in 2026',
+    // === Featured article (Kilo Code) ===
+    'article.featured.title':
+      'Kilo Code: Professional AI Agent Coding for Free (or Very Cheap) — Without Feeling Left Behind',
     'article.featured.excerpt':
-      "I've tested free AI coding setups on real projects — not demos. What holds up under daily professional use, what rate-limits you, and what still costs in tokens when the work is serious.",
+      'Real agent workflows on free models — stay in VS Code or JetBrains, skip the $100+/month token bill, and still ship professional work.',
+    'article.kilo2026.meta.title':
+      'Kilo Code: Professional AI Agent Coding for Free (or Very Cheap) | Banal',
+    'article.kilo2026.meta.description':
+      'Kilo Code runs proper agent modes on free gateway models in your existing IDE. Honest limits, BYOK upgrades, and how it compares to Cursor Hobby.',
+
+    // === AI agents cost article ===
+    'article.agents2026.badge': 'COST GUIDE',
+    'article.agents2026.meta.title':
+      'The Honest Truth About AI Coding Agents in 2026 | Banal',
+    'article.agents2026.meta.description':
+      'Real agent workloads cost $200–400/month on top models — or a fraction of that with smart model switching. MiniMax M3, Composer 2.5, and when Opus is worth it.',
+    'article.agents2026.card.title':
+      'The Honest Truth About AI Coding Agents in 2026',
+    'article.agents2026.card.excerpt':
+      'I burned thousands on agent sessions before the bill made sense. What top models actually cost, which cheaper models handle daily work, and when to switch up.',
 
     // === Legacy keys for tests ===
     'hero.title':
@@ -469,11 +491,17 @@ export const translations: Record<Lang, Translations> = {
     'loading.promptTemplates': 'プロンプトテンプレートを読み込み中...',
 
     // === Article labels ===
+    'article.back': '← Banalに戻る',
+    'article.shareLink': 'リンクを共有',
+    'article.shareCopied': 'コピーしました！',
+    'article.shareError': 'コピーに失敗しました',
+    'article.shareTitle': 'この記事のリンクをコピー',
     'article.featured': 'おすすめ',
     'article.minRead': '分で読める',
     'article.practicalGuide': '実践ガイド',
     'article.honestReview': '正直なレビュー',
     'article.readFullGuide': '全文を読む →',
+    'article.costGuide': 'コストガイド',
 
     // === Footer buttons ===
     'footer.viewOnGithub': 'GitHubで見る →',
@@ -556,10 +584,24 @@ export const translations: Record<Lang, Translations> = {
     'error.pleaseRefresh': 'ページを更新してください。',
     'error.refreshPage': 'ページを更新',
 
-    // === Featured article ===
-    'article.featured.title': '2026年に本当に使える唯一の無料AIコーディング環境',
+    // === Featured article (Kilo Code) ===
+    'article.featured.title':
+      'Kilo Code：AIエージェントを使った本格的なプログラミングを無料（または格安）で — 取り残されることなく',
     'article.featured.excerpt':
-      'デモではなく実プロジェクトで無料AIコーディング環境を検証した。日常のプロ仕事で耐えるもの、レート制限に当たるもの、本気の作業でトークン代がかかるものを整理。',
+      '既存のVS Code / JetBrainsのまま、無料ゲートウェイモデルで本気のエージェント作業。月100ドル超のトークン請求なしで、プロ品質の成果を出す方法。',
+    'article.kilo2026.meta.title':
+      'Kilo Code：無料（または格安）で本格的なAIエージェントコーディング | Banal',
+    'article.kilo2026.meta.description':
+      'Kilo Codeは既存IDEでエージェントモードを無料モデルで動かせる。正直な制限、BYOKでの段階的アップグレード、Cursor無料枠との比較。',
+
+    // === AI agents cost article ===
+    'article.agents2026.badge': 'コストガイド',
+    'article.agents2026.meta.title': '2026年のAIコーディングエージェントの本当のコスト | Banal',
+    'article.agents2026.meta.description':
+      '本気のエージェント運用はトップモデルで月200〜400ドル超え。賢い切り替えならその何分の一。MiniMax M3、Composer 2.5、Opusが価値ある瞬間。',
+    'article.agents2026.card.title': '2026年のAIコーディングエージェントの本当のコスト',
+    'article.agents2026.card.excerpt':
+      '請求書が意味をなすまで、エージェントに何千ドルも使った。トップモデルの実コスト、日常使いに足りる安いモデル、切り替えるべきタイミング。',
 
     // === Legacy keys for tests ===
     'hero.title':
@@ -726,17 +768,42 @@ export function applyTranslations(
     el.setAttribute('title', translated);
   });
 
+  scope.querySelectorAll<HTMLElement>('[data-lang-only]').forEach((el) => {
+    const blockLang = el.getAttribute('data-lang-only');
+    el.hidden = blockLang !== lang;
+  });
+
   // Page title and meta description — browser tab / share experience also localized.
   if (isFullDoc) {
-    const pageTitle = t(lang, 'meta.title');
-    if (pageTitle && !pageTitle.startsWith('meta.')) {
-      document.title = pageTitle;
+    const titleEl = document.querySelector('title[data-i18n]');
+    if (titleEl) {
+      const key = titleEl.getAttribute('data-i18n');
+      if (key) {
+        const translated = t(lang, key);
+        if (translated && !translated.startsWith('article.')) {
+          document.title = translated;
+        }
+      }
+    } else {
+      const pageTitle = t(lang, 'meta.title');
+      if (pageTitle && !pageTitle.startsWith('meta.')) {
+        document.title = pageTitle;
+      }
     }
+
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      const desc = t(lang, 'meta.description');
-      if (desc && !desc.startsWith('meta.')) {
-        metaDesc.setAttribute('content', desc);
+      const metaKey = metaDesc.getAttribute('data-i18n');
+      if (metaKey) {
+        const desc = t(lang, metaKey);
+        if (desc && !desc.startsWith('article.')) {
+          metaDesc.setAttribute('content', desc);
+        }
+      } else {
+        const desc = t(lang, 'meta.description');
+        if (desc && !desc.startsWith('meta.')) {
+          metaDesc.setAttribute('content', desc);
+        }
       }
     }
   }

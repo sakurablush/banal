@@ -190,6 +190,42 @@ describe('applyTranslations (DOM)', () => {
     const metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement;
     expect(metaDesc.content).toContain('273件');
   });
+
+  it('shows only matching data-lang-only blocks', () => {
+    document.body.innerHTML = `
+      <section data-lang-only="en">English block</section>
+      <section data-lang-only="ja" hidden>Japanese block</section>
+    `;
+
+    applyTranslations('ja');
+
+    const enBlock = document.querySelector('[data-lang-only="en"]') as HTMLElement;
+    const jaBlock = document.querySelector('[data-lang-only="ja"]') as HTMLElement;
+    expect(enBlock.hidden).toBe(true);
+    expect(jaBlock.hidden).toBe(false);
+  });
+
+  it('uses title[data-i18n] for document title on article pages', () => {
+    document.head.innerHTML = `
+      <title data-i18n="article.agents2026.meta.title">Fallback</title>
+    `;
+
+    applyTranslations('ja');
+
+    expect(document.title).toBe('2026年のAIコーディングエージェントの本当のコスト | Banal');
+  });
+
+  it('updates meta description when meta tag has data-i18n', () => {
+    document.head.innerHTML = `
+      <meta name="description" data-i18n="article.kilo2026.meta.description" content="Fallback" />
+    `;
+
+    applyTranslations('ja');
+
+    const metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement;
+    expect(metaDesc.content).toContain('Kilo Code');
+    expect(metaDesc.content).toContain('Cursor');
+  });
 });
 
 describe('initI18n (wires buttons + initial apply)', () => {

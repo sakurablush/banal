@@ -15,6 +15,10 @@ export default defineConfig({
           __dirname,
           'articles/free-ai-coding-setup-2026/index.html'
         ),
+        'articles/honest-truth-ai-coding-agents-2026': resolve(
+          __dirname,
+          'articles/honest-truth-ai-coding-agents-2026/index.html'
+        ),
       },
     },
   },
