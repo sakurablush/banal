@@ -3043,6 +3043,9 @@ textarea.sp-form-input {
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .article-card-void::before {
@@ -3090,6 +3093,7 @@ textarea.sp-form-input {
   font-size: 0.95rem;
   line-height: 1.6;
   margin-bottom: 1.25rem;
+  flex: 1;
 }
 
 .article-meta-void {
@@ -3100,6 +3104,7 @@ textarea.sp-form-input {
   color: var(--text-subtle);
   padding-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: auto;
 }
 
 /* Articles and mission cards - light mode overrides */
