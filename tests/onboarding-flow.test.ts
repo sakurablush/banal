@@ -13,14 +13,14 @@ describe('Onboarding Flow', () => {
     renderOnboarding(container, 'en');
     
     const title = container.querySelector('.onboarding-title');
-    expect(title?.textContent).toContain('Welcome');
+    expect(title?.textContent).toContain('Stack matcher');
   });
 
   it('should render subtitle', () => {
     renderOnboarding(container, 'en');
     
     const subtitle = container.querySelector('.onboarding-subtitle');
-    expect(subtitle?.textContent).toContain('find the perfect tools');
+    expect(subtitle?.textContent).toContain('Stack recommendations');
   });
 
   it('should render step 1 (role selection)', () => {
@@ -141,7 +141,7 @@ describe('Onboarding Flow', () => {
     renderOnboarding(container, 'ja');
     
     const title = container.querySelector('.onboarding-title');
-    expect(title?.textContent).toContain('ようこそ');
+    expect(title?.textContent).toContain('スタックマッチャー');
   });
 
   it('should render step indicator', () => {
