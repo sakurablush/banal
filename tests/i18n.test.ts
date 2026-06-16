@@ -205,6 +205,21 @@ describe('applyTranslations (DOM)', () => {
     expect(jaBlock.hidden).toBe(false);
   });
 
+  it('shows JA when article lang blocks are siblings', () => {
+    document.body.innerHTML = `
+      <div data-lang-only="en">English article</div>
+      <div data-lang-only="ja" hidden>Japanese article</div>
+    `;
+
+    applyTranslations('ja');
+
+    const enBlock = document.querySelector('[data-lang-only="en"]') as HTMLElement;
+    const jaBlock = document.querySelector('[data-lang-only="ja"]') as HTMLElement;
+    expect(enBlock.hidden).toBe(true);
+    expect(jaBlock.hidden).toBe(false);
+    expect(jaBlock.textContent).toContain('Japanese');
+  });
+
   it('uses title[data-i18n] for document title on article pages', () => {
     document.head.innerHTML = `
       <title data-i18n="article.agents2026.meta.title">Fallback</title>
@@ -212,7 +227,7 @@ describe('applyTranslations (DOM)', () => {
 
     applyTranslations('ja');
 
-    expect(document.title).toBe('2026年のAIコーディングエージェントの本当のコスト | Banal');
+    expect(document.title).toBe('2026年のAIエージェントの本当のコスト | Banal');
   });
 
   it('updates meta description when meta tag has data-i18n', () => {

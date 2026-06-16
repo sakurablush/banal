@@ -596,10 +596,10 @@ export const translations: Record<Lang, Translations> = {
 
     // === AI agents cost article ===
     'article.agents2026.badge': 'コストガイド',
-    'article.agents2026.meta.title': '2026年のAIコーディングエージェントの本当のコスト | Banal',
+    'article.agents2026.meta.title': '2026年のAIエージェントの本当のコスト | Banal',
     'article.agents2026.meta.description':
       '本気のエージェント運用はトップモデルで月200〜400ドル超え。賢い切り替えならその何分の一。MiniMax M3、Composer 2.5、Opusが価値ある瞬間。',
-    'article.agents2026.card.title': '2026年のAIコーディングエージェントの本当のコスト',
+    'article.agents2026.card.title': '2026年のAIエージェントの本当のコスト',
     'article.agents2026.card.excerpt':
       '請求書が意味をなすまで、エージェントに何千ドルも使った。トップモデルの実コスト、日常使いに足りる安いモデル、切り替えるべきタイミング。',
 

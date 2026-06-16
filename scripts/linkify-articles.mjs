@@ -371,7 +371,7 @@ function patchArticle(slug, en, ja) {
   let html = fs.readFileSync(file, 'utf8');
   html = html.replace(
     /<div data-lang-only="en">[\s\S]*?\n      <\/article>/,
-    `<div data-lang-only="en">${en}\n        <div data-lang-only="ja" hidden>${ja}\n        </div>\n      </article>`
+    `<div data-lang-only="en">${en}</div>\n        <div data-lang-only="ja" hidden>${ja}\n        </div>\n      </article>`
   );
   fs.writeFileSync(file, html);
   console.log('linked', slug);

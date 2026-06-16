@@ -3216,17 +3216,6 @@ textarea.sp-form-input {
   color: var(--text-primary);
 }
 
-.article-content a {
-  color: var(--neon-cyan);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.article-content a:hover {
-  color: var(--text-primary);
-  text-shadow: 0 0 20px rgba(34, 211, 238, 0.6);
-}
-
 .article-content .article-banal-ref {
   display: inline-flex;
   align-items: center;
@@ -3238,6 +3227,7 @@ textarea.sp-form-input {
   font-weight: 500;
   color: var(--text-muted);
   text-decoration: none;
+  border: none;
   opacity: 0.55;
   vertical-align: super;
   transition: color 0.15s ease, opacity 0.15s ease;
@@ -3247,6 +3237,17 @@ textarea.sp-form-input {
   color: var(--neon-violet);
   opacity: 1;
   text-shadow: none;
+}
+
+.article-content a:not(.article-banal-ref) {
+  color: var(--neon-cyan);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.article-content a:not(.article-banal-ref):hover {
+  color: var(--text-primary);
+  text-shadow: 0 0 20px rgba(34, 211, 238, 0.6);
 }
 
 .article-content em {
