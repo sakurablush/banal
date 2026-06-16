@@ -19,6 +19,7 @@ import {
   getLatestVerificationSnapshot,
   readmeVerificationPhrase,
 } from '../src/lib/latest-verification';
+import { generateReadmeToolsSection } from '../src/lib/tools-directory-markdown';
 import { translations } from '../src/i18n';
 import { PromptTemplatesLibrary, PROMPT_TEMPLATE_COUNT } from '../src/lib/prompt-templates';
 
@@ -260,6 +261,24 @@ describe('Public docs — counts match live data', () => {
     const phrase = readmeVerificationPhrase(snapshot!);
     expect(readme.replace(/\s+/g, ' ')).toContain(phrase);
     expect(snapshot!.totalTools).toBe(getSiteStats().total);
+  });
+
+  it('README.md auto-generated tools catalog matches the live catalog', () => {
+    const readme = readFileSync(join(process.cwd(), 'README.md'), 'utf8');
+    expect(readme).toContain('<!-- tools-directory:start -->');
+    expect(readme).toContain('<!-- tools-directory:end -->');
+    expect(readme).toContain('<a id="tools-directory"></a>');
+    expect(readme).toContain('### Quick jump — AI');
+
+    const start = readme.indexOf('<!-- tools-directory:start -->');
+    const end = readme.indexOf('<!-- tools-directory:end -->');
+    expect(start).toBeGreaterThan(-1);
+    expect(end).toBeGreaterThan(start);
+
+    const section = readme
+      .slice(start + '<!-- tools-directory:start -->'.length, end)
+      .trim();
+    expect(section).toBe(generateReadmeToolsSection());
   });
 
   it('README, ARCHITECTURE, and DIAMOND agree on test suite size', () => {

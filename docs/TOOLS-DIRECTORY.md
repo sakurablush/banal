@@ -2,7 +2,7 @@
 
 273 curated tools — 178 AI, 95 developer. Each row links to the public URL with honest access labels.
 
-> Auto-generated from `src/data/zero-key-tools.ts`. Run `npm run generate:tools-readme` to update.
+> Auto-generated from `src/data/zero-key-tools.ts`. Run `npm run generate:tools-readme` to update. [View on README](../README.md#tools-directory).
 
 ## Quick jump
 

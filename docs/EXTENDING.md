@@ -76,7 +76,8 @@ After editing:
    This writes `docs/verification/YYYY-MM-DD.json` and syncs the audit
    stats line in `README.md`.
 3. Run `npm run generate:tools-readme` to regenerate
-   `docs/TOOLS-DIRECTORY.md` from the catalog.
+   `docs/TOOLS-DIRECTORY.md` and sync the collapsible catalog in
+   `README.md` from the catalog.
 4. Open a PR. The weekly CI run will re-audit and update
    `lastVerified` automatically.
 

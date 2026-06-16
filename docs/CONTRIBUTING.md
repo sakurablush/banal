@@ -92,7 +92,8 @@ the `zeroKeyTools` array in `src/data/zero-key-tools.ts`. Run
 `npm run ci` to validate the schema, then `npm run verify:tools` to
 confirm the URL is reachable and refresh `docs/verification/` plus the
 README audit line. Regenerate the public directory with
-`npm run generate:tools-readme` (updates `docs/TOOLS-DIRECTORY.md`).
+`npm run generate:tools-readme` (updates `docs/TOOLS-DIRECTORY.md` and
+the README tools catalog).
 The weekly CI workflow re-audits the catalog and updates `lastVerified`
 automatically. See
 [`docs/EXTENDING.md`](EXTENDING.md#adding-a-tool-to-the-directory) for

@@ -76,7 +76,7 @@ banal/
 │   └── types/                # Shared TypeScript types.
 ├── scripts/
 │   ├── verify-tools.ts       # Audits every tool URL, writes full report + dated summary.
-│   └── generate-tools-readme.ts  # Regenerates docs/TOOLS-DIRECTORY.md.
+│   └── generate-tools-readme.ts  # Regenerates docs/TOOLS-DIRECTORY.md + README catalog.
 ├── tests/                    # Vitest + jsdom. One file per source module.
 ├── docs/                     # You are here.
 ├── .github/workflows/        # CI, deploy, and the weekly verify-tools job.
@@ -161,7 +161,7 @@ calls `npm run verify:tools`. The script:
 
 If you add a tool and the next verify run flags it as broken, fix the URL
 or remove the entry. After catalog edits, run `npm run generate:tools-readme`
-to refresh `docs/TOOLS-DIRECTORY.md`. If the run goes red on the CI, the broken tool is
+to refresh `docs/TOOLS-DIRECTORY.md` and the README tools catalog. If the run goes red on the CI, the broken tool is
 flagged in the next dated summary.
 
 ---

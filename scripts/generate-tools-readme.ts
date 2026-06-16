@@ -1,121 +1,56 @@
 /**
- * Generate the full tools directory for docs/TOOLS-DIRECTORY.md
- *
- * Imports all tools from zero-key-tools.ts and writes a markdown table
- * grouped by category with a quick-jump table of contents.
+ * Generate docs/TOOLS-DIRECTORY.md and sync the README tools catalog.
  *
  * Usage: npm run generate:tools-readme
  */
 
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { zeroKeyTools, categoryLabels, type ZeroKeyCategory } from '../src/data/zero-key-tools';
+import { zeroKeyTools } from '../src/data/zero-key-tools';
 import { syncReadmeVerification } from '../src/lib/latest-verification';
-
-const surfaceEmoji: Record<string, string> = {
-  web: '🌐',
-  api: '📡',
-  cli: '💻',
-};
-
-const accessLabels: Record<string, string> = {
-  'no-login': 'No login',
-  'public-api': 'Public API',
-  'open-source': 'Open source',
-  'free-tier': 'Free tier',
-  'free-key': 'Free API key',
-  'self-host': 'Self-host',
-};
+import {
+  README_SECTION_END,
+  README_SECTION_START,
+  generateReadmeToolsSection,
+  generateToolsDirectoryDoc,
+} from '../src/lib/tools-directory-markdown';
 
 const OUTPUT_PATH = resolve(import.meta.dirname, '../docs/TOOLS-DIRECTORY.md');
+const README_PATH = resolve(import.meta.dirname, '../README.md');
 
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-}
+function syncReadmeToolsSection(): boolean {
+  const readme = readFileSync(README_PATH, 'utf8');
+  const start = readme.indexOf(README_SECTION_START);
+  const end = readme.indexOf(README_SECTION_END);
 
-function escapeMarkdown(text: string): string {
-  return text.replace(/\|/g, '\\|').replace(/\n/g, ' ');
-}
-
-function generateToolsReadme(): string {
-  const lines: string[] = [];
-  const aiCount = zeroKeyTools.filter((t) => t.category.startsWith('ai-')).length;
-  const devCount = zeroKeyTools.filter((t) => t.category.startsWith('dev-')).length;
-
-  lines.push('# Tools Directory');
-  lines.push('');
-  lines.push(
-    `${zeroKeyTools.length} curated tools — ${aiCount} AI, ${devCount} developer. Each row links to the public URL with honest access labels.`
-  );
-  lines.push('');
-  lines.push(
-    '> Auto-generated from `src/data/zero-key-tools.ts`. Run `npm run generate:tools-readme` to update.'
-  );
-  lines.push('');
-
-  const byCategory: Record<ZeroKeyCategory, typeof zeroKeyTools> = {} as Record<
-    ZeroKeyCategory,
-    typeof zeroKeyTools
-  >;
-  for (const tool of zeroKeyTools) {
-    byCategory[tool.category] ??= [];
-    byCategory[tool.category].push(tool);
+  if (start === -1 || end === -1 || end <= start) {
+    throw new Error(
+      `README.md must contain ${README_SECTION_START} and ${README_SECTION_END} markers`
+    );
   }
 
-  lines.push('## Quick jump');
-  lines.push('');
-  const categoryOrder = Object.keys(categoryLabels) as ZeroKeyCategory[];
-  const tocParts: string[] = [];
-  for (const cat of categoryOrder) {
-    const tools = byCategory[cat];
-    if (!tools || tools.length === 0) continue;
-    const label = categoryLabels[cat];
-    const slug = slugify(label);
-    tocParts.push(`[${label}](#${slug}) (${tools.length})`);
-  }
-  lines.push(tocParts.join(' · '));
-  lines.push('');
+  const sectionBody = generateReadmeToolsSection();
+  const currentBody = readme
+    .slice(start + README_SECTION_START.length, end)
+    .trim();
+  if (currentBody === sectionBody) return false;
 
-  for (const cat of categoryOrder) {
-    const tools = byCategory[cat];
-    if (!tools || tools.length === 0) continue;
-
-    const label = categoryLabels[cat];
-    lines.push(`## ${label}`);
-    lines.push('');
-    lines.push('| Tool | Best for | Surface | Access |');
-    lines.push('|------|----------|---------|--------|');
-
-    for (const tool of tools) {
-      const emoji = surfaceEmoji[tool.surface] || '🔧';
-      const typeLabel = `${emoji} ${tool.surface.toUpperCase()}`;
-      const access = accessLabels[tool.access] || tool.access;
-      const name = `[${escapeMarkdown(tool.name)}](${tool.url})`;
-      const desc = escapeMarkdown(
-        tool.bestFor.slice(0, 80) + (tool.bestFor.length > 80 ? '…' : '')
-      );
-      lines.push(`| ${name} | ${desc} | ${typeLabel} | ${access} |`);
-    }
-
-    lines.push('');
-  }
-
-  lines.push('---');
-  lines.push('');
-  lines.push(
-    `*${zeroKeyTools.length} tools across ${categoryOrder.filter((c) => byCategory[c]?.length > 0).length} categories. Last generated: ${new Date().toISOString().split('T')[0]}.*`
-  );
-  lines.push('');
-
-  return lines.join('\n');
+  const before = readme.slice(0, start + README_SECTION_START.length);
+  const after = readme.slice(end);
+  writeFileSync(README_PATH, `${before}\n\n${sectionBody}\n\n${after}`, 'utf8');
+  return true;
 }
 
-const markdown = generateToolsReadme();
+const markdown = generateToolsDirectoryDoc();
 writeFileSync(OUTPUT_PATH, markdown, 'utf8');
 console.log(`Wrote ${OUTPUT_PATH} (${zeroKeyTools.length} tools)`);
+
+const readmeToolsUpdated = syncReadmeToolsSection();
+console.log(
+  readmeToolsUpdated
+    ? `Updated README.md tools directory section (${zeroKeyTools.length} tools)`
+    : `README.md tools directory section already current (${zeroKeyTools.length} tools)`
+);
 
 const { updated, snapshot } = syncReadmeVerification(resolve(import.meta.dirname, '..'));
 if (snapshot) {
