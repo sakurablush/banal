@@ -768,3 +768,28 @@ describe('Prompt templates — light-mode CSS regressions', () => {
     expect(css).toContain("[data-theme='light'] .prompt-accordion-title");
   });
 });
+
+describe('Prompt templates — dark accordion form surfaces', () => {
+  const css = readFileSync(resolve(__dirname, '../src/style.css'), 'utf8');
+
+  it('avoids heavy black overlays on the accordion form column', () => {
+    const block =
+      css.match(
+        /\/\* Prompt Accordion[\s\S]*?\.prompt-accordion \.sp-inline-form\s*\{[^}]+\}/s
+      )?.[0] ?? '';
+    expect(block).not.toContain('rgba(0, 0, 0');
+    expect(block).toContain('rgba(124, 58, 237');
+  });
+
+  it('uses violet glass on the accordion shell and inputs', () => {
+    const shell = css.match(/\/\* Prompt Accordion[\s\S]*?\.prompt-accordion\s*\{[^}]+\}/s)?.[0] ?? '';
+    expect(shell).toContain('var(--panel-stats-bg)');
+    expect(shell).toContain('backdrop-filter');
+
+    const inputs =
+      css.match(
+        /\/\* Prompt Accordion[\s\S]*?\.prompt-accordion \.sp-form-input\s*\{[^}]+\}/s
+      )?.[0] ?? '';
+    expect(inputs).toContain('rgba(168, 85, 247');
+  });
+});

@@ -3230,6 +3230,12 @@ textarea.sp-form-input {
   background: #ffffff !important;
 }
 
+[data-theme='light'] .prompt-accordion-content .sp-inline-actions .sp-btn-ghost:hover {
+  background: var(--light-hover-strong) !important;
+  border-color: var(--light-active-border) !important;
+  color: var(--light-violet) !important;
+}
+
 [data-theme='light'] .sp-inline-form {
   background: var(--light-hover) !important;
   border-color: var(--light-border) !important;
@@ -3856,9 +3862,14 @@ textarea.sp-form-input {
   width: 100%;
   margin-top: 0.75rem;
   padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: color-mix(in srgb, var(--panel-stats-bg) 82%, rgba(124, 58, 237, 0.14));
+  border: 1px solid rgba(168, 85, 247, 0.28);
   border-radius: 16px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 14px 36px -22px rgba(124, 58, 237, 0.28);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   animation: slideDown 0.25s ease;
 }
 
@@ -3885,23 +3896,55 @@ textarea.sp-form-input {
 
 .prompt-accordion .sp-inline-form {
   margin-top: 0;
-  background: rgba(0, 0, 0, 0.28);
-  border-color: rgba(168, 85, 247, 0.28);
+  background: rgba(124, 58, 237, 0.1);
+  border-color: rgba(168, 85, 247, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.prompt-accordion .sp-inline-form-title {
+  color: rgba(216, 180, 254, 0.95);
+}
+
+.prompt-accordion .sp-form-field label {
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .prompt-accordion .sp-form-input {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(168, 85, 247, 0.22);
 }
 
 .prompt-accordion .sp-form-input:focus {
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.11);
   border-color: rgba(168, 85, 247, 0.55);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.18);
+}
+
+.prompt-accordion .sp-form-input::placeholder {
+  color: rgba(196, 181, 253, 0.45);
+}
+
+.prompt-accordion .sp-preview-area {
+  background: rgba(124, 58, 237, 0.08);
+  border-color: rgba(168, 85, 247, 0.2);
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .prompt-accordion-content .sp-inline-actions {
   flex-direction: column;
   gap: 0.625rem;
+}
+
+.prompt-accordion-content .sp-inline-actions .sp-btn-ghost {
+  background: rgba(124, 58, 237, 0.1);
+  border-color: rgba(168, 85, 247, 0.28);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.prompt-accordion-content .sp-inline-actions .sp-btn-ghost:hover {
+  background: rgba(124, 58, 237, 0.16);
+  border-color: rgba(168, 85, 247, 0.42);
+  color: #fff;
 }
 
 .prompt-accordion-content .sp-inline-actions .sp-btn {
