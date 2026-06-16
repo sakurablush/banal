@@ -197,6 +197,8 @@ export const translations: Record<Lang, Translations> = {
     'filters.delete': 'Delete',
     'filters.oftenUsed': 'Often used:',
     'filters.apply': 'Apply',
+    'filters.panelLabel': 'Refine results',
+    'filters.panelHeading': 'Refine',
 
     // === Privacy ===
     'privacy.title': 'Stored data on this device',
@@ -468,6 +470,8 @@ export const translations: Record<Lang, Translations> = {
     'filters.delete': '削除',
     'filters.oftenUsed': 'よく使う:',
     'filters.apply': '適用',
+    'filters.panelLabel': '絞り込み',
+    'filters.panelHeading': '絞り込み',
 
     // === Privacy ===
     'privacy.title': 'この端末に保存されたデータ',

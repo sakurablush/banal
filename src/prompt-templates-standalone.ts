@@ -5,7 +5,7 @@
  * - All templates visible in a horizontal scroll container
  * - Clicking a card opens the form in an accordion slide-down under the card
  * - Keyboard navigation with ← → arrows
- * - Quick filter chips for categories
+ * - Category sidebar with filter toolbar above categories
  *
  * Features preserved from original:
  * - Auto-save to sessionStorage per template (more secure - cleared on tab close)
@@ -18,6 +18,8 @@ import { PromptTemplatesLibrary, type Locale, type PromptTemplate } from './lib/
 import { createCloseButton } from './lib/close-button';
 import { getSectionParams } from './lib/section-filter-url';
 import { renderFilterToolbar } from './components/filter-toolbar';
+import { createSidebarColumn } from './lib/sidebar-column';
+import { t } from './i18n';
 import { applyPromptsFilterValues } from './lib/apply-section-filters';
 import { getRawSuggestionsForSection } from './lib/filter-suggestions';
 import type { FilterSuggestion } from './lib/filter-suggestions';
@@ -251,14 +253,15 @@ function renderHorizontalLayout(state: PromptTemplatesViewState): void {
   layout.className = 'zk2-layout';
   state.container.appendChild(layout);
 
-  // Sidebar with categories
-  const sidebar = createSidebar(state);
-  layout.appendChild(sidebar);
-
-  // Quick filters row
-  const filtersRow = createQuickFilters(state);
-  layout.appendChild(filtersRow);
-  layout.appendChild(createFilterToolbar(state));
+  layout.appendChild(
+    createSidebarColumn({
+      sidebar: createSidebar(state),
+      toolbar: createFilterToolbar(state),
+      heading: t(state.lang, 'filters.panelHeading'),
+      headingId: 'pt-filters',
+      ariaLabel: t(state.lang, 'filters.panelLabel'),
+    })
+  );
 
   // Content area with grid
   const content = document.createElement('div');
@@ -317,48 +320,6 @@ function createSidebar(state: PromptTemplatesViewState): HTMLElement {
   }
 
   return sidebar;
-}
-
-function createQuickFilters(state: PromptTemplatesViewState): HTMLElement {
-  const row = document.createElement('div');
-  row.className = 'quick-filters-row';
-
-  const counts = getCategoryCounts(state.prompts);
-  const filters = PROMPT_CATEGORIES;
-
-  for (const cat of filters) {
-    const chip = document.createElement('button');
-    chip.type = 'button';
-    chip.className = `quick-filter-chip${state.selectedCategory === cat.id ? ' active' : ''}`;
-    chip.dataset.category = cat.id;
-    const label = state.lang === 'ja' ? cat.labelJa : cat.labelEn;
-    const count = counts[cat.id] || 0;
-
-    // Safely construct inner HTML with proper escaping to prevent XSS
-    const iconSpan = document.createElement('span');
-    iconSpan.className = 'filter-icon';
-    iconSpan.textContent = cat.icon; // textContent escapes any HTML entities
-
-    const labelSpan = document.createElement('span');
-    labelSpan.className = 'filter-label';
-    labelSpan.textContent = label;
-
-    const countSpan = document.createElement('span');
-    countSpan.className = 'filter-count';
-    countSpan.textContent = `(${count})`;
-
-    chip.append(iconSpan, ' ', labelSpan, ' ', countSpan);
-    chip.setAttribute(
-      'aria-label',
-      state.lang === 'ja' ? `${label}でフィルター` : `Filter by ${label}`
-    );
-    chip.addEventListener('click', () => {
-      selectPromptCategory(state, cat.id);
-    });
-    row.appendChild(chip);
-  }
-
-  return row;
 }
 
 function createFilterToolbar(state: PromptTemplatesViewState): HTMLElement {

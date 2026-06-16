@@ -2,22 +2,37 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import {
+  columnSunLit,
+  getHorizonY,
   getMeshPalette,
+  getSunLayout,
   initHeroMesh,
   prefersReducedMotion,
+  sunIllumination,
   waveOffset,
 } from '../src/lib/hero-mesh';
 
 function mockCanvasContext(): CanvasRenderingContext2D {
+  const gradient = { addColorStop: vi.fn() };
   return {
     clearRect: vi.fn(),
     beginPath: vi.fn(),
     moveTo: vi.fn(),
     lineTo: vi.fn(),
     stroke: vi.fn(),
+    fillRect: vi.fn(),
+    fill: vi.fn(),
+    arc: vi.fn(),
+    closePath: vi.fn(),
+    clip: vi.fn(),
+    save: vi.fn(),
+    restore: vi.fn(),
     setTransform: vi.fn(),
+    createRadialGradient: vi.fn(() => gradient),
+    createLinearGradient: vi.fn(() => gradient),
     globalAlpha: 1,
     strokeStyle: '',
+    fillStyle: '',
     lineWidth: 1,
   } as unknown as CanvasRenderingContext2D;
 }
@@ -92,12 +107,44 @@ describe('hero-mesh', () => {
       const dark = getMeshPalette('dark');
       expect(dark.line).toContain('168, 85, 247');
       expect(dark.accent).toContain('34, 211, 238');
+      expect(dark.sunCore).toContain('232, 121, 249');
     });
 
     it('returns softer lines in light mode', () => {
       const light = getMeshPalette('light');
       expect(light.line).toContain('124, 58, 237');
       expect(light.lineFar).toContain('0.08');
+      expect(light.sunBand).toContain('124, 58, 237');
+    });
+  });
+
+  describe('getSunLayout', () => {
+    it('anchors the sun on the horizon center', () => {
+      const sun = getSunLayout(960, 520);
+      expect(sun.cx).toBe(480);
+      expect(sun.cy).toBe(getHorizonY(520));
+      expect(sun.radius).toBeGreaterThan(0);
+    });
+  });
+
+  describe('sunIllumination', () => {
+    it('peaks at the sun center and falls off with distance', () => {
+      const sun = getSunLayout(960, 520);
+      const center = sunIllumination(sun.cx, sun.cy, sun);
+      const far = sunIllumination(0, sun.cy, sun);
+      expect(center).toBeGreaterThan(far);
+      expect(center).toBeGreaterThan(0.2);
+      expect(far).toBe(0);
+    });
+  });
+
+  describe('columnSunLit', () => {
+    it('dims columns away from the vanishing axis', () => {
+      const sun = getSunLayout(960, 520);
+      const center = columnSunLit(0, sun);
+      const edge = columnSunLit(0.5, sun);
+      expect(center).toBeGreaterThan(edge);
+      expect(edge).toBeGreaterThan(0);
     });
   });
 
@@ -195,5 +242,13 @@ describe('index.html hero mesh markup', () => {
     expect(html).toContain('class="hero-section');
     expect(html).toContain('class="hero-mesh" aria-hidden="true"');
     expect(html).toContain('class="hero-mesh-canvas"');
+  });
+
+  it('uses semantic hero copy classes for theme-aware contrast', () => {
+    const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf-8');
+    expect(html).toContain('hero-subtitle');
+    expect(html).toContain('hero-disclaimer');
+    expect(html).not.toMatch(/hero-subtitle[^"]*text-white\/50/);
+    expect(html).not.toMatch(/hero-disclaimer[^"]*text-white\/30/);
   });
 });

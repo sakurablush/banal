@@ -2,10 +2,10 @@
  * Zero-Key Panel — Horizontal Scroller Redesign
  * Android app drawer style: horizontal scroll with snapping cards.
  * All tools visible at once, no lazy loading.
- * Includes quick filter chips and new button design (Open → + Report ▼ dropdown).
+ * Quick filter chips and toolbar live above categories in the sidebar.
  */
 
-import { type Lang } from './i18n';
+import { type Lang, t } from './i18n';
 import {
   categoryLabels,
   categoryLabelsJa,
@@ -19,6 +19,7 @@ import { getLocalizedToolCopy, localizeBadge } from './lib/tool-localization';
 import { appendChildrenBatched } from './lib/batch-dom';
 import { getSectionParams, type SectionFilterId } from './lib/section-filter-url';
 import { renderFilterToolbar } from './components/filter-toolbar';
+import { createSidebarColumn, syncQuickFiltersInPanel } from './lib/sidebar-column';
 import { applyZeroKeyFilterValues, type ZeroKeyFilterState } from './lib/apply-section-filters';
 import { getRawSuggestionsForSection } from './lib/filter-suggestions';
 import type { FilterSuggestion } from './lib/filter-suggestions';
@@ -476,10 +477,11 @@ function getAvailableFilters(state: PanelState): LifeFilterDefinition[] {
   );
 }
 
-function renderQuickFilters(state: PanelState): HTMLElement {
-  const row = create('div', 'quick-filters-row');
+function renderQuickFilters(state: PanelState): HTMLElement | null {
   const availableFilters = getAvailableFilters(state);
+  if (availableFilters.length === 0) return null;
 
+  const row = create('div', 'quick-filters-row');
   for (const def of availableFilters) {
     const chip = create(
       'button',
@@ -887,14 +889,10 @@ function renderContent(state: PanelState): void {
 
   contentArea.innerHTML = '';
 
-  // Re-render quick filters (they are in zk2-layout, not contentArea)
-  const layout = container.querySelector('.zk2-layout') as HTMLElement | null;
-  if (layout) {
-    const oldFilters = layout.querySelector('.quick-filters-row');
-    if (oldFilters) {
-      const newFilters = renderQuickFilters(state);
-      layout.replaceChild(newFilters, oldFilters);
-    }
+  // Re-render quick filters without replacing toolbar (preserves open menus / copy state)
+  const filtersPanel = container.querySelector('.zk2-sidebar-filters') as HTMLElement | null;
+  if (filtersPanel) {
+    syncQuickFiltersInPanel(filtersPanel, renderQuickFilters(state));
   }
 
   const copy = COPY[state.lang];
@@ -1035,16 +1033,15 @@ export function renderZeroKeyPowerPanel(
   const layout = create('div', 'zk2-layout');
   container.appendChild(layout);
 
-  // Sidebar with categories
-  const sidebar = renderSidebar(state);
-  layout.appendChild(sidebar);
-
-  // Quick filters row (same level as sidebar for alignment)
-  const filtersRow = renderQuickFilters(state);
-  layout.appendChild(filtersRow);
-
-  const toolbar = renderFilterToolbarRow(state);
-  if (toolbar) layout.appendChild(toolbar);
+  const sidebarColumn = createSidebarColumn({
+    sidebar: renderSidebar(state),
+    quickFilters: renderQuickFilters(state),
+    toolbar: renderFilterToolbarRow(state),
+    heading: t(lang, 'filters.panelHeading'),
+    headingId: `zk-filters-${state.categoryPrefix ?? 'all'}`,
+    ariaLabel: t(lang, 'filters.panelLabel'),
+  });
+  layout.appendChild(sidebarColumn);
 
   // Horizontal content area
   const content = create('div', 'zk2-horizontal-content');

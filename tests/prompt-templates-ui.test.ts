@@ -57,24 +57,23 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     expect(cards.length).toBe(9); // 9 templates total
   });
 
-  // ─── Quick filters instead of category rail ─────────────────────────────────
+  // ─── Category sidebar ─────────────────────────────────────────────────────
 
-  it('renders quick filter chips row with 6 categories', () => {
+  it('renders category sidebar with 6 categories', () => {
     const el = setup();
-    const filtersRow = el.querySelector('.quick-filters-row');
-    expect(filtersRow).toBeTruthy();
-    const chips = filtersRow!.querySelectorAll('.quick-filter-chip');
-    expect(chips.length).toBe(6);
+    const sidebar = el.querySelector('.zk2-sidebar');
+    expect(sidebar).toBeTruthy();
+    const items = sidebar!.querySelectorAll('.zk2-cat-item');
+    expect(items.length).toBe(6);
   });
 
-  it('clicking a filter chip filters the prompt cards', () => {
+  it('clicking a category filters the prompt cards', () => {
     const el = setup();
-    const chips = Array.from(el.querySelectorAll('.quick-filter-chip')) as HTMLElement[];
+    const items = Array.from(el.querySelectorAll('.zk2-cat-item')) as HTMLElement[];
 
-    // Click on "Career & Money" filter
-    const careerChip = chips.find((c) => c.textContent?.includes('Career'));
-    expect(careerChip).toBeTruthy();
-    careerChip!.click();
+    const careerItem = items.find((c) => c.textContent?.includes('Career'));
+    expect(careerItem).toBeTruthy();
+    careerItem!.click();
 
     // Should show fewer cards (only career-money templates)
     const scrollContainer = el.querySelector('.zk2-grid');
@@ -264,16 +263,14 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     expect(closeBtn.innerHTML).not.toContain('<script');
   });
 
-  it('quick filter chips use textContent for icons to prevent XSS', () => {
+  it('category sidebar icons use textContent to prevent XSS', () => {
     const el = setup();
-    const chips = el.querySelectorAll('.quick-filter-chip');
+    const items = el.querySelectorAll('.zk2-cat-item');
 
-    chips.forEach((chip) => {
-      const iconSpan = chip.querySelector('.filter-icon');
+    items.forEach((item) => {
+      const iconSpan = item.querySelector('.zk2-cat-icon');
       expect(iconSpan).toBeTruthy();
-      // Icons are set via textContent, not innerHTML - prevents XSS
       expect(iconSpan!.textContent).toBeDefined();
-      // The icon should be a text character, not HTML
       if (iconSpan!.textContent) {
         expect(iconSpan!.textContent.length).toBeGreaterThan(0);
       }
@@ -307,16 +304,15 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   it('re-renders correctly when language changes', () => {
     const el = setup();
-    const chipsEN = el.querySelectorAll('.quick-filter-chip');
-    expect(chipsEN.length).toBe(6);
+    const itemsEN = el.querySelectorAll('.zk2-cat-item');
+    expect(itemsEN.length).toBe(6);
 
     // Simulate language change event
     const event = new CustomEvent('banal:language-changed', { detail: { lang: 'ja' } });
     window.dispatchEvent(event);
 
-    // Should still have 6 chips but with Japanese labels
-    const chipsJA = el.querySelectorAll('.quick-filter-chip');
-    expect(chipsJA.length).toBe(6);
+    const itemsJA = el.querySelectorAll('.zk2-cat-item');
+    expect(itemsJA.length).toBe(6);
   });
 
   // ─── Session Storage Security ───────────────────────────────────────────────────
@@ -493,8 +489,8 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
     // Should still have 9 cards but in Japanese
     expect(el.querySelectorAll('.tool-card-horizontal').length).toBe(9);
-    const chips = el.querySelectorAll('.quick-filter-chip');
-    expect(chips.length).toBe(6);
+    const items = el.querySelectorAll('.zk2-cat-item');
+    expect(items.length).toBe(6);
   });
 
   // ─── Japanese rendering ─────────────────────────────────────────────────────
@@ -502,10 +498,9 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
   it('renders in Japanese when lang is ja', () => {
     renderPromptTemplatesStandalone({ container, lang: 'ja' });
 
-    const chips = container.querySelectorAll('.quick-filter-chip');
-    // Should have Japanese labels
-    const allChip = Array.from(chips).find((c) => c.textContent?.includes('すべて'));
-    expect(allChip).toBeTruthy();
+    const items = container.querySelectorAll('.zk2-cat-item');
+    const allItem = Array.from(items).find((c) => c.textContent?.includes('すべて'));
+    expect(allItem).toBeTruthy();
   });
 
   // ─── Saved values restoration ───────────────────────────────────────────────
@@ -588,8 +583,8 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
     window.dispatchEvent(new CustomEvent('banal:language-changed'));
 
     // Should re-render with Japanese
-    const chips = el.querySelectorAll('.quick-filter-chip');
-    expect(chips.length).toBe(6);
+    const items = el.querySelectorAll('.zk2-cat-item');
+    expect(items.length).toBe(6);
 
     // Reset
     document.documentElement.lang = 'en';
@@ -597,32 +592,30 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   // ─── Filter chip aria-label in Japanese ──────────────────────────────────────
 
-  it('filter chips have Japanese aria-label when lang is ja', () => {
+  it('category items have Japanese aria-label when lang is ja', () => {
     renderPromptTemplatesStandalone({ container, lang: 'ja' });
 
-    const chips = container.querySelectorAll('.quick-filter-chip');
-    for (const chip of chips) {
-      expect(chip.getAttribute('aria-label')).toContain('でフィルター');
+    const items = container.querySelectorAll('.zk2-cat-item');
+    for (const item of items) {
+      expect(item.getAttribute('aria-label')).toContain('でフィルター');
     }
   });
 
-  // ─── Clicking "All" filter after category filter shows all prompts ───────────
+  // ─── Clicking "All" category after category filter shows all prompts ───────────
 
-  it('clicking All filter after category filter restores all prompts', () => {
+  it('clicking All category after category filter restores all prompts', () => {
     const el = setup();
 
-    // Click career filter
-    const chips = Array.from(el.querySelectorAll('.quick-filter-chip')) as HTMLElement[];
-    const careerChip = chips.find((c) => c.textContent?.includes('Career'));
-    careerChip!.click();
+    const items = Array.from(el.querySelectorAll('.zk2-cat-item')) as HTMLElement[];
+    const careerItem = items.find((c) => c.textContent?.includes('Career'));
+    careerItem!.click();
 
     const filteredCount = el.querySelectorAll('.tool-card-horizontal').length;
     expect(filteredCount).toBeLessThan(9);
 
-    // Click "All" filter
-    const newChips = Array.from(el.querySelectorAll('.quick-filter-chip')) as HTMLElement[];
-    const allChip = newChips.find((c) => c.textContent?.includes('All'));
-    allChip!.click();
+    const newItems = Array.from(el.querySelectorAll('.zk2-cat-item')) as HTMLElement[];
+    const allItem = newItems.find((c) => c.textContent?.includes('All'));
+    allItem!.click();
 
     const allCount = el.querySelectorAll('.tool-card-horizontal').length;
     expect(allCount).toBe(9);
