@@ -52,13 +52,17 @@
           <h1>The Honest Truth About AI Coding Agents in 2026</h1>
           <p class="article-meta">(Or: How I stopped burning hundreds of dollars a month and still get things done)</p>
           <hr />
-          <p>Listen. I've burned through thousands of dollars and thousands of hours with these things. I've worked in places where managers in suits tell you "just buy the $20 Cursor license and use whatever's cheap, bro." Then in the next breath they're like "make sure you use Opus for the important stuff."</p>
+          <p>Listen. I've burned through thousands of dollars and thousands of hours with these things. I've worked in places where managers in suits tell you "just buy the 
+        <div data-lang-only="ja" hidden>0 <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>) license and use whatever's cheap, bro." Then in the next breath they're like "make sure you use Opus for the important stuff."</p>
           <p>It's pure corporate theater.</p>
-          <p>The reality? If you actually want to use real agents — the kind that spin up, test your whole app, take screenshots of the UI, fix bugs, run terminal commands, and then casually email you "hey, everything looks good, I even added the dark mode you forgot about" — the top models will happily eat <strong>hundreds of dollars a month</strong>. Not $50. Not $100. We're talking <strong>$200–400+</strong> if you're using them properly for real work, multiple hours a day.</p>
+          <p>The reality? If you actually want to use real agents — the kind that spin up, test your whole app, take screenshots of the UI, fix bugs, run terminal commands, and then casually email you "hey, everything looks good, I even added the dark mode you forgot about" — the top models will happily eat <strong>hundreds of dollars a month</strong>. Not $50. Not <div data-lang-only="en">00. We're talking <strong>
+        <div data-lang-only="ja" hidden>00–400+</strong> if you're using them properly for real work, multiple hours a day.</p>
           <p>Because here's the dirty little secret nobody in those meetings wants to say out loud: <strong>output tokens are expensive as hell</strong>, and agent workflows are output-heavy. Every iteration, every code block, every reasoning trace, every tool call… it adds up fast.</p>
+
           <h2>The uncomfortable math</h2>
-          <p>Take Claude Opus (current generation). You're looking at roughly <strong>$5 per million input tokens</strong> and <strong>$25 per million output tokens</strong>.</p>
-          <p>Now run a proper agent session:</p>
+          <p>Take <a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a> (current generation via <a href="https://www.anthropic.com/" rel="noopener noreferrer">Anthropic</a>). You're looking at roughly <strong>$5 per million input tokens</strong> and <strong>
+        <div data-lang-only="ja" hidden>5 per million output tokens</strong> on direct API pricing — verify on <a href="../../#ai-models" rel="noopener">Banal's models panel</a> before you budget.</p>
+          <p>Now run a proper agent session in <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>), <a href="https://claude.ai/code" rel="noopener noreferrer">Claude Code</a> (<a href="../../#ai-tools?q=Claude%20Code" rel="noopener">Banal</a>), or <a href="https://antigravity.google/" rel="noopener noreferrer">Google Antigravity</a> (<a href="../../#ai-tools?q=Google%20Antigravity" rel="noopener">Banal</a>):</p>
           <ul>
             <li>Big context (whole repo or long history)</li>
             <li>Multiple tool calls</li>
@@ -68,33 +72,36 @@
           </ul>
           <p>Do that for a few serious hours and watch the bill climb. It's not theoretical. People are actually paying this.</p>
           <p>And the worst part? A lot of the time you don't even need the absolute best model for 80–90% of what you're doing.</p>
+
           <h2>The models that actually make sense long-term</h2>
-          <p>This is where it gets interesting.</p>
-          <p>Right now there are models that are shockingly close to the frontier on coding and agentic tasks while costing a fraction of the price. The one I keep coming back to is <strong>MiniMax M3</strong>.</p>
+          <p>Right now there are models that are shockingly close to the frontier on coding and agentic tasks while costing a fraction of the price. The one I keep coming back to is <strong><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a></strong>.</p>
           <div class="model-card">
             <h3>MiniMax M3</h3>
             <ul>
-              <li><strong>Price:</strong> $0.30 / $1.20 per million input/output (on OpenRouter and their platform — sometimes even better with caching).</li>
+              <li><strong>Price:</strong> $0.30 / <div data-lang-only="en">.20 per million input/output on <a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a> (<a href="../../#ai-tools?q=OpenRouter%20Free%20Models" rel="noopener">Banal</a>) and the <a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax</a> platform — sometimes even better with caching.</li>
               <li>That's roughly <strong>16–20× cheaper on output</strong> than Opus.</li>
               <li><strong>1M context window.</strong></li>
               <li><strong>Native multimodal</strong> (text + image + video) — perfect when your agent needs to actually see the UI it just built.</li>
-              <li>On coding and agent leaderboards (Artificial Analysis, Code Arena, etc.) it sits right up there with the big names on practical tasks — SWE-Bench style work, terminal agents, multi-file edits. Not always #1, but close enough that the gap often doesn't justify the 10–20× price difference for daily work.</li>
+              <li>On coding and agent leaderboards (<a href="https://artificialanalysis.ai/" rel="noopener noreferrer">Artificial Analysis</a>, <a href="https://www.codesota.com/arena/code" rel="noopener noreferrer">Code Arena</a>, etc.) it sits right up there with the big names on practical tasks — SWE-Bench style work, terminal agents, multi-file edits. Not always #1, but close enough that the gap often doesn't justify the 10–20× price difference for daily work.</li>
             </ul>
           </div>
-          <p>Then there's <strong>Cursor's Composer 2.5</strong> (the non-thinking/fast version).</p>
+          <p>Then there's <strong><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>)'s Composer 2.5</strong> (the non-thinking/fast version).</p>
           <div class="model-card">
             <h3>Cursor Composer 2.5 (fast)</h3>
-            <p>This thing is purpose-built for exactly what most of us do inside an IDE all day. Long-horizon agent sessions, tool use, file editing, terminal work. It's fast, cheap as hell in the context of Cursor usage, and genuinely strong. Many people are using it as their default daily driver and only switching up when things get really hard.</p>
+            <p>This thing is purpose-built for exactly what most of us do inside an IDE all day. Long-horizon agent sessions, tool use, file editing, terminal work. It's fast, cheap as hell in the context of <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>) usage, and genuinely strong. Many people are using it as their default daily driver and only switching up when things get really hard.</p>
           </div>
+          <p>A third lane worth knowing: <strong><a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a> (<a href="../../#ai-tools?q=Kilo%20Code" rel="noopener">Banal</a>)</strong> on <a href="https://kilo.ai/gateway" rel="noopener noreferrer">Kilo Gateway</a> (<a href="../../#ai-tools?q=Kilo%20Gateway" rel="noopener">Banal</a>) free models or cheap BYOK — covered in our <a href="../free-ai-coding-setup-2026/" rel="noopener">Kilo setup article</a> if you want professional agent work without a <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>) subscription.</p>
+
           <h2>My actual recommendation (after burning the money)</h2>
           <p>If you want to use agents sustainably — not just for a week until the credit card bill hits — do this:</p>
           <ol>
-            <li><strong>Daily driver:</strong> MiniMax M3 or Cursor Composer 2.5 (non-thinking). These two will handle the vast majority of real work at a price that doesn't make you cry at the end of the month.</li>
-            <li><strong>When it actually matters:</strong> Flip to Claude Opus (or whatever the current top Anthropic model is).</li>
+            <li><strong>Daily driver:</strong> <a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a> or <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>) Composer 2.5 (non-thinking). These two will handle the vast majority of real work at a price that doesn't make you cry at the end of the month.</li>
+            <li><strong>When it actually matters:</strong> Flip to <a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a> (or whatever the current top Anthropic model is).</li>
           </ol>
           <p>I'll say it plainly — right now Anthropic still makes the models that feel the most "magical" on really difficult programming problems. The code quality, the reasoning, the taste… it's often a step above. And for those moments? Worth it.</p>
           <p>But using it for everything is financial masochism unless you're already rich or your company is footing the bill without questions.</p>
-          <p>Check the leaderboards and prices regularly. Things move stupidly fast. What's the best value today might get dethroned next month by something even cheaper and stronger.</p>
+          <p>Check the leaderboards and prices regularly on <a href="../../#ai-models" rel="noopener">Banal</a> and <a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a> (<a href="../../#ai-tools?q=OpenRouter%20Free%20Models" rel="noopener">Banal</a>). Things move stupidly fast. What's the best value today might get dethroned next month by something even cheaper and stronger.</p>
+
           <h2>The bigger picture</h2>
           <p>The corporate line is always "just use the cheap one, it's fine."</p>
           <p>The actual truth is more nuanced: the cheap ones are fine for most things now — shockingly so. But the absolute best models are still meaningfully better at the hardest stuff.</p>
@@ -104,6 +111,19 @@
           <p>The tools are finally good enough that you can have both.</p>
           <p>You just have to be honest about the economics.</p>
           <p>That's it. No fluff. No "synergize your AI transformation journey." Just the real story, from someone who's paid the stupid tax so you don't have to.</p>
+
+        <div class="tools-mentioned">
+          <h2>Tools mentioned</h2>
+          <p>Official sites plus matching entries in our <a href="../../#ai-tools" rel="noopener">tools directory</a> (no affiliate links).</p>
+          <ul>
+            <li><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>) — IDE + Composer 2.5</li>
+            <li><a href="https://claude.ai/code" rel="noopener noreferrer">Claude Code</a> (<a href="../../#ai-tools?q=Claude%20Code" rel="noopener">Banal</a>) / <a href="https://www.anthropic.com/" rel="noopener noreferrer">Anthropic API</a> — top-tier reasoning</li>
+            <li><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a> — daily-driver value</li>
+            <li><a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a> (<a href="../../#ai-tools?q=OpenRouter%20Free%20Models" rel="noopener">Banal</a>) — price shopping + routing</li>
+            <li><a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a> (<a href="../../#ai-tools?q=Kilo%20Code" rel="noopener">Banal</a>) — free/cheap agent lane</li>
+            <li><a href="https://antigravity.google/" rel="noopener noreferrer">Google Antigravity</a> (<a href="../../#ai-tools?q=Google%20Antigravity" rel="noopener">Banal</a>) — heavy planning sessions</li>
+            <li><a href="../../#ai-models" rel="noopener">Banal AI models panel</a> — verify prices before you budget</li>
+          </ul>
         </div>
         <div data-lang-only="ja" hidden>
           <h1>2026年のAIコーディングエージェントの本当のコスト</h1>
@@ -164,8 +184,9 @@
       <div class="max-w-5xl mx-auto px-4 sm:px-6 text-xs text-white/25 flex flex-col sm:flex-row gap-y-2 items-center justify-between">
         <div>Banal — Free AI for everyone. No login. No credit card.</div>
         <div class="flex gap-5">
-          <a href="https://github.com" class="hover:text-white transition-colors">GitHub</a>
-          <a href="../../#tools" class="hover:text-white transition-colors">Tools</a>
+          <a href="https://github.com/sakurablush/banal" class="hover:text-white transition-colors" rel="noopener noreferrer">GitHub</a>
+          <a href="../../" class="hover:text-white transition-colors" rel="noopener">Banal</a>
+          <a href="../../#ai-tools" class="hover:text-white transition-colors" rel="noopener">Tools</a>
           <span>MIT License</span>
         </div>
       </div>
