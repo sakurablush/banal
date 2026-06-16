@@ -139,15 +139,49 @@ describe('Models Panel', () => {
 
   it('should open model detail on card click', () => {
     const api = renderModelsPanel(container, { lang: 'en' });
-    
+
     const card = container.querySelector('.model-card') as HTMLElement;
     if (card) {
       card.click();
-      
+
       const detail = container.querySelector('.model-detail-page');
       expect(detail).toBeTruthy();
+      expect(container.classList.contains('is-detail-view')).toBe(true);
+      expect(container.querySelector('.models-content')?.contains(detail!)).toBe(true);
     }
-    
+
+    api.destroy();
+  });
+
+  it('should restore list view from model detail back button', () => {
+    const api = renderModelsPanel(container, { lang: 'en' });
+
+    const card = container.querySelector('.model-card') as HTMLElement;
+    card?.click();
+
+    const backBtn = container.querySelector('.model-detail-back') as HTMLButtonElement;
+    backBtn?.click();
+
+    expect(container.classList.contains('is-detail-view')).toBe(false);
+    expect(container.querySelector('.model-detail-page')).toBeFalsy();
+    expect(container.querySelector('.models-panel-header')).toBeTruthy();
+    expect(container.querySelectorAll('.model-card').length).toBeGreaterThan(0);
+
+    api.destroy();
+  });
+
+  it('should exit detail view when reset via API', () => {
+    const api = renderModelsPanel(container, { lang: 'en' });
+
+    const card = container.querySelector('.model-card') as HTMLElement;
+    card?.click();
+    expect(container.classList.contains('is-detail-view')).toBe(true);
+
+    api.reset();
+
+    expect(container.classList.contains('is-detail-view')).toBe(false);
+    expect(container.querySelector('.models-panel-header')).toBeTruthy();
+
     api.destroy();
   });
 

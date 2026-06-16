@@ -275,26 +275,29 @@ function renderModelCard(state: ModelsPanelState, model: AIModel): HTMLElement {
   // Click to open detail view
   card.style.cursor = 'pointer';
   card.addEventListener('click', (e) => {
-    // Don't open detail if clicking on checkbox
     if ((e.target as HTMLElement).closest('.model-compare-check')) return;
-    
-    const container = state.container;
-    if (!container) return;
-    
-    // Store original content
-    const originalContent = container.innerHTML;
-    
-    // Render detail view
-    container.innerHTML = '';
-    const detailView = renderModelDetail(model, state.lang, () => {
-      // Back button callback - restore original content
-      container.innerHTML = originalContent;
-      renderContent(state);
-    });
-    container.appendChild(detailView);
+    showModelDetail(state, model);
   });
 
   return card;
+}
+
+function showModelDetail(state: ModelsPanelState, model: AIModel): void {
+  const container = state.container;
+  if (!container) return;
+
+  const contentArea = container.querySelector('.models-content') as HTMLElement | null;
+  if (!contentArea) return;
+
+  container.classList.add('is-detail-view');
+  contentArea.innerHTML = '';
+  contentArea.appendChild(
+    renderModelDetail(model, state.lang, () => {
+      renderContent(state);
+    })
+  );
+  contentArea.scrollTop = 0;
+  container.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
 // ─── Render: Filter Bar ─────────────────────────────────────────────────────
@@ -603,6 +606,8 @@ function renderComparison(state: ModelsPanelState): HTMLElement | null {
 function renderContent(state: ModelsPanelState): void {
   const container = state.container;
   if (!container) return;
+
+  container.classList.remove('is-detail-view');
 
   const contentArea = container.querySelector('.models-content') as HTMLElement | null;
   if (!contentArea) return;

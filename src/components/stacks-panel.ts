@@ -201,24 +201,30 @@ function renderStackCard(state: StacksPanelState, stack: ToolStack): HTMLElement
 
   // Click to open detail view
   card.style.cursor = 'pointer';
-  card.addEventListener('click', () => {
-    const container = state.container;
-    if (!container) return;
-    
-    // Store original content
-    const originalContent = container.innerHTML;
-    
-    // Render detail view
-    container.innerHTML = '';
-    const detailView = renderStackDetail(stack, state.lang, () => {
-      // Back button callback - restore original content
-      container.innerHTML = originalContent;
-      renderContent(state);
-    });
-    container.appendChild(detailView);
+  card.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('button, input, label, a')) return;
+    showStackDetail(state, stack);
   });
 
   return card;
+}
+
+function showStackDetail(state: StacksPanelState, stack: ToolStack): void {
+  const container = state.container;
+  if (!container) return;
+
+  const contentArea = container.querySelector('.stacks-content') as HTMLElement | null;
+  if (!contentArea) return;
+
+  container.classList.add('is-detail-view');
+  contentArea.innerHTML = '';
+  contentArea.appendChild(
+    renderStackDetail(stack, state.lang, () => {
+      renderContent(state);
+    })
+  );
+  contentArea.scrollTop = 0;
+  container.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
 // ─── State ──────────────────────────────────────────────────────────────────
@@ -234,6 +240,8 @@ interface StacksPanelState {
 function renderContent(state: StacksPanelState): void {
   const container = state.container;
   if (!container) return;
+
+  container.classList.remove('is-detail-view');
 
   const contentArea = container.querySelector('.stacks-content') as HTMLElement | null;
   if (!contentArea) return;

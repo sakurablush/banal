@@ -88,15 +88,46 @@ describe('Stacks Panel', () => {
 
   it('should open stack detail on card click', () => {
     const api = renderStacksPanel(container, { lang: 'en' });
-    
+
     const card = container.querySelector('.stack-card') as HTMLElement;
     if (card) {
       card.click();
-      
+
       const detail = container.querySelector('.stack-detail-page');
       expect(detail).toBeTruthy();
+      expect(container.classList.contains('is-detail-view')).toBe(true);
+      expect(container.querySelector('.stacks-content')?.contains(detail!)).toBe(true);
     }
-    
+
+    api.destroy();
+  });
+
+  it('should not open detail when clicking workflow toggle', () => {
+    const api = renderStacksPanel(container, { lang: 'en' });
+
+    const toggle = container.querySelector('.stack-workflow-toggle') as HTMLButtonElement;
+    toggle?.click();
+
+    expect(container.querySelector('.stack-detail-page')).toBeFalsy();
+    expect(container.classList.contains('is-detail-view')).toBe(false);
+
+    api.destroy();
+  });
+
+  it('should restore list view from stack detail back button', () => {
+    const api = renderStacksPanel(container, { lang: 'en' });
+
+    const card = container.querySelector('.stack-card') as HTMLElement;
+    card?.click();
+
+    const backBtn = container.querySelector('.stack-detail-back') as HTMLButtonElement;
+    backBtn?.click();
+
+    expect(container.classList.contains('is-detail-view')).toBe(false);
+    expect(container.querySelector('.stack-detail-page')).toBeFalsy();
+    expect(container.querySelector('.stacks-panel-header')).toBeTruthy();
+    expect(container.querySelectorAll('.stack-card').length).toBeGreaterThan(0);
+
     api.destroy();
   });
 
