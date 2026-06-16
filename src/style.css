@@ -1556,6 +1556,14 @@ main#app,
   --chip-bg-selected: #ede9fe;
   --elevated-surface: #ffffff;
   --light-surface-panel: rgba(255, 255, 255, 0.94);
+  --light-pink: #9d174d;
+  --light-pink-muted: rgba(157, 23, 77, 0.78);
+  --light-footer-title-gradient: linear-gradient(
+    90deg,
+    var(--light-pink) 0%,
+    var(--light-fuchsia) 50%,
+    var(--light-violet) 100%
+  );
 }
 
 /* Tailwind white-text utilities are too faint on a light page. */
@@ -2770,16 +2778,39 @@ main#app,
 
 /* Footer and buttons. */
 [data-theme='light'] footer {
-  border-color: var(--light-border) !important;
+  background: linear-gradient(
+    180deg,
+    rgba(248, 250, 252, 0) 0%,
+    #f8fafc 35%,
+    #f1f5f9 100%
+  ) !important;
+  border-top-color: var(--light-border) !important;
 }
 
-[data-theme='light'] footer,
+[data-theme='light'] footer #site-footer-title,
+[data-theme='light'] footer #site-footer-title span {
+  background-image: var(--light-footer-title-gradient) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+[data-theme='light'] footer .text-pink-200\/60 {
+  color: var(--light-pink-muted) !important;
+}
+
+[data-theme='light'] footer .text-pink-200\/80 {
+  color: var(--light-pink) !important;
+}
+
 [data-theme='light'] footer a {
   color: var(--light-text-muted) !important;
 }
 
-[data-theme='light'] footer a:hover {
-  color: var(--light-violet) !important;
+[data-theme='light'] footer a:hover,
+[data-theme='light'] footer a.hover\:text-pink-200:hover {
+  color: var(--light-fuchsia) !important;
 }
 
 [data-theme='light'] .cta-neon {
