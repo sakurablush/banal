@@ -1776,6 +1776,100 @@ main#app,
   pointer-events: none;
 }
 
+/* Page CTAs — fork section, articles, inline links */
+.cta-neon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.75rem 1.35rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, var(--neon-violet), var(--neon-fuchsia));
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  box-shadow: 0 4px 14px -4px rgba(124, 58, 237, 0.45);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.cta-neon:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px -6px rgba(124, 58, 237, 0.55);
+}
+
+.cta-neon:focus-visible {
+  outline: 2px solid var(--neon-violet);
+  outline-offset: 2px;
+}
+
+.cta-neon-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.75rem 1.35rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.cta-neon-secondary:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(168, 85, 247, 0.35);
+  transform: translateY(-2px);
+}
+
+.cta-neon-secondary:focus-visible {
+  outline: 2px solid var(--neon-violet);
+  outline-offset: 2px;
+}
+
+.cta-neon--inline {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  padding: 0.625rem 1.25rem;
+}
+
+.fork-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .fork-actions {
+    flex-direction: row;
+  }
+}
+
+.fork-actions .cta-neon,
+.fork-actions .cta-neon-secondary {
+  flex: 1;
+  min-height: 2.75rem;
+}
+
 .btn-header {
   width: 44px;
   height: 44px;
@@ -2540,6 +2634,20 @@ main#app,
 [data-theme='light'] .cta-neon {
   background: linear-gradient(135deg, #7c3aed, #c026d3) !important;
   color: #ffffff !important;
+  border-color: rgba(124, 58, 237, 0.25) !important;
+  box-shadow: 0 4px 14px -4px rgba(124, 58, 237, 0.35) !important;
+}
+
+[data-theme='light'] .cta-neon-secondary {
+  background: var(--light-card) !important;
+  border-color: var(--light-border) !important;
+  color: var(--light-text) !important;
+}
+
+[data-theme='light'] .cta-neon-secondary:hover {
+  background: var(--light-active-bg) !important;
+  border-color: var(--light-active-border) !important;
+  color: var(--light-violet) !important;
 }
 
 /* Keep dark modal islands readable when the page is in light mode. */
