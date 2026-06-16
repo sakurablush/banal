@@ -66,10 +66,40 @@ describe('Models Panel', () => {
 
   it('should render filter action buttons', () => {
     const api = renderModelsPanel(container, { lang: 'en' });
-    
+
     const actionBtns = container.querySelectorAll('.models-filter-btn');
-    expect(actionBtns.length).toBe(2); // Share + Save
-    
+    expect(actionBtns.length).toBe(1);
+
+    api.destroy();
+  });
+
+  it('should apply section-scoped filters from URL on init', () => {
+    const original = window.location.href;
+    window.history.replaceState({}, '', '/?models_useCase=multilingual&models_family=Llama#ai-models');
+
+    const api = renderModelsPanel(container, { lang: 'en' });
+
+    const familySelect = container.querySelector('.models-filter-select') as HTMLSelectElement;
+    const useCaseSelect = container.querySelectorAll('.models-filter-select')[1] as HTMLSelectElement;
+    expect(familySelect.value).toBe('Llama');
+    expect(useCaseSelect.value).toBe('multilingual');
+
+    window.history.replaceState({}, '', original);
+    api.destroy();
+  });
+
+  it('should ignore invalid URL filter values', () => {
+    const original = window.location.href;
+    window.history.replaceState({}, '', '/?models_useCase=not-a-real-use-case&models_family=Nope#ai-models');
+
+    const api = renderModelsPanel(container, { lang: 'en' });
+
+    const familySelect = container.querySelector('.models-filter-select') as HTMLSelectElement;
+    const useCaseSelect = container.querySelectorAll('.models-filter-select')[1] as HTMLSelectElement;
+    expect(familySelect.value).toBe('');
+    expect(useCaseSelect.value).toBe('');
+
+    window.history.replaceState({}, '', original);
     api.destroy();
   });
 

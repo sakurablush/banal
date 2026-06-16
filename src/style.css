@@ -3576,6 +3576,21 @@ textarea.sp-form-input {
   font-size: 0.8rem;
   cursor: pointer;
   outline: none;
+  color-scheme: dark;
+}
+
+.models-filter-select option {
+  background-color: #16111f;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+[data-theme='light'] .models-filter-select {
+  color-scheme: light;
+}
+
+[data-theme='light'] .models-filter-select option {
+  background-color: #ffffff;
+  color: #111827;
 }
 
 .models-filter-select:focus {
@@ -3616,7 +3631,16 @@ textarea.sp-form-input {
   margin-top: 0.5rem;
 }
 
-.models-filter-btn {
+.filter-share-actions {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 0.35rem;
+}
+
+.filter-share-btn,
+.models-filter-btn,
+.stacks-filter-btn {
   padding: 0.5rem 1rem;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -3627,7 +3651,9 @@ textarea.sp-form-input {
   transition: all 0.2s;
 }
 
-.models-filter-btn:hover {
+.filter-share-btn:hover,
+.models-filter-btn:hover,
+.stacks-filter-btn:hover {
   border-color: var(--neon-violet);
   color: var(--text-primary);
   background: var(--glass-hover);
@@ -3948,23 +3974,6 @@ textarea.sp-form-input {
   display: flex;
   gap: 0.5rem;
   margin-top: 0.75rem;
-}
-
-.stacks-filter-btn {
-  padding: 0.5rem 1rem;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 0.5rem;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.stacks-filter-btn:hover {
-  border-color: var(--neon-cyan);
-  color: var(--text-primary);
-  background: var(--glass-hover);
 }
 
 .stacks-stats {

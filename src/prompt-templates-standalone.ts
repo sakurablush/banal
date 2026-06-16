@@ -16,6 +16,7 @@
 
 import { PromptTemplatesLibrary, type Locale, type PromptTemplate } from './lib/prompt-templates';
 import { createCloseButton } from './lib/close-button';
+import { createShareFiltersButton, getSectionParams } from './lib/section-filter-url';
 
 const STORAGE_PREFIX = 'banal-pt-';
 
@@ -150,6 +151,14 @@ export function renderPromptTemplatesStandalone(options: {
       focusCleanup: null,
     };
 
+    const fromUrl = getSectionParams('prompts');
+    const validCategories = new Set(
+      PROMPT_CATEGORIES.map((cat) => cat.id).filter((id) => id !== 'all')
+    );
+    if (fromUrl.cat && validCategories.has(fromUrl.cat)) {
+      state.selectedCategory = fromUrl.cat;
+    }
+
     // Initialize saved values for all prompts
     for (const pt of prompts) {
       state.valuesByTemplate[pt.id] = getSavedValues(pt.id, lang);
@@ -193,6 +202,7 @@ function renderHorizontalLayout(state: PromptTemplatesViewState): void {
   // Quick filters row
   const filtersRow = createQuickFilters(state);
   layout.appendChild(filtersRow);
+  layout.appendChild(createShareActions(state));
 
   // Content area with grid
   const content = document.createElement('div');
@@ -295,6 +305,21 @@ function createQuickFilters(state: PromptTemplatesViewState): HTMLElement {
   }
 
   return row;
+}
+
+function createShareActions(state: PromptTemplatesViewState): HTMLElement {
+  const shareRow = document.createElement('div');
+  shareRow.className = 'filter-share-actions';
+  shareRow.appendChild(
+    createShareFiltersButton({
+      section: 'prompts',
+      lang: state.lang,
+      getValues: () => ({
+        cat: state.selectedCategory !== 'all' ? state.selectedCategory : null,
+      }),
+    })
+  );
+  return shareRow;
 }
 
 function createPromptGridContainer(state: PromptTemplatesViewState): HTMLElement {

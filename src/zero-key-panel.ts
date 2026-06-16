@@ -16,6 +16,7 @@ import {
   type ZeroKeyTool,
 } from './data/zero-key-tools';
 import { getLocalizedToolCopy, localizeBadge } from './lib/tool-localization';
+import { createShareFiltersButton, getSectionParams, type SectionFilterId } from './lib/section-filter-url';
 export type { ZeroKeyCategory };
 import { type SearchResult, searchTools } from './fuse-search';
 
@@ -485,6 +486,31 @@ function renderQuickFilters(state: PanelState): HTMLElement {
   return row;
 }
 
+function getPanelSectionId(categoryPrefix?: 'ai' | 'dev'): SectionFilterId | null {
+  if (categoryPrefix === 'ai') return 'ai-tools';
+  if (categoryPrefix === 'dev') return 'dev-tools';
+  return null;
+}
+
+function renderShareActions(state: PanelState): HTMLElement | null {
+  const section = getPanelSectionId(state.categoryPrefix);
+  if (!section) return null;
+
+  const row = create('div', 'filter-share-actions');
+  row.appendChild(
+    createShareFiltersButton({
+      section,
+      lang: state.lang,
+      getValues: () => ({
+        cat: state.activeCategory,
+        q: state.query.trim() || null,
+        life: state.lifeFilters.size > 0 ? [...state.lifeFilters].join(',') : null,
+      }),
+    })
+  );
+  return row;
+}
+
 // ─── Render: Horizontal Tool Card ───────────────────────────────────────────
 
 function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTMLElement {
@@ -835,6 +861,24 @@ export function renderZeroKeyPowerPanel(
     : zeroKeyTools;
   state.allTools = filteredTools;
   state.results = filteredTools.map((tool) => ({ tool, score: 0, matches: {} }));
+
+  const sectionId = getPanelSectionId(categoryPrefix);
+  if (sectionId) {
+    const fromUrl = getSectionParams(sectionId);
+    const validCategories = new Set(state.allTools.map((tool) => tool.category));
+    const validLifeIds = new Set(getLifeFilters(lang).map((filter) => filter.id));
+
+    if (fromUrl.cat && validCategories.has(fromUrl.cat as ZeroKeyCategory)) {
+      state.activeCategory = fromUrl.cat as ZeroKeyCategory;
+    }
+    if (fromUrl.q) state.query = fromUrl.q.slice(0, 200);
+    if (fromUrl.life) {
+      for (const id of fromUrl.life.split(',').filter(Boolean)) {
+        if (validLifeIds.has(id)) state.lifeFilters.add(id);
+      }
+    }
+  }
+
   state.container = container;
 
   container.innerHTML = '';
@@ -851,6 +895,7 @@ export function renderZeroKeyPowerPanel(
   searchInput.id = 'zk-search-input';
   searchInput.className = 'zk2-search-input';
   searchInput.placeholder = COPY[lang].searchPlaceholder;
+  searchInput.value = state.query;
   searchInput.autocomplete = 'off';
   searchInput.spellcheck = false;
 
@@ -860,6 +905,10 @@ export function renderZeroKeyPowerPanel(
   });
   searchWrap.appendChild(searchInput);
   container.appendChild(searchWrap);
+
+  if (state.query) {
+    syncSearchInputs(container, state.query, 'panel');
+  }
 
   // Layout wrapper with sidebar
   const layout = create('div', 'zk2-layout');
@@ -872,6 +921,9 @@ export function renderZeroKeyPowerPanel(
   // Quick filters row (same level as sidebar for alignment)
   const filtersRow = renderQuickFilters(state);
   layout.appendChild(filtersRow);
+
+  const shareActions = renderShareActions(state);
+  if (shareActions) layout.appendChild(shareActions);
 
   // Horizontal content area
   const content = create('div', 'zk2-horizontal-content');

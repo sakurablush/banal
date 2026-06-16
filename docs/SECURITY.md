@@ -39,8 +39,6 @@ improve the experience of the same browser session. The full list:
 |-------------------------------------------|----------------|----------------------------------------------|
 | `banal-lang`                              | localStorage   | Persisted language choice (en / ja).         |
 | `banal-theme`                             | sessionStorage | Light/dark override for this tab.            |
-| `savedModelFilters`                       | localStorage   | User-saved model-filter combinations.        |
-| `savedStackFilters`                       | localStorage   | User-saved tool-stack filter combinations.   |
 | `banal-saved-filters`                     | localStorage   | Saved directory filters.                     |
 | `banal-custom-stacks`                     | localStorage   | User-created tool stacks.                    |
 | `banal-filter-analytics`                  | localStorage   | Aggregated, anonymous filter usage counts.   |

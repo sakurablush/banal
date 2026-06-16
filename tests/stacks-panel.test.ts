@@ -47,10 +47,23 @@ describe('Stacks Panel', () => {
 
   it('should render filter action buttons', () => {
     const api = renderStacksPanel(container, { lang: 'en' });
-    
+
     const actionBtns = container.querySelectorAll('.stacks-filter-btn');
-    expect(actionBtns.length).toBe(2); // Share + Save
-    
+    expect(actionBtns.length).toBe(1);
+
+    api.destroy();
+  });
+
+  it('should apply section-scoped filters from URL on init', () => {
+    const original = window.location.href;
+    window.history.replaceState({}, '', '/?stacks_audience=developer#tool-stacks');
+
+    const api = renderStacksPanel(container, { lang: 'en' });
+
+    const activeChip = container.querySelector('.stacks-audience-chip.active');
+    expect(activeChip?.textContent).toContain('Developers');
+
+    window.history.replaceState({}, '', original);
     api.destroy();
   });
 

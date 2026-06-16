@@ -10,6 +10,7 @@ import { renderStackDetail } from './stack-detail';
 import { trackFilterEvent } from '../lib/filter-analytics';
 import { customizeStack, saveCustomStack } from '../lib/stack-customization';
 import { getLocalizedStack } from '../lib/stack-localization';
+import { createShareFiltersButton, getSectionParams } from '../lib/section-filter-url';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -297,6 +298,12 @@ export function renderStacksPanel(
     container,
   };
 
+  const validAudiences = new Set(getStackAudiences());
+  const fromUrl = getSectionParams('stacks');
+  if (fromUrl.audience && validAudiences.has(fromUrl.audience)) {
+    state.audienceFilter = fromUrl.audience as StackAudience;
+  }
+
   container.innerHTML = '';
   container.className = 'stacks-panel';
 
@@ -367,69 +374,18 @@ export function renderStacksPanel(
   }
   audienceRow.appendChild(chips);
 
-  // Filter actions row (Share + Save)
+  // Share link button
   const actionsRow = create('div', 'stacks-filter-actions');
-  
-  // Share filters button
-  const shareBtn = create('button', 'stacks-filter-btn');
-  shareBtn.type = 'button';
-  shareBtn.textContent = state.lang === 'ja' ? '🔗 フィルターを共有' : '🔗 Share Filters';
-  shareBtn.title = state.lang === 'ja' ? '現在のフィルターをURLとしてコピー' : 'Copy current filters as URL';
-  shareBtn.addEventListener('click', async () => {
-    const url = new URL(window.location.href);
-    if (state.audienceFilter) url.searchParams.set('audience', state.audienceFilter);
-    
-    try {
-      await navigator.clipboard.writeText(url.toString());
-      shareBtn.textContent = state.lang === 'ja' ? '✓ コピーしました！' : '✓ Copied!';
-      setTimeout(() => {
-        shareBtn.textContent = state.lang === 'ja' ? '🔗 フィルターを共有' : '🔗 Share Filters';
-      }, 2000);
-    } catch (err) {
-      console.error('Failed to copy URL:', err);
-      shareBtn.textContent = state.lang === 'ja' ? '✗ エラー' : '✗ Error';
-      setTimeout(() => {
-        shareBtn.textContent = state.lang === 'ja' ? '🔗 フィルターを共有' : '🔗 Share Filters';
-      }, 2000);
-    }
-  });
-  actionsRow.appendChild(shareBtn);
-
-  // Save filters button
-  const saveBtn = create('button', 'stacks-filter-btn');
-  saveBtn.type = 'button';
-  saveBtn.textContent = state.lang === 'ja' ? '💾 フィルターを保存' : '💾 Save Filters';
-  saveBtn.title = state.lang === 'ja' ? '現在のフィルターを保存' : 'Save current filters';
-  saveBtn.addEventListener('click', () => {
-    const filterName = prompt(
-      state.lang === 'ja' ? 'フィルター名を入力:' : 'Enter filter name:',
-      state.lang === 'ja' ? 'マイフィルター' : 'My Filter'
-    );
-    
-    if (filterName) {
-      const filterState = {
-        audienceFilter: state.audienceFilter,
-      };
-      
-      try {
-        const saved = JSON.parse(localStorage.getItem('savedStackFilters') || '[]');
-        saved.push({ name: filterName, state: filterState, timestamp: Date.now() });
-        localStorage.setItem('savedStackFilters', JSON.stringify(saved));
-        saveBtn.textContent = state.lang === 'ja' ? '✓ 保存しました！' : '✓ Saved!';
-        setTimeout(() => {
-          saveBtn.textContent = state.lang === 'ja' ? '💾 フィルターを保存' : '💾 Save Filters';
-        }, 2000);
-      } catch (err) {
-        console.error('Failed to save filter:', err);
-        saveBtn.textContent = state.lang === 'ja' ? '✗ エラー' : '✗ Error';
-        setTimeout(() => {
-          saveBtn.textContent = state.lang === 'ja' ? '💾 フィルターを保存' : '💾 Save Filters';
-        }, 2000);
-      }
-    }
-  });
-  actionsRow.appendChild(saveBtn);
-
+  actionsRow.appendChild(
+    createShareFiltersButton({
+      section: 'stacks',
+      lang: state.lang,
+      className: 'stacks-filter-btn',
+      getValues: () => ({
+        audience: state.audienceFilter,
+      }),
+    })
+  );
   audienceRow.appendChild(actionsRow);
   container.appendChild(audienceRow);
 

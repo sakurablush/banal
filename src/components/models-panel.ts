@@ -9,6 +9,31 @@ import type { AIModel } from '../types/tool';
 import { renderModelDetail } from './model-detail';
 import { trackFilterEvent } from '../lib/filter-analytics';
 import { localizeUseCase } from '../lib/model-localization';
+import { createShareFiltersButton, getSectionParams } from '../lib/section-filter-url';
+
+const MODEL_USE_CASES = [
+  'coding',
+  'reasoning',
+  'multilingual',
+  'long-context',
+  'general',
+  'all-round',
+  'consumer-hardware',
+  'edge-deployment',
+  'vision',
+] as const;
+
+function applyModelsUrlState(state: ModelsPanelState): void {
+  const fromUrl = getSectionParams('models');
+  const families = new Set(getModelFamilies());
+  const licenses = new Set(aiModels.map((m) => m.license.type));
+  const useCases = new Set<string>(MODEL_USE_CASES);
+
+  if (fromUrl.family && families.has(fromUrl.family)) state.familyFilter = fromUrl.family;
+  if (fromUrl.useCase && useCases.has(fromUrl.useCase)) state.useCaseFilter = fromUrl.useCase;
+  if (fromUrl.license && licenses.has(fromUrl.license)) state.licenseFilter = fromUrl.license;
+  if (fromUrl.q) state.query = fromUrl.q.slice(0, 200);
+}
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -360,7 +385,7 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   chipsRow.appendChild(familySelect);
 
   // Use case filter
-  const useCases = ['coding', 'reasoning', 'multilingual', 'long-context', 'general', 'all-round', 'consumer-hardware', 'edge-deployment', 'vision'];
+  const useCases = [...MODEL_USE_CASES];
   const useCaseSelect = create('select', 'models-filter-select');
   const allUseOpt = create('option');
   allUseOpt.value = '';
@@ -369,7 +394,7 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   for (const uc of useCases) {
     const opt = create('option');
     opt.value = uc;
-    opt.textContent = uc;
+    opt.textContent = localizeUseCaseTag(uc, state.lang);
     if (state.useCaseFilter === uc) opt.selected = true;
     useCaseSelect.appendChild(opt);
   }
@@ -468,76 +493,21 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   }
   bar.appendChild(quickChips);
 
-  // Filter actions row (Share + Save)
+  // Share link button
   const actionsRow = create('div', 'models-filter-actions');
-  
-  // Share filters button
-  const shareBtn = create('button', 'models-filter-btn');
-  shareBtn.type = 'button';
-  shareBtn.textContent = state.lang === 'ja' ? '🔗 フィルターを共有' : '🔗 Share Filters';
-  shareBtn.title = state.lang === 'ja' ? '現在のフィルターをURLとしてコピー' : 'Copy current filters as URL';
-  shareBtn.addEventListener('click', async () => {
-    // Build URL with current filters
-    const url = new URL(window.location.href);
-    if (state.familyFilter) url.searchParams.set('family', state.familyFilter);
-    if (state.useCaseFilter) url.searchParams.set('useCase', state.useCaseFilter);
-    if (state.licenseFilter) url.searchParams.set('license', state.licenseFilter);
-    if (state.query) url.searchParams.set('q', state.query);
-    
-    try {
-      await navigator.clipboard.writeText(url.toString());
-      shareBtn.textContent = state.lang === 'ja' ? '✓ コピーしました！' : '✓ Copied!';
-      setTimeout(() => {
-        shareBtn.textContent = state.lang === 'ja' ? '🔗 フィルターを共有' : '🔗 Share Filters';
-      }, 2000);
-    } catch (err) {
-      console.error('Failed to copy URL:', err);
-      shareBtn.textContent = state.lang === 'ja' ? '✗ エラー' : '✗ Error';
-      setTimeout(() => {
-        shareBtn.textContent = state.lang === 'ja' ? '🔗 フィルターを共有' : '🔗 Share Filters';
-      }, 2000);
-    }
-  });
-  actionsRow.appendChild(shareBtn);
-
-  // Save filters button
-  const saveBtn = create('button', 'models-filter-btn');
-  saveBtn.type = 'button';
-  saveBtn.textContent = state.lang === 'ja' ? '💾 フィルターを保存' : '💾 Save Filters';
-  saveBtn.title = state.lang === 'ja' ? '現在のフィルターを保存' : 'Save current filters';
-  saveBtn.addEventListener('click', () => {
-    const filterName = prompt(
-      state.lang === 'ja' ? 'フィルター名を入力:' : 'Enter filter name:',
-      state.lang === 'ja' ? 'マイフィルター' : 'My Filter'
-    );
-    
-    if (filterName) {
-      const filterState = {
-        familyFilter: state.familyFilter,
-        useCaseFilter: state.useCaseFilter,
-        licenseFilter: state.licenseFilter,
-        query: state.query,
-      };
-      
-      try {
-        const saved = JSON.parse(localStorage.getItem('savedModelFilters') || '[]');
-        saved.push({ name: filterName, state: filterState, timestamp: Date.now() });
-        localStorage.setItem('savedModelFilters', JSON.stringify(saved));
-        saveBtn.textContent = state.lang === 'ja' ? '✓ 保存しました！' : '✓ Saved!';
-        setTimeout(() => {
-          saveBtn.textContent = state.lang === 'ja' ? '💾 フィルターを保存' : '💾 Save Filters';
-        }, 2000);
-      } catch (err) {
-        console.error('Failed to save filter:', err);
-        saveBtn.textContent = state.lang === 'ja' ? '✗ エラー' : '✗ Error';
-        setTimeout(() => {
-          saveBtn.textContent = state.lang === 'ja' ? '💾 フィルターを保存' : '💾 Save Filters';
-        }, 2000);
-      }
-    }
-  });
-  actionsRow.appendChild(saveBtn);
-
+  actionsRow.appendChild(
+    createShareFiltersButton({
+      section: 'models',
+      lang: state.lang,
+      className: 'models-filter-btn',
+      getValues: () => ({
+        family: state.familyFilter,
+        useCase: state.useCaseFilter,
+        license: state.licenseFilter,
+        q: state.query.trim() || null,
+      }),
+    })
+  );
   bar.appendChild(actionsRow);
 
   return bar;
@@ -668,6 +638,8 @@ export function renderModelsPanel(
     compareSet: new Set(),
     container,
   };
+
+  applyModelsUrlState(state);
 
   container.innerHTML = '';
   container.className = 'models-panel';
