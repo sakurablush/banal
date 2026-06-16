@@ -60,6 +60,12 @@ export const surfaceLabels: Record<ZeroKeySurface, string> = {
   cli: 'Free CLI',
 };
 
+export const surfaceLabelsJa: Record<ZeroKeySurface, string> = {
+  web: '無料Web',
+  api: '無料API',
+  cli: '無料CLI',
+};
+
 export const categoryLabels: Record<ZeroKeyCategory, string> = {
   // AI categories
   'ai-chat': 'AI Chat & Assistants',
@@ -85,6 +91,33 @@ export const categoryLabels: Record<ZeroKeyCategory, string> = {
   'dev-data': 'Public Data & Open Datasets',
   'dev-docs': 'Docs, Research & Knowledge',
   'dev-design': 'Design, Images, Audio & Video',
+};
+
+export const categoryLabelsJa: Record<ZeroKeyCategory, string> = {
+  // AI categories
+  'ai-chat': 'AIチャット＆アシスタント',
+  'ai-image': 'AI画像生成・編集',
+  'ai-video': 'AI動画生成・編集',
+  'ai-audio': 'AI音声・音楽・TTS',
+  'ai-writing': 'AI文章作成・要約・翻訳',
+  'ai-search': 'AI検索・リサーチエンジン',
+  'ai-pdf': 'AIドキュメント・PDFツール',
+  'ai-presentation': 'AIプレゼンテーション・スライド',
+  'ai-math': 'AI数学・科学・教育',
+  'ai-coding': 'AIコーディングアシスタント',
+  'ai-agents': 'AIエージェントプラットフォーム',
+  'ai-open-source': 'オープンソースモデル（ローカル実行）',
+  'ai-models': '最新オープンソースモデル',
+  // Developer categories
+  'dev-coding': 'コーディング・開発者ワークフロー',
+  'dev-backend': 'バックエンド・ホスティング・データベース',
+  'dev-automation': '自動化・運用・モニタリング',
+  'dev-security': 'セキュリティ・プライバシー',
+  'dev-productivity': '生産性・ライフ管理',
+  'dev-learning': '学習・キャリア向上',
+  'dev-data': '公開データ・オープンデータセット',
+  'dev-docs': 'ドキュメント・リサーチ・ナレッジ',
+  'dev-design': 'デザイン・画像・音声・動画',
 };
 
 export const zeroKeyTools: ZeroKeyTool[] = [

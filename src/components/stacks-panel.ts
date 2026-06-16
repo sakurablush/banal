@@ -32,6 +32,7 @@ const COPY = {
     experience: 'Experience',
     showing: (n: number) => `${n} stacks`,
     noMatches: 'No stacks match this audience',
+    optional: 'optional',
   },
   ja: {
     title: 'ツールスタック',
@@ -52,6 +53,7 @@ const COPY = {
     experience: '経験',
     showing: (n: number) => `${n}スタック`,
     noMatches: '一致するスタックがありません',
+    optional: 'オプション',
   },
 } satisfies Record<Lang, Record<string, string | ((...args: number[]) => string)>>;
 
@@ -120,7 +122,7 @@ function renderStackCard(state: StacksPanelState, stack: ToolStack): HTMLElement
     toolItem.appendChild(span('stack-tool-role', tool.role));
     toolItem.appendChild(span('stack-tool-id', tool.toolId));
     if (tool.optional) {
-      toolItem.appendChild(span('stack-tool-optional', 'optional'));
+      toolItem.appendChild(span('stack-tool-optional', copy.optional));
     }
     toolsList.appendChild(toolItem);
   }

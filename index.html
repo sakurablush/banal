@@ -5,23 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="The world's largest directory of verified free tools for developers — 227+ tools (128 AI + 99 developer tools), no login required. Chat, image, video, coding, PDF, backend, automation. Free forever."
+      content="For engineers who fund their own AI stack: 273 tools (178 AI, 95 dev) with honest access labels — signup, API keys, rate limits. No affiliate links."
     />
     <meta name="theme-color" content="#06060b" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://banal.dev/" />
-    <meta property="og:title" content="Banal — 227+ Free Tools for Developers | AI + Dev Tools | Verified" />
-    <meta property="og:description" content="The world's largest directory of verified free tools for developers. 227+ tools, no login required. AI coding assistants, image generation, video tools, and more." />
+    <meta property="og:title" content="Banal — Independent Builder Tool Reference (273 tools)" />
+    <meta property="og:description" content="For engineers who fund their own AI stack: 273 tools with honest access labels — signup, limits, inference caveats. No affiliate links." />
     <meta property="og:image" content="https://banal.dev/og-image.png" />
     <meta property="og:site_name" content="Banal" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://banal.dev/" />
-    <meta name="twitter:title" content="Banal — 227+ Free Tools for Developers | AI + Dev Tools | Verified" />
-    <meta name="twitter:description" content="The world's largest directory of verified free tools for developers. 227+ tools, no login required. AI coding assistants, image generation, video tools, and more." />
+    <meta name="twitter:title" content="Banal — Independent Builder Tool Reference (273 tools)" />
+    <meta name="twitter:description" content="For engineers who fund their own AI stack: 273 tools with honest access labels — signup, limits, inference caveats. No affiliate links." />
     <meta name="twitter:image" content="https://banal.dev/og-image.png" />
     
     <!-- Canonical URL -->
@@ -34,7 +34,7 @@
       "@type": "WebSite",
       "name": "Banal",
       "url": "https://banal.dev/",
-      "description": "The world's largest directory of verified free tools for developers",
+      "description": "Independent builder reference for AI and developer tools with honest access labels and caveats",
       "potentialAction": {
         "@type": "SearchAction",
         "target": "https://banal.dev/?q={search_term_string}",
@@ -48,7 +48,7 @@
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
     />
-    <title>Banal — 227+ Free Tools for Developers | AI + Dev Tools | Verified</title>
+    <title>Banal — Independent Builder Tool Reference (273 tools)</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -72,7 +72,7 @@
     <header class="sticky top-0 z-50 backdrop-blur-md bg-[#06060b]/80 border-b border-white/5">
       <nav
         aria-label="Main navigation"
-        class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10 flex items-center justify-between h-14"
+        class="page-shell flex items-center justify-between h-14"
       >
         <a
           href="/"
@@ -170,24 +170,65 @@
           >
             <span class="btn-header-icon">
               <svg
+                class="lang-icon"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                style="width: 20px; height: 20px;"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
               >
-                <circle cx="12" cy="12" r="10" />
-                <path d="M2 12h20" />
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                <defs>
+                  <clipPath id="lang-uk-half">
+                    <rect x="3" y="4" width="9" height="16" rx="2.5" />
+                  </clipPath>
+                  <clipPath id="lang-jp-half">
+                    <rect x="12" y="4" width="9" height="16" rx="2.5" />
+                  </clipPath>
+                  <linearGradient id="lang-fusion" x1="11" y1="4" x2="13" y2="20" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#a855f7" stop-opacity="0.15" />
+                    <stop offset="50%" stop-color="#d946ef" stop-opacity="0.95" />
+                    <stop offset="100%" stop-color="#a855f7" stop-opacity="0.15" />
+                  </linearGradient>
+                </defs>
+                <rect
+                  x="3"
+                  y="4"
+                  width="18"
+                  height="16"
+                  rx="3.5"
+                  stroke="currentColor"
+                  stroke-width="1.15"
+                  stroke-opacity="0.42"
+                />
+                <g clip-path="url(#lang-uk-half)">
+                  <rect x="3" y="4" width="9.5" height="16" fill="#012169" />
+                  <path fill="#fff" d="M3 11.2h9.5M7.75 4v16" />
+                  <path fill="#C8102E" d="M3 10h9.5v2.4H3zM6.55 4v16h2.4V4z" />
+                  <path fill="#fff" d="M3 4.2 12.2 19.8M12.2 4.2 3 19.8" opacity="0.92" />
+                  <path
+                    fill="none"
+                    stroke="#C8102E"
+                    stroke-width="0.85"
+                    d="M3 4.9 11.5 19.1M11.5 4.9 3 19.1"
+                  />
+                </g>
+                <g clip-path="url(#lang-jp-half)">
+                  <rect x="12" y="4" width="9.5" height="16" fill="#f9f9f9" />
+                  <circle cx="16.5" cy="12" r="3.15" fill="#BC002D" />
+                </g>
+                <path
+                  d="M11.7 5.4c1.35 2.1 1.35 11.1 0 13.2"
+                  stroke="url(#lang-fusion)"
+                  stroke-width="1.05"
+                  stroke-linecap="round"
+                />
+                <circle cx="12" cy="12" r="0.75" fill="#e879f9" />
               </svg>
             </span>
           </button>
         </div>
       </nav>
       <!-- Mobile nav (hamburger not needed — just show all links stacked) -->
-      <div class="sm:hidden border-t border-white/5 px-4 py-2 flex gap-4 text-xs overflow-x-auto">
+      <div class="sm:hidden border-t border-white/5 page-shell py-2 flex gap-4 text-xs overflow-x-auto">
         <a
           href="#ai-tools"
           class="text-white/60 hover:text-white whitespace-nowrap"
@@ -217,12 +258,11 @@
 
     <!-- Particle canvas (THE GHOST) - decorative, hidden from screen readers -->
     <div class="void-bg" aria-hidden="true"></div>
-    <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
     <main id="app" role="main">
       <!-- HERO -->
       <section class="hero-section relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10 py-8 sm:py-12 text-center relative z-10">
+        <div class="page-shell pb-8 sm:pb-10 text-center relative z-10">
           <!-- Removed: ⚡ VERIFIED FREE AI DIRECTORY (clean header per redesign plan) -->
 
           <h1
@@ -233,21 +273,20 @@
             >
             <br />
             <span class="text-white/90 glitch-hover" data-i18n="hero.title2"
-              >Transparent. Honest. Forkable.</span
+              >Independent builder reference.</span
             >
           </h1>
 
           <p
-            class="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-6 leading-relaxed"
+            class="text-lg sm:text-xl text-white/50 max-w-3xl mx-auto mb-6 leading-relaxed"
             data-i18n="hero.subtitle"
           >
-            227+ tools. 128 AI + 99 developer tools. Chat, image, video, code, PDF, backend,
-            automation.
-            <span class="text-white/70">All verified.</span>
-            <span class="text-white/40">Free access.</span>
+            273 tools: 178 AI, 95 dev. Inference and API costs add up on real work. Each listing
+            shows access type, signup requirements, and limits.
           </p>
           <p class="text-sm text-white/30 max-w-xl mx-auto mb-2" data-i18n="hero.disclaimer">
-            Some tools require free signup (no credit card). We mark everything clearly.
+            Free here means one of: no login, free API key, freemium tier, or self-host. Stated on
+            each card before you click.
           </p>
 
           <!-- GIANT SEARCH -->
@@ -256,7 +295,7 @@
               type="text"
               id="hero-search"
               class="search-giant"
-              placeholder="Search 227+ free tools — AI chat, image, PDF, backend, automation..."
+              placeholder="Search 273 tools — chat, image, PDF, code..."
               autocomplete="off"
               data-i18n-placeholder="search.placeholder"
             />
@@ -277,20 +316,20 @@
           <!-- STATS -->
           <div class="stats-void">
             <div class="stat-void">
-              <div class="stat-number-void" id="stat-tools">227+</div>
-              <div class="stat-label-void" data-i18n="stats.tools">Tools</div>
+              <div class="stat-number-void" id="stat-tools">273</div>
+              <div class="stat-label-void" data-i18n="stats.tools">Tools listed</div>
             </div>
             <div class="stat-void">
-              <div class="stat-number-void">0</div>
-              <div class="stat-label-void" data-i18n="stats.logins">Logins</div>
+              <div class="stat-number-void" id="stat-ai">178</div>
+              <div class="stat-label-void" data-i18n="stats.ai">AI tools</div>
             </div>
             <div class="stat-void">
-              <div class="stat-number-void">∞</div>
-              <div class="stat-label-void" data-i18n="stats.freedom">Freedom</div>
+              <div class="stat-number-void" id="stat-dev">95</div>
+              <div class="stat-label-void" data-i18n="stats.dev">Dev tools</div>
             </div>
             <div class="stat-void">
-              <div class="stat-number-void">100%</div>
-              <div class="stat-label-void" data-i18n="stats.freeAccess">Free Access</div>
+              <div class="stat-number-void">$0</div>
+              <div class="stat-label-void" data-i18n="stats.siteCost">To use Banal</div>
             </div>
           </div>
         </div>
@@ -299,32 +338,32 @@
       <!-- ONBOARDING QUIZ -->
       <section
         id="onboarding"
-        class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10 py-8 sm:py-12 border-t border-white/5"
+        class="page-section page-shell"
       >
         <div id="onboarding-root"></div>
       </section>
 
       <!-- AI TOOLS DIRECTORY -->
-      <section id="ai-tools" class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10 py-8 sm:py-12 border-t border-white/5">
+      <section id="ai-tools" class="page-section page-shell">
         <div class="text-center mb-12">
           <div class="eyebrow-void" data-i18n="section.aiTools.eyebrow">🤖 AI TOOLS</div>
           <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
-            <span class="gradient-neon" data-i18n="section.aiTools.title1">128+ AI tools.</span>
-            <span class="text-white/80" data-i18n="section.aiTools.title2">Zero gatekeeping.</span>
+            <span class="gradient-neon" data-i18n="section.aiTools.title1">178 AI tools.</span>
+            <span class="text-white/80" data-i18n="section.aiTools.title2">Listed with access type and limits.</span>
           </h2>
           <p
-            class="text-white/40 max-w-lg mx-auto text-sm sm:text-base"
+            class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base"
             data-i18n="section.aiTools.desc"
           >
-            Free AI-powered tools for chat, image, video, code, PDF, and research.
-            <span class="text-white/50">All verified. All free.</span>
+            Chat, image, video, coding, PDF, research. Each card shows signup, API keys, and rate
+            limits before you click.
           </p>
         </div>
 
         <div id="ai-tools-root" data-category-prefix="ai">
           <div class="text-center py-16 text-white/20 text-sm">
-            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-              Loading 132+ verified AI tools & models...
+            <div class="inline-block px-8 py-4 rounded-2xl glass-card" data-i18n="loading.aiTools">
+              Loading AI tools...
             </div>
           </div>
         </div>
@@ -333,29 +372,29 @@
       <!-- DEV TOOLS DIRECTORY -->
       <section
         id="dev-tools"
-        class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10 py-8 sm:py-12 border-t border-white/5"
+        class="page-section page-shell"
       >
         <div class="text-center mb-12">
           <div class="eyebrow-void" data-i18n="section.devTools.eyebrow">💻 DEVELOPER TOOLS</div>
           <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
-            <span class="gradient-neon" data-i18n="section.devTools.title1">99+ dev tools.</span>
+            <span class="gradient-neon" data-i18n="section.devTools.title1">95 dev tools.</span>
             <span class="text-white/80" data-i18n="section.devTools.title2"
-              >Open source & free.</span
+              >Listed with access type and limits.</span
             >
           </h2>
           <p
-            class="text-white/40 max-w-lg mx-auto text-sm sm:text-base"
+            class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base"
             data-i18n="section.devTools.desc"
           >
-            Free tools for coding, backend, automation, security, and learning.
-            <span class="text-white/50">No hype. No affiliate links.</span>
+            CLI, APIs, automation, security, learning. Each card shows access and limits before you
+            click.
           </p>
         </div>
 
         <div id="dev-tools-root" data-category-prefix="dev">
           <div class="text-center py-16 text-white/20 text-sm">
-            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-              Loading 99+ verified developer tools...
+            <div class="inline-block px-8 py-4 rounded-2xl glass-card" data-i18n="loading.devTools">
+              Loading developer tools...
             </div>
           </div>
         </div>
@@ -364,24 +403,27 @@
       <!-- AI MODELS DIRECTORY -->
       <section
         id="ai-models"
-        class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10 py-8 sm:py-12 border-t border-white/5"
+        class="page-section page-shell"
       >
         <div class="text-center mb-12">
-          <div class="eyebrow-void">🌟 AI MODELS & WEIGHTS</div>
+          <div class="eyebrow-void" data-i18n="section.aiModels.eyebrow">🌟 AI MODELS</div>
           <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
-            <span class="gradient-neon">50+ open-source models.</span>
-            <span class="text-white/80">Run locally or via API.</span>
+            <span class="gradient-neon" data-i18n="section.aiModels.title1">38 open models.</span>
+            <span class="text-white/80" data-i18n="section.aiModels.title2">VRAM, benchmarks, inference options.</span>
           </h2>
-          <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base">
-            Discover the best open-source LLMs with benchmarks, hardware requirements, and inference providers.
-            <span class="text-white/50">Compare side-by-side.</span>
+          <p
+            class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base"
+            data-i18n="section.aiModels.desc"
+          >
+            Model weights with hardware requirements, benchmark notes, and free inference providers
+            where we found them.
           </p>
         </div>
 
         <div id="ai-models-root">
           <div class="text-center py-16 text-white/20 text-sm">
-            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-              Loading 50+ AI models...
+            <div class="inline-block px-8 py-4 rounded-2xl glass-card" data-i18n="loading.aiModels">
+              Loading AI models...
             </div>
           </div>
         </div>
@@ -390,23 +432,26 @@
       <!-- TOOL STACKS -->
       <section
         id="tool-stacks"
-        class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10 py-8 sm:py-12 border-t border-white/5 bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
+        class="page-section page-shell bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
       >
         <div class="text-center mb-12">
-          <div class="eyebrow-void">🛠️ TOOL STACKS</div>
+          <div class="eyebrow-void" data-i18n="section.stacks.eyebrow">🛠️ TOOL STACKS</div>
           <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
-            <span class="gradient-neon">Zero-budget workflows.</span>
-            <span class="text-white/80">Curated stacks.</span>
+            <span class="gradient-neon" data-i18n="section.stacks.title1">10 tool stacks.</span>
+            <span class="text-white/80" data-i18n="section.stacks.title2">Monthly cost stated.</span>
           </h2>
-          <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base">
-            Complete tool combinations for building SaaS, freelancing, learning, and more.
-            <span class="text-white/50">All $0/month.</span>
+          <p
+            class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base"
+            data-i18n="section.stacks.desc"
+          >
+            Tool combinations for client work, learning, and side projects. Monthly cost and caveats
+            on each stack.
           </p>
         </div>
 
         <div id="tool-stacks-root">
           <div class="text-center py-16 text-white/20 text-sm">
-            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
+            <div class="inline-block px-8 py-4 rounded-2xl glass-card" data-i18n="loading.toolStacks">
               Loading tool stacks...
             </div>
           </div>
@@ -416,7 +461,7 @@
       <!-- GETTING STARTED GUIDES -->
       <section
         id="guides"
-        class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10 py-8 sm:py-12 border-t border-white/5"
+        class="page-section page-shell"
       >
         <div id="guides-root"></div>
       </section>
@@ -424,34 +469,33 @@
       <!-- PROMPT TEMPLATES -->
       <section
         id="prompt-templates"
-        class="py-8 sm:py-12 border-t border-white/5 bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
+        class="page-section bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
       >
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10">
+        <div class="page-shell">
           <div class="text-center mb-12">
             <div class="eyebrow-void" data-i18n="section.promptTemplates.eyebrow">
               9 PROMPT TEMPLATES
             </div>
             <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
               <span class="gradient-neon" data-i18n="section.promptTemplates.title1"
-                >Prompt templates.</span
+                >9 prompt templates.</span
               >
               <span class="text-white/80" data-i18n="section.promptTemplates.title2"
-                >Copy & paste.</span
+                >Copy, fill, run.</span
               >
             </h2>
             <p
               class="text-white/40 max-w-lg mx-auto text-sm sm:text-base"
               data-i18n="section.promptTemplates.desc"
             >
-              9 powerful prompt templates for real-life situations. Copy them, fill in your details,
-              paste into any free AI chatbot.
-              <span class="text-white/50">No account needed.</span>
+              Templates for jobs, debt letters, forms, and EN↔JA translation. Paste into any chat
+              tool listed above.
             </p>
           </div>
 
           <div id="prompt-templates-root">
             <div class="text-center py-12 text-white/20 text-sm">
-              <div class="inline-block px-6 py-3 rounded-xl glass-card">
+              <div class="inline-block px-6 py-3 rounded-xl glass-card" data-i18n="loading.promptTemplates">
                 Loading prompt templates...
               </div>
             </div>
@@ -462,17 +506,17 @@
       <!-- ARTICLES -->
       <section
         id="articles"
-        class="py-8 sm:py-12 border-t border-white/5 bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
+        class="page-section bg-gradient-to-b from-transparent via-violet-950/5 to-transparent"
       >
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10">
+        <div class="page-shell">
           <div class="text-center mb-12">
             <div class="eyebrow-void" data-i18n="section.articles.eyebrow">ARTICLES</div>
             <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">
-              <span class="gradient-neon" data-i18n="section.articles.title1">Real stories.</span>
-              <span class="text-white/80" data-i18n="section.articles.title2">No fluff.</span>
+              <span class="gradient-neon" data-i18n="section.articles.title1">Articles.</span>
+              <span class="text-white/80" data-i18n="section.articles.title2">Setup notes and reviews.</span>
             </h2>
             <p class="text-white/40 max-w-md mx-auto text-sm" data-i18n="section.articles.desc">
-              Honest writing for people who need this. No social media circus.
+              Long-form notes on tools and workflows tested on real projects.
             </p>
           </div>
 
@@ -488,6 +532,7 @@
                 border-color: rgba(168, 85, 247, 0.4);
                 color: #c4b5fd;
               "
+              data-i18n="article.featured"
             >
               FEATURED
             </div>
@@ -495,21 +540,22 @@
               The Only Free AI Coding Setup That Actually Works in 2026
             </h3>
             <p class="article-excerpt-void">
-              I've tested every free AI coding tool. Most are glorified demos. Here's what actually
-              works for daily professional development — no $20/month, no credit card, no "you've
-              reached your limit."
+              I've tested free AI coding setups on real projects — not demos. What holds up under
+              daily professional use, what rate-limits you, and what still costs in tokens when the
+              work is serious.
             </p>
             <div class="article-meta-void">
-              <span>8 min read</span>
+              <span>8 <span data-i18n="article.minRead">min read</span></span>
               <span>·</span>
-              <span class="text-violet-400/60">Practical guide</span>
+              <span class="text-violet-400/60" data-i18n="article.practicalGuide">Practical guide</span>
               <span>·</span>
-              <span>Honest review</span>
+              <span data-i18n="article.honestReview">Honest review</span>
             </div>
             <a
               href="./articles/free-ai-coding-setup-2026/"
               class="cta-neon"
               style="display: inline-flex; margin-top: 12px; font-size: 0.9rem; padding: 10px 20px"
+              data-i18n="article.readFullGuide"
             >
               Read the full guide → <span style="font-size: 1.1rem">⌕</span>
             </a>
@@ -518,20 +564,20 @@
       </section>
 
       <!-- HONEST LIMITATIONS -->
-      <section class="py-10 sm:py-14 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10">
+      <section class="page-section">
+        <div class="page-shell">
           <div class="text-center mb-10">
             <div class="eyebrow-void" data-i18n="section.limitations.eyebrow">TRANSPARENCY</div>
             <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">
               <span class="gradient-neon" data-i18n="section.limitations.title"
-                >Honest Limitations</span
+                >What "free" means here</span
               >
             </h2>
             <p
               class="text-white/40 max-w-2xl mx-auto text-sm sm:text-base"
               data-i18n="section.limitations.desc"
             >
-              We will not lie to you. Here's what "free" really means.
+              How we label access type and limits on every listing.
             </p>
           </div>
 
@@ -550,22 +596,22 @@
             <div class="glass-card p-6">
               <div class="text-2xl mb-3">🤖</div>
               <h3 class="text-white font-semibold mb-2" data-i18n="limitations.1.title">
-                AI tools are not magic
+                AI output can be wrong
               </h3>
               <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.1.desc">
-                They can hallucinate, give wrong answers, or refuse legitimate requests. Always
-                verify important information. Never trust AI blindly.
+                Models hallucinate, refuse valid requests, or return outdated information. Verify
+                anything important yourself.
               </p>
             </div>
 
             <div class="glass-card p-6">
               <div class="text-2xl mb-3">⏱️</div>
               <h3 class="text-white font-semibold mb-2" data-i18n="limitations.2.title">
-                Rate limits are real
+                Rate limits apply
               </h3>
               <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.2.desc">
-                Free tiers exist to share resources. If you hit a limit, wait or try another tool.
-                This protects the free service for everyone.
+                Free tiers share capacity. When you hit a limit, wait, switch tools, or pay for more
+                capacity.
               </p>
             </div>
 
@@ -594,11 +640,10 @@
             <div class="glass-card p-6">
               <div class="text-2xl mb-3">✅</div>
               <h3 class="text-white font-semibold mb-2" data-i18n="limitations.5.title">
-                We mark everything
+                Every listing is labeled
               </h3>
               <p class="text-white/40 text-sm leading-relaxed" data-i18n="limitations.5.desc">
-                Every tool has its access type and limitations clearly marked. You know what to
-                expect before you click. No surprises.
+                Access type and caveats are on the card. Check them before you click.
               </p>
             </div>
           </div>
@@ -620,49 +665,49 @@
       </section>
 
       <!-- MISSION -->
-      <section class="py-10 sm:py-14 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10 text-center">
+      <section class="page-section">
+        <div class="page-shell text-center">
           <div class="eyebrow-void" data-i18n="mission.eyebrow">WHY WE EXIST</div>
           <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-8">
-            <span class="gradient-neon" data-i18n="mission.title1">AI is the new literacy.</span>
+            <span class="gradient-neon" data-i18n="mission.title1">Self-funded tooling.</span>
             <br />
-            <span class="text-white/90" data-i18n="mission.title2">Everyone deserves access.</span>
+            <span class="text-white/90" data-i18n="mission.title2">Stated access and limits.</span>
           </h2>
           <p
-            class="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed mb-12"
+            class="text-lg text-white/50 max-w-3xl mx-auto leading-relaxed mb-12"
             data-i18n="mission.desc"
           >
-            The best AI capabilities are locked behind $20/month subscriptions. That's $240/year
-            that separates those who can think with AI from those who can't.
-            <span class="text-white/70">We refuse this.</span>
+            Companies buy pooled inference, enterprise seats, and approved vendors. Independent
+            builders pay for tokens, APIs, and licenses themselves. Banal lists tools with access type
+            and limits on every card.
           </p>
 
           <div class="grid sm:grid-cols-3 gap-5">
             <div class="glass-card p-7 text-left">
               <div class="text-cyan-400 font-bold text-sm mb-2 tracking-wide">01</div>
               <div class="text-white font-semibold mb-1" data-i18n="mission.0.title">
-                Transparent access
+                Access labeled
               </div>
               <div class="text-white/40 text-sm" data-i18n="mission.0.desc">
-                We clearly mark which tools need signup and which don't. No surprises.
+                Each card states signup, API key, or payment requirements.
               </div>
             </div>
             <div class="glass-card p-7 text-left">
               <div class="text-fuchsia-400 font-bold text-sm mb-2 tracking-wide">02</div>
               <div class="text-white font-semibold mb-1" data-i18n="mission.1.title">
-                Honestly curated
+                Limits stated
               </div>
               <div class="text-white/40 text-sm" data-i18n="mission.1.desc">
-                Real limits, real caveats. No hype. No affiliate links. We print the asterisks.
+                Rate limits and caveats on every listing. No affiliate links.
               </div>
             </div>
             <div class="glass-card p-7 text-left">
               <div class="text-cyan-400 font-bold text-sm mb-2 tracking-wide">03</div>
               <div class="text-white font-semibold mb-1" data-i18n="mission.2.title">
-                Forkable forever
+                Open source
               </div>
               <div class="text-white/40 text-sm" data-i18n="mission.2.desc">
-                Open source. Clone it. Host it. MIT licensed. A thousand copies.
+                MIT license. Fork, host, or send a pull request on GitHub.
               </div>
             </div>
           </div>
@@ -670,31 +715,33 @@
       </section>
 
       <!-- FORK & CONTRIBUTE -->
-      <section class="py-10 sm:py-14 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10">
+      <section class="page-section">
+        <div class="page-shell">
           <div class="text-center mb-10">
-            <div class="eyebrow-void">FORK & CONTRIBUTE</div>
+            <div class="eyebrow-void" data-i18n="section.fork.eyebrow">FORK & CONTRIBUTE</div>
             <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
-              <span class="gradient-neon">Fork it.</span>
-              <span class="text-white/90">Host it. Own it.</span>
+              <span class="gradient-neon" data-i18n="section.fork.title1">Open source.</span>
+              <span class="text-white/90" data-i18n="section.fork.title2">MIT license.</span>
             </h2>
-            <p class="text-white/40 max-w-lg mx-auto text-sm sm:text-base">
-              This directory is open source. Fork it. Improve it. Make it yours.
+            <p
+              class="text-white/40 max-w-lg mx-auto text-sm sm:text-base"
+              data-i18n="section.fork.desc"
+            >
+              Fork, translate, add regional tools, or host your own copy.
             </p>
           </div>
 
           <div class="max-w-2xl mx-auto">
             <div class="glass-card p-6 sm:p-8 text-white/70 mb-6">
-              <p class="mb-4">Banal is MIT licensed. You can:</p>
+              <p class="mb-4" data-i18n="section.fork.listIntro">You can:</p>
               <ul class="list-disc list-inside space-y-2 text-white/60 text-sm sm:text-base">
-                <li>Fork the repo and customize for your community</li>
-                <li>Add new tools (especially local/regional ones)</li>
-                <li>Translate to your language</li>
-                <li>Host your own instance</li>
+                <li data-i18n="section.fork.list1">Fork the repo and customize for your community</li>
+                <li data-i18n="section.fork.list2">Add tools (including local or regional ones)</li>
+                <li data-i18n="section.fork.list3">Translate to your language</li>
+                <li data-i18n="section.fork.list4">Host your own instance</li>
               </ul>
-              <p class="mt-4 text-white/40 text-sm">
-                If you improve it, consider contributing back via PR. But you don't have to — that's
-                the beauty of MIT license.
+              <p class="mt-4 text-white/40 text-sm" data-i18n="section.fork.note">
+                Contributing back via pull request is welcome but not required.
               </p>
             </div>
 
@@ -713,6 +760,7 @@ npm run build</code></pre>
                 target="_blank"
                 rel="noopener"
                 class="cta-neon flex-1"
+                data-i18n="footer.viewOnGithub"
               >
                 View on GitHub →
               </a>
@@ -725,6 +773,7 @@ npm run build</code></pre>
                   background: rgba(255, 255, 255, 0.05);
                   border: 1px solid rgba(255, 255, 255, 0.1);
                 "
+                data-i18n="footer.reportIssue"
               >
                 Report Issue →
               </a>

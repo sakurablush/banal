@@ -8,6 +8,9 @@
 import { type Lang } from './i18n';
 import {
   categoryLabels,
+  categoryLabelsJa,
+  surfaceLabels,
+  surfaceLabelsJa,
   zeroKeyTools,
   type ZeroKeyCategory,
   type ZeroKeyTool,
@@ -67,6 +70,11 @@ const COPY = {
     noMatchesSuggestion: 'Try: chat, image, PDF, coding',
     showing: (visible: number, total: number) => `Showing ${visible} of ${total} tools`,
     allCategory: 'All Tools',
+    badgeNoSignup: '\u{1F513} No Signup',
+    badgeFreeSignup: '\u{1F511} Free Signup',
+    badgeRateLimited: '\u{26A1} Rate Limited',
+    badgeTypeAI: '\u{1F916} AI',
+    badgeTypeDev: '\u{1F4BB} Dev',
   },
   ja: {
     title: 'AIツール＆モデル',
@@ -79,6 +87,11 @@ const COPY = {
     noMatchesSuggestion: 'chat, image, PDF, coding \u3067\u691C\u7D22',
     showing: (visible: number, total: number) => `${visible} / ${total}\u4EF6`,
     allCategory: '\u5168\u30C4\u30FC\u30EB',
+    badgeNoSignup: '\u{1F513} \u30A2\u30AB\u30A6\u30F3\u30C8\u4E0D\u8981',
+    badgeFreeSignup: '\u{1F511} \u7121\u6599\u767B\u9332',
+    badgeRateLimited: '\u{26A1} \u5236\u9650\u3042\u308A',
+    badgeTypeAI: '\u{1F916} AI',
+    badgeTypeDev: '\u{1F4BB} \u958B\u767A',
   },
 } satisfies Record<
   Lang,
@@ -93,6 +106,11 @@ const COPY = {
     noMatchesSuggestion: string;
     showing: (visible: number, total: number) => string;
     allCategory: string;
+    badgeNoSignup: string;
+    badgeFreeSignup: string;
+    badgeRateLimited: string;
+    badgeTypeAI: string;
+    badgeTypeDev: string;
   }
 >;
 
@@ -482,7 +500,8 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
   header.appendChild(icon);
 
   const surface = create('span', `zk2-card-surface zk2-surface-${tool.surface}`);
-  surface.textContent = tool.surface.toUpperCase();
+  const surfaceLabelMap = state.lang === 'ja' ? surfaceLabelsJa : surfaceLabels;
+  surface.textContent = surfaceLabelMap[tool.surface] || tool.surface.toUpperCase();
   header.appendChild(surface);
   card.appendChild(header);
 
@@ -492,24 +511,24 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
   // AI vs Dev badge
   const isAI = tool.category.startsWith('ai-');
   const typeBadge = create('span', `zk2-access-badge zk2-access-${isAI ? 'ai' : 'dev'}`);
-  typeBadge.textContent = isAI ? '🤖 AI' : '💻 Dev';
+  typeBadge.textContent = isAI ? copy.badgeTypeAI : copy.badgeTypeDev;
   accessBadges.appendChild(typeBadge);
 
   // Access type badge - use requiresSignup field for transparency
   if (tool.requiresSignup === false) {
     const accessBadge = create('span', 'zk2-access-badge zk2-access-no-key');
-    accessBadge.textContent = '🔓 No Signup';
+    accessBadge.textContent = copy.badgeNoSignup;
     accessBadges.appendChild(accessBadge);
   } else if (tool.requiresSignup === true) {
     const accessBadge = create('span', 'zk2-access-badge zk2-access-free-key');
-    accessBadge.textContent = '🔑 Free Signup';
+    accessBadge.textContent = copy.badgeFreeSignup;
     accessBadges.appendChild(accessBadge);
   }
 
   // Rate limit badge
   if (tool.caveat && tool.caveat.toLowerCase().includes('rate limit')) {
     const rateBadge = create('span', 'zk2-access-badge zk2-access-rate-limited');
-    rateBadge.textContent = '⚡ Rate Limited';
+    rateBadge.textContent = copy.badgeRateLimited;
     accessBadges.appendChild(rateBadge);
   }
 
@@ -667,6 +686,9 @@ function renderSidebar(state: PanelState): HTMLElement {
     .sort()
     .filter((cat): cat is ZeroKeyCategory => !!categoryLabels[cat as ZeroKeyCategory]);
 
+  // Use Japanese labels when language is JA
+  const catLabels = state.lang === 'ja' ? categoryLabelsJa : categoryLabels;
+
   // All category button
   const allBtn = create('button', `zk2-cat-item${state.activeCategory === null ? ' active' : ''}`);
   allBtn.type = 'button';
@@ -684,7 +706,7 @@ function renderSidebar(state: PanelState): HTMLElement {
     const toolCount = state.allTools.filter((t) => t.category === cat).length;
     const btn = create('button', `zk2-cat-item${state.activeCategory === cat ? ' active' : ''}`);
     btn.type = 'button';
-    btn.innerHTML = `<span class="zk2-cat-icon">${categoryIcons[cat]}</span> <span class="zk2-cat-label">${categoryLabels[cat]}</span> <span class="zk2-cat-count">${toolCount}</span>`;
+    btn.innerHTML = `<span class="zk2-cat-icon">${categoryIcons[cat]}</span> <span class="zk2-cat-label">${catLabels[cat]}</span> <span class="zk2-cat-count">${toolCount}</span>`;
     btn.dataset.category = cat;
     btn.addEventListener('click', () => {
       state.activeCategory = cat;
