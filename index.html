@@ -64,6 +64,7 @@
     <a
       href="#app"
       class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-violet-600 focus:text-white focus:rounded-lg focus:outline-none"
+      data-i18n="a11y.skip"
     >
       Skip to main content
     </a>
@@ -72,6 +73,7 @@
     <header class="sticky top-0 z-50 backdrop-blur-md bg-[#06060b]/80 border-b border-white/5">
       <nav
         aria-label="Main navigation"
+        data-i18n-aria-label="nav.ariaLabel"
         class="page-shell flex items-center justify-between h-14"
       >
         <a
@@ -130,6 +132,7 @@
             class="btn-header"
             title="Toggle light/dark mode"
             aria-label="Toggle light/dark mode"
+            data-i18n-aria-label="theme.toggle"
             aria-pressed="false"
           >
             <span id="theme-icon" class="btn-header-icon">
@@ -536,10 +539,10 @@
             >
               FEATURED
             </div>
-            <h3 class="article-title-void" style="font-size: 1.35rem">
+            <h3 class="article-title-void" style="font-size: 1.35rem" data-i18n="article.featured.title">
               The Only Free AI Coding Setup That Actually Works in 2026
             </h3>
-            <p class="article-excerpt-void">
+            <p class="article-excerpt-void" data-i18n="article.featured.excerpt">
               I've tested free AI coding setups on real projects — not demos. What holds up under
               daily professional use, what rate-limits you, and what still costs in tokens when the
               work is serious.
@@ -650,12 +653,13 @@
 
           <div class="mt-8 text-center">
             <p class="text-white/50 text-sm">
-              Found outdated information?
+              <span data-i18n="limitations.reportOutdated">Found outdated information?</span>
               <a
                 href="https://github.com/sakurablush/banal/issues/new?title=Outdated%20information&body=URL%3A%0A%0AWhat%20is%20outdated%3F%0A%0ASuggested%20fix%3A"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="text-violet-400 hover:text-violet-300 underline"
+                data-i18n="limitations.reportLink"
               >
                 Report it on GitHub →
               </a>
@@ -783,7 +787,83 @@ npm run build</code></pre>
       </section>
     </main>
 
-    <footer class="border-t border-white/5 py-10">
+    <footer
+      class="relative mt-20 border-t border-white/10 bg-gradient-to-b from-transparent to-pink-500/[0.05] py-12"
+      aria-labelledby="site-footer-title"
+    >
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="grid gap-10 md:grid-cols-3 items-start">
+          <!-- Brand -->
+          <div>
+            <h2
+              id="site-footer-title"
+              class="text-2xl font-bold tracking-tight bg-gradient-to-r from-pink-300 via-fuchsia-300 to-pink-400 bg-clip-text text-transparent"
+            >
+              sakurablush<span class="text-pink-400">.banal</span>
+            </h2>
+            <p
+              class="mt-3 text-sm text-white/60 leading-relaxed max-w-xs"
+              data-i18n="footer.tagline"
+            >
+              Banal — tool reference. {total} listings. Limits labeled.
+            </p>
+            <p
+              class="mt-4 text-xs text-pink-200/60 italic"
+              data-i18n="footer.dedication"
+            >
+              Built with love by sakurablush.
+            </p>
+          </div>
+
+          <!-- Links -->
+          <nav
+            class="flex flex-col gap-2 text-sm"
+            aria-label="Footer"
+          >
+            <a
+              href="https://github.com/sakurablush/banal"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.github"
+              >GitHub</a
+            >
+            <a
+              href="https://github.com/sakurablush/banal/issues"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.report"
+              >Report Issue</a
+            >
+            <a
+              href="https://github.com/sakurablush/banal/blob/main/LICENSE"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.license"
+              >MIT License</a
+            >
+            <a
+              href="#top"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.backToTop"
+              >Back to top</a
+            >
+          </nav>
+
+          <!-- Signature -->
+          <div class="text-sm text-white/60 md:text-right">
+            <p class="font-mono text-pink-200/80" data-i18n="footer.love">
+              made with love, for the ghost in every fork
+            </p>
+            <p class="mt-2 text-xs text-white/40">
+              © <span id="footer-year">2026</span> sakurablush · MIT
+            </p>
+          </div>
+        </div>
+      </div>
+
       <script type="module" src="/src/main.ts"></script>
     </footer>
   </body>

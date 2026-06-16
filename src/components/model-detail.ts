@@ -7,6 +7,7 @@ import type { Lang } from '../i18n';
 import type { AIModel } from '../types/tool';
 import { aiModels } from '../data/ai-models';
 import { renderPrivacyIndicator } from './privacy-indicator';
+import { localizeUseCase } from '../lib/model-localization';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -257,7 +258,7 @@ export function renderModelDetail(
     bestSection.appendChild(bestTitle);
     const bestList = create('div', 'model-bestfor-tags');
     for (const use of model.bestFor) {
-      bestList.appendChild(span('bestfor-tag', use));
+      bestList.appendChild(span('bestfor-tag', localizeUseCase(use, lang)));
     }
     bestSection.appendChild(bestList);
     container.appendChild(bestSection);

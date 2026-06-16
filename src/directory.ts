@@ -3,14 +3,13 @@ import {
   type ZeroKeyPanelApi,
   type ZeroKeyCategory,
 } from './zero-key-panel';
-import { getCurrentLang } from './i18n';
+import { getCurrentLang, t } from './i18n';
 import { zeroKeyTools } from './data/zero-key-tools';
+import { getSiteStats } from './data/site-stats';
 import { renderModelsPanel, type ModelsPanelApi } from './components/models-panel';
 import { renderStacksPanel, type StacksPanelApi } from './components/stacks-panel';
 import { renderOnboarding } from './components/onboarding-flow';
 import { renderGettingStartedGuides } from './components/getting-started-guides';
-import { aiModels } from './data/ai-models';
-import { toolStacks } from './data/tool-stacks';
 
 /**
  * Initialize the main page Zero-Key Tools Directory.
@@ -48,11 +47,11 @@ export function initDirectory(): void {
         aiRoot.innerHTML = `
           <div class="text-center py-16 text-white/60">
             <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-              <p class="text-lg mb-2">⚠️ Unable to load AI tools</p>
+              <p class="text-lg mb-2">${escapeHtml(t(lang, 'error.unableToLoadAiTools'))}</p>
               <p class="text-sm mb-4">Error: ${escapeHtml(errorMessage)}</p>
-              <p class="text-sm">Please refresh the page or try again later.</p>
+              <p class="text-sm">${escapeHtml(t(lang, 'error.pleaseRefreshLater'))}</p>
               <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors">
-                Refresh Page
+                ${escapeHtml(t(lang, 'error.refreshPage'))}
               </button>
             </div>
           </div>
@@ -77,11 +76,11 @@ export function initDirectory(): void {
         devRoot.innerHTML = `
           <div class="text-center py-16 text-white/60">
             <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-              <p class="text-lg mb-2">⚠️ Unable to load developer tools</p>
+              <p class="text-lg mb-2">${escapeHtml(t(lang, 'error.unableToLoadDevTools'))}</p>
               <p class="text-sm mb-4">Error: ${escapeHtml(errorMessage)}</p>
-              <p class="text-sm">Please refresh the page or try again later.</p>
+              <p class="text-sm">${escapeHtml(t(lang, 'error.pleaseRefreshLater'))}</p>
               <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors">
-                Refresh Page
+                ${escapeHtml(t(lang, 'error.refreshPage'))}
               </button>
             </div>
           </div>
@@ -102,8 +101,8 @@ export function initDirectory(): void {
         modelsRoot.innerHTML = `
           <div class="text-center py-16 text-white/60">
             <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-              <p class="text-lg mb-2">\u26A0\uFE0F Unable to load AI models</p>
-              <p class="text-sm">Please refresh the page.</p>
+              <p class="text-lg mb-2">${escapeHtml(t(lang, 'error.unableToLoadAiModels'))}</p>
+              <p class="text-sm">${escapeHtml(t(lang, 'error.pleaseRefresh'))}</p>
             </div>
           </div>
         `;
@@ -120,8 +119,8 @@ export function initDirectory(): void {
         stacksRoot.innerHTML = `
           <div class="text-center py-16 text-white/60">
             <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-              <p class="text-lg mb-2">⚠️ Unable to load tool stacks</p>
-              <p class="text-sm">Please refresh the page.</p>
+              <p class="text-lg mb-2">${escapeHtml(t(lang, 'error.unableToLoadToolStacks'))}</p>
+              <p class="text-sm">${escapeHtml(t(lang, 'error.pleaseRefresh'))}</p>
             </div>
           </div>
         `;
@@ -222,9 +221,8 @@ function escapeHtml(text: string): string {
  * Calculates tool counts and updates category count elements and the total counter.
  */
 function updateToolCounts(): void {
-  const aiCount = zeroKeyTools.filter((t) => t.category.startsWith('ai-')).length;
-  const devCount = zeroKeyTools.filter((t) => t.category.startsWith('dev-')).length;
-  const total = zeroKeyTools.length;
+  const { total, ai: aiCount, dev: devCount, models: modelsCount, stacks: stacksCount } =
+    getSiteStats();
 
   // Update category count badges (e.g. "(31)")
   const categoryCounts: Record<string, number> = {};
@@ -242,30 +240,40 @@ function updateToolCounts(): void {
   // Update AI tools count
   const aiCountEl = document.querySelector('#ai-tools .tool-count-badge');
   if (aiCountEl) {
-    aiCountEl.textContent = `${aiCount}+`;
+    aiCountEl.textContent = String(aiCount);
   }
 
   // Update Dev tools count
   const devCountEl = document.querySelector('#dev-tools .tool-count-badge');
   if (devCountEl) {
-    devCountEl.textContent = `${devCount}+`;
+    devCountEl.textContent = String(devCount);
   }
 
   // Update total tool count in hero section
   const heroCountEl = document.getElementById('stat-tools');
   if (heroCountEl) {
-    heroCountEl.textContent = `${total}+`;
+    heroCountEl.textContent = String(total);
+  }
+
+  const heroAiEl = document.getElementById('stat-ai');
+  if (heroAiEl) {
+    heroAiEl.textContent = String(aiCount);
+  }
+
+  const heroDevEl = document.getElementById('stat-dev');
+  if (heroDevEl) {
+    heroDevEl.textContent = String(devCount);
   }
 
   // Update AI models count
   const modelsCountEl = document.querySelector('#ai-models .tool-count-badge');
   if (modelsCountEl) {
-    modelsCountEl.textContent = `${aiModels.length}+`;
+    modelsCountEl.textContent = String(modelsCount);
   }
 
   // Update tool stacks count
   const stacksCountEl = document.querySelector('#tool-stacks .tool-count-badge');
   if (stacksCountEl) {
-    stacksCountEl.textContent = `${toolStacks.length}+`;
+    stacksCountEl.textContent = String(stacksCount);
   }
 }

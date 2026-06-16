@@ -6,13 +6,14 @@
 import type { Lang } from '../i18n';
 import { toolStacks } from '../data/tool-stacks';
 import type { ToolStack, StackAudience, StackBudget, StackExperience } from '../types/tool';
+import { getLocalizedStack } from '../lib/stack-localization';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
 const COPY = {
   en: {
-    welcome: 'Welcome to Banal AI Tools (beta)',
-    findPerfectTools: "Let's find the perfect tools for you",
+    welcome: 'Stack matcher',
+    findPerfectTools: 'Four questions. Stack recommendations from the directory.',
     step1Title: "What's your role?",
     step2Title: "What's your budget?",
     step3Title: 'What do you want to build?',
@@ -23,10 +24,10 @@ const COPY = {
     jobSeeker: 'Job Seeker',
     developer: 'Developer',
     other: 'Other',
-    zeroBudget: '$0 (Zero budget)',
-    lowBudget: '$1-50/month (Low budget)',
-    mediumBudget: '$50-200/month (Medium budget)',
-    highBudget: '$200+/month (High budget)',
+    zeroBudget: '$0 (No paid tools)',
+    lowBudget: '$1–50/month (Light usage)',
+    mediumBudget: '$50–200/month (Regular side project)',
+    highBudget: '$200+/month (Heavy inference / production)',
     webApp: 'Web application',
     mobileApp: 'Mobile app',
     aiTool: 'AI-powered tool',
@@ -38,15 +39,15 @@ const COPY = {
     next: 'Next',
     back: 'Back',
     finish: 'Finish',
-    yourRecommendations: 'Your Personalized Recommendations',
-    basedOnAnswers: 'Based on your answers, we recommend:',
+    yourRecommendations: 'Recommended stacks',
+    basedOnAnswers: 'Based on your answers:',
     viewStack: 'View Stack',
     browseAllTools: 'Browse All Tools',
     takeQuizAgain: 'Take Quiz Again',
   },
   ja: {
-    welcome: 'Banal AIツールへようこそ（ベータ）',
-    findPerfectTools: 'あなたにぴったりのツールを見つけましょう',
+    welcome: 'スタックマッチャー',
+    findPerfectTools: '4つの質問に答えると、ディレクトリからスタックを提案します。',
     step1Title: 'あなたの役割は？',
     step2Title: '予算は？',
     step3Title: '何を構築したいですか？',
@@ -57,10 +58,10 @@ const COPY = {
     jobSeeker: '求職者',
     developer: '開発者',
     other: 'その他',
-    zeroBudget: '$0（予算ゼロ）',
-    lowBudget: '$1-50/月（低予算）',
-    mediumBudget: '$50-200/月（中予算）',
-    highBudget: '$200+/月（高予算）',
+    zeroBudget: '$0（有料ツールなし）',
+    lowBudget: '$1–50/月（軽い利用）',
+    mediumBudget: '$50–200/月（定期的な副業）',
+    highBudget: '$200+/月（本格推論・本番寄り）',
     webApp: 'Webアプリケーション',
     mobileApp: 'モバイルアプリ',
     aiTool: 'AI搭載ツール',
@@ -72,8 +73,8 @@ const COPY = {
     next: '次へ',
     back: '戻る',
     finish: '完了',
-    yourRecommendations: 'あなたへのおすすめ',
-    basedOnAnswers: 'あなたの回答に基づいて、以下をおすすめします：',
+    yourRecommendations: 'おすすめスタック',
+    basedOnAnswers: '回答に基づく提案：',
     viewStack: 'スタックを見る',
     browseAllTools: '全ツールを見る',
     takeQuizAgain: 'もう一度クイズをする',
@@ -132,12 +133,19 @@ function renderStep(state: OnboardingState): void {
 
   // Header
   const header = create('div', 'onboarding-header');
+  const headerText = create('div', 'onboarding-header-text');
   const title = create('h2', 'onboarding-title');
   title.textContent = copy.welcome;
-  header.appendChild(title);
+  headerText.appendChild(title);
   const subtitle = create('p', 'onboarding-subtitle');
   subtitle.textContent = copy.findPerfectTools;
-  header.appendChild(subtitle);
+  headerText.appendChild(subtitle);
+  header.appendChild(headerText);
+
+  if (state.currentStep < 5) {
+    header.appendChild(renderProgress(state));
+  }
+
   container.appendChild(header);
 
   // Step content
@@ -162,6 +170,20 @@ function renderStep(state: OnboardingState): void {
   }
 
   container.appendChild(stepContent);
+}
+
+function renderProgress(state: OnboardingState): HTMLElement {
+  const progress = create('div', 'onboarding-progress');
+  progress.setAttribute('aria-label', `Step ${state.currentStep} of 4`);
+
+  for (let i = 1; i <= 4; i++) {
+    const dot = create('span', 'onboarding-progress-dot');
+    if (i < state.currentStep) dot.classList.add('completed');
+    if (i === state.currentStep) dot.classList.add('current');
+    progress.appendChild(dot);
+  }
+
+  return progress;
 }
 
 function renderStep1(
@@ -309,12 +331,13 @@ function renderResults(
 
   const stacksList = create('div', 'recommended-stacks');
   for (const stack of matchingStacks.slice(0, 3)) {
+    const localized = getLocalizedStack(stack, state.lang);
     const stackCard = create('div', 'recommended-stack-card');
     const stackName = create('h4', 'stack-name');
-    stackName.textContent = stack.name;
+    stackName.textContent = localized.name;
     stackCard.appendChild(stackName);
     const stackDesc = create('p', 'stack-description');
-    stackDesc.textContent = stack.description;
+    stackDesc.textContent = localized.description;
     stackCard.appendChild(stackDesc);
     const viewBtn = create('button', 'stack-view-btn');
     viewBtn.textContent = copy.viewStack;

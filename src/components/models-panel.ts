@@ -8,6 +8,7 @@ import { aiModels, getModelFamilies } from '../data/ai-models';
 import type { AIModel } from '../types/tool';
 import { renderModelDetail } from './model-detail';
 import { trackFilterEvent } from '../lib/filter-analytics';
+import { localizeUseCase } from '../lib/model-localization';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -41,6 +42,9 @@ const COPY = {
     allFamilies: 'All Families',
     allLicenses: 'All Licenses',
     allUseCases: 'All Use Cases',
+    gpuRequired: 'GPU required',
+    gpuRecommended: 'GPU recommended',
+    benchmarksTitle: 'Benchmarks',
   },
   ja: {
     title: 'AIモデルディレクトリ',
@@ -71,9 +75,15 @@ const COPY = {
     allFamilies: '全ファミリー',
     allLicenses: '全ライセンス',
     allUseCases: '全用途',
+    gpuRequired: 'GPU必須',
+    gpuRecommended: 'GPU推奨',
+    benchmarksTitle: 'ベンチマーク',
   },
 } satisfies Record<Lang, Record<string, string | ((...args: number[]) => string)>>;
 
+function localizeUseCaseTag(useCase: string, lang: Lang): string {
+  return localizeUseCase(useCase, lang);
+}
 // ─── State ──────────────────────────────────────────────────────────────────
 
 interface ModelsPanelState {
@@ -212,7 +222,7 @@ function renderModelCard(state: ModelsPanelState, model: AIModel): HTMLElement {
     const bestFor = create('div', 'model-card-bestfor');
     for (const use of model.bestFor.slice(0, 4)) {
       const tag = create('span', 'model-use-tag');
-      tag.textContent = use;
+      tag.textContent = localizeUseCaseTag(use, state.lang);
       bestFor.appendChild(tag);
     }
     card.appendChild(bestFor);
@@ -220,7 +230,13 @@ function renderModelCard(state: ModelsPanelState, model: AIModel): HTMLElement {
 
   // Hardware info
   const hw = create('div', 'model-card-hardware');
-  hw.textContent = `${typeof copy.hardware === 'string' ? copy.hardware : 'Hardware'}: ${model.hardware.minRam}${model.hardware.gpu === 'required' ? ' (GPU required)' : model.hardware.gpu === 'recommended' ? ' (GPU recommended)' : ''}`;
+  const gpuSuffix =
+    model.hardware.gpu === 'required'
+      ? ` (${typeof copy.gpuRequired === 'string' ? copy.gpuRequired : 'GPU required'})`
+      : model.hardware.gpu === 'recommended'
+        ? ` (${typeof copy.gpuRecommended === 'string' ? copy.gpuRecommended : 'GPU recommended'})`
+        : '';
+  hw.textContent = `${typeof copy.hardware === 'string' ? copy.hardware : 'Hardware'}: ${model.hardware.minRam}${gpuSuffix}`;
   card.appendChild(hw);
 
   // Availability
@@ -563,7 +579,8 @@ function renderComparison(state: ModelsPanelState): HTMLElement | null {
     if (benchKeys.length > 0) {
       const benchSection = create('div', 'comparison-benchmarks');
       const benchTitle = create('span', 'comparison-section-title');
-      benchTitle.textContent = 'Benchmarks';
+      benchTitle.textContent =
+        typeof copy.benchmarksTitle === 'string' ? copy.benchmarksTitle : 'Benchmarks';
       benchSection.appendChild(benchTitle);
       for (const key of benchKeys) {
         const value = model.benchmarks[key];

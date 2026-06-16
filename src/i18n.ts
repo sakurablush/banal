@@ -41,6 +41,8 @@ export const translations: Record<Lang, Translations> = {
       'For engineers who fund their own AI stack: {total} tools ({ai} AI, {dev} dev) with honest access labels — signup, API keys, rate limits, inference caveats. No affiliate links.',
     'a11y.skip': 'Skip to main content',
     'nav.primary': 'Primary navigation',
+    'nav.ariaLabel': 'Main navigation',
+    'theme.toggle': 'Toggle light/dark mode',
     'nav.language': 'Language',
     'nav.why': 'Why',
     'nav.experience': 'Experience',
@@ -123,6 +125,8 @@ export const translations: Record<Lang, Translations> = {
     'limitations.5.title': 'Every listing is labeled',
     'limitations.5.desc':
       'Access type and caveats are on the card. Check them before you click.',
+    'limitations.reportOutdated': 'Found outdated information?',
+    'limitations.reportLink': 'Report it on GitHub →',
     'mission.eyebrow': 'WHY WE EXIST',
     'mission.title1': 'Self-funded tooling.',
     'mission.title2': 'Stated access and limits.',
@@ -145,9 +149,12 @@ export const translations: Record<Lang, Translations> = {
     'section.fork.list4': 'Host your own instance',
     'section.fork.note': 'Contributing back via pull request is welcome but not required.',
     'footer.tagline': 'Banal — tool reference. {total} listings. Limits labeled.',
+    'footer.dedication': 'Built with love by sakurablush.',
     'footer.github': 'GitHub',
     'footer.report': 'Report Issue',
     'footer.license': 'MIT License',
+    'footer.backToTop': 'Back to top',
+    'footer.love': 'made with love, for the ghost in every fork',
 
     // === Loading states ===
     'loading.aiTools': 'Loading AI tools...',
@@ -166,6 +173,20 @@ export const translations: Record<Lang, Translations> = {
     // === Footer buttons ===
     'footer.viewOnGithub': 'View on GitHub →',
     'footer.reportIssue': 'Report Issue →',
+
+    // === Error states ===
+    'error.unableToLoadAiTools': '⚠️ Unable to load AI tools',
+    'error.unableToLoadDevTools': '⚠️ Unable to load developer tools',
+    'error.unableToLoadAiModels': '⚠️ Unable to load AI models',
+    'error.unableToLoadToolStacks': '⚠️ Unable to load tool stacks',
+    'error.pleaseRefreshLater': 'Please refresh the page or try again later.',
+    'error.pleaseRefresh': 'Please refresh the page.',
+    'error.refreshPage': 'Refresh Page',
+
+    // === Featured article ===
+    'article.featured.title': 'The Only Free AI Coding Setup That Actually Works in 2026',
+    'article.featured.excerpt':
+      "I've tested free AI coding setups on real projects — not demos. What holds up under daily professional use, what rate-limits you, and what still costs in tokens when the work is serious.",
 
     // === Legacy keys for tests ===
     'hero.title':
@@ -229,6 +250,8 @@ export const translations: Record<Lang, Translations> = {
       '自腹でAIスタックを払うエンジニア向け：{total}件（AI {ai}、開発 {dev}）。サインアップ・APIキー・レート制限・推論コストを正直に表示。アフィリエイトなし。',
     'a11y.skip': 'メインコンテンツへスキップ',
     'nav.primary': 'メインのナビゲーション',
+    'nav.ariaLabel': 'メインナビゲーション',
+    'theme.toggle': 'ライト/ダークモード切替',
     'nav.language': '言語',
     'nav.why': 'なぜ',
     'nav.experience': '体験する',
@@ -311,6 +334,8 @@ export const translations: Record<Lang, Translations> = {
     'limitations.5.title': '全掲載にラベル付き',
     'limitations.5.desc':
       'アクセス種別と注意点はカードに記載。クリック前に確認。',
+    'limitations.reportOutdated': '情報が古いですか？',
+    'limitations.reportLink': 'GitHubで報告 →',
     'mission.eyebrow': 'なぜ存在するか',
     'mission.title1': '自腹のツール。',
     'mission.title2': 'アクセスと制限を明記。',
@@ -333,9 +358,12 @@ export const translations: Record<Lang, Translations> = {
     'section.fork.list4': '独自インスタンスをホスト',
     'section.fork.note': 'PRでの還元は歓迎するが必須ではない。',
     'footer.tagline': 'Banal — ツールリファレンス。{total}件。制限を明記。',
+    'footer.dedication': 'sakurablush が愛を込めて作成。',
     'footer.github': 'GitHub',
     'footer.report': '問題を報告',
     'footer.license': 'MITライセンス',
+    'footer.backToTop': '上に戻る',
+    'footer.love': 'すべてのフォークのゴーストへ、愛を込めて',
 
     // === Loading states ===
     'loading.aiTools': 'AIツールを読み込み中...',
@@ -354,6 +382,20 @@ export const translations: Record<Lang, Translations> = {
     // === Footer buttons ===
     'footer.viewOnGithub': 'GitHubで見る →',
     'footer.reportIssue': '問題を報告 →',
+
+    // === Error states ===
+    'error.unableToLoadAiTools': '⚠️ AIツールを読み込めませんでした',
+    'error.unableToLoadDevTools': '⚠️ 開発者ツールを読み込めませんでした',
+    'error.unableToLoadAiModels': '⚠️ AIモデルを読み込めませんでした',
+    'error.unableToLoadToolStacks': '⚠️ ツールスタックを読み込めませんでした',
+    'error.pleaseRefreshLater': 'ページを更新するか、しばらくしてから再度お試しください。',
+    'error.pleaseRefresh': 'ページを更新してください。',
+    'error.refreshPage': 'ページを更新',
+
+    // === Featured article ===
+    'article.featured.title': '2026年に本当に使える唯一の無料AIコーディング環境',
+    'article.featured.excerpt':
+      'デモではなく実プロジェクトで無料AIコーディング環境を検証した。日常のプロ仕事で耐えるもの、レート制限に当たるもの、本気の作業でトークン代がかかるものを整理。',
 
     // === Legacy keys for tests ===
     'hero.title':

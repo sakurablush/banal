@@ -15,6 +15,7 @@ import {
   type ZeroKeyCategory,
   type ZeroKeyTool,
 } from './data/zero-key-tools';
+import { getLocalizedToolCopy, localizeBadge } from './lib/tool-localization';
 export type { ZeroKeyCategory };
 import { type SearchResult, searchTools } from './fuse-search';
 
@@ -489,6 +490,7 @@ function renderQuickFilters(state: PanelState): HTMLElement {
 function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTMLElement {
   const { tool } = result;
   const copy = COPY[state.lang];
+  const localized = getLocalizedToolCopy(tool, state.lang);
 
   const card = create('article', 'tool-card-horizontal');
   card.tabIndex = 0; // Make cards focusable for keyboard navigation
@@ -551,7 +553,8 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
 
   // Description (bestFor)
   const desc = create('p', 'zk2-card-desc');
-  desc.textContent = tool.bestFor.length > 90 ? tool.bestFor.slice(0, 87) + '\u2026' : tool.bestFor;
+  const bestForText = localized.bestFor;
+  desc.textContent = bestForText.length > 90 ? bestForText.slice(0, 87) + '\u2026' : bestForText;
   card.appendChild(desc);
 
   // Badges
@@ -562,17 +565,17 @@ function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTML
         'span',
         b === 'true-free-models' ? 'zk2-badge zk2-badge-free' : 'zk2-badge'
       );
-      badge.textContent = b === 'true-free-models' ? '🔓 Free' : b;
+      badge.textContent = localizeBadge(b, state.lang);
       badgesWrap.appendChild(badge);
     }
     card.appendChild(badgesWrap);
   }
 
   // Caveat (full width as yellow bar, before footer)
-  if (tool.caveat) {
+  if (localized.caveat) {
     const caveat = create('div', 'zk2-card-caveat');
-    caveat.textContent = '\u26A0\uFE0F ' + tool.caveat;
-    caveat.title = tool.caveat;
+    caveat.textContent = '\u26A0\uFE0F ' + localized.caveat;
+    caveat.title = localized.caveat;
     card.appendChild(caveat);
   }
 

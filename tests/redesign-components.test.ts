@@ -286,7 +286,7 @@ describe('Onboarding Flow', () => {
     expect(container.classList.contains('onboarding-flow')).toBe(true);
     
     const title = container.querySelector('.onboarding-title');
-    expect(title?.textContent).toBe('Welcome to Banal AI Tools (beta)');
+    expect(title?.textContent).toBe('Stack matcher');
 
     const options = container.querySelectorAll('.onboarding-option');
     expect(options.length).toBeGreaterThan(0);
@@ -306,7 +306,7 @@ describe('Onboarding Flow', () => {
     renderOnboarding(container, 'ja');
 
     const title = container.querySelector('.onboarding-title');
-    expect(title?.textContent).toBe('Banal AIツールへようこそ（ベータ）');
+    expect(title?.textContent).toBe('スタックマッチャー');
   });
 });
 
@@ -443,7 +443,8 @@ describe('Stack Detail', () => {
     const container = renderStackDetail(stack, 'ja');
 
     const title = container.querySelector('.stack-detail-title');
-    expect(title?.textContent).toBe(stack.name);
+    expect(title?.textContent).not.toBe(stack.name);
+    expect(title?.textContent).toContain('SaaS');
   });
 });
 
@@ -568,7 +569,7 @@ describe('Getting Started Guides', () => {
     expect(container.classList.contains('getting-started-guides')).toBe(true);
 
     const title = container.querySelector('.guides-title');
-    expect(title?.textContent).toBe('Getting Started Guides');
+    expect(title?.textContent).toBe('Guides');
   });
 
   it('should render guide cards', () => {
@@ -592,6 +593,6 @@ describe('Getting Started Guides', () => {
     const container = renderGettingStartedGuides('ja');
 
     const title = container.querySelector('.guides-title');
-    expect(title?.textContent).toBe('はじめにガイド');
+    expect(title?.textContent).toBe('ガイド');
   });
 });

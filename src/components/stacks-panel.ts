@@ -9,6 +9,7 @@ import type { ToolStack, StackAudience } from '../types/tool';
 import { renderStackDetail } from './stack-detail';
 import { trackFilterEvent } from '../lib/filter-analytics';
 import { customizeStack, saveCustomStack } from '../lib/stack-customization';
+import { getLocalizedStack } from '../lib/stack-localization';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -90,6 +91,7 @@ function span(className: string, text: string): HTMLSpanElement {
 
 function renderStackCard(state: StacksPanelState, stack: ToolStack): HTMLElement {
   const copy = COPY[state.lang];
+  stack = getLocalizedStack(stack, state.lang);
   const card = create('article', 'stack-card');
 
   // Header

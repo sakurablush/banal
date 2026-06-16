@@ -6,6 +6,7 @@
 import type { Lang } from '../i18n';
 import type { ToolStack } from '../types/tool';
 import { zeroKeyTools } from '../data/zero-key-tools';
+import { getLocalizedStack } from '../lib/stack-localization';
 
 // ─── Copy ───────────────────────────────────────────────────────────────────
 
@@ -102,6 +103,7 @@ export function renderStackDetail(
   onBack?: () => void
 ): HTMLElement {
   const copy = COPY[lang];
+  stack = getLocalizedStack(stack, lang);
   const container = create('div', 'stack-detail-page');
 
   // Back button
