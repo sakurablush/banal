@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en" id="top" class="dark" data-banal-article>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      data-i18n="article.agents2026.meta.description"
+      content="Real agent workloads cost $200–400/month on top models — or a fraction of that with smart model switching. MiniMax M3, Composer 2.5, and when Opus is worth it."
+    />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content="https://sakurablush.github.io/banal/articles/honest-truth-ai-coding-agents-2026/"
+    />
+    <meta property="og:title" content="The Honest Truth About AI Coding Agents in 2026 | Banal" />
+    <meta
+      property="og:description"
+      content="Real agent workloads cost $200–400/month on top models — or a fraction of that with smart model switching. MiniMax M3, Composer 2.5, and when Opus is worth it."
+    />
+    <meta property="og:site_name" content="Banal" />
+    <link
+      rel="canonical"
+      href="https://sakurablush.github.io/banal/articles/honest-truth-ai-coding-agents-2026/"
+    />
+    <meta name="theme-color" content="#06060b" />
+    <title data-i18n="article.agents2026.meta.title">
+      The Honest Truth About AI Coding Agents in 2026 | Banal
+    </title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        try {
+          var t = sessionStorage.getItem('banal-theme');
+          if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="../../src/style.css" />
+  </head>
+  <body class="min-h-screen text-white/90 antialiased font-sans">
+    <div class="void-bg"></div>
+    <main id="app" class="article-page-main page-shell" role="main">
+      <article class="article-content">
+        <div class="article-toolbar">
+          <a href="../../" class="back-link" data-i18n="article.back">&#8592; Back to Banal</a>
+          <div class="article-toolbar-actions">
+            <button
+              type="button"
+              id="article-share-btn"
+              class="filter-share-btn"
+              data-i18n="article.shareLink"
+              data-i18n-title="article.shareTitle"
+            >
+              Share link
+            </button>
+            <button
+              type="button"
+              id="lang-toggle"
+              class="btn-header"
+              data-i18n-title="lang.toggleTitle"
+              data-i18n-aria-label="lang.toggle"
+            >
+              <span class="btn-header-icon">
+                <svg
+                  class="lang-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <clipPath id="lang-uk-half">
+                      <rect x="3" y="4" width="9" height="16" rx="2.5" />
+                    </clipPath>
+                    <clipPath id="lang-jp-half">
+                      <rect x="12" y="4" width="9" height="16" rx="2.5" />
+                    </clipPath>
+                    <linearGradient
+                      id="lang-fusion"
+                      x1="11"
+                      y1="4"
+                      x2="13"
+                      y2="20"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.15" />
+                      <stop offset="50%" stop-color="#d946ef" stop-opacity="0.95" />
+                      <stop offset="100%" stop-color="#a855f7" stop-opacity="0.15" />
+                    </linearGradient>
+                  </defs>
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="16"
+                    rx="3.5"
+                    stroke="currentColor"
+                    stroke-width="1.15"
+                    stroke-opacity="0.42"
+                  />
+                  <g clip-path="url(#lang-uk-half)">
+                    <rect x="3" y="4" width="9.5" height="16" fill="#012169" />
+                    <path fill="#fff" d="M3 11.2h9.5M7.75 4v16" />
+                    <path fill="#C8102E" d="M3 10h9.5v2.4H3zM6.55 4v16h2.4V4z" />
+                    <path fill="#fff" d="M3 4.2 12.2 19.8M12.2 4.2 3 19.8" opacity="0.92" />
+                    <path
+                      fill="none"
+                      stroke="#C8102E"
+                      stroke-width="0.85"
+                      d="M3 4.9 11.5 19.1M11.5 4.9 3 19.1"
+                    />
+                  </g>
+                  <g clip-path="url(#lang-jp-half)">
+                    <rect x="12" y="4" width="9.5" height="16" fill="#f9f9f9" />
+                    <circle cx="16.5" cy="12" r="3.15" fill="#BC002D" />
+                  </g>
+                  <path
+                    d="M11.7 5.4c1.35 2.1 1.35 11.1 0 13.2"
+                    stroke="url(#lang-fusion)"
+                    stroke-width="1.05"
+                    stroke-linecap="round"
+                  />
+                  <circle cx="12" cy="12" r="0.75" fill="#e879f9" />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </div>
+        <span class="article-badge article-badge--cost" data-i18n="article.agents2026.badge"
+          >COST GUIDE</span
+        >
+        <div data-lang-only="en">
+          <h1>The Honest Truth About AI Coding Agents in 2026</h1>
+          <p class="article-meta">
+            (Or: How I stopped burning hundreds of dollars a month and still get shit done)
+          </p>
+          <hr />
+          <p>
+            Listen. I've burned through thousands of dollars and thousands of hours with these
+            things. I've worked in places where managers in suits tell you "just buy the $20
+            <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+            ><a
+              href="../../#ai-tools?q=Cursor"
+              class="article-banal-ref"
+              rel="noopener"
+              aria-label="Cursor on Banal"
+              title="Banal listing"
+              ><span aria-hidden="true">↗</span></a
+            >
+            license and use whatever's cheap, bro." Then in the next breath they're like "make sure
+            you use Opus for the important stuff."
+          </p>
+          <p>It's pure corporate theater.</p>
+          <p>
+            The reality? If you actually want to use real agents — the kind that spin up, test your
+            whole app, take screenshots of the UI, fix bugs, run terminal commands, and then
+            casually email you "hey, everything looks good, I even added the dark mode you forgot
+            about" — the top models will happily eat <strong>hundreds of dollars a month</strong>.
+            Not $50. Not $100. We're talking <strong>$200–400+</strong> if you're using them
+            properly for real work, multiple hours a day.
+          </p>
+          <p>
+            Because here's the dirty little secret nobody in those meetings wants to say out loud:
+            <strong>output tokens are expensive as hell</strong>, and agent workflows are
+            output-heavy. Every iteration, every code block, every reasoning trace, every tool call…
+            it adds up fast.
+          </p>
+
+          <h2>The uncomfortable math</h2>
+          <p>
+            Take <a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a> (current
+            generation). You're looking at roughly <strong>$5 per million input tokens</strong> and
+            <strong>$25 per million output tokens</strong>.
+          </p>
+          <p>Now run a proper agent session:</p>
+          <ul>
+            <li>Big context (whole repo or long history)</li>
+            <li>Multiple tool calls</li>
+            <li>Generating + fixing code</li>
+            <li>Analyzing screenshots (multimodal)</li>
+            <li>Writing summaries or emails</li>
+          </ul>
+          <p>
+            Do that for a few serious hours and watch the bill climb. It's not theoretical. People
+            are actually paying this.
+          </p>
+          <p>
+            And the worst part? A lot of the time you don't even need the absolute best model for
+            80–90% of what you're doing.
+          </p>
+
+          <h2>The models that actually make sense long-term</h2>
+          <p>This is where it gets interesting.</p>
+          <p>
+            Right now there are models that are shockingly close to the frontier on coding and
+            agentic tasks while costing a fraction of the price. Two standouts right now are
+            <strong
+              ><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a
+              ><a
+                href="../../#ai-tools?q=MiniMax"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="MiniMax M3 on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              ></strong
+            >
+            and
+            <strong
+              ><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+              ><a
+                href="../../#ai-tools?q=Cursor"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="Cursor on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >'s own Composer 2.5</strong
+            >
+            (Standard / non-Thinking mode).
+          </p>
+
+          <h3>Head-to-head price comparison (official rates, June 2026)</h3>
+
+          <div class="article-table-wrap">
+            <table class="article-table">
+              <thead>
+                <tr>
+                  <th scope="col">Model</th>
+                  <th scope="col">Input per 1M tokens</th>
+                  <th scope="col">Output per 1M tokens</th>
+                  <th scope="col">Approx. vs Claude Opus 4.8</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong
+                      ><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a
+                      ><a
+                        href="../../#ai-tools?q=MiniMax"
+                        class="article-banal-ref"
+                        rel="noopener"
+                        aria-label="MiniMax M3 on Banal"
+                        title="Banal listing"
+                        ><span aria-hidden="true">↗</span></a
+                      ></strong
+                    >
+                  </td>
+                  <td>$0.30</td>
+                  <td><strong>$1.20</strong></td>
+                  <td>~20× cheaper on output</td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+                      ><a
+                        href="../../#ai-tools?q=Cursor"
+                        class="article-banal-ref"
+                        rel="noopener"
+                        aria-label="Cursor on Banal"
+                        title="Banal listing"
+                        ><span aria-hidden="true">↗</span></a
+                      >
+                      Composer 2.5</strong
+                    >
+                    (Standard, non-Thinking)
+                  </td>
+                  <td>$0.50</td>
+                  <td><strong>$2.50</strong></td>
+                  <td>~10× cheaper on output</td>
+                </tr>
+                <tr>
+                  <td>Claude Opus 4.8</td>
+                  <td>$5.00</td>
+                  <td>$25.00</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Both of these are in a completely different league price-wise compared to Opus. MiniMax
+            M3 edges it out slightly on raw per-token cost and has native multimodal + 1M context
+            out of the box. Composer 2.5 (Standard) is a bit more expensive per token but is deeply
+            optimized for long agentic sessions inside Cursor and feels extremely snappy for daily
+            work.
+          </p>
+          <p>
+            The key takeaway: both are excellent daily drivers. You're looking at roughly
+            <strong>10–20× lower cost</strong> than using Opus for the same kind of heavy agent
+            usage. That's the difference between "I can actually afford to use agents every day" and
+            "fuck, the bill again."
+          </p>
+
+          <h2>My actual recommendation (after burning the money)</h2>
+          <p>
+            If you want to use agents sustainably — not just for a week until the credit card bill
+            hits — do this:
+          </p>
+          <ol>
+            <li>
+              <strong>Daily driver:</strong>
+              <a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a
+              ><a
+                href="../../#ai-tools?q=MiniMax"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="MiniMax M3 on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >
+              or <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+              ><a
+                href="../../#ai-tools?q=Cursor"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="Cursor on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >
+              Composer 2.5 (Standard / non-Thinking). These two will handle the vast majority of
+              real work at a price that doesn't make you cry at the end of the month.
+            </li>
+            <li>
+              <strong>When it actually matters:</strong> Flip to
+              <a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a> (or whatever
+              the current top Anthropic model is).<br />I'll say it plainly — right now Anthropic
+              still makes the models that feel the most "magical" on really difficult programming
+              problems. The code quality, the reasoning, the taste… it's often a step above. And for
+              those moments? Worth it.<br />But using it for everything is financial masochism
+              unless you're already rich or your company is footing the bill without questions.
+            </li>
+            <li>
+              <strong>Check the leaderboards and prices regularly.</strong> Things move stupidly
+              fast. What's the best value today might get dethroned next month by something even
+              cheaper and stronger.
+            </li>
+          </ol>
+
+          <h2>The bigger picture</h2>
+          <p>The corporate line is always "just use the cheap one, it's fine."</p>
+          <p>
+            The actual truth is more nuanced: the cheap ones are fine for most things now —
+            shockingly so. But the absolute best models are still meaningfully better at the hardest
+            stuff.
+          </p>
+          <p>
+            The winning strategy isn't "use only the expensive one" or "use only the cheap one."
+          </p>
+          <p>
+            <strong>It's intelligent switching based on the actual difficulty of the task.</strong>
+          </p>
+          <p>
+            You don't have to choose between having jaw-dropping agents and keeping your sanity (and
+            money). You just have to stop listening to people who've never actually run serious
+            agent workloads themselves.
+          </p>
+          <p>The tools are finally good enough that you can have both.</p>
+          <p>You just have to be honest about the economics.</p>
+          <p>
+            That's it. No fluff. No "synergize your AI transformation journey." Just the real shit,
+            from someone who's paid the stupid tax so you don't have to.
+          </p>
+
+          <div class="tools-mentioned">
+            <h2>Tools mentioned</h2>
+            <p>
+              Matching entries in our
+              <a href="../../#ai-tools" rel="noopener">tools directory</a> and
+              <a href="../../#ai-models" rel="noopener">models panel</a>.
+            </p>
+            <ul>
+              <li>
+                <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> — Composer 2.5
+              </li>
+              <li>
+                <a href="https://claude.ai/code" rel="noopener noreferrer">Claude Code</a> /
+                <a href="https://www.anthropic.com/" rel="noopener noreferrer">Anthropic</a>
+              </li>
+              <li><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a></li>
+              <li><a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a></li>
+              <li><a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a></li>
+              <li><a href="../../#ai-models" rel="noopener">Banal models panel</a></li>
+            </ul>
+          </div>
+        </div>
+        <div data-lang-only="ja" hidden>
+          <h1>2026年のAIエージェントの本当のコスト</h1>
+          <p class="article-meta">〜「数百ドル燃やす」か「賢く使って持続可能にする」か〜</p>
+          <hr />
+          <p>
+            聞いてくれ。俺はもう何千時間も、何千ドルもこれらのツールに突っ込んできた。スーツ着たマネージャーたちが「<a
+              href="https://cursor.com/"
+              rel="noopener noreferrer"
+              >Cursor</a
+            ><a
+              href="../../#ai-tools?q=Cursor"
+              class="article-banal-ref"
+              rel="noopener"
+              aria-label="Cursor on Banal"
+              title="Banal listing"
+              ><span aria-hidden="true">↗</span></a
+            >の20ドルライセンス買えば十分だろ」と言いながら、次の瞬間には「大事なときはOpus使えよ」と言うのを見てきた。
+          </p>
+          <p>全部、綺麗事だ。</p>
+          <p>
+            現実を話すと、本物のエージェントをガチで使おうとすると（アプリ全体をテストして、スクリーンショット撮って、バグ直して、ターミナル操作して、最後に「全部大丈夫です、ダークモードも勝手に追加しときました」ってメールまで送ってくるようなやつ）、トップモデルの請求書は簡単に<strong>月200〜400ドル超える</strong>。50ドルとか100ドルとかじゃない。本気で何時間も使ったら、普通にそのくらい行く。
+          </p>
+          <p>
+            理由はシンプル。エージェントのワークフローは<strong>出力トークンがバカみたいに多い</strong>。コード生成、思考トレース、ツール呼び出し、修正ループ…全部出力だ。そこが一番高い。
+          </p>
+
+          <h2>実際の数字</h2>
+          <p>
+            <a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a
+            >（現行世代）だと、だいたい
+            <strong>入力500万トークンで5ドル、出力で25ドル</strong> くらい。
+          </p>
+          <p>
+            これで本気のエージェントセッション回したら、どうなるか想像できるだろ。コンテキストデカいし、ツール連打するし、コード何度も出し直すし。請求書が痛いのは当然なんだよ。
+          </p>
+          <p>でもここで大事な話がある。</p>
+
+          <h2>コスパがバグってるモデルたち</h2>
+          <p>
+            今、フロンティアにかなり近い性能を出しながら、価格が桁違いに安いモデルが出てきてる。特に目立ってるのが
+            <strong
+              ><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a
+              ><a
+                href="../../#ai-tools?q=MiniMax"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="MiniMax M3 on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              ></strong
+            >
+            と
+            <strong
+              ><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+              ><a
+                href="../../#ai-tools?q=Cursor"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="Cursor on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >
+              純正の Composer 2.5</strong
+            >（Standard / non-Thinkingモード）だ。
+          </p>
+
+          <h3>価格比較（公式ドキュメント準拠、2026年6月時点）</h3>
+
+          <div class="article-table-wrap">
+            <table class="article-table">
+              <thead>
+                <tr>
+                  <th scope="col">モデル</th>
+                  <th scope="col">入力（100万トークンあたり）</th>
+                  <th scope="col">出力（100万トークンあたり）</th>
+                  <th scope="col">Claude Opus 4.8 との比較</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong
+                      ><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a
+                      ><a
+                        href="../../#ai-tools?q=MiniMax"
+                        class="article-banal-ref"
+                        rel="noopener"
+                        aria-label="MiniMax M3 on Banal"
+                        title="Banal listing"
+                        ><span aria-hidden="true">↗</span></a
+                      ></strong
+                    >
+                  </td>
+                  <td>$0.30</td>
+                  <td><strong>$1.20</strong></td>
+                  <td>出力で約20倍安い</td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+                      ><a
+                        href="../../#ai-tools?q=Cursor"
+                        class="article-banal-ref"
+                        rel="noopener"
+                        aria-label="Cursor on Banal"
+                        title="Banal listing"
+                        ><span aria-hidden="true">↗</span></a
+                      >
+                      Composer 2.5</strong
+                    >
+                    (Standard, non-Thinking)
+                  </td>
+                  <td>$0.50</td>
+                  <td><strong>$2.50</strong></td>
+                  <td>出力で約10倍安い</td>
+                </tr>
+                <tr>
+                  <td>Claude Opus 4.8</td>
+                  <td>$5.00</td>
+                  <td>$25.00</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            どちらも Opus に比べると完全に別次元の価格帯だ。MiniMax M3
+            の方がトークン単価ではやや安く、マルチモーダルと100万コンテキストが最初から強い。Composer
+            2.5（Standard）は少し単価が高いけど、Cursor
+            IDE内での長時間エージェント作業に最適化されていて、日常使いの体感速度が非常に良い。
+          </p>
+          <p>
+            大事なポイントは、どちらも「毎日ガッツリ使っても財布が死なない」レベルだということ。Opus
+            で同じ量のエージェント作業をやると比べて、<strong>10〜20倍くらい安く</strong>済む。これが「毎日エージェントを使えるかどうか」の分水嶺になる。
+          </p>
+
+          <h2>俺が実際にやってる運用（金と時間を無駄にした後）</h2>
+          <p>正直に言うと、こうしてる：</p>
+          <ul>
+            <li>
+              <strong>普段使い（8〜9割）：</strong
+              ><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a
+              ><a
+                href="../../#ai-tools?q=MiniMax"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="MiniMax M3 on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >
+              か <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a
+              ><a
+                href="../../#ai-tools?q=Cursor"
+                class="article-banal-ref"
+                rel="noopener"
+                aria-label="Cursor on Banal"
+                title="Banal listing"
+                ><span aria-hidden="true">↗</span></a
+              >
+              Composer 2.5（Standard /
+              non-Thinking）。これで十分に「エージェントがヤバい」体験ができる。
+            </li>
+            <li>
+              <strong>本気で難しいときだけ：</strong
+              ><a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a
+              >（またはその時点の最強Anthropicモデル）に切り替える。
+            </li>
+          </ul>
+          <p>
+            Anthropicのモデルは、今でも「難しいプログラミングの問題」で一番「魔法みたい」と感じることが多い。コードの質、センス、推論の深さで、まだ一歩リードしてる部分があると思う。
+          </p>
+          <p>
+            でもそれを全部に使うのは、金に余裕がある人か、会社が無制限に払ってくれる人だけにしとけ。
+          </p>
+
+          <h2>最後に</h2>
+          <p>リーダーボードと価格は定期的に確認した方がいい。状況がバカみたいに速く変わるから。</p>
+          <p>
+            大事なのは「一番高いモデルだけ使う」でも「一番安いモデルだけ使う」でもない。<strong>タスクの難易度に応じて賢く切り替えること</strong>だ。
+          </p>
+          <p>本気でエージェントを使い続けたいなら、結局これが一番持続可能なやり方だと思う。</p>
+          <p>綺麗事抜きで。実際に金と時間を無駄にした人間からの、リアルな話だ。</p>
+
+          <div class="tools-mentioned">
+            <h2>掲載ツール一覧</h2>
+            <p>
+              <a href="../../#ai-tools" rel="noopener">ツール一覧</a>と<a
+                href="../../#ai-models"
+                rel="noopener"
+                >モデル一覧</a
+              >。
+            </p>
+            <ul>
+              <li>
+                <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> + Composer 2.5
+              </li>
+              <li>
+                <a href="https://claude.ai/code" rel="noopener noreferrer">Claude Code</a> /
+                <a href="https://www.anthropic.com/" rel="noopener noreferrer">Anthropic</a>
+              </li>
+              <li><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a></li>
+              <li><a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a></li>
+              <li><a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a></li>
+              <li><a href="../../#ai-models" rel="noopener">Banal モデル一覧</a></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </main>
+    <footer
+      class="relative mt-20 border-t border-white/10 bg-gradient-to-b from-transparent to-pink-500/[0.05] py-12"
+      aria-labelledby="site-footer-title"
+    >
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="grid gap-10 md:grid-cols-3 items-start">
+          <div>
+            <h2
+              id="site-footer-title"
+              class="text-2xl font-bold tracking-tight bg-gradient-to-r from-pink-300 via-fuchsia-300 to-pink-400 bg-clip-text text-transparent"
+            >
+              sakurablush<span class="text-pink-400">.banal</span>
+            </h2>
+            <p
+              class="mt-3 text-sm text-white/60 leading-relaxed max-w-xs"
+              data-i18n="footer.tagline"
+            >
+              Banal — tool reference. {total} listings. Limits labeled.
+            </p>
+            <p class="mt-4 text-xs text-pink-200/60 italic" data-i18n="footer.dedication">
+              Built with love by sakurablush.
+            </p>
+          </div>
+
+          <nav
+            class="flex flex-col gap-2 text-sm"
+            aria-label="Footer"
+            data-i18n-aria-label="footer.ariaLabel"
+          >
+            <a
+              href="https://github.com/sakurablush/banal"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.github"
+              >GitHub</a
+            >
+            <a
+              href="https://github.com/sakurablush/banal/issues"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.report"
+              >Report Issue</a
+            >
+            <a
+              href="https://github.com/sakurablush/banal/discussions"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.discuss"
+              >Discussions</a
+            >
+            <a
+              href="https://github.com/sakurablush/banal/blob/main/LICENSE"
+              target="_blank"
+              rel="noopener"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.license"
+              >MIT License</a
+            >
+            <a
+              href="../../"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.storedData"
+              >Stored data</a
+            >
+            <a
+              href="#top"
+              class="text-white/70 hover:text-pink-200 transition-colors"
+              data-i18n="footer.backToTop"
+              >Back to top</a
+            >
+          </nav>
+
+          <div class="text-sm text-white/60 md:text-right">
+            <p class="font-mono text-pink-200/80" data-i18n="footer.love">
+              made with love, for the ghost in every fork
+            </p>
+            <p class="mt-2 text-xs text-white/40">
+              © <span id="footer-year">2026</span> sakurablush · MIT
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script type="module" src="../../src/article-entry.ts"></script>
+  </body>
+</html>

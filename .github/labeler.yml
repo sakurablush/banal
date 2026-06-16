@@ -1,0 +1,49 @@
+# Labeler rules consumed by .github/workflows/labeler.yml
+# Documentation: https://github.com/actions/labeler
+
+# Workflows and CI/CD
+.github/**:
+  - ci
+  - infrastructure
+
+# Dependencies
+package.json:
+  - dependencies
+package-lock.json:
+  - dependencies
+
+# Source code
+src/**:
+  - code
+
+# Tests
+tests/**:
+  - tests
+'**/*.test.ts':
+  - tests
+'**/*.spec.ts':
+  - tests
+
+# Tool database
+src/data/**:
+  - data
+  - tools
+scripts/verify-tools.ts:
+  - tools
+  - maintenance
+
+# Security
+# NOTE: src/auth, src/security, src/crypto do not exist in this repo today.
+# Add the corresponding globs back here if those directories are ever created.
+SECURITY.md:
+  - security
+  - documentation
+PENTEST_REPORT.md:
+  - security
+  - documentation
+
+# Docs
+docs/**:
+  - documentation
+'*.md':
+  - documentation

@@ -1,0 +1,1212 @@
+/**
+ * Zero-Key Panel — Horizontal Scroller Redesign
+ * Android app drawer style: horizontal scroll with snapping cards.
+ * All tools visible at once, no lazy loading.
+ * Quick filter chips and toolbar sit beside categories in a two-column nav.
+ */
+
+import { type Lang, t } from './i18n';
+import {
+  categoryLabels,
+  categoryLabelsJa,
+  surfaceLabels,
+  surfaceLabelsJa,
+  zeroKeyTools,
+  type ZeroKeyCategory,
+  type ZeroKeyTool,
+} from './data/zero-key-tools';
+import { getLocalizedToolCopy, localizeBadge } from './lib/tool-localization';
+import { appendChildrenBatched } from './lib/batch-dom';
+import { getSectionParams, type SectionFilterId } from './lib/section-filter-url';
+import { renderFilterToolbar } from './components/filter-toolbar';
+import { createSidebarColumn, syncQuickFiltersInPanel } from './lib/sidebar-column';
+import { createPanelStatsBar, mountPanelContent } from './lib/panel-stats-bar';
+import { bindZk2LayoutHeightSync, syncZk2LayoutHeight } from './lib/sync-zk2-layout-height';
+import { applyZeroKeyFilterValues, type ZeroKeyFilterState } from './lib/apply-section-filters';
+import { getRawSuggestionsForSection } from './lib/filter-suggestions';
+import type { FilterSuggestion } from './lib/filter-suggestions';
+import { trackFilterEvent } from './lib/filter-analytics';
+export type { ZeroKeyCategory };
+import { type SearchResult, searchTools } from './fuse-search';
+
+// ─── Category Icons ──────────────────────────────────────────────────────────
+
+/**
+ * Checks if a category matches the given prefix.
+ * Uses delimiter-based matching to avoid false positives.
+ * Example: "ai" matches "ai-chat" but not "aid" or "airplane"
+ */
+function matchesCategoryPrefix(category: string, prefix: 'ai' | 'dev'): boolean {
+  return category === prefix || category.startsWith(`${prefix}-`);
+}
+
+const categoryIcons: Record<ZeroKeyCategory, string> = {
+  // AI categories
+  'ai-chat': '\u{1F4AC}', // 💬 speech balloon
+  'ai-image': '\u{1F3A8}', // 🎨 artist palette
+  'ai-video': '\u{1F3AC}', // 🎬 clapper board
+  'ai-audio': '\u{1F3B5}', // 🎵 musical note
+  'ai-writing': '\u{270D}\uFE0F', // ✍️ writing hand
+  'ai-search': '\u{1F50D}', // 🔍 magnifying glass
+  'ai-pdf': '\u{1F4C4}', // 📄 page
+  'ai-presentation': '\u{1F4CA}', // 📊 chart
+  'ai-math': '\u{1F9EE}', // 🧮 abacus
+  'ai-coding': '\u{1F6E0}\uFE0F', // 🛠️ hammer & wrench (coding/tools)
+  'ai-agents': '\u{1F916}', // 🤖 robot (agents/platforms)
+  'ai-open-source': '\u{1F4BE}', // 💾 floppy disk (download models)
+  'ai-models': '\u{1F31F}', // 🌟 glowing star (newest models)
+  // Developer categories
+  'dev-coding': '\u{1F4BB}', // 💻 laptop
+  'dev-docs': '\u{1F4DA}', // 📚 books
+  'dev-data': '\u{1F5C4}\uFE0F', // 🗄️ file cabinet
+  'dev-design': '\u{1F58C}\uFE0F', // 🎽 drafting compass
+  'dev-backend': '\u{1F680}', // 🚀 rocket (hosting/deployment)
+  'dev-automation': '\u{2699}\uFE0F', // ⚙️ gear
+  'dev-security': '\u{1F512}', // 🔒 lock
+  'dev-productivity': '\u{1F4CB}', // 📋 clipboard
+  'dev-learning': '\u{1F393}', // 🎓 graduation cap
+};
+
+// ─── Copy / i18n ─────────────────────────────────────────────────────────────
+
+const GITHUB_REPO = 'https://github.com/sakurablush/banal';
+
+const COPY = {
+  en: {
+    title: 'AI Tools & Models',
+    searchPlaceholder: 'Search tools\u2026 (Ctrl+K to focus)',
+    clearFilters: 'Clear all filters',
+    open: 'Open',
+    docs: 'Docs',
+    report: 'Report',
+    reportBroken: 'Report broken link',
+    discussTool: 'Discuss this tool',
+    noMatchesTitle: 'No tools match',
+    noMatchesSuggestion: 'Try: chat, image, PDF, coding',
+    showing: (visible: number, total: number) => `Showing ${visible} of ${total} tools`,
+    allCategory: 'All Tools',
+    badgeNoSignup: '\u{1F513} No Signup',
+    badgeFreeSignup: '\u{1F511} Free Signup',
+    badgeRateLimited: '\u{26A1} Rate Limited',
+    badgeTypeAI: '\u{1F916} AI',
+    badgeTypeDev: '\u{1F4BB} Dev',
+  },
+  ja: {
+    title: 'AIツール＆モデル',
+    searchPlaceholder: '\u691C\u7D22\u2026 (Ctrl+K)',
+    clearFilters: '\u30D5\u30A3\u30EALL\u30BF\u30FC\u30AF\u30EA\u30A2',
+    open: '\u958B\u304F',
+    docs: '\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8',
+    report: '\u5831\u544A',
+    reportBroken: '\u4E0D\u5177\u5408\u30EA\u30F3\u30AF\u3092\u5831\u544A',
+    discussTool: '\u3053\u306E\u30C4\u30FC\u30EB\u3092\u76F8\u8AC7',
+    noMatchesTitle: '\u4E00\u81F4\u306A\u3057',
+    noMatchesSuggestion: 'chat, image, PDF, coding \u3067\u691C\u7D22',
+    showing: (visible: number, total: number) => `${visible} / ${total}\u4EF6`,
+    allCategory: '\u5168\u30C4\u30FC\u30EB',
+    badgeNoSignup: '\u{1F513} \u30A2\u30AB\u30A6\u30F3\u30C8\u4E0D\u8981',
+    badgeFreeSignup: '\u{1F511} \u7121\u6599\u767B\u9332',
+    badgeRateLimited: '\u{26A1} \u5236\u9650\u3042\u308A',
+    badgeTypeAI: '\u{1F916} AI',
+    badgeTypeDev: '\u{1F4BB} \u958B\u767A',
+  },
+} satisfies Record<
+  Lang,
+  {
+    title: string;
+    searchPlaceholder: string;
+    clearFilters: string;
+    open: string;
+    docs: string;
+    report: string;
+    reportBroken: string;
+    discussTool: string;
+    noMatchesTitle: string;
+    noMatchesSuggestion: string;
+    showing: (visible: number, total: number) => string;
+    allCategory: string;
+    badgeNoSignup: string;
+    badgeFreeSignup: string;
+    badgeRateLimited: string;
+    badgeTypeAI: string;
+    badgeTypeDev: string;
+  }
+>;
+
+// ─── Life Filters ────────────────────────────────────────────────────────────
+
+interface LifeFilterDefinition {
+  id: string;
+  label: string;
+  predicate: (tool: ZeroKeyTool, haystack: string) => boolean;
+}
+
+function getLifeFilters(lang: Lang): LifeFilterDefinition[] {
+  const e = (en: string, ja: string) => (lang === 'ja' ? ja : en);
+  return [
+    // Access filters - core zero-budget needs
+    {
+      id: 'no-signup',
+      label: e('No Signup', 'アカウント不要'),
+      predicate: (tool) => tool.requiresSignup === false,
+    },
+    {
+      id: 'free-signup-ok',
+      label: e('Free Signup OK', '無料サインアップ可'),
+      predicate: (tool) => tool.requiresSignup === true,
+    },
+    {
+      id: 'no-key',
+      label: e('No API Key', 'APIキー不要'),
+      predicate: (tool) => tool.requiresSignup === false || tool.access === 'open-source',
+    },
+    // Free tokens/API credits for zero-budget developers
+    {
+      id: 'free-tokens',
+      label: e('Free Tokens', '無料トークン'),
+      predicate: (_tool, h) =>
+        /free token|free credit|hugging face|google ai studio|cohere|trial/i.test(h),
+    },
+    // Surface filters - where you run tools
+    {
+      id: 'cli',
+      label: e('CLI', 'CLI'),
+      predicate: (tool) => tool.surface === 'cli',
+    },
+    {
+      id: 'browser',
+      label: e('Browser', 'ブラウザ'),
+      predicate: (tool) => tool.surface === 'web',
+    },
+    {
+      id: 'api',
+      label: e('API', 'API'),
+      predicate: (tool) => tool.surface === 'api',
+    },
+    // Deployment filters - self-hosted and open source
+    {
+      id: 'self-host',
+      label: e('Self-host', 'セルフホスト'),
+      predicate: (tool) => tool.access === 'self-host' || tool.access === 'open-source',
+    },
+    {
+      id: 'open-source',
+      label: e('Open Source', 'オープンソース'),
+      predicate: (tool) => tool.access === 'open-source',
+    },
+    // Capability filters - what you can do
+    {
+      id: 'free-api',
+      label: e('Free API', '無料API'),
+      predicate: (tool) =>
+        tool.access === 'public-api' && tool.caveat?.toLowerCase().includes('rate') === false,
+    },
+    {
+      id: 'high-context',
+      label: e('1M+ Context', '長文対応'),
+      predicate: (_tool, h) => /1M|256K|400K/i.test(h),
+    },
+    {
+      id: 'developer',
+      label: e('For Devs', '開発者向け'),
+      predicate: (tool, h) =>
+        tool.surface !== 'web' ||
+        tool.category === 'dev-coding' ||
+        /developer|coding|api|cli|git|database|deploy/i.test(h),
+    },
+    // Special needs for zero-budget developers
+    {
+      id: 'multilingual',
+      label: e('Multilingual', '多言語'),
+      predicate: (_tool, h) =>
+        /multilingual|chinese|japanese|korean|spanish/i.test(h.toLowerCase()),
+    },
+    // Money filters - free access paths
+    {
+      id: 'rate-limited',
+      label: e('Free Limited', '無料制限あり'),
+      predicate: (tool) =>
+        (tool.caveat?.toLowerCase().includes('rate limit') ?? false) ||
+        (tool.caveat?.toLowerCase().includes('daily') ?? false),
+    },
+    // Privacy & offline capability
+    {
+      id: 'web-llm',
+      label: e('Web LLM', 'WebLLM'),
+      predicate: (_tool, h) => /webllm|local|offline|browser ll?lm/i.test(h.toLowerCase()),
+    },
+    {
+      id: 'privacy-first',
+      label: e('Privacy', 'プライバシー'),
+      predicate: (_tool, h) => /private|privacy|encrypted|local/i.test(h.toLowerCase()),
+    },
+  ];
+}
+
+// ─── State ───────────────────────────────────────────────────────────────────
+
+export interface ZeroKeyPanelOptions {
+  lang: Lang;
+  onToolOpen?: () => void;
+  categoryPrefix?: 'ai' | 'dev';
+}
+
+export interface ZeroKeyPanelApi {
+  search: (query: string) => void;
+  setCategory: (category: ZeroKeyCategory | null) => void;
+  reset: () => void;
+  destroy: () => void;
+}
+
+const DEBOUNCE_MS = 250;
+const MAX_RESULTS = 300;
+
+interface PanelState {
+  lang: Lang;
+  allTools: ZeroKeyTool[];
+  results: SearchResult[];
+  query: string;
+  activeCategory: ZeroKeyCategory | null;
+  onToolOpen?: () => void;
+  container: HTMLElement | null;
+  categoryPrefix?: 'ai' | 'dev';
+  lifeFilters: Set<string>;
+  debounceTimer: ReturnType<typeof setTimeout> | null;
+  heroAbortController: AbortController;
+  hasRenderedOnce: boolean;
+  renderGeneration: number;
+  layoutHeightCleanup: (() => void) | null;
+}
+
+// Per-panel state storage using WeakMap
+const panelStateMap = new WeakMap<HTMLElement, PanelState>();
+
+// Global keyboard handler flag (shared across all panels)
+let globalKeyboardAttached = false;
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function create<K extends keyof HTMLElementTagNameMap>(
+  tag: K,
+  className?: string
+): HTMLElementTagNameMap[K] {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  return el;
+}
+
+function buildHaystack(tool: ZeroKeyTool): string {
+  return [
+    tool.name,
+    tool.url,
+    tool.surface,
+    tool.category,
+    categoryLabels[tool.category],
+    tool.access,
+    ...tool.badges,
+    tool.bestFor,
+    tool.qualityNote,
+    tool.caveat || '',
+  ].join(' ');
+}
+
+function getState(container: HTMLElement): PanelState {
+  let state = panelStateMap.get(container);
+  if (!state) {
+    state = {
+      lang: 'en',
+      allTools: [],
+      results: [],
+      query: '',
+      activeCategory: null,
+      lifeFilters: new Set(),
+      debounceTimer: null,
+      heroAbortController: new AbortController(),
+      container: null,
+      hasRenderedOnce: false,
+      renderGeneration: 0,
+      layoutHeightCleanup: null,
+    };
+    panelStateMap.set(container, state);
+  }
+  return state;
+}
+
+// The panel's search input is identified by data-panel-search on its container
+function getPanelSearchInput(container: HTMLElement): HTMLInputElement | null {
+  return container.querySelector(`.zk2-search-input`) as HTMLInputElement | null;
+}
+
+// ─── Search & Filter Logic ───────────────────────────────────────────────────
+
+function applyLifeFilters(state: PanelState, results: SearchResult[]): SearchResult[] {
+  if (state.lifeFilters.size === 0) return results;
+  const filters = getLifeFilters(state.lang);
+  const activeFilterDefs = filters.filter((f) => state.lifeFilters.has(f.id));
+  if (activeFilterDefs.length === 0) return results;
+  return results.filter(({ tool }) => {
+    const haystack = buildHaystack(tool).toLowerCase();
+    for (const def of activeFilterDefs) {
+      if (!def.predicate(tool, haystack)) return false;
+    }
+    return true;
+  });
+}
+
+function applyCategoryFilter(state: PanelState, results: SearchResult[]): SearchResult[] {
+  if (!state.activeCategory) return results;
+  return results.filter(({ tool }) => tool.category === state.activeCategory);
+}
+
+/**
+ * Updates the hero no-results message visibility.
+ * Shows message only when query is non-empty AND no panels have results.
+ */
+function updateHeroNoResults(query: string): void {
+  const noResultsEl = document.getElementById('hero-no-results');
+  if (!noResultsEl) return;
+
+  if (!query.trim()) {
+    noResultsEl.style.display = 'none';
+    return;
+  }
+
+  // Check if any panel has results (look for .zk2-grid which is rendered when results exist)
+  const panels = document.querySelectorAll('[data-category-prefix]');
+  let hasAnyResults = false;
+  panels.forEach((panel) => {
+    const grid = panel.querySelector('.zk2-grid');
+    if (grid) {
+      hasAnyResults = true;
+    }
+  });
+
+  noResultsEl.style.display = hasAnyResults ? 'none' : 'block';
+}
+
+function performSearch(state: PanelState): void {
+  const query = state.query;
+
+  // Filter tools by category prefix if specified
+  const filteredTools = state.categoryPrefix
+    ? state.allTools.filter((t) => matchesCategoryPrefix(t.category, state.categoryPrefix!))
+    : state.allTools;
+
+  let results: SearchResult[];
+  if (!query.trim()) {
+    results = filteredTools.map((tool) => ({ tool, score: 0, matches: {} }));
+  } else {
+    results = searchTools(filteredTools, query, MAX_RESULTS);
+  }
+
+  results = applyCategoryFilter(state, results);
+
+  // Auto-remove active life filters that have no matching tools for current category
+  // This prevents showing zero results when switching categories with active chips
+  if (state.lifeFilters.size > 0) {
+    const availableFilters = getAvailableFilters(state);
+    const availableIds = new Set(availableFilters.map((f) => f.id));
+    for (const activeId of state.lifeFilters) {
+      if (!availableIds.has(activeId)) {
+        state.lifeFilters.delete(activeId);
+      }
+    }
+  }
+
+  results = applyLifeFilters(state, results);
+  state.results = results;
+
+  if (query.trim()) {
+    trackFilterEvent({
+      action: 'apply',
+      filterType: 'search',
+      filterValue: query.trim().slice(0, 120),
+      resultCount: results.length,
+    });
+  }
+
+  updateSidebarActiveState(state);
+  renderContent(state);
+
+  // Auto-scroll to panel when results found (only for non-empty queries)
+  if (query.trim() && results.length > 0 && state.container) {
+    const section = state.container.closest('section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // Update hero no-results message
+  updateHeroNoResults(query);
+}
+
+function debouncedSearch(state: PanelState, query: string): void {
+  if (state.debounceTimer) clearTimeout(state.debounceTimer);
+  state.query = query;
+  state.debounceTimer = setTimeout(() => performSearch(state), DEBOUNCE_MS);
+}
+
+// ─── Sync hero search ↔ panel search ────────────────────────────────────────
+
+function syncSearchInputs(container: HTMLElement, value: string, source: 'hero' | 'panel'): void {
+  const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
+  const panelInput = getPanelSearchInput(container);
+
+  if (source === 'hero' && panelInput && panelInput.value !== value) {
+    panelInput.value = value;
+  }
+  if (source === 'panel' && heroInput && heroInput.value !== value) {
+    heroInput.value = value;
+  }
+}
+
+// ─── Render: Quick Filters ───────────────────────────────────────────────────
+
+/**
+ * Computes which life filter chips have at least 1 matching tool
+ * for the current category (and category prefix).
+ * Only chips with matches are rendered, so users never see a chip
+ * that would produce zero results.
+ */
+function getAvailableFilters(state: PanelState): LifeFilterDefinition[] {
+  const filters = getLifeFilters(state.lang);
+
+  // Get tools matching current category (and category prefix)
+  let categoryTools = state.categoryPrefix
+    ? state.allTools.filter((t) => matchesCategoryPrefix(t.category, state.categoryPrefix!))
+    : state.allTools;
+
+  if (state.activeCategory) {
+    categoryTools = categoryTools.filter((t) => t.category === state.activeCategory);
+  }
+
+  // Build haystacks once for efficiency
+  const haystacks = categoryTools.map((t) => ({
+    tool: t,
+    haystack: buildHaystack(t).toLowerCase(),
+  }));
+
+  // Only return filters that have at least 1 matching tool
+  return filters.filter((def) =>
+    haystacks.some(({ tool, haystack }) => def.predicate(tool, haystack))
+  );
+}
+
+function renderQuickFilters(state: PanelState): HTMLElement | null {
+  const availableFilters = getAvailableFilters(state);
+  if (availableFilters.length === 0) return null;
+
+  const row = create('div', 'quick-filters-row');
+  for (const def of availableFilters) {
+    const chip = create(
+      'button',
+      `quick-filter-chip${state.lifeFilters.has(def.id) ? ' active' : ''}`
+    );
+    chip.type = 'button';
+    chip.textContent = def.label;
+    chip.setAttribute(
+      'aria-label',
+      state.lang === 'ja' ? `${def.label}でフィルター` : `Filter by ${def.label}`
+    );
+    chip.addEventListener('click', () => {
+      const wasActive = state.lifeFilters.has(def.id);
+      if (wasActive) {
+        state.lifeFilters.delete(def.id);
+      } else {
+        state.lifeFilters.add(def.id);
+      }
+      performSearch(state);
+      trackFilterEvent({
+        action: wasActive ? 'remove' : 'apply',
+        filterType: 'tag',
+        filterValue: `life:${def.id}`,
+        resultCount: state.results.length,
+      });
+    });
+    row.appendChild(chip);
+  }
+
+  return row;
+}
+
+function getPanelSectionId(categoryPrefix?: 'ai' | 'dev'): SectionFilterId | null {
+  if (categoryPrefix === 'ai') return 'ai-tools';
+  if (categoryPrefix === 'dev') return 'dev-tools';
+  return null;
+}
+
+function countZeroKeyForValues(state: PanelState, values: Record<string, string>): number {
+  const validCategories = new Set(state.allTools.map((t) => t.category));
+  const validLifeIds = new Set(getLifeFilters(state.lang).map((f) => f.id));
+  const temp: ZeroKeyFilterState = {
+    query: '',
+    activeCategory: null,
+    lifeFilters: new Set(),
+  };
+  applyZeroKeyFilterValues(temp, values, validCategories, validLifeIds);
+
+  let results: SearchResult[];
+  if (!temp.query.trim()) {
+    results = state.allTools.map((tool) => ({ tool, score: 0, matches: {} }));
+  } else {
+    results = searchTools(state.allTools, temp.query, MAX_RESULTS);
+  }
+  if (temp.activeCategory) {
+    results = results.filter((r) => r.tool.category === temp.activeCategory);
+  }
+  if (temp.lifeFilters.size > 0) {
+    const filters = getLifeFilters(state.lang);
+    const activeFilterDefs = filters.filter((f) => temp.lifeFilters.has(f.id));
+    const haystacks = results.map((r) => ({
+      ...r,
+      haystack: buildHaystack(r.tool).toLowerCase(),
+    }));
+    results = haystacks
+      .filter(({ tool, haystack }) =>
+        activeFilterDefs.every((def) => def.predicate(tool, haystack))
+      )
+      .map(({ tool, score, matches }) => ({ tool, score, matches }));
+  }
+  return results.length;
+}
+
+function buildZeroKeySuggestions(state: PanelState): FilterSuggestion[] {
+  const section = getPanelSectionId(state.categoryPrefix);
+  if (!section) return [];
+  const raw = getRawSuggestionsForSection(section, 8);
+  const catLabels = state.lang === 'ja' ? categoryLabelsJa : categoryLabels;
+  const lifeDefs = getLifeFilters(state.lang);
+  const out: FilterSuggestion[] = [];
+
+  for (const { values, analyticsKey } of raw) {
+    if (countZeroKeyForValues(state, values) === 0) continue;
+    let label = '';
+    if (values.cat) {
+      label = catLabels[values.cat as ZeroKeyCategory] || values.cat;
+    } else if (values.life) {
+      const def = lifeDefs.find((f) => f.id === values.life);
+      label = def?.label || values.life;
+    } else if (values.q) {
+      label = `"${values.q}"`;
+    } else {
+      continue;
+    }
+    out.push({ label, values, analyticsKey });
+    if (out.length >= 3) break;
+  }
+  return out;
+}
+
+function applyZeroKeyFilters(state: PanelState, values: Record<string, string>): void {
+  const validCategories = new Set(state.allTools.map((t) => t.category));
+  const validLifeIds = new Set(getLifeFilters(state.lang).map((f) => f.id));
+  applyZeroKeyFilterValues(state, values, validCategories, validLifeIds);
+  const panelInput = state.container ? getPanelSearchInput(state.container) : null;
+  const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
+  if (panelInput) panelInput.value = state.query;
+  if (heroInput) heroInput.value = state.query;
+  performSearch(state);
+}
+
+function renderFilterToolbarRow(state: PanelState): HTMLElement | null {
+  const section = getPanelSectionId(state.categoryPrefix);
+  if (!section) return null;
+
+  return renderFilterToolbar({
+    section,
+    lang: state.lang,
+    getValues: () => ({
+      cat: state.activeCategory,
+      q: state.query.trim() || null,
+      life: state.lifeFilters.size > 0 ? [...state.lifeFilters].join(',') : null,
+    }),
+    onApply: (values) => applyZeroKeyFilters(state, values),
+    suggestions: buildZeroKeySuggestions(state),
+  });
+}
+
+// ─── Render: Horizontal Tool Card ───────────────────────────────────────────
+
+function renderHorizontalToolCard(state: PanelState, result: SearchResult): HTMLElement {
+  const { tool } = result;
+  const copy = COPY[state.lang];
+  const localized = getLocalizedToolCopy(tool, state.lang);
+
+  const card = create('article', 'tool-card-horizontal');
+  card.tabIndex = 0; // Make cards focusable for keyboard navigation
+
+  // Header: icon + surface badge
+  const header = create('div', 'zk2-card-header');
+  const icon = create('span', 'zk2-card-icon');
+  icon.textContent = categoryIcons[tool.category];
+  header.appendChild(icon);
+
+  const surface = create('span', `zk2-card-surface zk2-surface-${tool.surface}`);
+  const surfaceLabelMap = state.lang === 'ja' ? surfaceLabelsJa : surfaceLabels;
+  surface.textContent = surfaceLabelMap[tool.surface] || tool.surface.toUpperCase();
+  header.appendChild(surface);
+  card.appendChild(header);
+
+  // Access type badges
+  const accessBadges = create('div', 'zk2-card-access-badges');
+
+  // AI vs Dev badge
+  const isAI = tool.category.startsWith('ai-');
+  const typeBadge = create('span', `zk2-access-badge zk2-access-${isAI ? 'ai' : 'dev'}`);
+  typeBadge.textContent = isAI ? copy.badgeTypeAI : copy.badgeTypeDev;
+  accessBadges.appendChild(typeBadge);
+
+  // Access type badge - use requiresSignup field for transparency
+  if (tool.requiresSignup === false) {
+    const accessBadge = create('span', 'zk2-access-badge zk2-access-no-key');
+    accessBadge.textContent = copy.badgeNoSignup;
+    accessBadges.appendChild(accessBadge);
+  } else if (tool.requiresSignup === true) {
+    const accessBadge = create('span', 'zk2-access-badge zk2-access-free-key');
+    accessBadge.textContent = copy.badgeFreeSignup;
+    accessBadges.appendChild(accessBadge);
+  }
+
+  // Rate limit badge
+  if (tool.caveat && tool.caveat.toLowerCase().includes('rate limit')) {
+    const rateBadge = create('span', 'zk2-access-badge zk2-access-rate-limited');
+    rateBadge.textContent = copy.badgeRateLimited;
+    accessBadges.appendChild(rateBadge);
+  }
+
+  card.appendChild(accessBadges);
+
+  // Name
+  const name = create('h3', 'zk2-card-name');
+  name.textContent = tool.name;
+  card.appendChild(name);
+
+  // URL (full width under name, before description)
+  const urlEl = create('a', 'zk2-card-url');
+  const rawUrl = tool.url;
+  urlEl.href = rawUrl;
+  urlEl.target = '_blank';
+  urlEl.rel = 'noopener noreferrer';
+  urlEl.textContent = rawUrl.length > 40 ? rawUrl.slice(0, 37) + '...' : rawUrl;
+  urlEl.title = rawUrl;
+  card.appendChild(urlEl);
+
+  // Description (bestFor)
+  const desc = create('p', 'zk2-card-desc');
+  const bestForText = localized.bestFor;
+  desc.textContent = bestForText.length > 90 ? bestForText.slice(0, 87) + '\u2026' : bestForText;
+  card.appendChild(desc);
+
+  // Badges
+  if (tool.badges.length > 0) {
+    const badgesWrap = create('div', 'zk2-card-badges');
+    for (const b of tool.badges.slice(0, 4)) {
+      const badge = create(
+        'span',
+        b === 'true-free-models' ? 'zk2-badge zk2-badge-free' : 'zk2-badge'
+      );
+      badge.textContent = localizeBadge(b, state.lang);
+      badgesWrap.appendChild(badge);
+    }
+    card.appendChild(badgesWrap);
+  }
+
+  // Caveat (full width as yellow bar, before footer)
+  if (localized.caveat) {
+    const caveat = create('div', 'zk2-card-caveat');
+    caveat.textContent = '\u26A0\uFE0F ' + localized.caveat;
+    caveat.title = localized.caveat;
+    card.appendChild(caveat);
+  }
+
+  // Footer: Report button (left) | Docs button (if exists) | Open button (right)
+  const footer = create('div', 'zk2-card-footer');
+
+  // Report menu (broken link + discussions)
+  const reportWrap = create('div', 'zk2-card-report-wrap');
+  const reportBtn = create('button', 'zk2-card-report');
+  reportBtn.type = 'button';
+  reportBtn.innerHTML = `<span class="report-text">${copy.report} ▼</span>`;
+  reportBtn.title =
+    state.lang === 'ja'
+      ? '\u3053\u306E\u30C4\u30FC\u30EB\u3092\u5831\u544A\u307E\u305F\u306F\u76F8\u8AC7'
+      : 'Report or discuss this tool';
+  reportBtn.setAttribute('aria-haspopup', 'true');
+  reportBtn.setAttribute('aria-expanded', 'false');
+  reportBtn.setAttribute(
+    'aria-label',
+    state.lang === 'ja'
+      ? `${tool.name}\u306E\u30EA\u30F3\u30AF\u3092\u5831\u544A\u307E\u305F\u306F\u76F8\u8AC7: ${tool.name}`
+      : `Report or discuss: ${tool.name}`
+  );
+
+  const reportMenu = create('div', 'zk2-card-report-menu');
+  reportMenu.hidden = true;
+  reportMenu.setAttribute('role', 'menu');
+
+  const closeReportMenu = () => {
+    reportMenu.hidden = true;
+    reportBtn.setAttribute('aria-expanded', 'false');
+  };
+
+  const reportIssueItem = create('button', 'zk2-card-report-menu-item');
+  reportIssueItem.type = 'button';
+  reportIssueItem.dataset.action = 'issue';
+  reportIssueItem.setAttribute('role', 'menuitem');
+  reportIssueItem.textContent = copy.reportBroken;
+  reportIssueItem.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeReportMenu();
+    const issueUrl = `${GITHUB_REPO}/issues/new?title=Broken+tool:+${encodeURIComponent(tool.name)}&body=Tool:+${encodeURIComponent(tool.name)}%0AURL:+${encodeURIComponent(tool.url)}%0A%0AProblem:`;
+    window.open(issueUrl, '_blank', 'noopener,noreferrer');
+  });
+
+  const discussItem = create('button', 'zk2-card-report-menu-item');
+  discussItem.type = 'button';
+  discussItem.dataset.action = 'discuss';
+  discussItem.setAttribute('role', 'menuitem');
+  discussItem.textContent = copy.discussTool;
+  discussItem.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeReportMenu();
+    const discussUrl = `${GITHUB_REPO}/discussions/new?title=Tool:+${encodeURIComponent(tool.name)}&body=Tool:+${encodeURIComponent(tool.name)}%0AURL:+${encodeURIComponent(tool.url)}%0A%0ATopic:`;
+    window.open(discussUrl, '_blank', 'noopener,noreferrer');
+  });
+
+  reportMenu.appendChild(reportIssueItem);
+  reportMenu.appendChild(discussItem);
+
+  reportBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const nextOpen = reportMenu.hidden;
+    closeReportMenu();
+    if (nextOpen) {
+      reportMenu.hidden = false;
+      reportBtn.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  reportWrap.appendChild(reportBtn);
+  reportWrap.appendChild(reportMenu);
+  footer.appendChild(reportWrap);
+
+  // Docs button (only if docsUrl exists)
+  if (tool.docsUrl) {
+    const docsBtn = create('button', 'zk2-card-docs');
+    docsBtn.type = 'button';
+    docsBtn.textContent = copy.docs + ' \u2192';
+    docsBtn.setAttribute(
+      'aria-label',
+      state.lang === 'ja' ? `${copy.docs}: ${tool.name}` : `${copy.docs} ${tool.name}`
+    );
+    docsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.open(tool.docsUrl, '_blank', 'noopener,noreferrer');
+    });
+    footer.appendChild(docsBtn);
+  }
+
+  // Open button (CTA) - ALWAYS present
+  const btn = create('button', 'zk2-card-cta');
+  btn.type = 'button';
+  btn.textContent = copy.open + ' \u2192';
+  btn.setAttribute(
+    'aria-label',
+    state.lang === 'ja' ? `${copy.open}: ${tool.name}` : `${copy.open} ${tool.name}`
+  );
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    state.onToolOpen?.();
+    window.open(tool.url, '_blank', 'noopener,noreferrer');
+  });
+  footer.appendChild(btn);
+
+  card.appendChild(footer);
+
+  return card;
+}
+
+// ─── Render: Empty State ─────────────────────────────────────────────────────
+
+function renderEmptyState(state: PanelState): HTMLElement {
+  const copy = COPY[state.lang];
+  const empty = create('div', 'zk2-empty');
+
+  const iconEl = create('div', 'zk2-empty-icon');
+  iconEl.textContent = '\u{1F50D}';
+  empty.appendChild(iconEl);
+
+  const titleEl = create('h3', 'zk2-empty-title');
+  titleEl.textContent = `${copy.noMatchesTitle} "${state.query || ''}"`;
+  empty.appendChild(titleEl);
+
+  const hintEl = create('p', 'zk2-empty-hint');
+  hintEl.textContent = copy.noMatchesSuggestion;
+  empty.appendChild(hintEl);
+
+  const clearBtn = create('button', 'zk2-empty-clear');
+  clearBtn.type = 'button';
+  clearBtn.textContent = copy.clearFilters;
+  empty.appendChild(clearBtn);
+
+  clearBtn.addEventListener('click', () => {
+    state.query = '';
+    state.activeCategory = null;
+    state.lifeFilters.clear();
+    const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
+    const panelInput = getPanelSearchInput(state.container!);
+    if (heroInput) heroInput.value = '';
+    if (panelInput) panelInput.value = '';
+    performSearch(state);
+  });
+  return empty;
+}
+
+// ─── Render: Sidebar Categories ─────────────────────────────────────────────
+
+function renderSidebar(state: PanelState): HTMLElement {
+  const sidebar = create('div', 'zk2-sidebar');
+
+  // Get unique categories from tools
+  const categories = Array.from(new Set(state.allTools.map((t) => t.category)))
+    .sort()
+    .filter((cat): cat is ZeroKeyCategory => !!categoryLabels[cat as ZeroKeyCategory]);
+
+  // Use Japanese labels when language is JA
+  const catLabels = state.lang === 'ja' ? categoryLabelsJa : categoryLabels;
+
+  // All category button
+  const allBtn = create('button', `zk2-cat-item${state.activeCategory === null ? ' active' : ''}`);
+  allBtn.type = 'button';
+  allBtn.innerHTML = `<span class="zk2-cat-icon">📦</span> <span class="zk2-cat-label">${COPY[state.lang].allCategory}</span> <span class="zk2-cat-count">${state.allTools.length}</span>`;
+  allBtn.dataset.category = 'all';
+  allBtn.addEventListener('click', () => {
+    state.activeCategory = null;
+    updateSidebarActiveState(state);
+    performSearch(state);
+    trackFilterEvent({
+      action: 'remove',
+      filterType: 'category',
+      filterValue: 'all',
+      resultCount: state.results.length,
+    });
+  });
+  sidebar.appendChild(allBtn);
+
+  // Individual category buttons
+  for (const cat of categories) {
+    const toolCount = state.allTools.filter((t) => t.category === cat).length;
+    const btn = create('button', `zk2-cat-item${state.activeCategory === cat ? ' active' : ''}`);
+    btn.type = 'button';
+    btn.innerHTML = `<span class="zk2-cat-icon">${categoryIcons[cat]}</span> <span class="zk2-cat-label">${catLabels[cat]}</span> <span class="zk2-cat-count">${toolCount}</span>`;
+    btn.dataset.category = cat;
+    btn.addEventListener('click', () => {
+      state.activeCategory = cat;
+      updateSidebarActiveState(state);
+      performSearch(state);
+      trackFilterEvent({
+        action: 'apply',
+        filterType: 'category',
+        filterValue: cat,
+        resultCount: state.results.length,
+      });
+    });
+    sidebar.appendChild(btn);
+  }
+
+  return sidebar;
+}
+
+// Update active state on sidebar buttons
+function updateSidebarActiveState(state: PanelState): void {
+  const container = state.container;
+  if (!container) return;
+
+  const sidebar = container.querySelector('.zk2-sidebar');
+  if (!sidebar) return;
+
+  const buttons = sidebar.querySelectorAll('.zk2-cat-item');
+  buttons.forEach((btn) => {
+    const cat = (btn as HTMLElement).dataset.category;
+    btn.classList.toggle(
+      'active',
+      cat === 'all' ? state.activeCategory === null : cat === state.activeCategory
+    );
+  });
+}
+
+function getDirectoryPoolCount(state: PanelState): number {
+  let pool = state.categoryPrefix
+    ? state.allTools.filter((t) => matchesCategoryPrefix(t.category, state.categoryPrefix!))
+    : state.allTools;
+  if (state.activeCategory) {
+    pool = pool.filter((t) => t.category === state.activeCategory);
+  }
+  return pool.length;
+}
+
+// ─── Render: Main Content (horizontal scroll) ─────────────────────────────
+
+function renderContent(state: PanelState): void {
+  const container = state.container;
+  if (!container) return;
+
+  // Clear content area (keep search bar)
+  const contentArea = container.querySelector('.zk2-horizontal-content') as HTMLElement | null;
+  if (!contentArea) return;
+
+  contentArea.innerHTML = '';
+
+  // Re-render quick filters without replacing toolbar (preserves open menus / copy state)
+  const filtersPanel = container.querySelector('.zk2-sidebar-filters') as HTMLElement | null;
+  if (filtersPanel) {
+    syncQuickFiltersInPanel(filtersPanel, renderQuickFilters(state));
+  }
+
+  const copy = COPY[state.lang];
+  const results = state.results;
+
+  // Stats bar with aria-live for screen reader announcements
+  const statsBar = createPanelStatsBar(
+    'zk2-stats-bar',
+    copy.showing(results.length, getDirectoryPoolCount(state))
+  );
+  if (state.activeCategory) {
+    const catLabel = create('span', 'zk2-stats-category');
+    catLabel.textContent = ` \u2022 ${categoryIcons[state.activeCategory]} ${categoryLabels[state.activeCategory]}`;
+    statsBar.appendChild(catLabel);
+  }
+
+  mountPanelContent(contentArea, statsBar, (scroll) => {
+    if (results.length === 0) {
+      scroll.appendChild(renderEmptyState(state));
+      return;
+    }
+
+    const gridContainer = create('div', 'zk2-grid');
+    const animateCards = state.hasRenderedOnce;
+    state.hasRenderedOnce = true;
+    const generation = ++state.renderGeneration;
+
+    appendChildrenBatched(
+      gridContainer,
+      results,
+      (result, i) => {
+        const card = renderHorizontalToolCard(state, result);
+        if (animateCards) {
+          card.style.animationDelay = `${Math.min(i * 20, 400)}ms`;
+        }
+        return card;
+      },
+      20,
+      () => generation === state.renderGeneration
+    );
+    scroll.appendChild(gridContainer);
+  });
+
+  const layout = container.querySelector('.zk2-layout') as HTMLElement | null;
+  if (layout) {
+    syncZk2LayoutHeight(layout);
+  }
+}
+
+// ─── Keyboard Navigation ─────────────────────────────────────────────────────
+
+function handleGlobalKeyboard(e: KeyboardEvent): void {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    // Focus the first panel search input we find
+    const input = document.querySelector('.zk2-search-input') as HTMLInputElement | null;
+    if (input) {
+      input.focus();
+      input.select();
+    }
+  }
+}
+
+// ─── Public API ──────────────────────────────────────────────────────────────
+
+export function renderZeroKeyPowerPanel(
+  container: HTMLElement,
+  options: ZeroKeyPanelOptions
+): ZeroKeyPanelApi {
+  const { lang, onToolOpen, categoryPrefix } = options;
+  const state = getState(container);
+
+  // Abort any previous hero listeners for this panel and create new controller
+  state.heroAbortController.abort();
+  state.heroAbortController = new AbortController();
+  const { signal } = state.heroAbortController;
+
+  // Initialize/reset state
+  state.lang = lang;
+  state.onToolOpen = onToolOpen;
+  state.categoryPrefix = categoryPrefix;
+  state.query = '';
+  state.activeCategory = null;
+  state.lifeFilters = new Set();
+
+  // Filter tools by category prefix if specified
+  const filteredTools = categoryPrefix
+    ? zeroKeyTools.filter((t) => matchesCategoryPrefix(t.category, categoryPrefix))
+    : zeroKeyTools;
+  state.allTools = filteredTools;
+  state.results = filteredTools.map((tool) => ({ tool, score: 0, matches: {} }));
+
+  const sectionId = getPanelSectionId(categoryPrefix);
+  if (sectionId) {
+    const fromUrl = getSectionParams(sectionId);
+    const validCategories = new Set(state.allTools.map((tool) => tool.category));
+    const validLifeIds = new Set(getLifeFilters(lang).map((filter) => filter.id));
+
+    if (fromUrl.cat && validCategories.has(fromUrl.cat as ZeroKeyCategory)) {
+      state.activeCategory = fromUrl.cat as ZeroKeyCategory;
+    }
+    if (fromUrl.q) state.query = fromUrl.q.slice(0, 200);
+    if (fromUrl.life) {
+      for (const id of fromUrl.life.split(',').filter(Boolean)) {
+        if (validLifeIds.has(id)) state.lifeFilters.add(id);
+      }
+    }
+  }
+
+  state.container = container;
+
+  container.innerHTML = '';
+  container.className = 'zk2-panel';
+
+  // Panel search bar
+  const searchWrap = create('div', 'zk2-search-wrap');
+  const searchIcon = create('span', 'zk2-search-icon');
+  searchIcon.textContent = '\u2315';
+  searchWrap.appendChild(searchIcon);
+
+  const searchInput = create('input');
+  searchInput.type = 'text';
+  searchInput.id = 'zk-search-input';
+  searchInput.className = 'zk2-search-input';
+  searchInput.placeholder = COPY[lang].searchPlaceholder;
+  searchInput.value = state.query;
+  searchInput.autocomplete = 'off';
+  searchInput.spellcheck = false;
+
+  searchInput.addEventListener('input', () => {
+    syncSearchInputs(container, searchInput.value, 'panel');
+    debouncedSearch(state, searchInput.value);
+  });
+  searchWrap.appendChild(searchInput);
+  container.appendChild(searchWrap);
+
+  if (state.query) {
+    syncSearchInputs(container, state.query, 'panel');
+  }
+
+  // Layout wrapper with sidebar
+  const layout = create('div', 'zk2-layout');
+  container.appendChild(layout);
+
+  const sidebarColumn = createSidebarColumn({
+    sidebar: renderSidebar(state),
+    quickFilters: renderQuickFilters(state),
+    toolbar: renderFilterToolbarRow(state),
+    heading: t(lang, 'filters.panelHeading'),
+    headingId: `zk-filters-${state.categoryPrefix ?? 'all'}`,
+    ariaLabel: t(lang, 'filters.panelLabel'),
+    categoriesHeading: t(lang, 'filters.categoriesHeading'),
+    categoriesHeadingId: `zk-categories-${state.categoryPrefix ?? 'all'}`,
+  });
+  layout.appendChild(sidebarColumn);
+
+  // Horizontal content area
+  const content = create('div', 'zk2-horizontal-content');
+  layout.appendChild(content);
+
+  state.layoutHeightCleanup?.();
+  state.layoutHeightCleanup = bindZk2LayoutHeightSync(layout);
+
+  // Wire hero search (each panel gets its own listener)
+  const heroInput = document.getElementById('hero-search') as HTMLInputElement | null;
+  if (heroInput) {
+    heroInput.addEventListener(
+      'input',
+      () => {
+        syncSearchInputs(container, heroInput.value, 'hero');
+        debouncedSearch(state, heroInput.value);
+      },
+      { signal }
+    );
+
+    // Enter on hero → focus panel search
+    heroInput.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          searchInput.focus();
+        }
+        if (e.key === 'Escape') {
+          state.query = '';
+          state.activeCategory = null;
+          heroInput.value = '';
+          syncSearchInputs(container, '', 'hero');
+          performSearch(state);
+        }
+      },
+      { signal }
+    );
+  }
+
+  // Panel search keyboard
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      state.query = '';
+      state.activeCategory = null;
+      searchInput.value = '';
+      syncSearchInputs(container, '', 'panel');
+      performSearch(state);
+    }
+  });
+
+  // Global Ctrl+K (attach once)
+  if (!globalKeyboardAttached) {
+    document.addEventListener('keydown', handleGlobalKeyboard);
+    globalKeyboardAttached = true;
+  }
+
+  // Initial render
+  performSearch(state);
+
+  return {
+    search: (query: string) => {
+      state.query = query;
+      performSearch(state);
+    },
+    setCategory: (category: ZeroKeyCategory | null) => {
+      state.activeCategory = category;
+      performSearch(state);
+    },
+    reset: () => {
+      state.query = '';
+      state.activeCategory = null;
+      state.lifeFilters.clear();
+      const panelInput = getPanelSearchInput(container);
+      if (panelInput) panelInput.value = '';
+      performSearch(state);
+    },
+    destroy: () => {
+      state.layoutHeightCleanup?.();
+      state.layoutHeightCleanup = null;
+      state.heroAbortController.abort();
+      state.lifeFilters.clear();
+      if (state.debounceTimer) {
+        clearTimeout(state.debounceTimer);
+        state.debounceTimer = null;
+      }
+    },
+  };
+}
+
+export function resetZeroKeyPanelFiltersForTests(): void {
+  // Note: Per-panel state is not cleared here for backward compatibility with tests
+  // that call renderZeroKeyPowerPanel directly. Each panel manages its own state.
+}
