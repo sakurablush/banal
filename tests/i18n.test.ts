@@ -4,6 +4,7 @@
  */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { translations, t, getCurrentLang, setLang, applyTranslations, initI18n } from '../src/i18n';
+import { getSiteStats } from '../src/data/site-stats';
 
 describe('i18n translations object', () => {
   it('has both supported languages', () => {
@@ -18,16 +19,17 @@ describe('i18n translations object', () => {
 });
 
 describe('t() helper', () => {
+  const stats = getSiteStats();
+
   it('returns english for valid key', () => {
-    expect(t('en', 'hero.subtitle')).toBe(
-      '227+ tools. 128 AI + 99 developer tools. Chat, image, video, code, PDF, backend, automation. <span class="text-white/70">All verified.</span> <span class="text-white/40">Free access.</span>'
-    );
+    expect(t('en', 'hero.subtitle')).toContain(`${stats.total} tools`);
+    expect(t('en', 'hero.subtitle')).toContain(`${stats.ai} AI`);
+    expect(t('en', 'hero.subtitle')).not.toContain('$20');
   });
 
   it('returns japanese for valid key', () => {
-    expect(t('ja', 'hero.subtitle')).toBe(
-      '227以上のツール。128のAI + 99の開発者ツール。チャット、画像、動画、コード、PDF、バックエンド、自動化。<span class="text-white/70">すべて認証済み。</span><span class="text-white/40">無料アクセス。</span>'
-    );
+    expect(t('ja', 'hero.subtitle')).toContain(`${stats.total}件`);
+    expect(t('ja', 'hero.subtitle')).toContain(`AI ${stats.ai}`);
   });
 
   it('falls back to english when japanese key missing (future-proof)', () => {
@@ -35,9 +37,7 @@ describe('t() helper', () => {
     const original = translations.ja['hero.subtitle'];
     // @ts-ignore - intentional mutation for fallback test
     delete (translations.ja as any)['hero.subtitle'];
-    expect(t('ja', 'hero.subtitle')).toBe(
-      '227+ tools. 128 AI + 99 developer tools. Chat, image, video, code, PDF, backend, automation. <span class="text-white/70">All verified.</span> <span class="text-white/40">Free access.</span>'
-    );
+    expect(t('ja', 'hero.subtitle')).toContain(`${stats.total} tools`);
     // restore
     (translations.ja as any)['hero.subtitle'] = original;
   });
@@ -130,9 +130,9 @@ describe('applyTranslations (DOM)', () => {
     applyTranslations('ja');
 
     const subtitle = document.querySelector('[data-i18n="hero.subtitle"]')!;
-    expect(subtitle.innerHTML).toBe(
-      '227以上のツール。128のAI + 99の開発者ツール。チャット、画像、動画、コード、PDF、バックエンド、自動化。<span class="text-white/70">すべて認証済み。</span><span class="text-white/40">無料アクセス。</span>'
-    );
+    const stats = getSiteStats();
+    expect(subtitle.innerHTML).toContain(`${stats.total}件`);
+    expect(subtitle.innerHTML).toContain(`AI ${stats.ai}`);
 
     const title = document.querySelector('[data-i18n="manifesto.values.0.title"]')!;
     expect(title.textContent).toBe('バカみたいにシンプル');
@@ -166,7 +166,7 @@ describe('applyTranslations (DOM)', () => {
     applyTranslations('ja');
 
     const input = document.querySelector('[data-i18n-placeholder]') as HTMLInputElement;
-    expect(input.placeholder).toContain('200以上の無料AIツールを検索');
+    expect(input.placeholder).toContain('件のツールを検索');
   });
 
   it('updates aria-label for data-i18n-aria-label elements', () => {
@@ -188,7 +188,7 @@ describe('applyTranslations (DOM)', () => {
     applyTranslations('ja');
 
     const metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement;
-    expect(metaDesc.content).toContain('Banal');
+    expect(metaDesc.content).toContain('273件');
   });
 });
 

@@ -40,7 +40,7 @@ describe('directory module initialization & behavior', () => {
 
     // Verify total count in hero section
     const heroCount = document.getElementById('stat-tools');
-    expect(heroCount?.textContent).toBe(`${zeroKeyTools.length}+`);
+    expect(heroCount?.textContent).toBe(String(zeroKeyTools.length));
   });
 
   it('horizontal scroll layout has quick filters row', () => {
@@ -236,8 +236,8 @@ describe('directory: updateToolCounts', () => {
     const aiBadge = document.querySelector('#ai-tools .tool-count-badge');
     const devBadge = document.querySelector('#dev-tools .tool-count-badge');
 
-    expect(aiBadge?.textContent).toBe(`${aiCount}+`);
-    expect(devBadge?.textContent).toBe(`${devCount}+`);
+    expect(aiBadge?.textContent).toBe(String(aiCount));
+    expect(devBadge?.textContent).toBe(String(devCount));
   });
 
   it('handles missing DOM elements gracefully', () => {
