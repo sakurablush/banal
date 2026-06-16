@@ -13,6 +13,7 @@ import { initI18n } from './i18n';
 import { initTheme, setTheme } from './theme';
 import { initDirectory } from './directory';
 import { renderPromptTemplatesStandalone } from './prompt-templates-standalone';
+import { initHeroMesh } from './lib/hero-mesh';
 
 // Boot theme first (before any rendering so CSS variables are correct)
 initTheme();
@@ -30,7 +31,8 @@ if (themeToggleBtn) {
 // Boot i18n first (lang switcher + data-i18n + events for dynamic parts)
 initI18n();
 
-// Ambient background is pure CSS on .void-bg (no JS, no canvas)
+// Hero horizon mesh (canvas, pauses off-screen / reduced motion)
+initHeroMesh();
 
 // Initialize the main Zero-Key tools directory and categories quick-nav
 try {
