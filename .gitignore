@@ -54,3 +54,7 @@ tmp/
 
 # Articles (content, not code)
 articles/
+
+# Verification / audit run artifacts (regenerated on every run)
+verification-results.json
+verification-*.json
