@@ -44,7 +44,7 @@ to behave maliciously. We mitigate that with a strict threat model in
   HTML, CSS, and JS in `dist/`.
 - **Styling:** Tailwind CSS 3.x + a small custom CSS layer
   (`src/style.css`) for the few things Tailwind cannot do ergonomically.
-- **Tests:** [Vitest](https://vitest.dev) 4.x with jsdom. 651 tests across 35
+- **Tests:** [Vitest](https://vitest.dev) 4.x with jsdom. 661 tests across 36
   files. Coverage thresholds are enforced in `vitest.config.ts`.
 - **Lint / format:** ESLint + Prettier.
 - **Runtime dependencies for end users:** **none.** The `dist/` folder is
@@ -157,9 +157,11 @@ calls `npm run verify:tools`. The script:
 4. Writes a compact, date-stamped summary to
    `docs/verification/YYYY-MM-DD.json` (tracked, see
    [`docs/verification/`](verification/) for history).
+5. Syncs the audit parenthetical in `README.md` from that snapshot.
 
 If you add a tool and the next verify run flags it as broken, fix the URL
-or remove the entry. If the run goes red on the CI, the broken tool is
+or remove the entry. After catalog edits, run `npm run generate:tools-readme`
+to refresh `docs/TOOLS-DIRECTORY.md`. If the run goes red on the CI, the broken tool is
 flagged in the next dated summary.
 
 ---
@@ -215,7 +217,7 @@ output text never contains shaming phrases.
 
 ## Testing & quality gates
 
-- **Coverage:** the full test suite is 651 tests across 35 files. Thresholds
+- **Coverage:** the full test suite is 661 tests across 36 files. Thresholds
   for lines, branches, functions, and statements are enforced in
   `vitest.config.ts`.
 - **Local gate:** `npm run ci` runs lint:check + typecheck + test:run +

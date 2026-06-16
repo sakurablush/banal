@@ -16,8 +16,7 @@ numbers. See [MINDSET.md](MINDSET.md) for voice and editorial rules.
 
 - **273 curated tools** (178 AI, 95 developer), organized by category. URLs are
   audited weekly; the [latest snapshot](docs/verification/) shows which links
-  still respond (249/273 as of 2026-06-16 — bots and rate limits cause false
-  negatives). [Full directory →](docs/TOOLS-DIRECTORY.md)
+  still respond (249/273 as of 2026-06-16 — bots and rate limits cause false negatives). [Full directory →](docs/TOOLS-DIRECTORY.md)
 - **52 prompt templates** in EN/JA — career, money, health, paperwork, dev
   workflows, crisis scripts. Copy, fill blanks, paste into any free chat listed
   in the app.
@@ -122,7 +121,7 @@ Full learning material:
 - **No backend.** Language, theme, stacks, filters, and prompt drafts live in
   `localStorage` / `sessionStorage` on your device only.
 - **No runtime npm dependencies** for end users.
-- **Test gate:** `npm run ci` — lint, typecheck, Vitest (651 tests across 35
+- **Test gate:** `npm run ci` — lint, typecheck, Vitest (661 tests across 36
   files), coverage enforced, `npm audit --audit-level=moderate`.
 - **CI:** every push + weekly
   [`verify-tools`](.github/workflows/verify-tools.yml) catalog audit →

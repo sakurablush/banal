@@ -88,8 +88,11 @@ new language.
 The catalog is data, not code. To add a tool, append a typed entry to
 the `zeroKeyTools` array in `src/data/zero-key-tools.ts`. Run
 `npm run ci` to validate the schema, then `npm run verify:tools` to
-confirm the URL is reachable. The weekly CI workflow re-audits the
-catalog and updates `lastVerified` automatically. See
+confirm the URL is reachable and refresh `docs/verification/` plus the
+README audit line. Regenerate the public directory with
+`npm run generate:tools-readme` (updates `docs/TOOLS-DIRECTORY.md`).
+The weekly CI workflow re-audits the catalog and updates `lastVerified`
+automatically. See
 [`docs/EXTENDING.md`](EXTENDING.md#adding-a-tool-to-the-directory) for
 the exact shape and the rules of thumb.
 

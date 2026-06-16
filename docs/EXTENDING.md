@@ -73,7 +73,11 @@ After editing:
 1. Run `npm run ci`. The catalog schema tests will catch missing fields
    and duplicate IDs.
 2. Run `npm run verify:tools` to confirm the tool's URL is reachable.
-3. Open a PR. The weekly CI run will re-audit and update
+   This writes `docs/verification/YYYY-MM-DD.json` and syncs the audit
+   stats line in `README.md`.
+3. Run `npm run generate:tools-readme` to regenerate
+   `docs/TOOLS-DIRECTORY.md` from the catalog.
+4. Open a PR. The weekly CI run will re-audit and update
    `lastVerified` automatically.
 
 ---

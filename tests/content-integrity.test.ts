@@ -15,6 +15,11 @@ import {
   getGettingStartedGuidesCopy,
 } from '../src/data/getting-started-guides-copy';
 import { getLocalizedStack } from '../src/lib/stack-localization';
+import {
+  getLatestVerificationSnapshot,
+  readmeVerificationPhrase,
+} from '../src/lib/latest-verification';
+import { translations } from '../src/i18n';
 import { PromptTemplatesLibrary, PROMPT_TEMPLATE_COUNT } from '../src/lib/prompt-templates';
 
 const zeroKeyIds = new Set(zeroKeyTools.map((t) => t.id));
@@ -204,6 +209,34 @@ describe('Prompt templates — parity and paste notes', () => {
       expect(withoutNote).not.toMatch(/Free tiers cap daily messages/);
     }
   });
+
+  it('site-stats.prompts matches the live template count (no drift)', () => {
+    const stats = getSiteStats();
+    expect(stats.prompts).toBe(PROMPT_TEMPLATE_COUNT);
+    expect(stats.prompts).toBeGreaterThanOrEqual(40);
+  });
+
+  it('section prompt-templates i18n strings use the data-driven count, not a hardcoded 9', () => {
+    // Prevents a regression of the original "9 PROMPT TEMPLATES" hardcode.
+    // The strings must interpolate {prompts} from getSiteStats(), never embed a number.
+    for (const lang of ['en', 'ja'] as const) {
+      const strings = translations[lang] as Record<string, string>;
+      const eyebrow = strings['section.promptTemplates.eyebrow'] ?? '';
+      const title1 = strings['section.promptTemplates.title1'] ?? '';
+      const more = strings['promptTemplates.more'] ?? '';
+      const intro = strings['promptTemplates.intro'] ?? '';
+      for (const [name, value] of [
+        ['eyebrow', eyebrow],
+        ['title1', title1],
+        ['more', more],
+        ['intro', intro],
+      ]) {
+        expect(value, `${lang} ${name} must use {prompts} placeholder`).toMatch(/\{prompts\}/);
+        // And must NOT contain a baked-in small number that would mislead readers.
+        expect(value, `${lang} ${name} must not hardcode a number`).not.toMatch(/\b9\b/);
+      }
+    }
+  });
 });
 
 describe('Public docs — counts match live data', () => {
@@ -217,5 +250,15 @@ describe('Public docs — counts match live data', () => {
     expect(readme).toContain(`${stats.models} open models`);
     expect(readme).toContain(`${stats.stacks} workflow stacks`);
     expect(PROMPT_TEMPLATE_COUNT).toBe(stats.prompts);
+  });
+
+  it('README.md verification stats match the latest docs/verification snapshot', () => {
+    const snapshot = getLatestVerificationSnapshot();
+    expect(snapshot, 'commit at least one docs/verification/YYYY-MM-DD.json').not.toBeNull();
+
+    const readme = readFileSync(join(process.cwd(), 'README.md'), 'utf8');
+    const phrase = readmeVerificationPhrase(snapshot!);
+    expect(readme).toContain(phrase);
+    expect(snapshot!.totalTools).toBe(getSiteStats().total);
   });
 });

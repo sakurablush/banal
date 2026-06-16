@@ -138,43 +138,30 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
   // ─── Legacy category alias (?cat=) backward compat ──────────────────────────
 
   it('resolves legacy ?cat=career-money alias to the current career-work category', () => {
-    // Pretend the URL has ?cat=career-money (the old id)
-    const originalLocation = window.location;
-    const url = 'https://example.com/?cat=career-money';
-    Object.defineProperty(window, 'location', {
-      value: { ...originalLocation, search: '?cat=career-money', href: url },
-      writable: true,
-      configurable: true,
-    });
+    // Use history.replaceState to set the URL — works reliably in jsdom
+    // (direct property assignment to window.location is not permitted).
+    window.history.replaceState({}, '', '/?cat=career-money#prompt-templates');
 
-    try {
-      renderPromptTemplatesStandalone({ container, lang: 'en' });
-      // The career-work category (the resolved alias target) should be active
-      const activeItem = container.querySelector('.zk2-cat-item.active');
-      expect(activeItem).toBeTruthy();
-      expect(activeItem!.getAttribute('data-category')).toBe('career-work');
-    } finally {
-      Object.defineProperty(window, 'location', { value: originalLocation, configurable: true });
-    }
+    renderPromptTemplatesStandalone({ container, lang: 'en' });
+    // The career-work category (the resolved alias target) should be active
+    const activeItem = container.querySelector('.zk2-cat-item.active');
+    expect(activeItem).toBeTruthy();
+    expect(activeItem!.getAttribute('data-category')).toBe('career-work');
+
+    // Reset the URL for subsequent tests
+    window.history.replaceState({}, '', '/');
   });
 
   it('ignores unknown ?cat= values without crashing', () => {
-    const originalLocation = window.location;
-    Object.defineProperty(window, 'location', {
-      value: { ...originalLocation, search: '?cat=nonexistent', href: 'https://example.com/?cat=nonexistent' },
-      writable: true,
-      configurable: true,
-    });
+    window.history.replaceState({}, '', '/?cat=nonexistent#prompt-templates');
 
-    try {
-      renderPromptTemplatesStandalone({ container, lang: 'en' });
-      // Falls back to "all" — no category is marked active except possibly nothing
-      const activeItems = container.querySelectorAll('.zk2-cat-item.active');
-      // Either no active item or "all" — either way no crash
-      expect(activeItems.length).toBeLessThanOrEqual(1);
-    } finally {
-      Object.defineProperty(window, 'location', { value: originalLocation, configurable: true });
-    }
+    renderPromptTemplatesStandalone({ container, lang: 'en' });
+    // Falls back to no selection — at most one item can be active
+    const activeItems = container.querySelectorAll('.zk2-cat-item.active');
+    expect(activeItems.length).toBeLessThanOrEqual(1);
+
+    // Reset the URL for subsequent tests
+    window.history.replaceState({}, '', '/');
   });
 
   // ─── Accordion behavior ───────────────────────────────────────────────

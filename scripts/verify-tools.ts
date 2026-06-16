@@ -11,9 +11,11 @@
  * Outputs:
  *   - verification-results.json  (full per-tool report, gitignored)
  *   - docs/verification/YYYY-MM-DD.json  (date-stamped summary, safe to commit)
+ *   - README.md verification parenthetical (synced from the latest snapshot)
  */
 
 import { zeroKeyTools, type ZeroKeyTool } from '../src/data/zero-key-tools';
+import { syncReadmeVerification } from '../src/lib/latest-verification';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -314,6 +316,15 @@ async function main() {
 
   // Write date-stamped summary (safe to commit; small, comparable over time)
   writeDatedSummary(report);
+
+  const { updated, snapshot } = syncReadmeVerification();
+  if (snapshot) {
+    console.log(
+      updated
+        ? `README.md updated (${snapshot.verified}/${snapshot.totalTools} as of ${snapshot.date})`
+        : `README.md verification line already current (${snapshot.verified}/${snapshot.totalTools} as of ${snapshot.date})`
+    );
+  }
 
   // Summary
   console.log('\n=== Verification Complete ===');

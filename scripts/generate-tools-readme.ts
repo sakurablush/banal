@@ -10,6 +10,7 @@
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { zeroKeyTools, categoryLabels, type ZeroKeyCategory } from '../src/data/zero-key-tools';
+import { syncReadmeVerification } from '../src/lib/latest-verification';
 
 const surfaceEmoji: Record<string, string> = {
   web: '🌐',
@@ -115,3 +116,12 @@ function generateToolsReadme(): string {
 const markdown = generateToolsReadme();
 writeFileSync(OUTPUT_PATH, markdown, 'utf8');
 console.log(`Wrote ${OUTPUT_PATH} (${zeroKeyTools.length} tools)`);
+
+const { updated, snapshot } = syncReadmeVerification(resolve(import.meta.dirname, '..'));
+if (snapshot) {
+  console.log(
+    updated
+      ? `Updated README.md verification line (${snapshot.verified}/${snapshot.totalTools} as of ${snapshot.date})`
+      : `README.md verification line already current (${snapshot.verified}/${snapshot.totalTools} as of ${snapshot.date})`
+  );
+}
