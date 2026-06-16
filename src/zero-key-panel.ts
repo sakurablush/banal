@@ -2,7 +2,7 @@
  * Zero-Key Panel — Horizontal Scroller Redesign
  * Android app drawer style: horizontal scroll with snapping cards.
  * All tools visible at once, no lazy loading.
- * Quick filter chips and toolbar live above categories in the sidebar.
+ * Quick filter chips and toolbar sit beside categories in a two-column nav.
  */
 
 import { type Lang, t } from './i18n';
@@ -20,6 +20,7 @@ import { appendChildrenBatched } from './lib/batch-dom';
 import { getSectionParams, type SectionFilterId } from './lib/section-filter-url';
 import { renderFilterToolbar } from './components/filter-toolbar';
 import { createSidebarColumn, syncQuickFiltersInPanel } from './lib/sidebar-column';
+import { createPanelStatsBar } from './lib/panel-stats-bar';
 import { applyZeroKeyFilterValues, type ZeroKeyFilterState } from './lib/apply-section-filters';
 import { getRawSuggestionsForSection } from './lib/filter-suggestions';
 import type { FilterSuggestion } from './lib/filter-suggestions';
@@ -877,6 +878,16 @@ function updateSidebarActiveState(state: PanelState): void {
   });
 }
 
+function getDirectoryPoolCount(state: PanelState): number {
+  let pool = state.categoryPrefix
+    ? state.allTools.filter((t) => matchesCategoryPrefix(t.category, state.categoryPrefix!))
+    : state.allTools;
+  if (state.activeCategory) {
+    pool = pool.filter((t) => t.category === state.activeCategory);
+  }
+  return pool.length;
+}
+
 // ─── Render: Main Content (horizontal scroll) ─────────────────────────────
 
 function renderContent(state: PanelState): void {
@@ -899,10 +910,10 @@ function renderContent(state: PanelState): void {
   const results = state.results;
 
   // Stats bar with aria-live for screen reader announcements
-  const statsBar = create('div', 'zk2-stats-bar');
-  statsBar.setAttribute('aria-live', 'polite');
-  statsBar.setAttribute('aria-atomic', 'true');
-  statsBar.textContent = copy.showing(results.length, results.length);
+  const statsBar = createPanelStatsBar(
+    'zk2-stats-bar',
+    copy.showing(results.length, getDirectoryPoolCount(state))
+  );
   if (state.activeCategory) {
     const catLabel = create('span', 'zk2-stats-category');
     catLabel.textContent = ` \u2022 ${categoryIcons[state.activeCategory]} ${categoryLabels[state.activeCategory]}`;
@@ -1040,6 +1051,8 @@ export function renderZeroKeyPowerPanel(
     heading: t(lang, 'filters.panelHeading'),
     headingId: `zk-filters-${state.categoryPrefix ?? 'all'}`,
     ariaLabel: t(lang, 'filters.panelLabel'),
+    categoriesHeading: t(lang, 'filters.categoriesHeading'),
+    categoriesHeadingId: `zk-categories-${state.categoryPrefix ?? 'all'}`,
   });
   layout.appendChild(sidebarColumn);
 

@@ -199,6 +199,8 @@ export const translations: Record<Lang, Translations> = {
     'filters.apply': 'Apply',
     'filters.panelLabel': 'Refine results',
     'filters.panelHeading': 'Refine',
+    'filters.categoriesHeading': 'Categories',
+    'prompts.showing': 'Showing {count} templates',
 
     // === Privacy ===
     'privacy.title': 'Stored data on this device',
@@ -472,6 +474,8 @@ export const translations: Record<Lang, Translations> = {
     'filters.apply': '適用',
     'filters.panelLabel': '絞り込み',
     'filters.panelHeading': '絞り込み',
+    'filters.categoriesHeading': 'カテゴリ',
+    'prompts.showing': '{count}件のテンプレートを表示',
 
     // === Privacy ===
     'privacy.title': 'この端末に保存されたデータ',

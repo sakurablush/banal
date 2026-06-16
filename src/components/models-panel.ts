@@ -11,6 +11,7 @@ import { trackFilterEvent } from '../lib/filter-analytics';
 import { localizeUseCase } from '../lib/model-localization';
 import { getSectionParams } from '../lib/section-filter-url';
 import { renderFilterToolbar } from './filter-toolbar';
+import { createPanelStatsBar } from '../lib/panel-stats-bar';
 import {
   applyModelsFilterValues,
   countModelsForValues,
@@ -649,9 +650,10 @@ function renderContent(state: ModelsPanelState): void {
   const models = filterModels(state);
 
   // Stats bar
-  const stats = create('div', 'models-stats-bar');
-  stats.setAttribute('aria-live', 'polite');
-  stats.textContent = typeof copy.showing === 'function' ? copy.showing(models.length, aiModels.length) : `${models.length} / ${aiModels.length} models`;
+  const stats = createPanelStatsBar(
+    'models-stats-bar',
+    typeof copy.showing === 'function' ? copy.showing(models.length, aiModels.length) : `${models.length} / ${aiModels.length} models`
+  );
   contentArea.appendChild(stats);
 
   // Comparison view (if 2+ selected)

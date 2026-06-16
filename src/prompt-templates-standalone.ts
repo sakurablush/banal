@@ -19,6 +19,7 @@ import { createCloseButton } from './lib/close-button';
 import { getSectionParams } from './lib/section-filter-url';
 import { renderFilterToolbar } from './components/filter-toolbar';
 import { createSidebarColumn } from './lib/sidebar-column';
+import { createPanelStatsBar } from './lib/panel-stats-bar';
 import { t } from './i18n';
 import { applyPromptsFilterValues } from './lib/apply-section-filters';
 import { getRawSuggestionsForSection } from './lib/filter-suggestions';
@@ -260,6 +261,8 @@ function renderHorizontalLayout(state: PromptTemplatesViewState): void {
       heading: t(state.lang, 'filters.panelHeading'),
       headingId: 'pt-filters',
       ariaLabel: t(state.lang, 'filters.panelLabel'),
+      categoriesHeading: t(state.lang, 'filters.categoriesHeading'),
+      categoriesHeadingId: 'pt-categories',
     })
   );
 
@@ -269,12 +272,11 @@ function renderHorizontalLayout(state: PromptTemplatesViewState): void {
   layout.appendChild(content);
 
   // Stats bar
-  const statsBar = document.createElement('div');
-  statsBar.className = 'zk2-stats-bar';
   const filteredPrompts = getPromptsForCategory(state.selectedCategory, state.prompts);
-  statsBar.textContent = state.lang === 'ja' 
-    ? `${filteredPrompts.length}件のテンプレートを表示` 
-    : `Showing ${filteredPrompts.length} templates`;
+  const statsBar = createPanelStatsBar(
+    'zk2-stats-bar',
+    t(state.lang, 'prompts.showing').replace('{count}', String(filteredPrompts.length))
+  );
   content.appendChild(statsBar);
 
   // Grid container for prompt cards

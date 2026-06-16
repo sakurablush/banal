@@ -14,6 +14,7 @@ import { openCustomStackEditor } from './custom-stack-editor';
 import { getLocalizedStack } from '../lib/stack-localization';
 import { getSectionParams } from '../lib/section-filter-url';
 import { renderFilterToolbar } from './filter-toolbar';
+import { createPanelStatsBar } from '../lib/panel-stats-bar';
 import { applyStacksFilterValues } from '../lib/apply-section-filters';
 import { getRawSuggestionsForSection } from '../lib/filter-suggestions';
 import type { FilterSuggestion } from '../lib/filter-suggestions';
@@ -349,6 +350,17 @@ function renderContent(state: StacksPanelState): void {
   contentArea.innerHTML = '';
   const copy = COPY[state.lang];
 
+  let stacks = [...toolStacks];
+  if (state.audienceFilter) {
+    stacks = stacks.filter((s) => s.audience.type === state.audienceFilter);
+  }
+
+  const stats = createPanelStatsBar(
+    'stacks-stats',
+    typeof copy.showing === 'function' ? copy.showing(stacks.length) : `${stacks.length} stacks`
+  );
+  contentArea.appendChild(stats);
+
   const customStacks = getCustomStacks();
   if (customStacks.length > 0) {
     const mySection = create('div', 'stacks-my-section');
@@ -362,17 +374,6 @@ function renderContent(state: StacksPanelState): void {
     mySection.appendChild(myGrid);
     contentArea.appendChild(mySection);
   }
-
-  // Filter curated stacks
-  let stacks = [...toolStacks];
-  if (state.audienceFilter) {
-    stacks = stacks.filter((s) => s.audience.type === state.audienceFilter);
-  }
-
-  // Stats
-  const stats = create('div', 'stacks-stats');
-  stats.textContent = typeof copy.showing === 'function' ? copy.showing(stacks.length) : `${stacks.length} stacks`;
-  contentArea.appendChild(stats);
 
   // Empty state
   if (stacks.length === 0) {

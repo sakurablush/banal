@@ -1,5 +1,5 @@
 /**
- * Left column layout: always-visible filter panel above scrollable categories.
+ * Navigation column: categories (left) beside filters/tags (right).
  */
 
 export interface SidebarFiltersOptions {
@@ -15,6 +15,8 @@ export interface SidebarFiltersOptions {
 
 export interface SidebarColumnOptions extends SidebarFiltersOptions {
   sidebar: HTMLElement;
+  categoriesHeading?: string;
+  categoriesHeadingId?: string;
 }
 
 let headingIdCounter = 0;
@@ -30,10 +32,14 @@ function createFiltersDivider(): HTMLElement {
   return divider;
 }
 
-function createFiltersHeading(label: string, headingId?: string): HTMLElement {
+function createNavHeading(
+  label: string,
+  className: string,
+  headingId?: string
+): HTMLElement {
   const heading = document.createElement('h3');
-  heading.className = 'zk2-sidebar-filters-heading';
-  heading.id = headingId ?? `zk2-sidebar-filters-heading-${++headingIdCounter}`;
+  heading.className = className;
+  heading.id = headingId ?? `zk2-sidebar-heading-${++headingIdCounter}`;
   heading.textContent = label;
   return heading;
 }
@@ -48,7 +54,7 @@ export function buildSidebarFiltersPanel(options: SidebarFiltersOptions): HTMLEl
   panel.setAttribute('role', 'region');
 
   if (options.heading) {
-    const heading = createFiltersHeading(options.heading, options.headingId);
+    const heading = createNavHeading(options.heading, 'zk2-sidebar-filters-heading', options.headingId);
     panel.appendChild(heading);
     panel.setAttribute('aria-labelledby', heading.id);
   }
@@ -74,6 +80,25 @@ export function buildSidebarFiltersPanel(options: SidebarFiltersOptions): HTMLEl
   return panel;
 }
 
+function createCategoriesWrap(options: SidebarColumnOptions): HTMLElement {
+  const wrap = document.createElement('div');
+  wrap.className = 'zk2-sidebar-categories';
+  wrap.setAttribute('role', 'navigation');
+
+  if (options.categoriesHeading) {
+    const heading = createNavHeading(
+      options.categoriesHeading,
+      'zk2-sidebar-categories-heading',
+      options.categoriesHeadingId
+    );
+    wrap.appendChild(heading);
+    wrap.setAttribute('aria-labelledby', heading.id);
+  }
+
+  wrap.appendChild(options.sidebar);
+  return wrap;
+}
+
 /** Keep toolbar stable; only replace the quick-filter chip row when results change. */
 export function syncQuickFiltersInPanel(
   panel: HTMLElement,
@@ -90,8 +115,7 @@ export function syncQuickFiltersInPanel(
     return;
   }
 
-  const insertBefore =
-    divider ?? toolbar ?? null;
+  const insertBefore = divider ?? toolbar ?? null;
 
   if (insertBefore) {
     panel.insertBefore(nextFilters, insertBefore);
@@ -109,11 +133,14 @@ export function createSidebarColumn(options: SidebarColumnOptions): HTMLElement 
   const column = document.createElement('div');
   column.className = 'zk2-sidebar-column';
 
+  column.appendChild(createCategoriesWrap(options));
+
   const panel = buildSidebarFiltersPanel(options);
   if (panel) {
     column.appendChild(panel);
+  } else {
+    column.classList.add('zk2-sidebar-column--categories-only');
   }
 
-  column.appendChild(options.sidebar);
   return column;
 }

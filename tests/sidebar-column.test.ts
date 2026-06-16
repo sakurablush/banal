@@ -6,7 +6,7 @@ import {
 } from '../src/lib/sidebar-column';
 
 describe('createSidebarColumn', () => {
-  it('places filters panel above scrollable sidebar', () => {
+  it('places categories left and filters right in a two-column nav', () => {
     const sidebar = document.createElement('div');
     sidebar.className = 'zk2-sidebar';
 
@@ -24,37 +24,50 @@ describe('createSidebarColumn', () => {
       heading: 'Refine',
       headingId: 'test-filters',
       ariaLabel: 'Refine results',
+      categoriesHeading: 'Categories',
+      categoriesHeadingId: 'test-categories',
     });
 
     expect(column.className).toBe('zk2-sidebar-column');
     expect(column.children.length).toBe(2);
 
+    const categories = column.querySelector('.zk2-sidebar-categories');
+    expect(categories).toBeTruthy();
+    expect(categories?.getAttribute('role')).toBe('navigation');
+    expect(categories?.getAttribute('aria-labelledby')).toBe('test-categories');
+    expect(categories?.querySelector('.zk2-sidebar-categories-heading')?.textContent).toBe(
+      'Categories'
+    );
+    expect(categories?.querySelector('.zk2-sidebar')).toBe(sidebar);
+
     const panel = column.querySelector('.zk2-sidebar-filters');
     expect(panel).toBeTruthy();
+    expect(column.children[0]).toBe(categories);
+    expect(column.children[1]).toBe(panel);
+
     expect(panel?.getAttribute('role')).toBe('region');
     expect(panel?.getAttribute('aria-label')).toBe('Refine results');
     expect(panel?.getAttribute('aria-labelledby')).toBe('test-filters');
     const heading = panel?.querySelector('.zk2-sidebar-filters-heading');
     expect(heading?.textContent).toBe('Refine');
-    expect(heading?.id).toBe('test-filters');
     expect(panel?.querySelector('.quick-filters-row')).toBeTruthy();
     expect(panel?.querySelector('.filter-toolbar--sidebar')).toBeTruthy();
     expect(panel?.querySelector('.zk2-sidebar-filters-divider')).toBeTruthy();
-    expect(column.querySelector(':scope > .zk2-sidebar')).toBe(sidebar);
   });
 
-  it('omits filter panel when no filters are provided', () => {
+  it('uses single column when filters panel is omitted', () => {
     const sidebar = document.createElement('div');
     sidebar.className = 'zk2-sidebar';
 
     const column = createSidebarColumn({ sidebar });
 
+    expect(column.classList.contains('zk2-sidebar-column--categories-only')).toBe(true);
     expect(column.querySelector('.zk2-sidebar-filters')).toBeNull();
+    expect(column.querySelector('.zk2-sidebar-categories')).toBeTruthy();
     expect(column.children.length).toBe(1);
   });
 
   it('skips empty quick filter rows', () => {
-    const sidebar = document.createElement('div');
     const quickFilters = document.createElement('div');
     quickFilters.className = 'quick-filters-row';
 
