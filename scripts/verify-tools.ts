@@ -8,7 +8,9 @@
  * Usage: npm run verify:tools
  *    or: npx tsx scripts/verify-tools.ts
  *
- * Output: Writes results to verification-results.json
+ * Outputs:
+ *   - verification-results.json  (full per-tool report, gitignored)
+ *   - docs/verification/YYYY-MM-DD.json  (date-stamped summary, safe to commit)
  */
 
 import { zeroKeyTools, type ZeroKeyTool } from '../src/data/zero-key-tools';
@@ -241,12 +243,77 @@ async function verifyAllTools(): Promise<VerificationReport> {
   return report;
 }
 
+interface VerificationSummary {
+  date: string;            // YYYY-MM-DD
+  generatedAt: string;     // full ISO timestamp
+  totalTools: number;
+  verified: number;
+  failed: number;
+  errors: number;
+  successRate: number;     // verified / totalTools, 0..1
+  lastVerifiedCoverage: VerificationReport['lastVerifiedCoverage'];
+  failedTools: { id: string; name: string; url: string; status: number | null }[];
+  duplicates: { url: string; ids: string[] }[];
+  avgResponseTimeMs: number;
+}
+
+/**
+ * Write a compact, date-stamped summary to docs/verification/YYYY-MM-DD.json.
+ * Only this file is intended to be committed, so it stays small and comparable.
+ */
+function writeDatedSummary(report: VerificationReport): void {
+  const date = report.timestamp.slice(0, 10); // YYYY-MM-DD
+
+  const failedTools = report.results
+    .filter((r) => !r.ok)
+    .map((r) => ({ id: r.id, name: r.name, url: r.url, status: r.status }));
+
+  const duplicates = report.duplicateUrls.map((d) => ({
+    url: d.url,
+    ids: d.entries.map((e) => e.id),
+  }));
+
+  const avgResponseTimeMs =
+    report.results.length > 0
+      ? Math.round(
+          report.results.reduce((sum, r) => sum + r.responseTime, 0) /
+            report.results.length,
+        )
+      : 0;
+
+  const summary: VerificationSummary = {
+    date,
+    generatedAt: report.timestamp,
+    totalTools: report.totalTools,
+    verified: report.verified,
+    failed: report.failed,
+    errors: report.errors,
+    successRate:
+      report.totalTools > 0
+        ? Math.round((report.verified / report.totalTools) * 1000) / 1000
+        : 0,
+    lastVerifiedCoverage: report.lastVerifiedCoverage,
+    failedTools,
+    duplicates,
+    avgResponseTimeMs,
+  };
+
+  const dir = path.join(process.cwd(), 'docs', 'verification');
+  fs.mkdirSync(dir, { recursive: true });
+  const outPath = path.join(dir, `${date}.json`);
+  fs.writeFileSync(outPath, JSON.stringify(summary, null, 2) + '\n');
+  console.log(`Summary written to ${path.relative(process.cwd(), outPath)}`);
+}
+
 async function main() {
   const report = await verifyAllTools();
 
-  // Write results to file
+  // Write full results (gitignored, used locally / by CI)
   const outputPath = path.join(process.cwd(), 'verification-results.json');
   fs.writeFileSync(outputPath, JSON.stringify(report, null, 2));
+
+  // Write date-stamped summary (safe to commit; small, comparable over time)
+  writeDatedSummary(report);
 
   // Summary
   console.log('\n=== Verification Complete ===');

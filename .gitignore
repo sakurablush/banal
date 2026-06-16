@@ -55,6 +55,7 @@ tmp/
 # Articles (content, not code)
 articles/
 
-# Verification / audit run artifacts (regenerated on every run)
+# Verification / audit run artifacts
+# Full per-tool report (regenerated on every run, big, not for repo):
 verification-results.json
-verification-*.json
+# Date-stamped summaries under docs/verification/ are intentionally tracked
