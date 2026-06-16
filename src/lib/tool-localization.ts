@@ -5,7 +5,26 @@
 
 import type { Lang } from '../i18n';
 import type { ZeroKeyTool } from '../data/zero-key-tools';
-import { zeroKeyToolsJa } from '../data/zero-key-tools-ja';
+
+type JaToolOverlay = {
+  bestFor: string;
+  qualityNote: string;
+  caveat?: string;
+};
+
+let jaCache: Record<string, JaToolOverlay> | null = null;
+let jaLoadPromise: Promise<void> | null = null;
+
+/** Load Japanese tool copy on demand (skipped for EN-only visitors). */
+export async function ensureJaLocaleLoaded(): Promise<void> {
+  if (jaCache) return;
+  if (!jaLoadPromise) {
+    jaLoadPromise = import('../data/zero-key-tools-ja').then((mod) => {
+      jaCache = mod.zeroKeyToolsJa;
+    });
+  }
+  await jaLoadPromise;
+}
 
 export interface LocalizedToolCopy {
   bestFor: string;
@@ -20,8 +39,8 @@ const BADGE_JA: Record<string, string> = {
   'no install': 'インストール不要',
   'no key': 'キー不要',
   'no google': 'Google不要',
-  'private': 'プライベート',
-  'local': 'ローカル',
+  private: 'プライベート',
+  local: 'ローカル',
   'local ai': 'ローカルAI',
   'local models': 'ローカルモデル',
   'local-first': 'ローカル優先',
@@ -201,7 +220,7 @@ const BADGE_JA: Record<string, string> = {
   'visual graph': 'ビジュアルグラフ',
   discovery: '発見',
   'real-time': 'リアルタイム',
-  'european': '欧州',
+  european: '欧州',
   transparent: '透明性',
   byok: 'BYOK',
   'rate limited': '制限あり',
@@ -211,8 +230,8 @@ const BADGE_FREE_JA = '🔓 無料';
 const BADGE_FREE_EN = '🔓 Free';
 
 export function getLocalizedToolCopy(tool: ZeroKeyTool, lang: Lang): LocalizedToolCopy {
-  if (lang === 'ja') {
-    const ja = zeroKeyToolsJa[tool.id];
+  if (lang === 'ja' && jaCache) {
+    const ja = jaCache[tool.id];
     if (ja) {
       return {
         bestFor: ja.bestFor,
@@ -235,4 +254,10 @@ export function localizeBadge(badge: string, lang: Lang): string {
   if (badge === 'true-free-models') return BADGE_FREE_JA;
   const key = badge.toLowerCase();
   return BADGE_JA[key] ?? BADGE_JA[badge] ?? badge;
+}
+
+/** Reset cached JA copy (for tests). */
+export function resetJaLocaleCacheForTests(): void {
+  jaCache = null;
+  jaLoadPromise = null;
 }

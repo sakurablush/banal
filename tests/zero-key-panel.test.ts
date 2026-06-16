@@ -79,10 +79,15 @@ describe('zero-key panel rendering', () => {
     resetZeroKeyPanelFiltersForTests();
     document.body.innerHTML = '';
     vi.useFakeTimers();
+    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
   });
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.unstubAllGlobals();
   });
 
   it('renders search input and tool cards in horizontal scroll layout', () => {
@@ -533,10 +538,15 @@ describe('zero-key panel API methods', () => {
     resetZeroKeyPanelFiltersForTests();
     document.body.innerHTML = '';
     vi.useFakeTimers();
+    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
   });
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.unstubAllGlobals();
   });
 
   it('API.search() filters tools programmatically', () => {

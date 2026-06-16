@@ -18,6 +18,8 @@ import {
 import { getRawSuggestionsForSection } from '../lib/filter-suggestions';
 import type { FilterSuggestion } from '../lib/filter-suggestions';
 
+const DEBOUNCE_MS = 250;
+
 const MODEL_USE_CASES = [
   'coding',
   'reasoning',
@@ -153,6 +155,7 @@ interface ModelsPanelState {
   licenseFilter: string | null;
   compareSet: Set<string>;
   container: HTMLElement | null;
+  debounceTimer: ReturnType<typeof setTimeout> | null;
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -323,7 +326,7 @@ function renderModelCard(state: ModelsPanelState, model: AIModel): HTMLElement {
     } else {
       state.compareSet.delete(model.id);
     }
-    renderContent(state);
+    updateComparisonBar(state);
   });
   compareWrap.appendChild(checkbox);
   const compareLabel = create('span');
@@ -374,15 +377,18 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   searchInput.value = state.query;
   searchInput.addEventListener('input', () => {
     state.query = searchInput.value;
-    if (searchInput.value.trim()) {
-      trackFilterEvent({
-        action: 'apply',
-        filterType: 'search',
-        filterValue: searchInput.value,
-        resultCount: filterModels(state).length,
-      });
-    }
-    renderContent(state);
+    if (state.debounceTimer) clearTimeout(state.debounceTimer);
+    state.debounceTimer = setTimeout(() => {
+      if (searchInput.value.trim()) {
+        trackFilterEvent({
+          action: 'apply',
+          filterType: 'search',
+          filterValue: searchInput.value,
+          resultCount: filterModels(state).length,
+        });
+      }
+      renderContent(state);
+    }, DEBOUNCE_MS);
   });
   searchWrap.appendChild(searchInput);
   bar.appendChild(searchWrap);
@@ -603,6 +609,30 @@ function renderComparison(state: ModelsPanelState): HTMLElement | null {
   return wrapper;
 }
 
+function updateComparisonBar(state: ModelsPanelState): void {
+  const contentArea = state.container?.querySelector('.models-content') as HTMLElement | null;
+  if (!contentArea) return;
+
+  const existing = contentArea.querySelector('.models-comparison');
+  const comparison = renderComparison(state);
+
+  if (comparison) {
+    if (existing) {
+      existing.replaceWith(comparison);
+    } else {
+      const stats = contentArea.querySelector('.models-stats-bar');
+      if (stats) {
+        stats.insertAdjacentElement('afterend', comparison);
+      } else {
+        contentArea.prepend(comparison);
+      }
+    }
+    return;
+  }
+
+  existing?.remove();
+}
+
 // ─── Render: Content ────────────────────────────────────────────────────────
 
 function renderContent(state: ModelsPanelState): void {
@@ -640,9 +670,11 @@ function renderContent(state: ModelsPanelState): void {
 
   // Model cards grid
   const grid = create('div', 'models-grid');
+  const fragment = document.createDocumentFragment();
   for (const model of models) {
-    grid.appendChild(renderModelCard(state, model));
+    fragment.appendChild(renderModelCard(state, model));
   }
+  grid.appendChild(fragment);
   contentArea.appendChild(grid);
 }
 
@@ -669,6 +701,7 @@ export function renderModelsPanel(
     licenseFilter: null,
     compareSet: new Set(),
     container,
+    debounceTimer: null,
   };
 
   applyModelsUrlState(state);
@@ -710,6 +743,10 @@ export function renderModelsPanel(
       renderContent(state);
     },
     destroy: () => {
+      if (state.debounceTimer) {
+        clearTimeout(state.debounceTimer);
+        state.debounceTimer = null;
+      }
       state.compareSet.clear();
     },
   };

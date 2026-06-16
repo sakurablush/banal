@@ -3,18 +3,17 @@ import {
   type ZeroKeyPanelApi,
   type ZeroKeyCategory,
 } from './zero-key-panel';
-import { getCurrentLang, t } from './i18n';
+import { getCurrentLang, t, type Lang } from './i18n';
 import { zeroKeyTools } from './data/zero-key-tools';
 import { getSiteStats } from './data/site-stats';
-import { renderModelsPanel, type ModelsPanelApi } from './components/models-panel';
-import { renderStacksPanel, type StacksPanelApi } from './components/stacks-panel';
-import { renderOnboarding } from './components/onboarding-flow';
-import { renderGettingStartedGuides } from './components/getting-started-guides';
+import type { ModelsPanelApi } from './components/models-panel';
+import type { StacksPanelApi } from './components/stacks-panel';
+import { whenIdle, whenVisible } from './lib/lazy-section';
+import { ensureJaLocaleLoaded } from './lib/tool-localization';
 
 /**
  * Initialize the main page Zero-Key Tools Directory.
- * Renders two separate panels: AI Tools and Developer Tools,
- * populates the category badges/counts, and wires quick navigation filters.
+ * Renders AI tools immediately; defers below-fold sections for faster first paint.
  */
 export function initDirectory(): void {
   const aiRoot = document.getElementById('ai-tools-root');
@@ -24,175 +23,271 @@ export function initDirectory(): void {
   const onboardingRoot = document.getElementById('onboarding-root');
   const guidesRoot = document.getElementById('guides-root');
 
-  // Store panel APIs for category quick-nav
   let aiPanelApi: ZeroKeyPanelApi | null = null;
   let devPanelApi: ZeroKeyPanelApi | null = null;
   let modelsPanelApi: ModelsPanelApi | null = null;
   let stacksPanelApi: StacksPanelApi | null = null;
 
-  const render = (lang = getCurrentLang()) => {
-    // Render AI Tools section
-    if (aiRoot) {
-      try {
-        aiPanelApi = renderZeroKeyPowerPanel(aiRoot, {
-          lang,
-          categoryPrefix: 'ai',
-          onToolOpen: () => {
-            // Safe tracking or custom callback if needed
-          },
-        });
-      } catch (error) {
-        console.error('Failed to render AI tools directory:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        aiRoot.innerHTML = `
-          <div class="text-center py-16 text-white/60">
-            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-              <p class="text-lg mb-2">${escapeHtml(t(lang, 'error.unableToLoadAiTools'))}</p>
-              <p class="text-sm mb-4">Error: ${escapeHtml(errorMessage)}</p>
-              <p class="text-sm">${escapeHtml(t(lang, 'error.pleaseRefreshLater'))}</p>
-              <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors">
-                ${escapeHtml(t(lang, 'error.refreshPage'))}
-              </button>
-            </div>
-          </div>
-        `;
-        aiPanelApi = null;
-      }
-    }
-
-    // Render Developer Tools section
-    if (devRoot) {
-      try {
-        devPanelApi = renderZeroKeyPowerPanel(devRoot, {
-          lang,
-          categoryPrefix: 'dev',
-          onToolOpen: () => {
-            // Safe tracking or custom callback if needed
-          },
-        });
-      } catch (error) {
-        console.error('Failed to render developer tools directory:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        devRoot.innerHTML = `
-          <div class="text-center py-16 text-white/60">
-            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-              <p class="text-lg mb-2">${escapeHtml(t(lang, 'error.unableToLoadDevTools'))}</p>
-              <p class="text-sm mb-4">Error: ${escapeHtml(errorMessage)}</p>
-              <p class="text-sm">${escapeHtml(t(lang, 'error.pleaseRefreshLater'))}</p>
-              <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors">
-                ${escapeHtml(t(lang, 'error.refreshPage'))}
-              </button>
-            </div>
-          </div>
-        `;
-        devPanelApi = null;
-      }
-    }
-
-    // Update dynamic tool counts
-    updateToolCounts();
-
-    // Render AI Models section
-    if (modelsRoot) {
-      try {
-        modelsPanelApi = renderModelsPanel(modelsRoot, { lang });
-      } catch (error) {
-        console.error('Failed to render AI models section:', error);
-        modelsRoot.innerHTML = `
-          <div class="text-center py-16 text-white/60">
-            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-              <p class="text-lg mb-2">${escapeHtml(t(lang, 'error.unableToLoadAiModels'))}</p>
-              <p class="text-sm">${escapeHtml(t(lang, 'error.pleaseRefresh'))}</p>
-            </div>
-          </div>
-        `;
-        modelsPanelApi = null;
-      }
-    }
-
-    // Render Tool Stacks section
-    if (stacksRoot) {
-      try {
-        stacksPanelApi = renderStacksPanel(stacksRoot, { lang });
-      } catch (error) {
-        console.error('Failed to render tool stacks section:', error);
-        stacksRoot.innerHTML = `
-          <div class="text-center py-16 text-white/60">
-            <div class="inline-block px-8 py-4 rounded-2xl glass-card">
-              <p class="text-lg mb-2">${escapeHtml(t(lang, 'error.unableToLoadToolStacks'))}</p>
-              <p class="text-sm">${escapeHtml(t(lang, 'error.pleaseRefresh'))}</p>
-            </div>
-          </div>
-        `;
-        stacksPanelApi = null;
-      }
-    }
-
-    // Render Onboarding Quiz
-    if (onboardingRoot) {
-      try {
-        renderOnboarding(onboardingRoot, lang);
-      } catch (error) {
-        console.error('Failed to render onboarding quiz:', error);
-      }
-    }
-
-    // Render Getting Started Guides
-    if (guidesRoot) {
-      try {
-        guidesRoot.innerHTML = '';
-        guidesRoot.appendChild(renderGettingStartedGuides(lang));
-      } catch (error) {
-        console.error('Failed to render getting started guides:', error);
-      }
-    }
+  const mounted = {
+    dev: false,
+    models: false,
+    stacks: false,
+    onboarding: false,
+    guides: false,
   };
 
-  // Initial render
-  render();
+  const scheduled = {
+    models: false,
+    stacks: false,
+    onboarding: false,
+    guides: false,
+  };
 
-  // Expose panel APIs for external use (e.g., quick-nav, testing)
-  void modelsPanelApi;
-  void stacksPanelApi;
+  let devSeq = 0;
+  let modelsSeq = 0;
+  let stacksSeq = 0;
+  let onboardingSeq = 0;
+  let guidesSeq = 0;
 
-  // Re-render when language changes
+  async function prepareLocale(lang: Lang): Promise<void> {
+    if (lang === 'ja') {
+      await ensureJaLocaleLoaded();
+    }
+  }
+
+  function renderAiToolsSync(lang: Lang): void {
+    if (!aiRoot) return;
+    try {
+      aiPanelApi = renderZeroKeyPowerPanel(aiRoot, {
+        lang,
+        categoryPrefix: 'ai',
+        onToolOpen: () => {},
+      });
+    } catch (error) {
+      console.error('Failed to render AI tools directory:', error);
+      aiRoot.innerHTML = renderPanelError(
+        lang,
+        t(lang, 'error.unableToLoadAiTools'),
+        error
+      );
+      aiPanelApi = null;
+    }
+  }
+
+  function renderDevToolsSync(lang: Lang): void {
+    if (!devRoot) return;
+    try {
+      devPanelApi = renderZeroKeyPowerPanel(devRoot, {
+        lang,
+        categoryPrefix: 'dev',
+        onToolOpen: () => {},
+      });
+      mounted.dev = true;
+    } catch (error) {
+      console.error('Failed to render developer tools directory:', error);
+      devRoot.innerHTML = renderPanelError(
+        lang,
+        t(lang, 'error.unableToLoadDevTools'),
+        error
+      );
+      devPanelApi = null;
+    }
+  }
+
+  async function renderAiTools(lang: Lang): Promise<void> {
+    await prepareLocale(lang);
+    renderAiToolsSync(lang);
+  }
+
+  async function renderDevTools(lang: Lang): Promise<void> {
+    const seq = ++devSeq;
+    await prepareLocale(lang);
+    if (seq !== devSeq) return;
+    renderDevToolsSync(lang);
+  }
+
+  async function renderModelsSection(lang: Lang): Promise<void> {
+    if (!modelsRoot) return;
+    const seq = ++modelsSeq;
+    try {
+      const { renderModelsPanel } = await import('./components/models-panel');
+      if (seq !== modelsSeq) return;
+      modelsPanelApi = renderModelsPanel(modelsRoot, { lang });
+      mounted.models = true;
+    } catch (error) {
+      if (seq !== modelsSeq) return;
+      console.error('Failed to render AI models section:', error);
+      modelsRoot.innerHTML = `
+        <div class="text-center py-16 text-white/60">
+          <div class="inline-block px-8 py-4 rounded-2xl glass-card">
+            <p class="text-lg mb-2">${escapeHtml(t(lang, 'error.unableToLoadAiModels'))}</p>
+            <p class="text-sm">${escapeHtml(t(lang, 'error.pleaseRefresh'))}</p>
+          </div>
+        </div>
+      `;
+      modelsPanelApi = null;
+    }
+  }
+
+  async function renderStacksSection(lang: Lang): Promise<void> {
+    if (!stacksRoot) return;
+    const seq = ++stacksSeq;
+    try {
+      const { renderStacksPanel } = await import('./components/stacks-panel');
+      if (seq !== stacksSeq) return;
+      stacksPanelApi = renderStacksPanel(stacksRoot, { lang });
+      mounted.stacks = true;
+    } catch (error) {
+      if (seq !== stacksSeq) return;
+      console.error('Failed to render tool stacks section:', error);
+      stacksRoot.innerHTML = `
+        <div class="text-center py-16 text-white/60">
+          <div class="inline-block px-8 py-4 rounded-2xl glass-card">
+            <p class="text-lg mb-2">${escapeHtml(t(lang, 'error.unableToLoadToolStacks'))}</p>
+            <p class="text-sm">${escapeHtml(t(lang, 'error.pleaseRefresh'))}</p>
+          </div>
+        </div>
+      `;
+      stacksPanelApi = null;
+    }
+  }
+
+  async function renderOnboardingSection(lang: Lang): Promise<void> {
+    if (!onboardingRoot) return;
+    const seq = ++onboardingSeq;
+    try {
+      const { renderOnboarding } = await import('./components/onboarding-flow');
+      if (seq !== onboardingSeq) return;
+      renderOnboarding(onboardingRoot, lang);
+      mounted.onboarding = true;
+    } catch (error) {
+      if (seq !== onboardingSeq) return;
+      console.error('Failed to render onboarding quiz:', error);
+    }
+  }
+
+  async function renderGuidesSection(lang: Lang): Promise<void> {
+    if (!guidesRoot) return;
+    const seq = ++guidesSeq;
+    try {
+      const { renderGettingStartedGuides } = await import('./components/getting-started-guides');
+      if (seq !== guidesSeq) return;
+      guidesRoot.innerHTML = '';
+      guidesRoot.appendChild(renderGettingStartedGuides(lang));
+      mounted.guides = true;
+    } catch (error) {
+      if (seq !== guidesSeq) return;
+      console.error('Failed to render getting started guides:', error);
+    }
+  }
+
+  async function renderAll(lang: Lang): Promise<void> {
+    await renderAiTools(lang);
+    updateToolCounts();
+
+    const tasks: Promise<void>[] = [];
+    if (mounted.dev) tasks.push(renderDevTools(lang));
+    if (mounted.models || scheduled.models) tasks.push(renderModelsSection(lang));
+    if (mounted.stacks || scheduled.stacks) tasks.push(renderStacksSection(lang));
+    if (mounted.onboarding || scheduled.onboarding) tasks.push(renderOnboardingSection(lang));
+    if (mounted.guides || scheduled.guides) tasks.push(renderGuidesSection(lang));
+    await Promise.all(tasks);
+  }
+
+  function scheduleDeferredSections(): void {
+    whenIdle(() => {
+      void renderDevTools(getCurrentLang());
+    });
+
+    const modelsSection = document.getElementById('ai-models');
+    if (modelsSection && modelsRoot) {
+      whenVisible(modelsSection, () => {
+        scheduled.models = true;
+        void renderModelsSection(getCurrentLang());
+      });
+    }
+
+    const stacksSection = document.getElementById('tool-stacks');
+    if (stacksSection && stacksRoot) {
+      whenVisible(stacksSection, () => {
+        scheduled.stacks = true;
+        void renderStacksSection(getCurrentLang());
+      });
+    }
+
+    const onboardingSection = document.getElementById('onboarding');
+    if (onboardingSection && onboardingRoot) {
+      whenVisible(onboardingSection, () => {
+        scheduled.onboarding = true;
+        void renderOnboardingSection(getCurrentLang());
+      });
+    }
+
+    const guidesSection = document.getElementById('guides');
+    if (guidesSection && guidesRoot) {
+      whenVisible(guidesSection, () => {
+        scheduled.guides = true;
+        void renderGuidesSection(getCurrentLang());
+      });
+    }
+  }
+
+  function bootDirectory(): void {
+    const lang = getCurrentLang();
+    if (lang === 'ja') {
+      void ensureJaLocaleLoaded()
+        .then(() => {
+          renderAiToolsSync(lang);
+          updateToolCounts();
+          scheduleDeferredSections();
+        })
+        .catch((error) => {
+          console.error('Failed to load Japanese locale:', error);
+          if (aiRoot) {
+            aiRoot.innerHTML = renderPanelError(
+              lang,
+              t(lang, 'error.unableToLoadAiTools'),
+              error
+            );
+          }
+        });
+      return;
+    }
+
+    renderAiToolsSync(lang);
+    updateToolCounts();
+    scheduleDeferredSections();
+  }
+
+  bootDirectory();
+
   window.addEventListener('banal:language-changed', (e: Event) => {
     const nextLang = (e as CustomEvent).detail?.lang || getCurrentLang();
-    render(nextLang);
-    // APIs are reassigned on re-render
-    aiPanelApi = null;
-    devPanelApi = null;
-    modelsPanelApi = null;
-    stacksPanelApi = null;
+    void renderAll(nextLang);
   });
 
-  // Wire up category quick nav links to filter the list
   document.querySelectorAll('[data-filter]').forEach((card) => {
     card.addEventListener('click', (e) => {
       e.preventDefault();
       const cat = card.getAttribute('data-filter');
       if (!cat) return;
 
-      // Determine which section to scroll to based on category prefix
       const targetSection = cat.startsWith('ai-') ? 'ai-tools' : 'dev-tools';
-      const targetRoot = document.getElementById(`${targetSection}-root`);
 
-      // Use panel API to set category directly (preferred method)
       if (cat.startsWith('ai-')) {
-        if (aiPanelApi && targetRoot) {
-          aiPanelApi.setCategory(cat as ZeroKeyCategory);
-        }
+        aiPanelApi?.setCategory(cat as ZeroKeyCategory);
       } else if (cat.startsWith('dev-')) {
-        if (devPanelApi && targetRoot) {
-          devPanelApi.setCategory(cat as ZeroKeyCategory);
+        if (!mounted.dev) {
+          void renderDevTools(getCurrentLang()).then(() => {
+            devPanelApi?.setCategory(cat as ZeroKeyCategory);
+          });
+        } else {
+          devPanelApi?.setCategory(cat as ZeroKeyCategory);
         }
       }
 
-      // Smooth scroll to the appropriate section
       const toolsSec = document.getElementById(targetSection);
-      if (toolsSec) {
-        toolsSec.scrollIntoView({ behavior: 'smooth' });
-      }
+      toolsSec?.scrollIntoView({ behavior: 'smooth' });
     });
   });
 }
@@ -203,28 +298,35 @@ export function getPanelApis(): {
   models: ModelsPanelApi | null;
   stacks: StacksPanelApi | null;
 } {
-  // This is a convenience function for testing
-  // In production, the APIs are managed internally by initDirectory
   return { ai: null, dev: null, models: null, stacks: null };
 }
 
-/**
- * Escape HTML to prevent XSS in error messages
- */
+function renderPanelError(lang: Lang, title: string, error: unknown): string {
+  const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+  return `
+    <div class="text-center py-16 text-white/60">
+      <div class="inline-block px-8 py-4 rounded-2xl glass-card">
+        <p class="text-lg mb-2">${escapeHtml(title)}</p>
+        <p class="text-sm mb-4">Error: ${escapeHtml(errorMessage)}</p>
+        <p class="text-sm">${escapeHtml(t(lang, 'error.pleaseRefreshLater'))}</p>
+        <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors">
+          ${escapeHtml(t(lang, 'error.refreshPage'))}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
 function escapeHtml(text: string): string {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
 }
 
-/**
- * Calculates tool counts and updates category count elements and the total counter.
- */
 function updateToolCounts(): void {
   const { total, ai: aiCount, dev: devCount, models: modelsCount, stacks: stacksCount } =
     getSiteStats();
 
-  // Update category count badges (e.g. "(31)")
   const categoryCounts: Record<string, number> = {};
   zeroKeyTools.forEach((tool) => {
     categoryCounts[tool.category] = (categoryCounts[tool.category] || 0) + 1;
@@ -237,43 +339,24 @@ function updateToolCounts(): void {
     }
   });
 
-  // Update AI tools count
   const aiCountEl = document.querySelector('#ai-tools .tool-count-badge');
-  if (aiCountEl) {
-    aiCountEl.textContent = String(aiCount);
-  }
+  if (aiCountEl) aiCountEl.textContent = String(aiCount);
 
-  // Update Dev tools count
   const devCountEl = document.querySelector('#dev-tools .tool-count-badge');
-  if (devCountEl) {
-    devCountEl.textContent = String(devCount);
-  }
+  if (devCountEl) devCountEl.textContent = String(devCount);
 
-  // Update total tool count in hero section
   const heroCountEl = document.getElementById('stat-tools');
-  if (heroCountEl) {
-    heroCountEl.textContent = String(total);
-  }
+  if (heroCountEl) heroCountEl.textContent = String(total);
 
   const heroAiEl = document.getElementById('stat-ai');
-  if (heroAiEl) {
-    heroAiEl.textContent = String(aiCount);
-  }
+  if (heroAiEl) heroAiEl.textContent = String(aiCount);
 
   const heroDevEl = document.getElementById('stat-dev');
-  if (heroDevEl) {
-    heroDevEl.textContent = String(devCount);
-  }
+  if (heroDevEl) heroDevEl.textContent = String(devCount);
 
-  // Update AI models count
   const modelsCountEl = document.querySelector('#ai-models .tool-count-badge');
-  if (modelsCountEl) {
-    modelsCountEl.textContent = String(modelsCount);
-  }
+  if (modelsCountEl) modelsCountEl.textContent = String(modelsCount);
 
-  // Update tool stacks count
   const stacksCountEl = document.querySelector('#tool-stacks .tool-count-badge');
-  if (stacksCountEl) {
-    stacksCountEl.textContent = String(stacksCount);
-  }
+  if (stacksCountEl) stacksCountEl.textContent = String(stacksCount);
 }

@@ -5,18 +5,18 @@
  * Deliberately two lines. The entire "app" is these two calls because:
  * - A human being with 3 minutes and a text editor on a public computer must be able to understand
  *   the whole control flow without opening an IDE or learning a framework.
- * - Every other capability is in its own file with its own tests and its own JSDoc explaining the "why".
+ * - Every other capability is in its own file with its own tests and its own JSDoc.
  * This is the opposite of corporate "architecture astronaut" code. It is infrastructure that can be
  * read, understood, and forked by the very people it is meant to serve — the ghost in a million plain files.
  */
-import { initI18n } from './i18n';
+import { initI18n, getCurrentLang } from './i18n';
 import { initTheme, setTheme } from './theme';
 import { initDirectory } from './directory';
-import { renderPromptTemplatesStandalone } from './prompt-templates-standalone';
 import { initHeroMesh } from './lib/hero-mesh';
 import { migrateLegacyStorage } from './lib/storage-cleanup';
 import { initPrivacyExitGuard } from './lib/privacy-exit-guard';
 import { wirePrivacyPanelTriggers } from './components/privacy-panel';
+import { whenVisible } from './lib/lazy-section';
 
 // Boot theme first (before any rendering so CSS variables are correct)
 initTheme();
@@ -47,13 +47,33 @@ try {
   console.error('Tools directory failed to initialize:', error);
 }
 
-// Prompt Templates standalone section
+// Prompt Templates — mount when section nears viewport
 try {
   const promptTemplatesRoot = document.getElementById('prompt-templates-root');
-  if (promptTemplatesRoot) {
-    renderPromptTemplatesStandalone({
-      container: promptTemplatesRoot,
-      lang: document.documentElement.lang?.startsWith('ja') ? 'ja' : 'en',
+  const promptSection = document.getElementById('prompt-templates');
+  if (promptTemplatesRoot && promptSection) {
+    let promptsSeq = 0;
+    let promptsScheduled = false;
+
+    const mountPromptTemplates = (): void => {
+      const seq = ++promptsSeq;
+      void import('./prompt-templates-standalone').then(({ renderPromptTemplatesStandalone }) => {
+        if (seq !== promptsSeq) return;
+        renderPromptTemplatesStandalone({
+          container: promptTemplatesRoot,
+          lang: getCurrentLang(),
+        });
+      });
+    };
+
+    whenVisible(promptSection, () => {
+      promptsScheduled = true;
+      mountPromptTemplates();
+    });
+
+    window.addEventListener('banal:language-changed', () => {
+      if (!promptsScheduled) return;
+      mountPromptTemplates();
     });
   }
 } catch (error) {

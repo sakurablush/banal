@@ -3,19 +3,35 @@ import { initDirectory, getPanelApis } from '../src/directory';
 import { zeroKeyTools } from '../src/data/zero-key-tools';
 import { renderZeroKeyPowerPanel } from '../src/zero-key-panel';
 
+function stubDeferredMount(): void {
+  vi.stubGlobal('requestIdleCallback', (cb: IdleRequestCallback) => {
+    cb({ didTimeout: false, timeRemaining: () => 50 } as IdleDeadline);
+    return 1;
+  });
+  vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
+    cb(0);
+    return 0;
+  });
+}
+
+async function flushAsyncMounts(): Promise<void> {
+  await Promise.resolve();
+  await Promise.resolve();
+}
+
 describe('directory module initialization & behavior', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
-    // Reset mocks/spies if any
     vi.restoreAllMocks();
+    stubDeferredMount();
   });
 
   afterEach(() => {
-    // Clean up any timers
     vi.useRealTimers();
+    vi.unstubAllGlobals();
   });
 
-  it('mounts the Zero-Key directory and renders tools in horizontal scroll layout', () => {
+  it('mounts the Zero-Key directory and renders tools in horizontal scroll layout', async () => {
     // Create required DOM elements
     document.body.innerHTML = `
       <div id="stat-tools">227+</div>
@@ -24,6 +40,7 @@ describe('directory module initialization & behavior', () => {
     `;
 
     initDirectory();
+    await flushAsyncMounts();
 
     // Check AI tools section - now uses horizontal scroll
     const aiRoot = document.getElementById('ai-tools-root')!;
@@ -305,6 +322,11 @@ describe('directory: dev tools error handling', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
     vi.restoreAllMocks();
+    stubDeferredMount();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it('displays error message for dev tools when render throws', async () => {
@@ -331,6 +353,7 @@ describe('directory: dev tools error handling', () => {
     });
 
     initDirectory();
+    await flushAsyncMounts();
 
     const devRoot = document.getElementById('dev-tools-root')!;
     expect(devRoot.innerHTML).toContain('Unable to load developer tools');
@@ -402,15 +425,21 @@ describe('directory: missing root elements', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
     vi.restoreAllMocks();
+    stubDeferredMount();
   });
 
-  it('handles missing ai-tools-root gracefully', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('handles missing ai-tools-root gracefully', async () => {
     document.body.innerHTML = `
       <div id="stat-tools">0+</div>
       <div id="dev-tools-root"></div>
     `;
 
     expect(() => initDirectory()).not.toThrow();
+    await flushAsyncMounts();
 
     const devRoot = document.getElementById('dev-tools-root')!;
     const devCards = devRoot.querySelectorAll('.tool-card-horizontal');

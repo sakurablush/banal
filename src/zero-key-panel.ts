@@ -16,6 +16,7 @@ import {
   type ZeroKeyTool,
 } from './data/zero-key-tools';
 import { getLocalizedToolCopy, localizeBadge } from './lib/tool-localization';
+import { appendChildrenBatched } from './lib/batch-dom';
 import { getSectionParams, type SectionFilterId } from './lib/section-filter-url';
 import { renderFilterToolbar } from './components/filter-toolbar';
 import { applyZeroKeyFilterValues, type ZeroKeyFilterState } from './lib/apply-section-filters';
@@ -261,6 +262,8 @@ interface PanelState {
   lifeFilters: Set<string>;
   debounceTimer: ReturnType<typeof setTimeout> | null;
   heroAbortController: AbortController;
+  hasRenderedOnce: boolean;
+  renderGeneration: number;
 }
 
 // Per-panel state storage using WeakMap
@@ -308,6 +311,8 @@ function getState(container: HTMLElement): PanelState {
       debounceTimer: null,
       heroAbortController: new AbortController(),
       container: null,
+      hasRenderedOnce: false,
+      renderGeneration: 0,
     };
     panelStateMap.set(container, state);
   }
@@ -915,11 +920,23 @@ function renderContent(state: PanelState): void {
 
   // Grid container (instead of horizontal scroll)
   const gridContainer = create('div', 'zk2-grid');
-  results.forEach((result, i) => {
-    const card = renderHorizontalToolCard(state, result);
-    card.style.animationDelay = `${Math.min(i * 20, 400)}ms`;
-    gridContainer.appendChild(card);
-  });
+  const animateCards = state.hasRenderedOnce;
+  state.hasRenderedOnce = true;
+  const generation = ++state.renderGeneration;
+
+  appendChildrenBatched(
+    gridContainer,
+    results,
+    (result, i) => {
+      const card = renderHorizontalToolCard(state, result);
+      if (animateCards) {
+        card.style.animationDelay = `${Math.min(i * 20, 400)}ms`;
+      }
+      return card;
+    },
+    20,
+    () => generation === state.renderGeneration
+  );
   contentArea.appendChild(gridContainer);
 }
 
