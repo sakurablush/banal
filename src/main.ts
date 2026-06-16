@@ -12,7 +12,6 @@
 import { initI18n } from './i18n';
 import { initTheme, setTheme } from './theme';
 import { initDirectory } from './directory';
-import { ParticleSystem } from './lib/particle-system';
 import { renderPromptTemplatesStandalone } from './prompt-templates-standalone';
 
 // Boot theme first (before any rendering so CSS variables are correct)
@@ -31,24 +30,7 @@ if (themeToggleBtn) {
 // Boot i18n first (lang switcher + data-i18n + events for dynamic parts)
 initI18n();
 
-// Atmosphere: ghost particles in the background (skips if reduced motion)
-if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  try {
-    const particles = new ParticleSystem({
-      count: 100,
-      colorPalette: [
-        { r: 168, g: 85, b: 247, a: 0.4 },
-        { r: 217, g: 70, b: 239, a: 0.3 },
-        { r: 34, g: 211, b: 238, a: 0.25 },
-        { r: 245, g: 158, b: 11, a: 0.2 },
-        { r: 255, g: 255, b: 255, a: 0.2 },
-      ],
-    });
-    particles.mount('.void-bg');
-  } catch (error) {
-    console.warn('Particle system failed to initialize:', error);
-  }
-}
+// Ambient background is pure CSS on .void-bg (no JS, no canvas)
 
 // Initialize the main Zero-Key tools directory and categories quick-nav
 try {

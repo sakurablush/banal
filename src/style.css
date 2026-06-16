@@ -4,7 +4,7 @@
 
 /* ============================================================
    BANAL AI — COMPLETE VISUAL REDESIGN
-   Neon particles + glassmorphism + broken-through-the-wall feel
+   CSS aurora atmosphere + glassmorphism
    WCAG AA compliant color system with semantic tokens
    ============================================================ */
 
@@ -138,21 +138,68 @@ main#app,
 /* Base styles for elements used in HTML but styled only in light mode overrides */
 .void-bg {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
   z-index: -1;
-  background: var(--void);
+  overflow: hidden;
+  background: radial-gradient(ellipse 130% 90% at 50% -10%, #0c0a14 0%, var(--void) 55%);
 }
 
-.void-bg canvas {
+/* Slow aurora washes — CSS only, no canvas, respects reduced motion */
+.void-bg::before,
+.void-bg::after {
+  content: '';
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: -25%;
   pointer-events: none;
+}
+
+.void-bg::before {
+  background:
+    radial-gradient(ellipse 58% 48% at 18% 28%, rgba(124, 58, 237, 0.26), transparent 72%),
+    radial-gradient(ellipse 52% 42% at 78% 22%, rgba(34, 211, 238, 0.13), transparent 68%),
+    radial-gradient(ellipse 64% 52% at 52% 88%, rgba(168, 85, 247, 0.1), transparent 74%);
+  animation: void-aurora-a 32s ease-in-out infinite alternate;
+}
+
+.void-bg::after {
+  background:
+    radial-gradient(ellipse 48% 44% at 72% 62%, rgba(217, 70, 239, 0.16), transparent 70%),
+    radial-gradient(ellipse 42% 38% at 28% 72%, rgba(124, 58, 237, 0.09), transparent 66%);
+  animation: void-aurora-b 40s ease-in-out infinite alternate;
+  opacity: 0.9;
+}
+
+@keyframes void-aurora-a {
+  from {
+    transform: translate3d(-2.5%, -1.5%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(2.5%, 2%, 0) scale(1.04);
+  }
+}
+
+@keyframes void-aurora-b {
+  from {
+    transform: translate3d(2%, 1%, 0) scale(1.02);
+  }
+  to {
+    transform: translate3d(-2.5%, -2%, 0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .void-bg::before,
+  .void-bg::after {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .void-bg::before,
+  .void-bg::after {
+    will-change: transform;
+  }
 }
 
 .glass-card {
@@ -1638,7 +1685,20 @@ main#app,
 }
 
 [data-theme='light'] .void-bg {
-  background: #f4f6f8 !important;
+  background: radial-gradient(ellipse 130% 90% at 50% -10%, #faf8ff 0%, #f4f6f8 55%);
+}
+
+[data-theme='light'] .void-bg::before {
+  background:
+    radial-gradient(ellipse 58% 48% at 18% 28%, rgba(124, 58, 237, 0.1), transparent 72%),
+    radial-gradient(ellipse 52% 42% at 78% 22%, rgba(34, 211, 238, 0.07), transparent 68%),
+    radial-gradient(ellipse 64% 52% at 52% 88%, rgba(168, 85, 247, 0.05), transparent 74%);
+}
+
+[data-theme='light'] .void-bg::after {
+  background:
+    radial-gradient(ellipse 48% 44% at 72% 62%, rgba(217, 70, 239, 0.06), transparent 70%),
+    radial-gradient(ellipse 42% 38% at 28% 72%, rgba(124, 58, 237, 0.04), transparent 66%);
 }
 
 [data-theme='light'] .page-section {
