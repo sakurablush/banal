@@ -20,6 +20,10 @@
   --page-pad-x: var(--section-pad-x);
   --module-gap: clamp(1rem, 2.5vw, 1.75rem);
   --card-pad: clamp(1rem, 2vw, 1.35rem);
+  /* Sticky header (h-14) + gap so anchor scroll does not clip section titles */
+  --header-height: 3.5rem;
+  --scroll-offset: calc(var(--header-height) + 0.75rem);
+  --hero-pad-y: clamp(1.25rem, 2.5vw, 1.75rem);
   --text-primary: rgba(255, 255, 255, 0.9);
   --text-muted: rgba(255, 255, 255, 0.62);
   --text-subtle: rgba(255, 255, 255, 0.48);
@@ -61,6 +65,13 @@
 /* Smooth scrolling for accessibility */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--scroll-offset);
+}
+
+/* Offset anchor targets and scrollIntoView() for sticky header */
+main#app,
+.page-section {
+  scroll-margin-top: var(--scroll-offset);
 }
 
 /* Shared page width + section rhythm — keeps nav, hero, and every block aligned */
@@ -1647,8 +1658,16 @@ html {
 /* Base styles for hero section and key components (used in HTML) */
 .hero-section {
   position: relative;
-  padding: clamp(1rem, 2.5vw, 1.5rem) 0 clamp(1.5rem, 3vw, 2.5rem);
+  padding-block: var(--hero-pad-y);
   background: var(--void);
+}
+
+.hero-section > .page-shell {
+  padding-bottom: 0;
+}
+
+.hero-section h1 {
+  margin-top: 0;
 }
 
 .gradient-neon {
