@@ -136,7 +136,6 @@ const BADGE_JA: Record<string, string> = {
   'codebase-aware': 'コードベース対応',
   'rate limit': 'レート制限',
   'files deleted': 'ファイル自動削除',
-  'no signup': 'アカウント不要',
   'sketch-to-image': 'スケッチ→画像',
   'background music': 'BGM',
   'voice clone': 'ボイスクローン',
@@ -204,7 +203,6 @@ const BADGE_JA: Record<string, string> = {
   'real-time': 'リアルタイム',
   'european': '欧州',
   transparent: '透明性',
-  'self-host': 'セルフホスト',
   byok: 'BYOK',
   'rate limited': '制限あり',
 };

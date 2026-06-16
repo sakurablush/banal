@@ -121,7 +121,8 @@ export function initHeroMesh(root: ParentNode = document): () => void {
   let time = 0;
 
   const render = (): void => {
-    drawMesh(ctx, width, height, prefersReducedMotion() ? 0 : time, readTheme());
+    if (prefersReducedMotion()) return;
+    drawMesh(ctx, width, height, time, readTheme());
   };
 
   const resize = (): void => {

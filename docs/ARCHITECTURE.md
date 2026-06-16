@@ -62,7 +62,7 @@ and `npm audit --audit-level=moderate` is part of the CI gate.
 banal/
 ├── index.html                # The static shell. Two roots: <ai-tools-root> and <dev-tools-root>.
 ├── src/
-│   ├── main.ts               # Entry point. Boots theme, i18n, directory, particles, prompt templates.
+│   ├── main.ts               # Entry point. Boots theme, i18n, hero mesh, directory, prompt templates.
 │   ├── directory.ts          # Renders the AI Tools and Developer Tools panels.
 │   ├── zero-key-panel.ts     # The single panel renderer used for both top-level groups.
 │   ├── i18n.ts               # Bilingual string table + lang switcher (en, ja).
@@ -95,8 +95,9 @@ banal/
 3. `initI18n()` — loads the bilingual string table, applies
    `data-i18n` attributes, and persists the language choice in
    `localStorage` under the key `banal-lang`.
-4. (Optional, respects `prefers-reduced-motion`) mount a small particle
-   background.
+4. `initHeroMesh()` — perspective grid with gravitational-wave ripples in the
+   hero only (canvas, 30 FPS cap, pauses off-screen / hidden tab /
+   `prefers-reduced-motion`; page-wide aurora stays CSS-only on `.void-bg`).
 5. `initDirectory()` — renders the AI Tools panel, the Developer Tools
    panel, the Models panel, the Stacks panel, the Onboarding flow, and the
    Getting Started guides into their respective roots in `index.html`.

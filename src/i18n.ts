@@ -16,6 +16,8 @@
 
 import { interpolateSiteStats } from './data/site-stats';
 
+export type Lang = 'en' | 'ja';
+
 export interface Translations {
   [key: string]: string | Translations;
 }

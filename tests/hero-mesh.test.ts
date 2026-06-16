@@ -1,4 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import fs from 'fs';
+import path from 'path';
 import {
   getMeshPalette,
   initHeroMesh,
@@ -109,7 +111,7 @@ describe('hero-mesh', () => {
       }
     });
 
-    it('draws once without scheduling frames when reduced motion is preferred', () => {
+    it('skips canvas drawing when reduced motion is preferred', () => {
       vi.spyOn(window, 'matchMedia').mockImplementation((query: string) => ({
         matches: query === '(prefers-reduced-motion: reduce)',
         media: query,
@@ -127,7 +129,7 @@ describe('hero-mesh', () => {
 
       cleanup = initHeroMesh();
       expect(raf).not.toHaveBeenCalled();
-      expect(ctx.stroke).toHaveBeenCalled();
+      expect(ctx.stroke).not.toHaveBeenCalled();
     });
 
     it('returns noop when hero markup is missing', () => {
@@ -159,11 +161,23 @@ describe('hero-mesh', () => {
     });
 
     it('redraws when theme changes', async () => {
+      vi.spyOn(window, 'matchMedia').mockImplementation((query: string) => ({
+        matches: false,
+        media: query,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        onchange: null,
+        dispatchEvent: vi.fn(),
+      }));
+
       const ctx = mockCanvasContext();
       vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(ctx);
 
       cleanup = initHeroMesh();
       const strokesAfterInit = (ctx.stroke as ReturnType<typeof vi.fn>).mock.calls.length;
+      expect(strokesAfterInit).toBeGreaterThan(0);
 
       document.documentElement.setAttribute('data-theme', 'light');
       await new Promise<void>((resolve) => queueMicrotask(resolve));
@@ -172,5 +186,14 @@ describe('hero-mesh', () => {
         strokesAfterInit
       );
     });
+  });
+});
+
+describe('index.html hero mesh markup', () => {
+  it('includes accessible hero mesh canvas shell', () => {
+    const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf-8');
+    expect(html).toContain('class="hero-section');
+    expect(html).toContain('class="hero-mesh" aria-hidden="true"');
+    expect(html).toContain('class="hero-mesh-canvas"');
   });
 });
