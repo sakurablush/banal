@@ -113,19 +113,16 @@
         <span class="article-badge article-badge--cost" data-i18n="article.agents2026.badge">COST GUIDE</span>
         <div data-lang-only="en">
           <h1>The Honest Truth About AI Coding Agents in 2026</h1>
-          <p class="article-meta">(Or: How I stopped burning hundreds of dollars a month and still get things done)</p>
+          <p class="article-meta">(Or: How I stopped burning hundreds of dollars a month and still get shit done)</p>
           <hr />
-          <p>Listen. I've burned through thousands of dollars and thousands of hours with these things. I've worked in places where managers in suits tell you "just buy the 
-        <div data-lang-only="ja" hidden>0 <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>) license and use whatever's cheap, bro." Then in the next breath they're like "make sure you use Opus for the important stuff."</p>
+          <p>Listen. I've burned through thousands of dollars and thousands of hours with these things. I've worked in places where managers in suits tell you "just buy the $20 <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a><a href="../../#ai-tools?q=Cursor" class="article-banal-ref" rel="noopener" aria-label="Cursor on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a> license and use whatever's cheap, bro." Then in the next breath they're like "make sure you use Opus for the important stuff."</p>
           <p>It's pure corporate theater.</p>
-          <p>The reality? If you actually want to use real agents — the kind that spin up, test your whole app, take screenshots of the UI, fix bugs, run terminal commands, and then casually email you "hey, everything looks good, I even added the dark mode you forgot about" — the top models will happily eat <strong>hundreds of dollars a month</strong>. Not $50. Not <div data-lang-only="en">00. We're talking <strong>
-        <div data-lang-only="ja" hidden>00–400+</strong> if you're using them properly for real work, multiple hours a day.</p>
+          <p>The reality? If you actually want to use real agents — the kind that spin up, test your whole app, take screenshots of the UI, fix bugs, run terminal commands, and then casually email you "hey, everything looks good, I even added the dark mode you forgot about" — the top models will happily eat <strong>hundreds of dollars a month</strong>. Not $50. Not $100. We're talking <strong>$200–400+</strong> if you're using them properly for real work, multiple hours a day.</p>
           <p>Because here's the dirty little secret nobody in those meetings wants to say out loud: <strong>output tokens are expensive as hell</strong>, and agent workflows are output-heavy. Every iteration, every code block, every reasoning trace, every tool call… it adds up fast.</p>
 
           <h2>The uncomfortable math</h2>
-          <p>Take <a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a> (current generation via <a href="https://www.anthropic.com/" rel="noopener noreferrer">Anthropic</a>). You're looking at roughly <strong>$5 per million input tokens</strong> and <strong>
-        <div data-lang-only="ja" hidden>5 per million output tokens</strong> on direct API pricing — verify on <a href="../../#ai-models" rel="noopener">Banal's models panel</a> before you budget.</p>
-          <p>Now run a proper agent session in <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>), <a href="https://claude.ai/code" rel="noopener noreferrer">Claude Code</a> (<a href="../../#ai-tools?q=Claude%20Code" rel="noopener">Banal</a>), or <a href="https://antigravity.google/" rel="noopener noreferrer">Google Antigravity</a> (<a href="../../#ai-tools?q=Google%20Antigravity" rel="noopener">Banal</a>):</p>
+          <p>Take <a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a> (current generation). You're looking at roughly <strong>$5 per million input tokens</strong> and <strong>$25 per million output tokens</strong>.</p>
+          <p>Now run a proper agent session:</p>
           <ul>
             <li>Big context (whole repo or long history)</li>
             <li>Multiple tool calls</li>
@@ -137,33 +134,53 @@
           <p>And the worst part? A lot of the time you don't even need the absolute best model for 80–90% of what you're doing.</p>
 
           <h2>The models that actually make sense long-term</h2>
-          <p>Right now there are models that are shockingly close to the frontier on coding and agentic tasks while costing a fraction of the price. The one I keep coming back to is <strong><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a></strong>.</p>
-          <div class="model-card">
-            <h3>MiniMax M3</h3>
-            <ul>
-              <li><strong>Price:</strong> $0.30 / <div data-lang-only="en">.20 per million input/output on <a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a> (<a href="../../#ai-tools?q=OpenRouter%20Free%20Models" rel="noopener">Banal</a>) and the <a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax</a> platform — sometimes even better with caching.</li>
-              <li>That's roughly <strong>16–20× cheaper on output</strong> than Opus.</li>
-              <li><strong>1M context window.</strong></li>
-              <li><strong>Native multimodal</strong> (text + image + video) — perfect when your agent needs to actually see the UI it just built.</li>
-              <li>On coding and agent leaderboards (<a href="https://artificialanalysis.ai/" rel="noopener noreferrer">Artificial Analysis</a>, <a href="https://www.codesota.com/arena/code" rel="noopener noreferrer">Code Arena</a>, etc.) it sits right up there with the big names on practical tasks — SWE-Bench style work, terminal agents, multi-file edits. Not always #1, but close enough that the gap often doesn't justify the 10–20× price difference for daily work.</li>
-            </ul>
+          <p>This is where it gets interesting.</p>
+          <p>Right now there are models that are shockingly close to the frontier on coding and agentic tasks while costing a fraction of the price. Two standouts right now are <strong><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a><a href="../../#ai-tools?q=MiniMax" class="article-banal-ref" rel="noopener" aria-label="MiniMax M3 on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a></strong> and <strong><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a><a href="../../#ai-tools?q=Cursor" class="article-banal-ref" rel="noopener" aria-label="Cursor on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a>'s own Composer 2.5</strong> (Standard / non-Thinking mode).</p>
+
+          <h3>Head-to-head price comparison (official rates, June 2026)</h3>
+
+          <div class="article-table-wrap">
+            <table class="article-table">
+              <thead>
+                <tr>
+                  <th scope="col">Model</th>
+                  <th scope="col">Input per 1M tokens</th>
+                  <th scope="col">Output per 1M tokens</th>
+                  <th scope="col">Approx. vs Claude Opus 4.8</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a><a href="../../#ai-tools?q=MiniMax" class="article-banal-ref" rel="noopener" aria-label="MiniMax M3 on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a></strong></td>
+                  <td>$0.30</td>
+                  <td><strong>$1.20</strong></td>
+                  <td>~20× cheaper on output</td>
+                </tr>
+                <tr>
+                  <td><strong><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a><a href="../../#ai-tools?q=Cursor" class="article-banal-ref" rel="noopener" aria-label="Cursor on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a> Composer 2.5</strong> (Standard, non-Thinking)</td>
+                  <td>$0.50</td>
+                  <td><strong>$2.50</strong></td>
+                  <td>~10× cheaper on output</td>
+                </tr>
+                <tr>
+                  <td>Claude Opus 4.8</td>
+                  <td>$5.00</td>
+                  <td>$25.00</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <p>Then there's <strong><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>)'s Composer 2.5</strong> (the non-thinking/fast version).</p>
-          <div class="model-card">
-            <h3>Cursor Composer 2.5 (fast)</h3>
-            <p>This thing is purpose-built for exactly what most of us do inside an IDE all day. Long-horizon agent sessions, tool use, file editing, terminal work. It's fast, cheap as hell in the context of <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>) usage, and genuinely strong. Many people are using it as their default daily driver and only switching up when things get really hard.</p>
-          </div>
-          <p>A third lane worth knowing: <strong><a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a> (<a href="../../#ai-tools?q=Kilo%20Code" rel="noopener">Banal</a>)</strong> on <a href="https://kilo.ai/gateway" rel="noopener noreferrer">Kilo Gateway</a> (<a href="../../#ai-tools?q=Kilo%20Gateway" rel="noopener">Banal</a>) free models or cheap BYOK — covered in our <a href="../free-ai-coding-setup-2026/" rel="noopener">Kilo setup article</a> if you want professional agent work without a <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>) subscription.</p>
+          <p>Both of these are in a completely different league price-wise compared to Opus. MiniMax M3 edges it out slightly on raw per-token cost and has native multimodal + 1M context out of the box. Composer 2.5 (Standard) is a bit more expensive per token but is deeply optimized for long agentic sessions inside Cursor and feels extremely snappy for daily work.</p>
+          <p>The key takeaway: both are excellent daily drivers. You're looking at roughly <strong>10–20× lower cost</strong> than using Opus for the same kind of heavy agent usage. That's the difference between "I can actually afford to use agents every day" and "fuck, the bill again."</p>
 
           <h2>My actual recommendation (after burning the money)</h2>
           <p>If you want to use agents sustainably — not just for a week until the credit card bill hits — do this:</p>
           <ol>
-            <li><strong>Daily driver:</strong> <a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a> or <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>) Composer 2.5 (non-thinking). These two will handle the vast majority of real work at a price that doesn't make you cry at the end of the month.</li>
-            <li><strong>When it actually matters:</strong> Flip to <a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a> (or whatever the current top Anthropic model is).</li>
+            <li><strong>Daily driver:</strong> <a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a><a href="../../#ai-tools?q=MiniMax" class="article-banal-ref" rel="noopener" aria-label="MiniMax M3 on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a> or <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a><a href="../../#ai-tools?q=Cursor" class="article-banal-ref" rel="noopener" aria-label="Cursor on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a> Composer 2.5 (Standard / non-Thinking). These two will handle the vast majority of real work at a price that doesn't make you cry at the end of the month.</li>
+            <li><strong>When it actually matters:</strong> Flip to <a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a> (or whatever the current top Anthropic model is).<br />I'll say it plainly — right now Anthropic still makes the models that feel the most "magical" on really difficult programming problems. The code quality, the reasoning, the taste… it's often a step above. And for those moments? Worth it.<br />But using it for everything is financial masochism unless you're already rich or your company is footing the bill without questions.</li>
+            <li><strong>Check the leaderboards and prices regularly.</strong> Things move stupidly fast. What's the best value today might get dethroned next month by something even cheaper and stronger.</li>
           </ol>
-          <p>I'll say it plainly — right now Anthropic still makes the models that feel the most "magical" on really difficult programming problems. The code quality, the reasoning, the taste… it's often a step above. And for those moments? Worth it.</p>
-          <p>But using it for everything is financial masochism unless you're already rich or your company is footing the bill without questions.</p>
-          <p>Check the leaderboards and prices regularly on <a href="../../#ai-models" rel="noopener">Banal</a> and <a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a> (<a href="../../#ai-tools?q=OpenRouter%20Free%20Models" rel="noopener">Banal</a>). Things move stupidly fast. What's the best value today might get dethroned next month by something even cheaper and stronger.</p>
 
           <h2>The bigger picture</h2>
           <p>The corporate line is always "just use the cheap one, it's fine."</p>
@@ -173,73 +190,101 @@
           <p>You don't have to choose between having jaw-dropping agents and keeping your sanity (and money). You just have to stop listening to people who've never actually run serious agent workloads themselves.</p>
           <p>The tools are finally good enough that you can have both.</p>
           <p>You just have to be honest about the economics.</p>
-          <p>That's it. No fluff. No "synergize your AI transformation journey." Just the real story, from someone who's paid the stupid tax so you don't have to.</p>
+          <p>That's it. No fluff. No "synergize your AI transformation journey." Just the real shit, from someone who's paid the stupid tax so you don't have to.</p>
 
         <div class="tools-mentioned">
           <h2>Tools mentioned</h2>
-          <p>Official sites plus matching entries in our <a href="../../#ai-tools" rel="noopener">tools directory</a> (no affiliate links).</p>
+          <p>Matching entries in our <a href="../../#ai-tools" rel="noopener">tools directory</a> and <a href="../../#ai-models" rel="noopener">models panel</a>.</p>
           <ul>
-            <li><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> (<a href="../../#ai-tools?q=Cursor" rel="noopener">Banal</a>) — IDE + Composer 2.5</li>
-            <li><a href="https://claude.ai/code" rel="noopener noreferrer">Claude Code</a> (<a href="../../#ai-tools?q=Claude%20Code" rel="noopener">Banal</a>) / <a href="https://www.anthropic.com/" rel="noopener noreferrer">Anthropic API</a> — top-tier reasoning</li>
-            <li><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a> — daily-driver value</li>
-            <li><a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a> (<a href="../../#ai-tools?q=OpenRouter%20Free%20Models" rel="noopener">Banal</a>) — price shopping + routing</li>
-            <li><a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a> (<a href="../../#ai-tools?q=Kilo%20Code" rel="noopener">Banal</a>) — free/cheap agent lane</li>
-            <li><a href="https://antigravity.google/" rel="noopener noreferrer">Google Antigravity</a> (<a href="../../#ai-tools?q=Google%20Antigravity" rel="noopener">Banal</a>) — heavy planning sessions</li>
-            <li><a href="../../#ai-models" rel="noopener">Banal AI models panel</a> — verify prices before you budget</li>
+            <li><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> — Composer 2.5</li>
+            <li><a href="https://claude.ai/code" rel="noopener noreferrer">Claude Code</a> / <a href="https://www.anthropic.com/" rel="noopener noreferrer">Anthropic</a></li>
+            <li><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a></li>
+            <li><a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a></li>
+            <li><a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a></li>
+            <li><a href="../../#ai-models" rel="noopener">Banal models panel</a></li>
           </ul>
         </div>
         <div data-lang-only="ja" hidden>
-          <h1>2026年のAIコーディングエージェントの本当のコスト</h1>
+          <h1>2026年のAIエージェントの本当のコスト</h1>
           <p class="article-meta">〜「数百ドル燃やす」か「賢く使って持続可能にする」か〜</p>
           <hr />
-          <p>聞いてくれ。俺はもう何千時間も、何千ドルもこれらのツールに突っ込んできた。スーツ着たマネージャーたちが「Cursorの20ドルライセンス買えば十分だろ」と言いながら、次の瞬間には「大事なときはOpus使えよ」と言うのを見てきた。</p>
+          <p>聞いてくれ。俺はもう何千時間も、何千ドルもこれらのツールに突っ込んできた。スーツ着たマネージャーたちが「<a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a><a href="../../#ai-tools?q=Cursor" class="article-banal-ref" rel="noopener" aria-label="Cursor on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a>の20ドルライセンス買えば十分だろ」と言いながら、次の瞬間には「大事なときはOpus使えよ」と言うのを見てきた。</p>
           <p>全部、綺麗事だ。</p>
           <p>現実を話すと、本物のエージェントをガチで使おうとすると（アプリ全体をテストして、スクリーンショット撮って、バグ直して、ターミナル操作して、最後に「全部大丈夫です、ダークモードも勝手に追加しときました」ってメールまで送ってくるようなやつ）、トップモデルの請求書は簡単に<strong>月200〜400ドル超える</strong>。50ドルとか100ドルとかじゃない。本気で何時間も使ったら、普通にそのくらい行く。</p>
-          <p>理由はシンプル。<strong>エージェントのワークフローは出力トークンがバカみたいに多い</strong>。コード生成、思考トレース、ツール呼び出し、修正ループ…全部出力だ。そこが一番高い。</p>
+          <p>理由はシンプル。エージェントのワークフローは<strong>出力トークンがバカみたいに多い</strong>。コード生成、思考トレース、ツール呼び出し、修正ループ…全部出力だ。そこが一番高い。</p>
+
           <h2>実際の数字</h2>
-          <p>Claude Opus（現行世代）だと、だいたい<strong>入力500万トークンで5ドル、出力で25ドル</strong>くらい。</p>
-          <p>これで本気のエージェントセッション回したら、どうなるか想像できるだろ。</p>
-          <ul>
-            <li>コンテキストデカい</li>
-            <li>ツール連打する</li>
-            <li>コード何度も出し直す</li>
-            <li>スクリーンショット解析（マルチモーダル）</li>
-            <li>サマリーやメールまで書く</li>
-          </ul>
-          <p>請求書が痛いのは当然なんだよ。</p>
-          <p>でもここで大事な話がある。80〜90%の作業には、最強モデルは要らないことが多い。</p>
+          <p><a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a>（現行世代）だと、だいたい <strong>入力500万トークンで5ドル、出力で25ドル</strong> くらい。</p>
+          <p>これで本気のエージェントセッション回したら、どうなるか想像できるだろ。コンテキストデカいし、ツール連打するし、コード何度も出し直すし。請求書が痛いのは当然なんだよ。</p>
+          <p>でもここで大事な話がある。</p>
+
           <h2>コスパがバグってるモデルたち</h2>
-          <p>今、フロンティアにかなり近い性能を出しながら、価格が桁違いに安いモデルが出てきてる。</p>
-          <p>特に推してるのが <strong>MiniMax M3</strong> だ。</p>
-          <div class="model-card">
-            <h3>MiniMax M3</h3>
-            <ul>
-              <li><strong>価格：</strong>入力0.30ドル / 出力1.20ドル（OpenRouterや公式経由。キャッシュ効かせるとさらに安くなる）</li>
-              <li>Opusの出力価格の<strong>16〜20分の1</strong>くらい</li>
-              <li><strong>コンテキスト100万トークン</strong></li>
-              <li><strong>ネイティブマルチモーダル</strong>（画像も動画もそのまま理解）→ エージェントが自分でUIのスクショ見て「ここ変だな」って直せる</li>
-              <li>コーディング・エージェント系のリーダーボード（Artificial AnalysisとかCode Arenaとか）で、ガチのトップ勢にかなり近い位置にいる。完璧に同じじゃないけど、「20倍高い価値があるか？」って聞かれたら、ほとんどのケースでNoだと思う。</li>
-            </ul>
+          <p>今、フロンティアにかなり近い性能を出しながら、価格が桁違いに安いモデルが出てきてる。特に目立ってるのが <strong><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a><a href="../../#ai-tools?q=MiniMax" class="article-banal-ref" rel="noopener" aria-label="MiniMax M3 on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a></strong> と <strong><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a><a href="../../#ai-tools?q=Cursor" class="article-banal-ref" rel="noopener" aria-label="Cursor on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a> 純正の Composer 2.5</strong>（Standard / non-Thinkingモード）だ。</p>
+
+          <h3>価格比較（公式ドキュメント準拠、2026年6月時点）</h3>
+
+          <div class="article-table-wrap">
+            <table class="article-table">
+              <thead>
+                <tr>
+                  <th scope="col">モデル</th>
+                  <th scope="col">入力（100万トークンあたり）</th>
+                  <th scope="col">出力（100万トークンあたり）</th>
+                  <th scope="col">Claude Opus 4.8 との比較</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a><a href="../../#ai-tools?q=MiniMax" class="article-banal-ref" rel="noopener" aria-label="MiniMax M3 on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a></strong></td>
+                  <td>$0.30</td>
+                  <td><strong>$1.20</strong></td>
+                  <td>出力で約20倍安い</td>
+                </tr>
+                <tr>
+                  <td><strong><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a><a href="../../#ai-tools?q=Cursor" class="article-banal-ref" rel="noopener" aria-label="Cursor on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a> Composer 2.5</strong> (Standard, non-Thinking)</td>
+                  <td>$0.50</td>
+                  <td><strong>$2.50</strong></td>
+                  <td>出力で約10倍安い</td>
+                </tr>
+                <tr>
+                  <td>Claude Opus 4.8</td>
+                  <td>$5.00</td>
+                  <td>$25.00</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <p>あと <strong>CursorのComposer 2.5</strong>（Thinkingオフの速い方）もめちゃくちゃ強い。</p>
-          <div class="model-card">
-            <h3>Cursor Composer 2.5（高速版）</h3>
-            <p>Cursorの中で長時間エージェントを回すために作られてる感じで、ファイル編集・ツール使用・ターミナル作業が上手い。価格もCursorユーザーからするとバカみたいに安くて、日常使いの主力に据えてる人が増えてる。</p>
-          </div>
+          <p>どちらも Opus に比べると完全に別次元の価格帯だ。MiniMax M3 の方がトークン単価ではやや安く、マルチモーダルと100万コンテキストが最初から強い。Composer 2.5（Standard）は少し単価が高いけど、Cursor IDE内での長時間エージェント作業に最適化されていて、日常使いの体感速度が非常に良い。</p>
+          <p>大事なポイントは、どちらも「毎日ガッツリ使っても財布が死なない」レベルだということ。Opus で同じ量のエージェント作業をやると比べて、<strong>10〜20倍くらい安く</strong>済む。これが「毎日エージェントを使えるかどうか」の分水嶺になる。</p>
+
           <h2>俺が実際にやってる運用（金と時間を無駄にした後）</h2>
           <p>正直に言うと、こうしてる：</p>
-          <ol>
-            <li><strong>普段使い（8〜9割）：</strong>MiniMax M3 か Cursor Composer 2.5（非Thinking）。これで十分に「エージェントがヤバい」体験ができる。</li>
-            <li><strong>本気で難しいときだけ：</strong>Claude Opus（またはその時点の最強Anthropicモデル）に切り替える。</li>
-          </ol>
+          <ul>
+            <li><strong>普段使い（8〜9割）：</strong><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a><a href="../../#ai-tools?q=MiniMax" class="article-banal-ref" rel="noopener" aria-label="MiniMax M3 on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a> か <a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a><a href="../../#ai-tools?q=Cursor" class="article-banal-ref" rel="noopener" aria-label="Cursor on Banal" title="Banal listing"><span aria-hidden="true">↗</span></a> Composer 2.5（Standard / non-Thinking）。これで十分に「エージェントがヤバい」体験ができる。</li>
+            <li><strong>本気で難しいときだけ：</strong><a href="https://claude.ai/" rel="noopener noreferrer">Claude Opus</a>（またはその時点の最強Anthropicモデル）に切り替える。</li>
+          </ul>
           <p>Anthropicのモデルは、今でも「難しいプログラミングの問題」で一番「魔法みたい」と感じることが多い。コードの質、センス、推論の深さで、まだ一歩リードしてる部分があると思う。</p>
           <p>でもそれを全部に使うのは、金に余裕がある人か、会社が無制限に払ってくれる人だけにしとけ。</p>
-          <p>リーダーボードと価格は定期的に確認した方がいい。状況がバカみたいに速く変わるから。</p>
+
           <h2>最後に</h2>
-          <p>大事なのは「一番高いモデルだけ使う」でも「一番安いモデルだけ使う」でもない。</p>
-          <p><strong>タスクの難易度に応じて賢く切り替えること</strong>だ。</p>
+          <p>リーダーボードと価格は定期的に確認した方がいい。状況がバカみたいに速く変わるから。</p>
+          <p>大事なのは「一番高いモデルだけ使う」でも「一番安いモデルだけ使う」でもない。<strong>タスクの難易度に応じて賢く切り替えること</strong>だ。</p>
           <p>本気でエージェントを使い続けたいなら、結局これが一番持続可能なやり方だと思う。</p>
           <p>綺麗事抜きで。実際に金と時間を無駄にした人間からの、リアルな話だ。</p>
+
+        <div class="tools-mentioned">
+          <h2>掲載ツール一覧</h2>
+          <p><a href="../../#ai-tools" rel="noopener">ツール一覧</a>と<a href="../../#ai-models" rel="noopener">モデル一覧</a>。</p>
+          <ul>
+            <li><a href="https://cursor.com/" rel="noopener noreferrer">Cursor</a> + Composer 2.5</li>
+            <li><a href="https://claude.ai/code" rel="noopener noreferrer">Claude Code</a> / <a href="https://www.anthropic.com/" rel="noopener noreferrer">Anthropic</a></li>
+            <li><a href="https://www.minimax.io/" rel="noopener noreferrer">MiniMax M3</a></li>
+            <li><a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a></li>
+            <li><a href="https://kilo.ai/" rel="noopener noreferrer">Kilo Code</a></li>
+            <li><a href="../../#ai-models" rel="noopener">Banal モデル一覧</a></li>
+          </ul>
+        </div>
         </div>
       </article>
     </main>

@@ -21,6 +21,9 @@ for (const slug of slugs) {
     ['repo link', html.includes('sakurablush/banal')],
     ['no placeholder github', !html.includes('href="https://github.com"')],
     ['banal tools link', html.includes('#ai-tools')],
+    ['lang blocks', (html.match(/data-lang-only="/g) ?? []).length === 2],
+    ['banal ref links', html.includes('article-banal-ref')],
+    ['agents table', slug === 'honest-truth-ai-coding-agents-2026' ? html.includes('article-table') : true],
   ];
   for (const [name, ok] of checks) {
     if (!ok) issues.push(`${slug}: failed ${name}`);
