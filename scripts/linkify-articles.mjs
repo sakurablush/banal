@@ -362,25 +362,11 @@ function replaceLangBlock(html, lang, content) {
   );
 }
 
-function patchFooter(html) {
-  return html
-    .replace(
-      '<a href="https://github.com" class="hover:text-white transition-colors">GitHub</a>',
-      `<a href="https://github.com/sakurablush/banal" class="hover:text-white transition-colors" rel="noopener noreferrer">GitHub</a>
-          <a href="../../" class="hover:text-white transition-colors" rel="noopener">Banal</a>`
-    )
-    .replace(
-      '<a href="../../#tools" class="hover:text-white transition-colors">Tools</a>',
-      `<a href="${L.banalTools}" class="hover:text-white transition-colors" rel="noopener">Tools</a>`
-    );
-}
-
 function patchArticle(slug, en, ja) {
   const file = path.join(root, 'articles', slug, 'index.html');
   let html = fs.readFileSync(file, 'utf8');
   html = replaceLangBlock(html, 'en', en);
   html = replaceLangBlock(html, 'ja', ja);
-  html = patchFooter(html);
   fs.writeFileSync(file, html);
   console.log('linked', slug);
 }

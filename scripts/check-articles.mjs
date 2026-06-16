@@ -10,6 +10,11 @@ for (const slug of slugs) {
   const html = fs.readFileSync(path.join(root, slug, 'index.html'), 'utf8');
   const checks = [
     ['share btn', html.includes('id="article-share-btn"')],
+    ['lang toggle', html.includes('id="lang-toggle"') && html.includes('lang-icon')],
+    ['no legacy lang btn', !html.includes('article-lang-toggle')],
+    ['article main', html.includes('article-page-main') && html.includes('page-shell')],
+    ['back to top', html.includes('id="top"')],
+    ['site footer', html.includes('site-footer-title')],
     ['tools-mentioned', html.includes('tools-mentioned')],
     ['en block', html.includes('data-lang-only="en"')],
     ['ja block', html.includes('data-lang-only="ja"')],

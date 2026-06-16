@@ -3162,6 +3162,14 @@ textarea.sp-form-input {
   min-width: 6.5rem;
 }
 
+.article-page-main {
+  padding-block: var(--hero-pad-y);
+}
+
+.article-toolbar .btn-header {
+  flex-shrink: 0;
+}
+
 /* Standalone article pages */
 .article-content {
   max-width: 800px;
