@@ -15,6 +15,7 @@
  */
 
 import { PromptTemplatesLibrary, type Locale, type PromptTemplate } from './lib/prompt-templates';
+import { createCloseButton } from './lib/close-button';
 
 const STORAGE_PREFIX = 'banal-pt-';
 
@@ -479,17 +480,12 @@ function createPromptAccordion(
   title.textContent = pt.title;
   header.appendChild(title);
 
-  const closeBtn = document.createElement('button');
-  closeBtn.type = 'button';
-  closeBtn.className = 'prompt-accordion-close';
-  // Use textContent with actual multiplication sign to prevent XSS vulnerability
-  const closeIcon = document.createElement('span');
-  closeIcon.className = 'close-icon';
-  closeIcon.textContent = '×';
-  closeBtn.appendChild(closeIcon);
-  closeBtn.setAttribute('aria-label', state.lang === 'ja' ? '閉じる' : 'Close');
-  closeBtn.addEventListener('click', () => {
-    closeAccordion(card, accordion, focusCleanup);
+  const closeBtn = createCloseButton({
+    className: 'prompt-accordion-close',
+    label: state.lang === 'ja' ? '閉じる' : 'Close',
+    onClick: () => {
+      closeAccordion(card, accordion, focusCleanup);
+    },
   });
   header.appendChild(closeBtn);
   accordion.appendChild(header);

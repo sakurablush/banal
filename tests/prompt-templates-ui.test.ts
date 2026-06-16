@@ -244,18 +244,17 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
 
   // ─── Security: XSS Prevention ────────────────────────────────────────────────────
 
-  it('close button uses textContent instead of innerHTML to prevent XSS', () => {
+  it('close button uses safe SVG icon instead of innerHTML', () => {
     const el = setup();
     const card = el.querySelector('.tool-card-horizontal') as HTMLElement;
     card.click();
 
     const closeBtn = document.querySelector('.prompt-accordion-close') as HTMLButtonElement;
-    // Verify close button uses a span with textContent, not innerHTML with HTML
-    const closeIcon = closeBtn.querySelector('.close-icon');
-    expect(closeIcon).toBeTruthy();
-    expect(closeIcon!.textContent).toBe('×');
-    // Verify no XSS vulnerability - textContent should escape HTML entities
-    expect(closeIcon!.innerHTML).toBe('×');
+    const icon = closeBtn.querySelector('svg');
+    expect(icon).toBeTruthy();
+    expect(icon!.getAttribute('aria-hidden')).toBe('true');
+    expect(closeBtn.querySelector('.close-icon')).toBeFalsy();
+    expect(closeBtn.innerHTML).not.toContain('<script');
   });
 
   it('quick filter chips use textContent for icons to prevent XSS', () => {
