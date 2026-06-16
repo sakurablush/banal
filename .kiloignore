@@ -32,6 +32,22 @@ package-lock.json
 .kilo/plans/
 
 # -----------------------------------------------------------------------------
+# AI-generated plan / working-doc files (any tool)
+# -----------------------------------------------------------------------------
+.cursor/plans/
+.claude/plans/
+plans/
+**/plans/
+**/plan.md
+**/plans.md
+**/*-plan.md
+**/*-plans.md
+**/plan-*.md
+**/plans-*.md
+**/EXECUTION_PLAN.md
+**/execution-plan.md
+
+# -----------------------------------------------------------------------------
 # Git internals
 # -----------------------------------------------------------------------------
 .git/
