@@ -89,8 +89,9 @@ Banal follows [Semantic Versioning](https://semver.org/):
   entry in the catalog, a new required translation key).
 - **Minor** bumps when a new tool, new prompt template, or new
   language is added.
-- **Patch** bumps for documentation fixes, dependency updates, and
-  catalog corrections that do not require a fork to update.
+- **Patch** bumps for backwards-compatible bug fixes, documentation fixes,
+  dependency updates, and catalog corrections that do not require a fork to
+  update.
 
-The current version is `1.0.0` (see the `version` field in
-`package.json`).
+The current version is `1.0.1` (see the `version` field in `package.json`).
+Release notes for every version live in [`CHANGELOG.md`](CHANGELOG.md).
