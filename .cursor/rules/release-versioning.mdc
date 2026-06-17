@@ -1,0 +1,42 @@
+---
+description: Mandatory release versioning and CHANGELOG updates for shippable changes
+alwaysApply: true
+---
+
+# Release Versioning & CHANGELOG (MANDATORY)
+
+Every task that changes **shipped** behavior MUST end with an explicit **release decision** and **CHANGELOG update**. Authority: `DIAMOND.md` (Versioning), `CHANGELOG.md` (Keep a Changelog format).
+
+## Release decision (required in final output)
+
+State one of:
+
+- **No bump** — internal-only, docs/comments, or user explicitly deferred release; say why.
+- **Bump X.Y.Z** — name level (patch / minor / major) and one-line rationale.
+
+When in doubt whether work is release-worthy: if a user would notice after deploy → treat as release-worthy.
+
+## SemVer (Banal)
+
+| Bump | When |
+|------|------|
+| **Major** | Public site shape changes requiring fork maintainer action (moved paths, renamed catalog entries, new **required** i18n keys) |
+| **Minor** | New tool, prompt template, or language |
+| **Patch** | Bug fixes, perf, UX polish, docs, deps, catalog corrections — backwards-compatible |
+
+No new tool / template / language → **patch**, not minor.
+
+## CHANGELOG rules
+
+1. Noteworthy unreleased work → `[Unreleased]`; cutting a release → new `## [X.Y.Z] - YYYY-MM-DD` section.
+2. Sections: **Added**, **Changed**, **Fixed**, **Removed**, **Tests** — omit empty ones.
+3. Version blurb = one short paragraph; bullets = user-visible impact.
+4. **Do not mix unrelated themes under one version** (e.g. perf in 1.0.1, mobile UX in 1.0.2).
+5. On version bump, sync `package.json`, `package-lock.json` (`npm version X.Y.Z --no-git-tag-version`), and `DIAMOND.md` current-version line.
+
+## Checklist before marking work complete
+
+- [ ] Release decision stated (bump level or explicit no-bump)
+- [ ] `CHANGELOG.md` updated under `[Unreleased]` or new version section
+- [ ] If bumping: version files synced
+- [ ] New i18n keys noted under **Added** or **Changed** when user-facing
