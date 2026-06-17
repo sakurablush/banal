@@ -61,4 +61,13 @@ describe('GitHub report link regression tests', () => {
       /<a\s+href="\.\/"\s+class="font-black text-lg[^"]*"[^>]*>\s*BANAL\s*<\/a>/
     );
   });
+
+  describe('index.html script loading', () => {
+    it('does not hand-roll modulepreload for TypeScript sources', () => {
+      const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf-8');
+
+      // Vite rewrites manual modulepreload to dist/*.ts; GitHub Pages serves .ts as video/mp2t.
+      expect(html).not.toMatch(/rel=["']modulepreload["'][^>]*\.ts["']/);
+    });
+  });
 });
