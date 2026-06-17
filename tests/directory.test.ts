@@ -12,6 +12,24 @@ function stubDeferredMount(): void {
     cb(0);
     return 0;
   });
+  class MockIntersectionObserver {
+    readonly root = null;
+    readonly rootMargin = '';
+    readonly thresholds = [0];
+    constructor(private cb: IntersectionObserverCallback) {}
+    observe(): void {
+      this.cb(
+        [{ isIntersecting: true } as IntersectionObserverEntry],
+        this as unknown as IntersectionObserver
+      );
+    }
+    disconnect(): void {}
+    unobserve(): void {}
+    takeRecords(): IntersectionObserverEntry[] {
+      return [];
+    }
+  }
+  vi.stubGlobal('IntersectionObserver', MockIntersectionObserver);
 }
 
 async function flushAsyncMounts(): Promise<void> {
@@ -35,6 +53,7 @@ describe('directory module initialization & behavior', () => {
     // Create required DOM elements
     document.body.innerHTML = `
       <div id="stat-tools">227+</div>
+      <div id="dev-tools"></div>
       <div id="ai-tools-root" data-category-prefix="ai"></div>
       <div id="dev-tools-root" data-category-prefix="dev"></div>
     `;
@@ -76,6 +95,7 @@ describe('directory module initialization & behavior', () => {
   it('re-renders directory when language-changed custom event fires', () => {
     document.body.innerHTML = `
       <div id="stat-tools">227+</div>
+      <div id="dev-tools"></div>
       <div id="ai-tools-root" data-category-prefix="ai"></div>
       <div id="dev-tools-root" data-category-prefix="dev"></div>
     `;
@@ -339,6 +359,7 @@ describe('directory: dev tools error handling', () => {
 
     document.body.innerHTML = `
       <div id="stat-tools">0+</div>
+      <div id="dev-tools"></div>
       <div id="ai-tools-root"></div>
       <div id="dev-tools-root"></div>
     `;
@@ -440,6 +461,8 @@ describe('directory: missing root elements', () => {
   it('handles missing ai-tools-root gracefully', async () => {
     document.body.innerHTML = `
       <div id="stat-tools">0+</div>
+      <div id="dev-tools"></div>
+      <div id="ai-tools-root"></div>
       <div id="dev-tools-root"></div>
     `;
 

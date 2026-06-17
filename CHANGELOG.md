@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Homepage boot path.** Dev Tools directory mounts when its section nears the
+  viewport (not on idle), and the hero canvas mesh initializes after first paint
+  via `requestIdleCallback` — less main-thread work competing with AI Tools first
+  paint.
+
 ### Fixed
 
 - **Mobile category and refine rails (≤900px).** Sidebar column no longer
