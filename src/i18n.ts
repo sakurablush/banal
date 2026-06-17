@@ -214,6 +214,7 @@ export const translations: Record<Lang, Translations> = {
     'article.honestReview': 'Honest review',
     'article.readFullGuide': 'Read the full guide →',
     'article.costGuide': 'Cost guide',
+    'article.published.20260616': '16 June 2026',
 
     // === Footer buttons ===
     'footer.viewOnGithub': 'View on GitHub →',
@@ -547,6 +548,7 @@ export const translations: Record<Lang, Translations> = {
     'article.honestReview': '正直なレビュー',
     'article.readFullGuide': '全文を読む →',
     'article.costGuide': 'コストガイド',
+    'article.published.20260616': '2026年6月16日',
 
     // === Footer buttons ===
     'footer.viewOnGithub': 'GitHubで見る →',

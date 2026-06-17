@@ -3515,6 +3515,24 @@ textarea.sp-form-input {
   color: #67e8f9;
 }
 
+.article-content .article-published {
+  display: block;
+  margin: 0 0 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-subtle);
+}
+
+.article-content .article-badge + .article-published {
+  margin-top: -0.35rem;
+}
+
+.article-meta-void .article-published {
+  font-variant-numeric: tabular-nums;
+}
+
 .article-content .back-link {
   display: inline-flex;
   align-items: center;
@@ -3576,6 +3594,10 @@ textarea.sp-form-input {
 [data-theme='light'] .article-content .model-card {
   background: var(--light-card) !important;
   border-color: var(--light-border) !important;
+}
+
+[data-theme='light'] .article-content .article-published {
+  color: var(--light-text-subtle) !important;
 }
 
 /* Prompt templates standalone. */
