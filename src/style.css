@@ -982,10 +982,14 @@ main#app,
   }
 }
 
-/* Desktop: refine details transparent wrapper — no collapse UI */
+/* Desktop: refine always expanded — summary hidden, no collapse UI */
 @media (min-width: 901px) {
   .zk2-refine-details {
-    display: contents;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    flex: 1 1 auto;
+    min-height: 0;
   }
 
   .zk2-refine-summary {
@@ -993,7 +997,11 @@ main#app,
   }
 
   .zk2-refine-body {
-    display: contents;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    flex: 1 1 auto;
+    min-height: 0;
   }
 }
 

@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-06-17
+
+Bug fix for desktop refine panel appearing empty after the mobile collapsible
+sidebar shipped in v1.0.2. No catalog, API, or breaking changes.
+
+### Fixed
+
+- **Desktop refine panel empty on load.** The collapsible `<details>` wrapper
+  stayed closed while its summary was hidden at ≥901px, so filter toolbars and
+  quick filters did not render until a category or filter was selected. Desktop
+  now opens refine by default; mobile collapse behavior is unchanged.
+
+### Tests
+
+- Desktop vs mobile default open state for refine `<details>` in
+  `tests/mobile-layout.test.ts`.
+
 ## [1.0.2] - 2026-06-17
 
 Mobile browsing UX for viewports ≤900px: collapsible refine sidebar, horizontal
