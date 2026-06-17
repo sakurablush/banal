@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
   buildSidebarFiltersPanel,
   createSidebarColumn,
@@ -6,6 +6,23 @@ import {
 } from '../src/lib/sidebar-column';
 
 describe('mobile layout structure', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  function mockRefineViewport(desktop: boolean): void {
+    vi.spyOn(window, 'matchMedia').mockImplementation((query: string) => ({
+      matches: desktop && query.includes('901px'),
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    }));
+  }
+
   it('wraps filter content in collapsible refine details', () => {
     const quickFilters = document.createElement('div');
     quickFilters.className = 'quick-filters-row';
@@ -67,7 +84,35 @@ describe('mobile layout structure', () => {
     expect(pills[3]?.textContent).toBe('+1 more');
   });
 
+  it('starts collapsed on mobile viewport', () => {
+    mockRefineViewport(false);
+
+    const panel = buildSidebarFiltersPanel({
+      quickFilters: document.createElement('div'),
+      toolbar: document.createElement('div'),
+      heading: 'Refine',
+    })!;
+
+    const details = panel.querySelector('.zk2-refine-details') as HTMLDetailsElement;
+    expect(details.open).toBe(false);
+  });
+
+  it('starts expanded on desktop viewport', () => {
+    mockRefineViewport(true);
+
+    const panel = buildSidebarFiltersPanel({
+      quickFilters: document.createElement('div'),
+      toolbar: document.createElement('div'),
+      heading: 'Refine',
+    })!;
+
+    const details = panel.querySelector('.zk2-refine-details') as HTMLDetailsElement;
+    expect(details.open).toBe(true);
+  });
+
   it('opens refine details when filters are active until user toggles', () => {
+    mockRefineViewport(false);
+
     const panel = buildSidebarFiltersPanel({
       quickFilters: document.createElement('div'),
       toolbar: document.createElement('div'),

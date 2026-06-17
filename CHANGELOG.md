@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-06-17
+
+Follow-up patch after v1.0.2: desktop refine fix, mobile layout polish, faster
+homepage first paint, Contributor Covenant, and reproducible CI npm pin. No
+catalog, API, or breaking changes.
+
+### Added
+
+- **Code of Conduct.** Contributor Covenant 2.1 at `CODE_OF_CONDUCT.md`, linked
+  from `README.md` and required in `docs/CONTRIBUTING.md` ground rules.
+
+### Changed
+
+- **Homepage boot path.** Dev Tools directory mounts when its section nears the
+  viewport (not on idle), and the hero canvas mesh initializes after first paint
+  via `requestIdleCallback` — less main-thread work competing with AI Tools first
+  paint.
+- **CI npm pin.** GitHub Actions workflows use npm 10.9.2 so `npm ci` matches
+  the committed lockfile.
+
+### Fixed
+
+- **Desktop refine panel empty on load.** The collapsible `<details>` wrapper
+  stayed closed while its summary was hidden at ≥901px, so filter toolbars and
+  quick filters did not render until a category or filter was selected. Desktop
+  now opens refine by default; mobile collapse behavior is unchanged.
+- **Mobile category and refine rails (≤900px).** Sidebar column no longer
+  inherits the desktop tile min-height, so category chips and collapsed refine
+  stay compact single-row pills instead of stretching to full viewport height.
+- **AI Models (and Stacks) list scroll on mobile.** Models directory no longer
+  grows unbounded on small screens; the card grid scrolls inside a capped pane
+  matching prompt templates (`85vh` / `--panel-tiles-effective-scroll-height`).
+
+### Tests
+
+- Desktop vs mobile default open state for refine `<details>` in
+  `tests/mobile-layout.test.ts`.
+
 ## [1.0.2] - 2026-06-17
 
 Mobile browsing UX for viewports ≤900px: collapsible refine sidebar, horizontal

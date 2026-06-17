@@ -8,12 +8,12 @@ import { zeroKeyTools } from './data/zero-key-tools';
 import { getSiteStats } from './data/site-stats';
 import type { ModelsPanelApi } from './components/models-panel';
 import type { StacksPanelApi } from './components/stacks-panel';
-import { whenIdle, whenVisible } from './lib/lazy-section';
+import { whenVisible } from './lib/lazy-section';
 import { ensureJaLocaleLoaded } from './lib/tool-localization';
 
 /**
  * Initialize the main page Zero-Key Tools Directory.
- * Renders AI tools immediately; defers below-fold sections for faster first paint.
+ * Renders AI tools immediately; defers dev tools and other below-fold sections until visible.
  */
 export function initDirectory(): void {
   const aiRoot = document.getElementById('ai-tools-root');
@@ -35,6 +35,7 @@ export function initDirectory(): void {
   };
 
   const scheduled = {
+    dev: false,
     models: false,
     stacks: false,
     onboarding: false,
@@ -174,7 +175,7 @@ export function initDirectory(): void {
     updateToolCounts();
 
     const tasks: Promise<void>[] = [];
-    if (mounted.dev) tasks.push(renderDevTools(lang));
+    if (mounted.dev || scheduled.dev) tasks.push(renderDevTools(lang));
     if (mounted.models || scheduled.models) tasks.push(renderModelsSection(lang));
     if (mounted.stacks || scheduled.stacks) tasks.push(renderStacksSection(lang));
     if (mounted.onboarding || scheduled.onboarding) tasks.push(renderOnboardingSection(lang));
@@ -183,9 +184,13 @@ export function initDirectory(): void {
   }
 
   function scheduleDeferredSections(): void {
-    whenIdle(() => {
-      void renderDevTools(getCurrentLang());
-    });
+    const devSection = document.getElementById('dev-tools');
+    if (devSection && devRoot) {
+      whenVisible(devSection, () => {
+        scheduled.dev = true;
+        void renderDevTools(getCurrentLang());
+      });
+    }
 
     const modelsSection = document.getElementById('ai-models');
     if (modelsSection && modelsRoot) {

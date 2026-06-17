@@ -16,7 +16,7 @@ import { initHeroMesh } from './lib/hero-mesh';
 import { migrateLegacyStorage } from './lib/storage-cleanup';
 import { initPrivacyExitGuard } from './lib/privacy-exit-guard';
 import { wirePrivacyPanelTriggers } from './components/privacy-panel';
-import { whenVisible } from './lib/lazy-section';
+import { whenVisible, whenIdle } from './lib/lazy-section';
 
 // Boot theme first (before any rendering so CSS variables are correct)
 initTheme();
@@ -37,8 +37,8 @@ if (themeToggleBtn) {
 initI18n();
 wirePrivacyPanelTriggers();
 
-// Hero horizon mesh (canvas, pauses off-screen / reduced motion)
-initHeroMesh();
+// Hero horizon mesh (canvas, pauses off-screen / reduced motion) — after first paint
+whenIdle(() => initHeroMesh());
 
 // Initialize the main Zero-Key tools directory and categories quick-nav
 try {

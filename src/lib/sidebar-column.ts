@@ -29,6 +29,17 @@ export interface RefineSummaryState {
 
 let headingIdCounter = 0;
 
+/** Desktop keeps refine expanded; mobile starts collapsed. */
+function setRefineDetailsDefaultOpen(details: HTMLDetailsElement): void {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return;
+  }
+  const mq = window.matchMedia('(min-width: 901px)');
+  if (mq?.matches) {
+    details.open = true;
+  }
+}
+
 function hasFilterContent(el?: HTMLElement | null): boolean {
   return !!el && el.childElementCount > 0;
 }
@@ -117,6 +128,7 @@ function createRefineDetails(
   }
 
   details.append(summary, refineBody);
+  setRefineDetailsDefaultOpen(details);
   return details;
 }
 
