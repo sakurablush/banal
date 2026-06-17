@@ -7,12 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-06-17
+
+Follow-up patch after v1.0.3: faster homepage first paint, mobile layout fixes
+for sidebar rails and scrollable model/stack lists, Contributor Covenant, and
+reproducible CI npm pin. No catalog, API, or breaking changes.
+
+### Added
+
+- **Code of Conduct.** Contributor Covenant 2.1 at `CODE_OF_CONDUCT.md`, linked
+  from `README.md` and required in `docs/CONTRIBUTING.md` ground rules.
+
 ### Changed
 
 - **Homepage boot path.** Dev Tools directory mounts when its section nears the
   viewport (not on idle), and the hero canvas mesh initializes after first paint
   via `requestIdleCallback` — less main-thread work competing with AI Tools first
   paint.
+- **CI npm pin.** GitHub Actions workflows use npm 10.9.2 so `npm ci` matches
+  the committed lockfile.
 
 ### Fixed
 

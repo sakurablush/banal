@@ -687,6 +687,7 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                         | Fork, build, host                                  |
 | [docs/EXTENDING.md](docs/EXTENDING.md)                           | Add tools, templates, languages                    |
 | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)                     | PR process and ground rules                        |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)                         | Community standards and enforcement                |
 | [docs/SECURITY.md](docs/SECURITY.md)                             | Threat model and local storage                     |
 | [docs/PROMPT-TEMPLATES-GUIDE.md](docs/PROMPT-TEMPLATES-GUIDE.md) | Deep guide to the templates                        |
 | [docs/PROMPT-TEMPLATES-STYLE.md](docs/PROMPT-TEMPLATES-STYLE.md) | Authoring rules for new templates                  |

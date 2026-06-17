@@ -14,24 +14,26 @@ bottom of this file.
 
 ## Ground rules
 
-1. **Run `npm run ci` locally before opening a PR.** This is the same
+1. **Read and follow the [Code of Conduct](../CODE_OF_CONDUCT.md).** Issues,
+   PRs, and discussions must stay respectful and inclusive.
+2. **Run `npm run ci` locally before opening a PR.** This is the same
    gate CI runs: lint:check + typecheck + the full test suite +
    `npm audit --audit-level=moderate`. If it is not green, the PR is
    not ready.
-2. **Smallest effective diff wins.** If a change can be 12 lines instead
+3. **Smallest effective diff wins.** If a change can be 12 lines instead
    of 47, make it 12. We can add more later.
-3. **Bilingual from day one.** Every user-facing string must exist in
+4. **Bilingual from day one.** Every user-facing string must exist in
    both English and Japanese (or come with a clear reason in the PR
    description). Japanese is first-class, not a follow-up. See
    [`docs/JAPANESE.md`](JAPANESE.md) for the Japanese review checklist.
-4. **The empathy bar is real.** Copy that shames, assumes privilege
+5. **The empathy bar is real.** Copy that shames, assumes privilege
    ("just buy a better phone"), or talks down to the user will be
    sent back for rework. Read
    [`MINDSET.md`](MINDSET.md) for the editorial test.
-5. **Test or it does not ship.** New features, especially anything
+6. **Test or it does not ship.** New features, especially anything
    touching prompt templates or the catalog, need tests. See the
    existing test files for the expected depth.
-6. **Forkability and simplicity are sacred.** If a change makes it
+7. **Forkability and simplicity are sacred.** If a change makes it
    meaningfully harder to fork, build, or host the project, it will be
    pushed back.
 
