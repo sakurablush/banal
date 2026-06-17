@@ -1,8 +1,10 @@
 name: Labeler
 
 # Auto-labels PRs based on changed paths.
-# Free for public repos, no extra cost.
-# Complementary to Dependabot (which already adds `dependencies`).
+# pull_request_target is required so fork PRs can receive labels (GITHUB_TOKEN
+# write on base repo). Workflow YAML is always taken from the default branch;
+# until this file is on main, labeler runs may still use the previous config.
+# https://github.com/actions/labeler
 
 on:
   pull_request_target:
@@ -11,6 +13,7 @@ on:
 permissions:
   contents: read
   pull-requests: write
+  issues: write
 
 jobs:
   label:
@@ -18,11 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout PR head
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Apply path-based labels
-        uses: actions/labeler@v5
+        uses: actions/labeler@v6
         with:
           configuration-path: .github/labeler.yml
-          fail-on-error: false
