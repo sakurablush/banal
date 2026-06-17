@@ -19,7 +19,11 @@ import { getLocalizedToolCopy, localizeBadge } from './lib/tool-localization';
 import { appendChildrenBatched } from './lib/batch-dom';
 import { getSectionParams, type SectionFilterId } from './lib/section-filter-url';
 import { renderFilterToolbar } from './components/filter-toolbar';
-import { createSidebarColumn, syncQuickFiltersInPanel } from './lib/sidebar-column';
+import {
+  createSidebarColumn,
+  syncQuickFiltersInPanel,
+  syncRefineSummary,
+} from './lib/sidebar-column';
 import { createPanelStatsBar, mountPanelContent } from './lib/panel-stats-bar';
 import { bindZk2LayoutHeightSync, syncZk2LayoutHeight } from './lib/sync-zk2-layout-height';
 import { applyZeroKeyFilterValues, type ZeroKeyFilterState } from './lib/apply-zero-key-filters';
@@ -862,6 +866,47 @@ function renderEmptyState(state: PanelState): HTMLElement {
   return empty;
 }
 
+function scrollCategoryIntoView(btn: HTMLElement): void {
+  const reduced =
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  btn.scrollIntoView({
+    inline: 'nearest',
+    block: 'nearest',
+    behavior: reduced ? 'auto' : 'smooth',
+  });
+}
+
+function getRefineSummaryState(state: PanelState): {
+  lang: Lang;
+  activeCount: number;
+  activeLabels: string[];
+} {
+  const labels: string[] = [];
+  const catLabels = state.lang === 'ja' ? categoryLabelsJa : categoryLabels;
+
+  if (state.query.trim()) {
+    labels.push(
+      state.lang === 'ja' ? `検索: ${state.query.trim()}` : `Search: ${state.query.trim()}`
+    );
+  }
+  if (state.activeCategory) {
+    labels.push(catLabels[state.activeCategory]);
+  }
+  for (const id of state.lifeFilters) {
+    const def = getLifeFilters(state.lang).find((f) => f.id === id);
+    if (def) labels.push(def.label);
+  }
+
+  return { lang: state.lang, activeCount: labels.length, activeLabels: labels };
+}
+
+function updateRefineSummary(state: PanelState): void {
+  const panel = state.container?.querySelector('.zk2-sidebar-filters') as HTMLElement | null;
+  if (panel) {
+    syncRefineSummary(panel, getRefineSummaryState(state));
+  }
+}
+
 // ─── Render: Sidebar Categories ─────────────────────────────────────────────
 
 function renderSidebar(state: PanelState): HTMLElement {
@@ -884,6 +929,7 @@ function renderSidebar(state: PanelState): HTMLElement {
     state.activeCategory = null;
     updateSidebarActiveState(state);
     performSearch(state);
+    scrollCategoryIntoView(allBtn);
     trackFilterEvent({
       action: 'remove',
       filterType: 'category',
@@ -904,6 +950,7 @@ function renderSidebar(state: PanelState): HTMLElement {
       state.activeCategory = cat;
       updateSidebarActiveState(state);
       performSearch(state);
+      scrollCategoryIntoView(btn);
       trackFilterEvent({
         action: 'apply',
         filterType: 'category',
@@ -961,6 +1008,7 @@ function renderContent(state: PanelState): void {
   const filtersPanel = container.querySelector('.zk2-sidebar-filters') as HTMLElement | null;
   if (filtersPanel) {
     syncQuickFiltersInPanel(filtersPanel, renderQuickFilters(state));
+    updateRefineSummary(state);
   }
 
   const copy = COPY[state.lang];
@@ -1175,6 +1223,15 @@ export function renderZeroKeyPowerPanel(
 
   // Initial render
   performSearch(state);
+
+  if (state.activeCategory) {
+    requestAnimationFrame(() => {
+      const activeBtn = container.querySelector(
+        `.zk2-cat-item[data-category="${state.activeCategory}"]`
+      ) as HTMLElement | null;
+      if (activeBtn) scrollCategoryIntoView(activeBtn);
+    });
+  }
 
   return {
     search: (query: string) => {

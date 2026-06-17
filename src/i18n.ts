@@ -242,6 +242,8 @@ export const translations: Record<Lang, Translations> = {
     'filters.panelLabel': 'Refine results',
     'filters.panelHeading': 'Refine',
     'filters.categoriesHeading': 'Categories',
+    'filters.activeCount': '{count} active',
+    'filters.activeCountMore': '+{count} more',
     'prompts.showing': 'Showing {count} templates',
 
     // === Privacy ===
@@ -576,6 +578,8 @@ export const translations: Record<Lang, Translations> = {
     'filters.panelLabel': '絞り込み',
     'filters.panelHeading': '絞り込み',
     'filters.categoriesHeading': 'カテゴリ',
+    'filters.activeCount': '{count}件',
+    'filters.activeCountMore': '+{count}件',
     'prompts.showing': '{count}件のテンプレートを表示',
 
     // === Privacy ===

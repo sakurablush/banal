@@ -42,6 +42,12 @@ tests. No catalog, API, or breaking changes.
   with slightly stronger background opacity — same look, less GPU work.
 - **Article pages** use the system font stack; Google Fonts (Inter, JetBrains Mono)
   removed from both article HTML shells — zero third-party font requests.
+- **Mobile sidebar (≤900px):** Categories appear before filters; life filters and
+  toolbar live in a collapsible refine block with active-count badge and pill preview.
+  Quick filters, suggestions, and toolbar actions scroll horizontally; models/stacks
+  filter rows use the same chip-rail pattern. Desktop layout (≥901px) is unchanged.
+- **Mobile header nav** adds AI Models, Stacks, and Guides links; homepage prompt
+  template chips use a horizontal scroll rail.
 
 ### Fixed
 
@@ -78,6 +84,8 @@ tests. No catalog, API, or breaking changes.
   `tests/content-integrity.test.ts`.
 - `requestAnimationFrame` stub in `tests/prompt-templates-ui.test.ts` for batched
   card rendering.
+- `tests/mobile-layout.test.ts` for refine-details structure, summary sync, and
+  auto-open behavior; sidebar-column tests updated for the refine wrapper.
 
 ## [1.0.0]
 

@@ -2,6 +2,8 @@
  * Navigation column: categories (left) beside filters/tags (right).
  */
 
+import { t, type Lang } from '../i18n';
+
 export interface SidebarFiltersOptions {
   quickFilters?: HTMLElement | null;
   toolbar?: HTMLElement | null;
@@ -17,6 +19,12 @@ export interface SidebarColumnOptions extends SidebarFiltersOptions {
   sidebar: HTMLElement;
   categoriesHeading?: string;
   categoriesHeadingId?: string;
+}
+
+export interface RefineSummaryState {
+  lang: Lang;
+  activeCount: number;
+  activeLabels: string[];
 }
 
 let headingIdCounter = 0;
@@ -42,12 +50,114 @@ function getNavPanelBody(panel: HTMLElement): HTMLElement {
   return panel.querySelector(':scope > .zk2-sidebar-nav-panel') ?? panel;
 }
 
+function getRefineBody(panel: HTMLElement): HTMLElement {
+  const body = getNavPanelBody(panel);
+  const refineBody = body.querySelector(':scope > .zk2-refine-details > .zk2-refine-body');
+  return (refineBody as HTMLElement | null) ?? body;
+}
+
 function createNavHeading(label: string, className: string, headingId?: string): HTMLElement {
   const heading = document.createElement('h3');
   heading.className = className;
   heading.id = headingId ?? `zk2-sidebar-heading-${++headingIdCounter}`;
   heading.textContent = label;
   return heading;
+}
+
+function createRefineDetails(
+  options: SidebarFiltersOptions,
+  quickFilters: HTMLElement | null,
+  toolbar: HTMLElement | null
+): HTMLDetailsElement {
+  const details = document.createElement('details');
+  details.className = 'zk2-refine-details';
+
+  const summary = document.createElement('summary');
+  summary.className = 'zk2-refine-summary';
+
+  const summaryLabel = document.createElement('span');
+  summaryLabel.className = 'zk2-refine-summary-label';
+  summaryLabel.textContent = options.heading ?? options.ariaLabel ?? 'Refine';
+
+  const summaryMeta = document.createElement('span');
+  summaryMeta.className = 'zk2-refine-summary-meta';
+
+  const activePills = document.createElement('span');
+  activePills.className = 'zk2-refine-active-pills';
+
+  summary.append(summaryLabel, summaryMeta, activePills);
+
+  if (options.headingId) {
+    summary.setAttribute('aria-labelledby', options.headingId);
+  }
+
+  summary.addEventListener('click', () => {
+    details.dataset.userToggled = '1';
+  });
+  summary.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      details.dataset.userToggled = '1';
+    }
+  });
+
+  const refineBody = document.createElement('div');
+  refineBody.className = 'zk2-refine-body';
+
+  if (quickFilters) {
+    refineBody.appendChild(quickFilters);
+  }
+
+  if (quickFilters && toolbar) {
+    refineBody.appendChild(createFiltersDivider());
+  }
+
+  if (toolbar) {
+    toolbar.classList.add('filter-toolbar--sidebar');
+    refineBody.appendChild(toolbar);
+  }
+
+  details.append(summary, refineBody);
+  return details;
+}
+
+/** Update mobile refine summary badge and active filter pills. */
+export function syncRefineSummary(panel: HTMLElement, state: RefineSummaryState): void {
+  const details = panel.querySelector('.zk2-refine-details') as HTMLDetailsElement | null;
+  const summary = panel.querySelector('.zk2-refine-summary');
+  if (!summary) return;
+
+  if (details && state.activeCount > 0 && !details.dataset.userToggled) {
+    details.open = true;
+  }
+
+  const meta = summary.querySelector('.zk2-refine-summary-meta');
+  const pills = summary.querySelector('.zk2-refine-active-pills');
+  if (!meta || !pills) return;
+
+  meta.textContent =
+    state.activeCount > 0
+      ? t(state.lang, 'filters.activeCount').replace('{count}', String(state.activeCount))
+      : '';
+
+  pills.innerHTML = '';
+  const maxVisible = 3;
+  for (const label of state.activeLabels.slice(0, maxVisible)) {
+    const pill = document.createElement('span');
+    pill.className = 'zk2-refine-active-pill';
+    pill.textContent = label;
+    pills.appendChild(pill);
+  }
+
+  const overflow = state.activeLabels.length - maxVisible;
+  if (overflow > 0) {
+    const more = document.createElement('span');
+    more.className = 'zk2-refine-active-pill zk2-refine-active-pill--more';
+    more.textContent = t(state.lang, 'filters.activeCountMore').replace(
+      '{count}',
+      String(overflow)
+    );
+    pills.appendChild(more);
+  }
 }
 
 export function buildSidebarFiltersPanel(options: SidebarFiltersOptions): HTMLElement | null {
@@ -74,19 +184,7 @@ export function buildSidebarFiltersPanel(options: SidebarFiltersOptions): HTMLEl
     body.setAttribute('aria-labelledby', heading.id);
   }
 
-  if (quickFilters) {
-    body.appendChild(quickFilters);
-  }
-
-  if (quickFilters && toolbar) {
-    body.appendChild(createFiltersDivider());
-  }
-
-  if (toolbar) {
-    toolbar.classList.add('filter-toolbar--sidebar');
-    body.appendChild(toolbar);
-  }
-
+  body.appendChild(createRefineDetails(options, quickFilters, toolbar));
   panel.appendChild(body);
 
   return panel;
@@ -122,7 +220,7 @@ export function syncQuickFiltersInPanel(
   panel: HTMLElement,
   quickFilters: HTMLElement | null
 ): void {
-  const body = getNavPanelBody(panel);
+  const body = getRefineBody(panel);
   const nextFilters = hasFilterContent(quickFilters) ? quickFilters : null;
   body.querySelector('.quick-filters-row')?.remove();
 
