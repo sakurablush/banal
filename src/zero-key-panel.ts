@@ -1083,7 +1083,7 @@ export function renderZeroKeyPowerPanel(
 
   const searchInput = create('input');
   searchInput.type = 'text';
-  searchInput.id = 'zk-search-input';
+  searchInput.id = `zk-search-input-${categoryPrefix ?? 'all'}`;
   searchInput.className = 'zk2-search-input';
   searchInput.placeholder = COPY[lang].searchPlaceholder;
   searchInput.value = state.query;

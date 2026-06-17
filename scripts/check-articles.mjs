@@ -25,6 +25,10 @@ for (const slug of slugs) {
     ['lang blocks', (html.match(/data-lang-only="/g) ?? []).length === 2],
     ['sibling lang blocks', /<\/div>\s*<div data-lang-only="ja" hidden>/.test(html)],
     ['banal ref links', html.includes('article-banal-ref')],
+    [
+      'published date',
+      html.includes('class="article-published"') && html.includes('datetime="2026-06-16"'),
+    ],
     ['agents table', slug === 'honest-truth-ai-coding-agents-2026' ? html.includes('article-table') : true],
   ];
   for (const [name, ok] of checks) {

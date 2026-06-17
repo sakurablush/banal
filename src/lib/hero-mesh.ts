@@ -14,6 +14,8 @@ const SUN_BANDS = 13;
 const SUN_SET_DEPTH = 0.1;
 /** Minimum perspective spread so the mesh does not collapse to a single point. */
 const HORIZON_SPREAD = 0.11;
+/** Extra half-width (px) at the horizon row so mesh edges meet the sun chord. */
+const HORIZON_EDGE_PAD_PX = 4;
 
 export type MeshPalette = {
   line: string;
@@ -74,6 +76,23 @@ export function getSunLayout(width: number, height: number): SunLayout {
 /** Perspective spread factor — keeps the far mesh row wide like a road, not a point. */
 export function meshSpread(depth: number): number {
   return HORIZON_SPREAD + depth * (1 - HORIZON_SPREAD);
+}
+
+/** Half-width of a mesh row in canvas px (u ∈ [-0.5, 0.5]); horizon pad fades toward camera. */
+export function meshRowHalfWidth(width: number, depth: number): number {
+  const span = width * 0.92;
+  const horizonPad = (1 - depth) * (1 - depth) * HORIZON_EDGE_PAD_PX;
+  return 0.5 * span * meshSpread(depth) + horizonPad;
+}
+
+/** Sun chord half-width at the mesh horizon (for alignment checks). */
+export function sunHalfWidthAtHorizon(width: number, height: number): number {
+  const sun = getSunLayout(width, height);
+  return sun.radius * Math.sqrt(1 - SUN_SET_DEPTH * SUN_SET_DEPTH);
+}
+
+export function meshX(vanishX: number, u: number, width: number, depth: number): number {
+  return vanishX + u * meshRowHalfWidth(width, depth) * 2;
 }
 
 /** Y coordinate used for sun glow / mesh lighting (the visible horizon line). */
@@ -209,7 +228,6 @@ function drawMesh(
   const palette = getMeshPalette(theme);
   const horizon = getHorizonY(height);
   const vanishX = width * 0.5;
-  const span = width * 0.92;
   const sun = getSunLayout(width, height);
 
   ctx.clearRect(0, 0, width, height);
@@ -228,10 +246,9 @@ function drawMesh(
     ctx.globalAlpha = alpha;
     ctx.lineWidth = depth < 0.2 ? 0.6 : 1;
 
-    const spread = meshSpread(depth);
     for (let c = 0; c <= COLS; c++) {
       const u = c / COLS - 0.5;
-      const x = vanishX + u * span * spread;
+      const x = meshX(vanishX, u, width, depth);
       const yPt = yBase + waveOffset(u, depth, time);
       if (c === 0) ctx.moveTo(x, yPt);
       else ctx.lineTo(x, yPt);
@@ -253,7 +270,7 @@ function drawMesh(
     for (let r = 0; r <= ROWS; r++) {
       const depth = r / ROWS;
       const yBase = meshRowY(horizon, height, depth);
-      const x = vanishX + u * span * meshSpread(depth);
+      const x = meshX(vanishX, u, width, depth);
       const y = yBase + waveOffset(u, depth, time);
       if (r === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);

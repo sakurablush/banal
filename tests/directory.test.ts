@@ -143,8 +143,11 @@ describe('multi-panel independent state', () => {
     renderZeroKeyPowerPanel(aiRoot, { lang: 'en', categoryPrefix: 'ai' });
     renderZeroKeyPowerPanel(devRoot, { lang: 'en', categoryPrefix: 'dev' });
 
-    // Get panel search inputs
-    const aiSearch = aiRoot.querySelector('#zk-search-input') as HTMLInputElement;
+    const aiSearch = aiRoot.querySelector('#zk-search-input-ai') as HTMLInputElement;
+    const devSearch = devRoot.querySelector('#zk-search-input-dev') as HTMLInputElement;
+    expect(aiSearch).toBeTruthy();
+    expect(devSearch).toBeTruthy();
+    expect(aiSearch.id).not.toBe(devSearch.id);
 
     // Type in AI panel
     aiSearch.value = 'chatgpt';
@@ -190,9 +193,11 @@ describe('multi-panel independent state', () => {
     vi.advanceTimersByTime(150);
 
     // Both panels should receive the search value
-    const aiSearch = aiRoot.querySelector('#zk-search-input') as HTMLInputElement;
+    const aiSearch = aiRoot.querySelector('#zk-search-input-ai') as HTMLInputElement;
+    const devSearch = devRoot.querySelector('#zk-search-input-dev') as HTMLInputElement;
 
     expect(aiSearch.value).toBe('docker');
+    expect(devSearch.value).toBe('docker');
   });
 });
 

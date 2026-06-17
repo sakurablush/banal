@@ -677,6 +677,8 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 | Doc                                                              | What it covers                                     |
 | ---------------------------------------------------------------- | -------------------------------------------------- |
+| [CHANGELOG.md](CHANGELOG.md)                                     | Version history and release notes                  |
+| [DIAMOND.md](DIAMOND.md)                                         | v1.0.0 release marker and quality bar              |
 | [MINDSET.md](MINDSET.md)                                         | Voice, tone, editorial rules                       |
 | [SPIRIT.md](SPIRIT.md)                                           | Why the project exists                             |
 | [Tools directory](#tools-directory)                              | Full catalog on this page (273 tools, collapsible) |
