@@ -22,7 +22,7 @@ import { renderFilterToolbar } from './components/filter-toolbar';
 import { createSidebarColumn, syncQuickFiltersInPanel } from './lib/sidebar-column';
 import { createPanelStatsBar, mountPanelContent } from './lib/panel-stats-bar';
 import { bindZk2LayoutHeightSync, syncZk2LayoutHeight } from './lib/sync-zk2-layout-height';
-import { applyZeroKeyFilterValues, type ZeroKeyFilterState } from './lib/apply-section-filters';
+import { applyZeroKeyFilterValues, type ZeroKeyFilterState } from './lib/apply-zero-key-filters';
 import { getRawSuggestionsForSection } from './lib/filter-suggestions';
 import type { FilterSuggestion } from './lib/filter-suggestions';
 import { trackFilterEvent } from './lib/filter-analytics';

@@ -11,8 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 First patch after v1.0.0: production fixes for GitHub Pages and duplicate HTML
 ids, GitHub Actions labeler, hero mesh alignment with the synthwave sun, article
-publish dates in EN/JA, and expanded regression tests. No catalog, API, or breaking
-changes.
+publish dates in EN/JA, homepage performance improvements, and expanded regression
+tests. No catalog, API, or breaking changes.
 
 ### Added
 
@@ -20,6 +20,28 @@ changes.
   16 June 2026 in English and 2026年6月16日 in Japanese via a subtle
   `<time class="article-published" datetime="2026-06-16">` element and i18n key
   `article.published.20260616`.
+- **`npm run measure:bundle`.** Prints raw and gzip sizes for production chunks and
+  homepage boot JS (main + shared i18n chunk). Baseline before/after numbers live in
+  `scripts/measure-bundle.mjs`.
+- **`src/data/catalog-counts.ts`.** Lightweight constants for models, stacks, and
+  prompt counts used by site copy — avoids parsing heavy data modules on first paint.
+- **Split filter modules.** `apply-zero-key-filters`, `apply-models-filters`,
+  `apply-stacks-filters`, and `apply-prompts-filters` replace the monolithic
+  `apply-section-filters.ts` so lazy panels no longer pull into the homepage bundle.
+
+### Changed
+
+- **Homepage boot JS ~54% smaller (raw).** Shared i18n chunk drops from ~437 KB to
+  ~175 KB; main + i18n boot total from ~496 KB to ~227 KB (~68 KB gzip). Prompt
+  templates, AI models, and tool stacks data stay lazy-loaded in their own chunks.
+- **Prompt template cards** render via `appendChildrenBatched` (same frame-budget
+  pattern as the tools panel).
+- **Off-screen cards** use `content-visibility: auto` on `.zk2-card` and
+  `.prompt-card-horizontal` (`.tool-card-horizontal` already had it).
+- **Mobile glass cards (≤768px):** `backdrop-filter` blur reduced from 12px to 6px
+  with slightly stronger background opacity — same look, less GPU work.
+- **Article pages** use the system font stack; Google Fonts (Inter, JetBrains Mono)
+  removed from both article HTML shells — zero third-party font requests.
 
 ### Fixed
 
@@ -52,6 +74,10 @@ changes.
 - `tests/article-dates.test.ts` for EN/JA date formatting and article markup.
 - `meshRowHalfWidth` coverage for horizon sun alignment in hero-mesh tests.
 - `scripts/check-articles.mjs` verifies published-date markup on article pages.
+- `catalog-counts constants match live data` drift guard in
+  `tests/content-integrity.test.ts`.
+- `requestAnimationFrame` stub in `tests/prompt-templates-ui.test.ts` for batched
+  card rendering.
 
 ## [1.0.0]
 

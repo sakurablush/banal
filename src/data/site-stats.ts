@@ -1,7 +1,5 @@
 import { zeroKeyTools } from './zero-key-tools';
-import { aiModels } from './ai-models';
-import { toolStacks } from './tool-stacks';
-import { PROMPT_TEMPLATE_COUNT } from '../lib/prompt-templates';
+import { AI_MODEL_COUNT, PROMPT_TEMPLATE_COUNT, TOOL_STACK_COUNT } from './catalog-counts';
 
 export interface SiteStats {
   total: number;
@@ -20,8 +18,8 @@ export function getSiteStats(): SiteStats {
     total: zeroKeyTools.length,
     ai,
     dev,
-    models: aiModels.length,
-    stacks: toolStacks.length,
+    models: AI_MODEL_COUNT,
+    stacks: TOOL_STACK_COUNT,
     prompts: PROMPT_TEMPLATE_COUNT,
   };
 }

@@ -21,7 +21,7 @@ import { getDisplayStack } from '../lib/stack-localization';
 import { getSectionParams } from '../lib/section-filter-url';
 import { renderFilterToolbar } from './filter-toolbar';
 import { createPanelStatsBar, mountPanelContent } from '../lib/panel-stats-bar';
-import { applyStacksFilterValues } from '../lib/apply-section-filters';
+import { applyStacksFilterValues } from '../lib/apply-stacks-filters';
 import { getRawSuggestionsForSection } from '../lib/filter-suggestions';
 import type { FilterSuggestion } from '../lib/filter-suggestions';
 

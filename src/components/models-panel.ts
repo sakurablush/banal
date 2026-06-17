@@ -12,7 +12,7 @@ import { localizeUseCase } from '../lib/model-localization';
 import { getSectionParams } from '../lib/section-filter-url';
 import { renderFilterToolbar } from './filter-toolbar';
 import { createPanelStatsBar, mountPanelContent } from '../lib/panel-stats-bar';
-import { applyModelsFilterValues, countModelsForValues } from '../lib/apply-section-filters';
+import { applyModelsFilterValues, countModelsForValues } from '../lib/apply-models-filters';
 import { getRawSuggestionsForSection } from '../lib/filter-suggestions';
 import type { FilterSuggestion } from '../lib/filter-suggestions';
 

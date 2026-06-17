@@ -24,6 +24,10 @@ describe('Prompt Templates — horizontal scroller UI behavior', () => {
       },
     });
     vi.useFakeTimers();
+    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
+      cb(0);
+      return 1;
+    });
   });
 
   afterEach(() => {

@@ -1,11 +1,8 @@
 /**
- * Apply section-scoped filter values to panel state.
+ * Apply URL / saved filter values to AI models panel state.
  */
 
-import type { StackAudience } from '../types/tool';
-import type { ZeroKeyCategory } from '../data/zero-key-tools';
 import { aiModels, getModelFamilies } from '../data/ai-models';
-import { getStackAudiences } from '../data/tool-stacks';
 
 const MODEL_USE_CASES = new Set([
   'coding',
@@ -62,48 +59,4 @@ export function countModelsForValues(values: Record<string, string>): number {
   if (s.useCaseFilter) models = models.filter((m) => m.bestFor.includes(s.useCaseFilter!));
   if (s.licenseFilter) models = models.filter((m) => m.license.type === s.licenseFilter);
   return models.length;
-}
-
-export interface StacksFilterState {
-  audienceFilter: StackAudience | null;
-}
-
-export function applyStacksFilterValues(
-  state: StacksFilterState,
-  values: Record<string, string>
-): void {
-  const valid = new Set(getStackAudiences());
-  state.audienceFilter =
-    values.audience && valid.has(values.audience) ? (values.audience as StackAudience) : null;
-}
-
-export interface ZeroKeyFilterState {
-  query: string;
-  activeCategory: ZeroKeyCategory | null;
-  lifeFilters: Set<string>;
-}
-
-export function applyZeroKeyFilterValues(
-  state: ZeroKeyFilterState,
-  values: Record<string, string>,
-  validCategories: Set<string>,
-  validLifeIds: Set<string>
-): void {
-  state.activeCategory =
-    values.cat && validCategories.has(values.cat) ? (values.cat as ZeroKeyCategory) : null;
-  state.query = values.q ? values.q.slice(0, 200) : '';
-  state.lifeFilters.clear();
-  if (values.life) {
-    for (const id of values.life.split(',').filter(Boolean)) {
-      if (validLifeIds.has(id)) state.lifeFilters.add(id);
-    }
-  }
-}
-
-export function applyPromptsFilterValues(
-  state: { selectedCategory: string },
-  values: Record<string, string>,
-  validCategories: Set<string>
-): void {
-  state.selectedCategory = values.cat && validCategories.has(values.cat) ? values.cat : 'all';
 }

@@ -942,6 +942,22 @@ main#app,
   align-items: stretch;
 }
 
+@media (max-width: 768px) {
+  .zk2-card,
+  .tool-card-horizontal,
+  .prompt-card-horizontal {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  [data-theme='light'] .zk2-card,
+  [data-theme='light'] .tool-card-horizontal,
+  [data-theme='light'] .prompt-card-horizontal {
+    background: rgba(255, 255, 255, 0.92);
+  }
+}
+
 @media (max-width: 700px) {
   .zk2-grid {
     grid-template-columns: 1fr;
@@ -965,6 +981,8 @@ main#app,
   overflow: hidden;
   animation: zk2CardAppear 0.35s ease forwards;
   opacity: 0;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 280px;
 }
 
 @keyframes zk2CardAppear {
@@ -3870,6 +3888,8 @@ textarea.sp-form-input {
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 180px;
 }
 
 .prompt-card-horizontal:hover {
