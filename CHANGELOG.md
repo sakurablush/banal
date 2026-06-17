@@ -7,11 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.4] - 2026-06-17
+## [1.0.3] - 2026-06-17
 
-Follow-up patch after v1.0.3: faster homepage first paint, mobile layout fixes
-for sidebar rails and scrollable model/stack lists, Contributor Covenant, and
-reproducible CI npm pin. No catalog, API, or breaking changes.
+Follow-up patch after v1.0.2: desktop refine fix, mobile layout polish, faster
+homepage first paint, Contributor Covenant, and reproducible CI npm pin. No
+catalog, API, or breaking changes.
 
 ### Added
 
@@ -29,24 +29,16 @@ reproducible CI npm pin. No catalog, API, or breaking changes.
 
 ### Fixed
 
+- **Desktop refine panel empty on load.** The collapsible `<details>` wrapper
+  stayed closed while its summary was hidden at ≥901px, so filter toolbars and
+  quick filters did not render until a category or filter was selected. Desktop
+  now opens refine by default; mobile collapse behavior is unchanged.
 - **Mobile category and refine rails (≤900px).** Sidebar column no longer
   inherits the desktop tile min-height, so category chips and collapsed refine
   stay compact single-row pills instead of stretching to full viewport height.
 - **AI Models (and Stacks) list scroll on mobile.** Models directory no longer
   grows unbounded on small screens; the card grid scrolls inside a capped pane
   matching prompt templates (`85vh` / `--panel-tiles-effective-scroll-height`).
-
-## [1.0.3] - 2026-06-17
-
-Bug fix for desktop refine panel appearing empty after the mobile collapsible
-sidebar shipped in v1.0.2. No catalog, API, or breaking changes.
-
-### Fixed
-
-- **Desktop refine panel empty on load.** The collapsible `<details>` wrapper
-  stayed closed while its summary was hidden at ≥901px, so filter toolbars and
-  quick filters did not render until a category or filter was selected. Desktop
-  now opens refine by default; mobile collapse behavior is unchanged.
 
 ### Tests
 
