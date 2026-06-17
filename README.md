@@ -3,7 +3,7 @@
 **Free, forkable reference for AI and developer tools — curated for builders who fund their own stack.**
 
 Banal is a single static site: **273 tools** with honest access labels, **52 prompt
-templates** in English and Japanese, **38 open models**, and \*\*10 workflow stacks.
+templates** in English and Japanese, **38 open models**, and **10 workflow stacks**.
 No backend. No accounts. No installs. No telemetry. Clone it, host it for free,
 copy it to a USB, or open `dist/index.html` from disk.
 
