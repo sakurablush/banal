@@ -518,6 +518,32 @@ main#app,
     grid-template-columns: 1fr;
     min-height: calc(var(--panel-tiles-effective-min-height) * 0.8);
   }
+
+  /* Bounded scroll panes — models/stacks + zk2 directories (match prompt templates) */
+  .models-panel,
+  .stacks-panel {
+    height: auto;
+    max-height: var(--panel-tiles-mobile-max-height);
+    min-height: 0;
+  }
+
+  .models-content,
+  .stacks-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .models-panel .panel-content-scroll,
+  .stacks-panel .panel-content-scroll,
+  .zk2-layout > .zk2-horizontal-content .panel-content-scroll {
+    max-height: var(--panel-tiles-effective-scroll-height);
+  }
+
+  .zk2-layout > .zk2-horizontal-content {
+    max-height: var(--panel-tiles-mobile-max-height);
+    overflow: hidden;
+  }
 }
 
 /* Cipher Menu removed â€” replaced with simple navbar */
@@ -6009,11 +6035,6 @@ textarea.sp-form-input {
 
 /* Responsive adjustments for models and stacks */
 @media (max-width: 767px) {
-  .models-panel,
-  .stacks-panel {
-    height: auto;
-  }
-
   .models-grid {
     grid-template-columns: 1fr;
   }

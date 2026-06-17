@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Mobile category and refine rails (≤900px).** Sidebar column no longer
   inherits the desktop tile min-height, so category chips and collapsed refine
   stay compact single-row pills instead of stretching to full viewport height.
+- **AI Models (and Stacks) list scroll on mobile.** Models directory no longer
+  grows unbounded on small screens; the card grid scrolls inside a capped pane
+  matching prompt templates (`85vh` / `--panel-tiles-effective-scroll-height`).
 
 ## [1.0.3] - 2026-06-17
 
