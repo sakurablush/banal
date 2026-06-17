@@ -22,7 +22,8 @@ import { createSidebarColumn } from './lib/sidebar-column';
 import { createPanelStatsBar, mountPanelContent } from './lib/panel-stats-bar';
 import { bindZk2LayoutHeightSync, syncZk2LayoutHeight } from './lib/sync-zk2-layout-height';
 import { t } from './i18n';
-import { applyPromptsFilterValues } from './lib/apply-section-filters';
+import { applyPromptsFilterValues } from './lib/apply-prompts-filters';
+import { appendChildrenBatched } from './lib/batch-dom';
 import { getRawSuggestionsForSection } from './lib/filter-suggestions';
 import type { FilterSuggestion } from './lib/filter-suggestions';
 import { trackFilterEvent } from './lib/filter-analytics';
@@ -496,10 +497,7 @@ function createPromptGridContainer(state: PromptTemplatesViewState): HTMLElement
 
   const filteredPrompts = getPromptsForCategory(state.selectedCategory, state.prompts);
 
-  for (const pt of filteredPrompts) {
-    const card = createHorizontalPromptCard(state, pt);
-    grid.appendChild(card);
-  }
+  appendChildrenBatched(grid, filteredPrompts, (pt) => createHorizontalPromptCard(state, pt));
 
   return grid;
 }

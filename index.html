@@ -276,35 +276,53 @@
       </nav>
       <!-- Mobile nav (hamburger not needed — just show all links stacked) -->
       <div
-        class="sm:hidden border-t border-white/5 page-shell py-2 flex gap-4 text-xs overflow-x-auto"
+        class="sm:hidden border-t border-white/5 page-shell py-2 flex gap-4 text-xs overflow-x-auto chip-rail-mobile-nav"
       >
         <a
           href="#ai-tools"
-          class="text-white/60 hover:text-white whitespace-nowrap"
+          class="text-white/60 hover:text-white whitespace-nowrap flex-shrink-0"
           data-i18n="nav.aiTools"
           >AI Tools</a
         >
         <a
           href="#dev-tools"
-          class="text-white/60 hover:text-white whitespace-nowrap"
+          class="text-white/60 hover:text-white whitespace-nowrap flex-shrink-0"
           data-i18n="nav.devTools"
           >Dev Tools</a
         >
         <a
+          href="#ai-models"
+          class="text-white/60 hover:text-white whitespace-nowrap flex-shrink-0"
+          data-i18n="nav.aiModels"
+          >AI Models</a
+        >
+        <a
+          href="#tool-stacks"
+          class="text-white/60 hover:text-white whitespace-nowrap flex-shrink-0"
+          data-i18n="nav.stacks"
+          >Stacks</a
+        >
+        <a
+          href="#guides"
+          class="text-white/60 hover:text-white whitespace-nowrap flex-shrink-0"
+          data-i18n="nav.guides"
+          >Guides</a
+        >
+        <a
           href="#prompt-templates"
-          class="text-white/60 hover:text-white whitespace-nowrap"
+          class="text-white/60 hover:text-white whitespace-nowrap flex-shrink-0"
           data-i18n="nav.promptTemplates"
           >Prompt Templates</a
         >
         <a
           href="#articles"
-          class="text-white/60 hover:text-white whitespace-nowrap"
+          class="text-white/60 hover:text-white whitespace-nowrap flex-shrink-0"
           data-i18n="nav.articles"
           >Articles</a
         >
         <a
           href="#about"
-          class="text-white/60 hover:text-white whitespace-nowrap"
+          class="text-white/60 hover:text-white whitespace-nowrap flex-shrink-0"
           data-i18n="nav.about"
           >About</a
         >
@@ -675,7 +693,10 @@
                 >
                   Recommended free AI chats
                 </div>
-                <div id="prompt-templates-chips" class="flex flex-wrap gap-2"></div>
+                <div
+                  id="prompt-templates-chips"
+                  class="flex flex-nowrap gap-2 overflow-x-auto chip-rail"
+                ></div>
               </div>
               <p class="mt-4 text-xs text-white/50" data-i18n="promptTemplates.howTo.privacy">
                 Drafts are saved in this tab only and disappear when you close it. Do not paste

@@ -38,6 +38,11 @@ jobs:
           node-version: '22' # Current Active LTS (since Oct 2024)
           cache: 'npm'
 
+      # Match package.json "packageManager" — npm 11+ resolves optional peers
+      # differently and can desync the lockfile from npm 10 used on CI.
+      - name: Align npm with packageManager field
+        run: npm i -g npm@10.9.2
+
       - name: Install dependencies (clean, reproducible)
         run: npm ci --no-audit --no-fund
 

@@ -10,6 +10,12 @@ import { toolStacks } from '../src/data/tool-stacks';
 import { toolStacksJa } from '../src/data/tool-stacks-ja';
 import { zeroKeyTools } from '../src/data/zero-key-tools';
 import { zeroKeyToolsJa } from '../src/data/zero-key-tools-ja';
+import { aiModels } from '../src/data/ai-models';
+import {
+  AI_MODEL_COUNT,
+  PROMPT_TEMPLATE_COUNT,
+  TOOL_STACK_COUNT,
+} from '../src/data/catalog-counts';
 import { getSiteStats } from '../src/data/site-stats';
 import {
   getGettingStartedGuidesMeta,
@@ -27,7 +33,10 @@ import {
 } from '../src/lib/tools-directory-markdown';
 import { missingOverlayKeys, extraOverlayKeys } from '../src/lib/locale-parity';
 import { translations } from '../src/i18n';
-import { PromptTemplatesLibrary, PROMPT_TEMPLATE_COUNT } from '../src/lib/prompt-templates';
+import {
+  PromptTemplatesLibrary,
+  PROMPT_TEMPLATE_COUNT as LIVE_PROMPT_COUNT,
+} from '../src/lib/prompt-templates';
 import prettier from 'prettier';
 
 async function canonicalReadmeToolsSection(content: string): Promise<string> {
@@ -243,9 +252,16 @@ describe('Prompt templates — parity and paste notes', () => {
     }
   });
 
+  it('catalog-counts constants match live data (no boot-path drift)', () => {
+    expect(AI_MODEL_COUNT).toBe(aiModels.length);
+    expect(TOOL_STACK_COUNT).toBe(toolStacks.length);
+    expect(PROMPT_TEMPLATE_COUNT).toBe(LIVE_PROMPT_COUNT);
+  });
+
   it('site-stats.prompts matches the live template count (no drift)', () => {
     const stats = getSiteStats();
     expect(stats.prompts).toBe(PROMPT_TEMPLATE_COUNT);
+    expect(stats.prompts).toBe(LIVE_PROMPT_COUNT);
     expect(stats.prompts).toBeGreaterThanOrEqual(40);
   });
 
