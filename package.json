@@ -1,6 +1,6 @@
 {
   "name": "banal-ai",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Banal — curated free AI and developer tools with honest access labels. Static, forkable, bilingual (EN/JA). For builders who fund their own stack.",
   "type": "module",
   "license": "MIT",
