@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Mobile category and refine rails (≤900px).** Sidebar column no longer
+  inherits the desktop tile min-height, so category chips and collapsed refine
+  stay compact single-row pills instead of stretching to full viewport height.
+
 ## [1.0.3] - 2026-06-17
 
 Bug fix for desktop refine panel appearing empty after the mobile collapsible
