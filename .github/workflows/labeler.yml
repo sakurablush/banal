@@ -2,8 +2,9 @@ name: Labeler
 
 # Auto-labels PRs based on changed paths.
 # pull_request_target is required so fork PRs can receive labels (GITHUB_TOKEN
-# write on base repo). Workflow YAML is always taken from the default branch;
-# until this file is on main, labeler runs may still use the previous config.
+# write on base repo). Workflow YAML is always read from the default branch.
+# After changing this file on main, trigger a fresh run (push / synchronize) —
+# "Re-run jobs" keeps the workflow snapshot from the original run.
 # https://github.com/actions/labeler
 
 on:
@@ -21,11 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Checkout PR head
+      - name: Checkout default branch config
         uses: actions/checkout@v5
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Apply path-based labels
         uses: actions/labeler@v6
