@@ -7,8 +7,10 @@ import {
   getMeshPalette,
   getSunLayout,
   initHeroMesh,
+  meshRowHalfWidth,
   meshSpread,
   prefersReducedMotion,
+  sunHalfWidthAtHorizon,
   sunIllumination,
   sunLightY,
   waveOffset,
@@ -142,6 +144,25 @@ describe('hero-mesh', () => {
       expect(meshSpread(0)).toBeGreaterThan(0.1);
       expect(meshSpread(1)).toBe(1);
       expect(meshSpread(0.5)).toBeGreaterThan(meshSpread(0));
+    });
+  });
+
+  describe('meshRowHalfWidth', () => {
+    it('adds horizon edge padding at the vanishing row only', () => {
+      const width = 960;
+      const base = 0.5 * width * 0.92 * meshSpread(0);
+      expect(meshRowHalfWidth(width, 0)).toBe(base + 4);
+      expect(meshRowHalfWidth(width, 1)).toBeCloseTo(0.5 * width * 0.92 * meshSpread(1), 5);
+    });
+
+    it('tracks the sun chord more closely at the horizon than spread alone', () => {
+      const width = 960;
+      const height = 520;
+      const meshHalf = meshRowHalfWidth(width, 0);
+      const sunHalf = sunHalfWidthAtHorizon(width, height);
+      const baseHalf = 0.5 * width * 0.92 * meshSpread(0);
+      expect(meshHalf).toBeGreaterThan(baseHalf);
+      expect(Math.abs(meshHalf - sunHalf)).toBeLessThan(Math.abs(baseHalf - sunHalf));
     });
   });
 
