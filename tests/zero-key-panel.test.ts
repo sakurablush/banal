@@ -93,7 +93,9 @@ describe('zero-key panel rendering', () => {
   it('renders search input and tool cards in horizontal scroll layout', () => {
     const root = renderPanel();
 
-    expect(root.querySelector('#zk-search-input')).not.toBeNull();
+    const searchInput = root.querySelector('.zk2-search-input') as HTMLInputElement;
+    expect(searchInput).not.toBeNull();
+    expect(searchInput.id).toBe('zk-search-input-all');
     // All tools should be visible in horizontal scroll (no lazy loading)
     const cards = root.querySelectorAll('.tool-card-horizontal');
     expect(cards.length).toBeGreaterThan(0);
@@ -102,7 +104,7 @@ describe('zero-key panel rendering', () => {
 
   it('searches across names, categories, badges, and use cases in horizontal layout', () => {
     const root = renderPanel();
-    const input = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const input = root.querySelector('.zk2-search-input') as HTMLInputElement;
 
     input.value = 'Postgres';
     input.dispatchEvent(new Event('input', { bubbles: true }));
@@ -135,7 +137,7 @@ describe('zero-key panel rendering', () => {
 
   it('shows clear empty state for impossible searches', () => {
     const root = renderPanel();
-    const input = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const input = root.querySelector('.zk2-search-input') as HTMLInputElement;
 
     input.value = 'zzzz-no-such-zero-key-tool';
     input.dispatchEvent(new Event('input', { bubbles: true }));
@@ -181,7 +183,7 @@ describe('zero-key panel rendering', () => {
     vi.advanceTimersByTime(300);
 
     // Panel search should sync
-    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const panelInput = root.querySelector('.zk2-search-input') as HTMLInputElement;
     expect(panelInput.value).toBe('Docker');
 
     // Should show filtered results in horizontal scroll
@@ -199,7 +201,7 @@ describe('zero-key panel rendering', () => {
     document.body.appendChild(toolsSection);
 
     const root = renderPanel();
-    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const panelInput = root.querySelector('.zk2-search-input') as HTMLInputElement;
 
     // Press Enter in hero search
     heroInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
@@ -229,7 +231,7 @@ describe('zero-key panel rendering', () => {
 
   it('panel search Escape key clears search', () => {
     const root = renderPanel();
-    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const panelInput = root.querySelector('.zk2-search-input') as HTMLInputElement;
 
     // Type something
     panelInput.value = 'Redis';
@@ -248,7 +250,7 @@ describe('zero-key panel rendering', () => {
 
   it('Ctrl+K focuses and selects panel search input', () => {
     const root = renderPanel();
-    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const panelInput = root.querySelector('.zk2-search-input') as HTMLInputElement;
 
     // Press Ctrl+K
     document.dispatchEvent(
@@ -265,7 +267,7 @@ describe('zero-key panel rendering', () => {
 
   it('clear filters button resets all filters and search', () => {
     const root = renderPanel();
-    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const panelInput = root.querySelector('.zk2-search-input') as HTMLInputElement;
 
     // Apply a search that returns no results
     panelInput.value = 'zzzz-no-such-tool';
@@ -384,7 +386,7 @@ describe('zero-key panel rendering', () => {
     document.body.appendChild(heroInput);
 
     const root = renderPanel();
-    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const panelInput = root.querySelector('.zk2-search-input') as HTMLInputElement;
 
     // Type in panel search
     panelInput.value = 'Docker';
@@ -634,7 +636,7 @@ describe('zero-key panel API methods', () => {
     expect(resetCount).toBeGreaterThan(searchCount);
 
     // Search input should be cleared
-    const input = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const input = root.querySelector('.zk2-search-input') as HTMLInputElement;
     expect(input.value).toBe('');
   });
 
@@ -649,7 +651,7 @@ describe('zero-key panel API methods', () => {
     const api = renderZeroKeyPowerPanel(root, { lang: 'en' });
 
     // Type in search to trigger debounce
-    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const panelInput = root.querySelector('.zk2-search-input') as HTMLInputElement;
     panelInput.value = 'test';
     panelInput.dispatchEvent(new Event('input', { bubbles: true }));
 
@@ -785,7 +787,7 @@ describe('zero-key panel API methods', () => {
     renderZeroKeyPowerPanel(root, { lang: 'en' });
 
     // Search for impossible term
-    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const panelInput = root.querySelector('.zk2-search-input') as HTMLInputElement;
     panelInput.value = 'zzzz-no-such-tool';
     panelInput.dispatchEvent(new Event('input', { bubbles: true }));
     vi.advanceTimersByTime(300);
@@ -819,7 +821,7 @@ describe('zero-key panel API methods', () => {
     heroInput.dispatchEvent(new Event('input', { bubbles: true }));
     vi.advanceTimersByTime(300);
 
-    const panelInput = root.querySelector('#zk-search-input') as HTMLInputElement;
+    const panelInput = root.querySelector('.zk2-search-input') as HTMLInputElement;
     expect(panelInput.value).toBe('Docker');
   });
 
