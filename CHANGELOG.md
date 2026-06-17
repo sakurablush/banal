@@ -26,9 +26,10 @@ changes.
 - **GitHub Actions labeler.** Migrated `.github/labeler.yml` to the
   `actions/labeler@v6` schema (label keys with `changed-files` match objects).
   Upgraded the workflow to `actions/checkout@v5` and `actions/labeler@v6`, added
-  `issues: write` so labels can be created, and check out the PR head so config
-  updates apply before merge. Removed unsupported `fail-on-error` input that caused
-  the labeler job to fail on every PR.
+  `issues: write` so labels can be created, and read config from the default
+  branch. Removed unsupported `fail-on-error` input that caused the labeler job
+  to fail on every PR. After workflow changes on `main`, push or synchronize the
+  PR to trigger a fresh run — re-run keeps the old workflow snapshot.
 - **GitHub Pages module load.** Removed the hand-rolled `modulepreload` for
   `/src/main.ts`. Vite rewrote it to `dist/assets/main-*.ts` while the script tag
   became `.js`. GitHub Pages serves `.ts` as MIME type `video/mp2t`, so the browser
