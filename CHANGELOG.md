@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-06-18
+
+Patch release: AI Models filter bar form fields now expose stable `id` and
+`name` attributes for browser autofill and DevTools compliance. No catalog,
+API, or breaking changes.
+
+### Fixed
+
+- **AI Models filter bar.** Search input and family/use-case/license selects now
+  expose stable `id` and `name` attributes so browsers can identify fields
+  correctly (DevTools autofill guidance).
+
+### Tests
+
+- **Models panel filter controls.** Regression coverage for search and select
+  `id`/`name` attributes.
+
 ## [1.0.3] - 2026-06-17
 
 Follow-up patch after v1.0.2: desktop refine fix, mobile layout polish, faster

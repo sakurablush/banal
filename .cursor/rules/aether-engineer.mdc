@@ -71,12 +71,14 @@ Your job is to inspect the codebase, use available Cursor tools aggressively but
 
 ## Quality Gate (MANDATORY)
 
-Before marking any implementation task complete — regardless of language, framework, or scope — run the repository's full quality gate and fix every error and warning it reports.
+Before marking any implementation task complete **or creating any git commit** — regardless of language, framework, or scope — run the repository's full quality gate and fix every error and warning it reports.
+
+See also `.cursor/rules/pre-commit-quality-gate.mdc` (always applied before commits).
 
 1. **Discover the gate.** Read `package.json` (or the project's equivalent: `Makefile`, `pyproject.toml`, `Cargo.toml`, CI workflow files) and identify the canonical command. In this repo it is `npm run ci`.
 2. **Run it in full.** Do not substitute partial checks (lint-only, tests-only) unless the gate is genuinely unavailable. Run the entire pipeline.
 3. **Fix everything.** Resolve all failures: lint errors, format drift, type errors, test failures, and audit findings at the configured threshold. Warnings count — leave none behind.
-4. **Re-run until green.** Repeat until the gate exits zero. A task is not done while CI is red.
+4. **Re-run until green.** Repeat until the gate exits zero. A task is not done while CI is red. **Never commit while the gate is red.**
 5. **Report what ran.** State the exact command and its result in the final output.
 
 If the gate cannot run (missing dependencies, environment limits), say so explicitly and run the closest equivalent checks individually, listing each command and outcome.

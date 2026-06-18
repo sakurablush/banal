@@ -1,0 +1,41 @@
+---
+description: Mandatory lint, format, typecheck, and tests before any git commit
+alwaysApply: true
+---
+
+# Pre-Commit Quality Gate (MANDATORY)
+
+Before **every** `git commit` — and before telling the user work is ready to merge — run the repository quality gate and fix all failures.
+
+## Canonical command
+
+```bash
+npm run ci
+```
+
+Equivalent pipeline (only if `ci` cannot run):
+
+```bash
+npm run lint:check && npm run format:check && npm run typecheck && npm run test:run
+```
+
+## Workflow
+
+1. **After code edits**, run `npm run lint` on touched files when convenient; always run the full gate before commit.
+2. **Fix everything** — ESLint/Prettier (`prettier/prettier`), TypeScript, test failures, and audit at the configured threshold. Warnings count.
+3. **Re-run until exit code 0.** Never commit with a red gate.
+4. **Stage lint/format fixes** in the same commit as the feature or fix they belong to.
+
+## Common pitfalls in this repo
+
+- **Prettier via ESLint** — multi-line `expect(...)` chains in tests must match project style; run `npm run lint` (with `--fix`) instead of guessing formatting.
+- **Tests-only changes** still require `lint:check` and `format:check`, not just `vitest`.
+- **Do not rely on Bugbot or unit tests alone** — they do not run ESLint or Prettier.
+
+## When committing for the user
+
+If the user asks you to commit:
+
+1. Run `npm run ci` (or the equivalent pipeline above).
+2. Include any auto-fixed formatting in the commit.
+3. State in the final message which gate command ran and that it passed.
