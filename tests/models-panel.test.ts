@@ -25,7 +25,25 @@ describe('Models Panel', () => {
 
     const searchInput = container.querySelector('.models-search-input') as HTMLInputElement;
     expect(searchInput).toBeTruthy();
+    expect(searchInput.id).toBe('models-search-input');
+    expect(searchInput.name).toBe('models-search');
     expect(searchInput.placeholder).toContain('Search models');
+
+    api.destroy();
+  });
+
+  it('should give filter controls stable id and name attributes', () => {
+    const api = renderModelsPanel(container, { lang: 'en' });
+
+    expect((container.querySelector('#models-filter-family') as HTMLSelectElement)?.name).toBe(
+      'family'
+    );
+    expect((container.querySelector('#models-filter-use-case') as HTMLSelectElement)?.name).toBe(
+      'useCase'
+    );
+    expect((container.querySelector('#models-filter-license') as HTMLSelectElement)?.name).toBe(
+      'license'
+    );
 
     api.destroy();
   });
