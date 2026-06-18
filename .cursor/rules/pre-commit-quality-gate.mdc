@@ -1,41 +1,27 @@
 ---
-description: Mandatory lint, format, typecheck, and tests before any git commit
-alwaysApply: true
+description: Run npm run ci before git commit, PR readiness, or fixing CI/lint failures in Banal. Use when implementing code, editing Cursor rules/skills, committing, or marking work merge-ready.
+globs: src/**/*.ts, tests/**/*.ts, .cursor/skills/**/*.md
+alwaysApply: false
 ---
 
-# Pre-Commit Quality Gate (MANDATORY)
+# Pre-Commit Quality Gate
 
-Before **every** `git commit` — and before telling the user work is ready to merge — run the repository quality gate and fix all failures.
+Before **any** `git commit` or "ready to merge" sign-off, run the full gate and fix all failures.
 
-## Canonical command
+**Canonical command:** `npm run ci`
 
-```bash
-npm run ci
-```
+**Fallback:** `npm run lint:check && npm run format:check && npm run typecheck && npm run test:run`
 
-Equivalent pipeline (only if `ci` cannot run):
+## Requirements
 
-```bash
-npm run lint:check && npm run format:check && npm run typecheck && npm run test:run
-```
+1. Re-run until exit code **0**. Never commit on a red gate.
+2. Stage lint/format fixes in the same commit as the change they belong to.
+3. Bugbot or unit tests alone are **not** sufficient — ESLint/Prettier must pass.
 
-## Workflow
+## Repo pitfalls
 
-1. **After code edits**, run `npm run lint` on touched files when convenient; always run the full gate before commit.
-2. **Fix everything** — ESLint/Prettier (`prettier/prettier`), TypeScript, test failures, and audit at the configured threshold. Warnings count.
-3. **Re-run until exit code 0.** Never commit with a red gate.
-4. **Stage lint/format fixes** in the same commit as the feature or fix they belong to.
+- Run `npm run lint` (with `--fix`) on touched `src/` / `tests/` files; do not guess ESLint/Prettier formatting.
+- **`.cursor/skills/**/*.md`** is included in `format:check`. After editing skills (especially markdown tables), run `npm run format` or full `npm run ci` — do not commit skills without a green `format:check`.
+- Test-only edits still need `lint:check` and `format:check`.
 
-## Common pitfalls in this repo
-
-- **Prettier via ESLint** — multi-line `expect(...)` chains in tests must match project style; run `npm run lint` (with `--fix`) instead of guessing formatting.
-- **Tests-only changes** still require `lint:check` and `format:check`, not just `vitest`.
-- **Do not rely on Bugbot or unit tests alone** — they do not run ESLint or Prettier.
-
-## When committing for the user
-
-If the user asks you to commit:
-
-1. Run `npm run ci` (or the equivalent pipeline above).
-2. Include any auto-fixed formatting in the commit.
-3. State in the final message which gate command ran and that it passed.
+**Workflow detail:** `.cursor/skills/pre-commit-ci/SKILL.md`
