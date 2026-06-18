@@ -372,7 +372,10 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   const searchWrap = create('div', 'models-search-wrap');
   const searchInput = create('input');
   searchInput.type = 'text';
+  searchInput.id = 'models-search-input';
+  searchInput.name = 'models-search';
   searchInput.className = 'models-search-input';
+  searchInput.autocomplete = 'off';
   searchInput.placeholder =
     typeof copy.searchPlaceholder === 'string' ? copy.searchPlaceholder : 'Search models\u2026';
   searchInput.value = state.query;
@@ -400,6 +403,8 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   // Family filter
   const families = getModelFamilies();
   const familySelect = create('select', 'models-filter-select');
+  familySelect.id = 'models-filter-family';
+  familySelect.name = 'family';
   const allFamOpt = create('option');
   allFamOpt.value = '';
   allFamOpt.textContent = typeof copy.allFamilies === 'string' ? copy.allFamilies : 'All Families';
@@ -428,6 +433,8 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   // Use case filter
   const useCases = [...MODEL_USE_CASES];
   const useCaseSelect = create('select', 'models-filter-select');
+  useCaseSelect.id = 'models-filter-use-case';
+  useCaseSelect.name = 'useCase';
   const allUseOpt = create('option');
   allUseOpt.value = '';
   allUseOpt.textContent = typeof copy.allUseCases === 'string' ? copy.allUseCases : 'All Use Cases';
@@ -456,6 +463,8 @@ function renderFilterBar(state: ModelsPanelState): HTMLElement {
   // License filter
   const licenses = [...new Set(aiModels.map((m) => m.license.type))].sort();
   const licSelect = create('select', 'models-filter-select');
+  licSelect.id = 'models-filter-license';
+  licSelect.name = 'license';
   const allLicOpt = create('option');
   allLicOpt.value = '';
   allLicOpt.textContent = typeof copy.allLicenses === 'string' ? copy.allLicenses : 'All Licenses';

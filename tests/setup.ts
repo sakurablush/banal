@@ -27,3 +27,6 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Mock scrollIntoView (not implemented in jsdom)
 Element.prototype.scrollIntoView = vi.fn();
+
+// Mock window.open (not implemented in jsdom; zk2-card-cta and report menus call it)
+window.open = vi.fn();

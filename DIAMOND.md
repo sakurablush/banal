@@ -93,5 +93,5 @@ Banal follows [Semantic Versioning](https://semver.org/):
   dependency updates, and catalog corrections that do not require a fork to
   update.
 
-The current version is `1.0.3` (see the `version` field in `package.json`).
+The current version is `1.0.4` (see the `version` field in `package.json`).
 Release notes for every version live in [`CHANGELOG.md`](CHANGELOG.md).
