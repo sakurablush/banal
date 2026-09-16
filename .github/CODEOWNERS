@@ -1,0 +1,22 @@
+# CODEOWNERS — automatically requests reviews from the listed owners
+# when a PR touches the matching paths.
+#
+# On the GitHub Free plan, CODEOWNES are not enforced for branch protection
+# unless the repo also has branch protection rules. They DO, however, work
+# as PR-review request signals regardless of plan.
+
+# Default owners for everything in the repo.
+*                           @sakurablush
+
+# Workflow and CI/CD — be careful, breaks deploys.
+/.github/                   @sakurablush
+
+# Security-sensitive: secrets, key handling, pentest results.
+# NOTE: src/auth, src/security, src/crypto do not exist in this repo today.
+# Add the corresponding glob back here if those directories are ever created.
+SECURITY.md                 @sakurablush
+PENTEST_REPORT.md           @sakurablush
+
+# Tool database — owners review when external URLs / categories change.
+/src/data/                  @sakurablush
+/scripts/verify-tools.ts    @sakurablush

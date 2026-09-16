@@ -1,0 +1,22 @@
+---
+description: Security audit and threat modeling for Banal. Use when the user requests a security review, or when auth, input handling, secrets, or external URLs are in scope.
+alwaysApply: false
+---
+
+# Aether Security Auditor
+
+Think as defender and attacker. Assume hostile external input.
+
+## Review areas
+
+Authentication, authorization, sessions, secrets, input validation, output encoding, XSS, CSRF, dependency risk, static asset exposure, third-party scripts.
+
+## Method
+
+- Evidence from code inspection; cite `file:line`.
+- Classify: critical / high / medium / low / informational.
+- Recommend minimal mitigations; no drive-by refactors.
+
+## Related
+
+For pre-merge code review, see `.cursor/skills/review-before-merge/SKILL.md` (Bugbot + security review skills).

@@ -1,0 +1,27 @@
+---
+description: Run npm run ci before git commit, PR readiness, or fixing CI/lint failures in Banal. Use when implementing code, editing Cursor rules/skills, committing, or marking work merge-ready.
+globs: src/**/*.ts, tests/**/*.ts, .cursor/skills/**/*.md
+alwaysApply: false
+---
+
+# Pre-Commit Quality Gate
+
+Before **any** `git commit` or "ready to merge" sign-off, run the full gate and fix all failures.
+
+**Canonical command:** `npm run ci`
+
+**Fallback:** `npm run lint:check && npm run format:check && npm run typecheck && npm run test:run`
+
+## Requirements
+
+1. Re-run until exit code **0**. Never commit on a red gate.
+2. Stage lint/format fixes in the same commit as the change they belong to.
+3. Bugbot or unit tests alone are **not** sufficient — ESLint/Prettier must pass.
+
+## Repo pitfalls
+
+- Run `npm run lint` (with `--fix`) on touched `src/` / `tests/` files; do not guess ESLint/Prettier formatting.
+- **`.cursor/skills/**/*.md`** is included in `format:check`. After editing skills (especially markdown tables), run `npm run format` or full `npm run ci` — do not commit skills without a green `format:check`.
+- Test-only edits still need `lint:check` and `format:check`.
+
+**Workflow detail:** `.cursor/skills/pre-commit-ci/SKILL.md`

@@ -1,0 +1,35 @@
+---
+description: SemVer, CHANGELOG, and version file sync for shippable Banal changes. Use when finishing user-visible work, cutting a release, or editing CHANGELOG.md or package.json version.
+globs: CHANGELOG.md, package.json, DIAMOND.md
+alwaysApply: false
+---
+
+# Release Versioning & CHANGELOG
+
+Every task that changes **shipped** behavior MUST end with a **release decision** and **CHANGELOG** update. Authority: `DIAMOND.md`, `CHANGELOG.md` (Keep a Changelog).
+
+## Release decision (required in final output)
+
+- **No bump** — internal-only, agent rules, or user deferred release; say why.
+- **Bump X.Y.Z** — patch / minor / major + one-line rationale.
+
+If a user would notice after deploy → release-worthy.
+
+## SemVer (Banal)
+
+| Bump | When |
+|------|------|
+| **Major** | Public site shape changes requiring fork maintainer action |
+| **Minor** | New tool, prompt template, or language |
+| **Patch** | Bug fixes, perf, UX polish, docs, deps, catalog corrections |
+
+No new tool / template / language → **patch**, not minor.
+
+## CHANGELOG
+
+1. Unreleased work → `[Unreleased]`; release cut → `## [X.Y.Z] - YYYY-MM-DD`.
+2. Sections: **Added**, **Changed**, **Fixed**, **Removed**, **Tests** — omit empty.
+3. One theme per version; do not mix unrelated changes.
+4. On bump: sync `package.json`, `package-lock.json`, `DIAMOND.md`.
+
+**Workflow detail:** `.cursor/skills/release-versioning/SKILL.md`

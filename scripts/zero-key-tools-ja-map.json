@@ -1,0 +1,1261 @@
+{
+  "duck-ai": {
+    "bestFor": "プライベートな日常チャット、手紙・計画・説明・機密性の高い下書き。",
+    "qualityNote": "DuckDuckGoがプライバシー重視のチャットUIに高性能ホストモデルを提供。アカウント不要。",
+    "caveat": "ホスト型AIを法的・医療・金融の機密相談先とみなさないこと。"
+  },
+  "lmarena": {
+    "bestFor": "速度より品質重視でモデル回答を比較したいとき。",
+    "qualityNote": "Arenaは同一プロンプトで多数の高性能モデルを試せる最高の公開ベンチの一つ。"
+  },
+  "webllm-chat": {
+    "bestFor": "テキストをサーバーに送らず、性能のあるPCやスマホでプライベートAIを使う。",
+    "qualityNote": "WebGPUでブラウザ内オープンモデルを実行。Webセクション最強のプライバシー。",
+    "caveat": "最新ブラウザ/GPUが必要。古い共有マシンでは遅い場合あり。"
+  },
+  "perchance-chat": {
+    "bestFor": "アカウント作成が難しいときのゼロ摩擦テキスト支援。",
+    "qualityNote": "摩擦の少ない実用的ブラウザチャット。緊急フォールバックタブに最適。"
+  },
+  "huggingface-spaces": {
+    "bestFor": "LLM・画像・音声・OCR・小規模プロトタイプのオープンデモを探す。",
+    "qualityNote": "Web最大のコミュニティラボ。モデルやタスクで検索すれば話題性より実用的。",
+    "caveat": "作者によりスリープ・障害・レート制限・ログイン必須の場合あり。"
+  },
+  "chatgpt-free": {
+    "bestFor": "執筆・コーディング・ブレスト・学習の汎用AIチャット。",
+    "qualityNote": "最も人気のAIチャット。無料枠でGPT-4o-miniと限定GPT-4oが使え、日常タスクに十分。",
+    "caveat": "無料枠に定期リセットの利用上限あり。一部機能はPlus要。"
+  },
+  "microsoft-copilot": {
+    "bestFor": "Web検索・画像生成付きGPT-4クラスチャットをアカウント不要で。",
+    "qualityNote": "ログインなしでGPT-4級モデルが使える優秀な無料選択肢。DALL-E画像生成付き。",
+    "caveat": "Microsoftアカウントで機能拡張。会話上限あり。"
+  },
+  "google-gemini": {
+    "bestFor": "画像理解・Google連携・長コンテキストのマルチモーダルAIチャット。",
+    "qualityNote": "Gemini無料アクセスで強い推論。画像・長文書・Google Workspace向き。",
+    "caveat": "Googleアカウント必須。高度機能は有料枠限定。"
+  },
+  "meta-ai": {
+    "bestFor": "アカウント不要の手軽なAIチャットと画像生成。",
+    "qualityNote": "Llamaモデル搭載。摩擦ゼロで意外と高品質なチャットと画像生成。",
+    "caveat": "提供地域限定。GPT-4級と比べ品質にばらつき。"
+  },
+  "pi-ai": {
+    "bestFor": "丁寧な説明や思考パートナーが欲しい温かい会話型AI。",
+    "qualityNote": "自然な会話特化。共感的で忍耐強く、ブレストに最適。",
+    "caveat": "技術・コーディングは専用ツールより弱い。"
+  },
+  "grok": {
+    "bestFor": "X/Twitterのリアルタイム情報と画像生成付きAIチャット。",
+    "qualityNote": "X経由で無料枠あり。リアルタイムデータで時事・トレンドに強い。",
+    "caveat": "Xアカウント必須。無料枠は日次メッセージ上限あり。"
+  },
+  "you-com": {
+    "bestFor": "チャット・Web結果・複数AIモデルを統合したAI検索。",
+    "qualityNote": "検索エンジンとAIチャットのハイブリッド。無料枠でモデル切替可能。",
+    "caveat": "高度モデル・機能は有料壁の向こう。"
+  },
+  "groq": {
+    "bestFor": "速度最優先のオープンソースモデル超高速推論。",
+    "qualityNote": "独自LPUでLlama・Mixtral等を最速クラスで実行。無料枠も寛大。",
+    "caveat": "レート制限あり。オープンモデルのみ。"
+  },
+  "deepseek-chat": {
+    "bestFor": "トップ級に匹敵するコーディング・推論の高性能AIチャット。",
+    "qualityNote": "DeepSeek-V3/R1はコスパ抜群。数学・コーディング・分析をゼロコストで。",
+    "caveat": "アカウント必須。中国拠点のため機密作業はデータ所在地に注意。"
+  },
+  "phind": {
+    "bestFor": "コード・ドキュメント・技術質問を理解する開発者向けAI検索。",
+    "qualityNote": "開発者特化。技術コンテンツを検索しソース付きコード回答を生成。",
+    "caveat": "無料枠は高度モデルクエリに日次上限。"
+  },
+  "mistral-le-chat": {
+    "bestFor": "Mistral Large含むMistralモデルへの無料アクセス。",
+    "qualityNote": "欧州AIラボの強力モデル。canvas・コード機能付き全ラインナップが無料枠で。",
+    "caveat": "アカウント必須。ChatGPT/Geminiよりエコシステム小。"
+  },
+  "huggingchat": {
+    "bestFor": "最高のコミュニティモデルにアクセスするOSSチャットUI。",
+    "qualityNote": "Hugging Face運営。Llama・Mixtral・Command R+等トップOSSモデルを無料利用。",
+    "caveat": "Hugging Faceアカウント必須。モデル提供は変動あり。"
+  },
+  "poe": {
+    "bestFor": "GPT-4・Claude・GeminiやコミュニティBotを一画面で試す。",
+    "qualityNote": "Quora製。GPT-4o-mini・Claude・Geminiと数千Botを無料枠で一元利用。",
+    "caveat": "モデルごとに日次メッセージ上限。プレミアムモデルはクレジット消費。"
+  },
+  "perchance-image": {
+    "bestFor": "アカウント・費用ゼロの無制限AI画像生成。",
+    "qualityNote": "真に無制限・ログイン不要の希少な画像生成。コンセプト・イラスト向き。",
+    "caveat": "DALL-E/Midjourney未満の品質。下書き・実験向き。"
+  },
+  "craiyon": {
+    "bestFor": "アカウント・課金不要の手軽なテキスト→画像生成。",
+    "qualityNote": "旧DALL-E Mini。シンプルUIで1プロンプト複数枚。素早いアイデア出しに。",
+    "caveat": "プレミアム生成より低品質。無料枠に広告あり。"
+  },
+  "deepai-image": {
+    "bestFor": "登録不要で複数スタイルの手軽な画像生成。",
+    "qualityNote": "テキスト→画像・スタイル転送等をアカウントなしで提供。",
+    "caveat": "無料枠は透かし・解像度制限あり。"
+  },
+  "pollinations-image": {
+    "bestFor": "認証不要の超シンプルAPIによるプログラム的画像生成。",
+    "qualityNote": "Web UIと完全オープンAPIの両方。無料アプリへの画像機能組み込みに最適。"
+  },
+  "scribble-diffusion": {
+    "bestFor": "ラフスケッチを洗練AI画像に変換してブレストや楽しみに。",
+    "qualityNote": "落書きとテキストプロンプトから精緻な画像を生成。ビジュアル発想に最適。"
+  },
+  "remove-bg": {
+    "bestFor": "商品写真・プロフィール・デザインの背景を即座に除去。",
+    "qualityNote": "背景除去のゴールドスタンダード。即時で驚くほど正確。",
+    "caveat": "無料枠は低解像度。フル解像度はクレジットまたはサブスク。"
+  },
+  "cleanup-pictures": {
+    "bestFor": "Photoshop不要で写真から不要物・文字・人物を除去。",
+    "qualityNote": "消したい部分をブラシで塗るとAIが自然に補完。無料でも驚く品質。",
+    "caveat": "無料枠は解像度制限。複雑な除去は複数回が必要な場合あり。"
+  },
+  "canva-free": {
+    "bestFor": "デザインスキル不要でプロ品質のSNSグラフィック・プレゼンを作成。",
+    "qualityNote": "非デザイナー向け最もアクセスしやすいツール。AI画像・テンプレ・巨大アセット庫。",
+    "caveat": "ベスト機能はPro要。無料枠はプレミアム素材に透かし。"
+  },
+  "microsoft-designer": {
+    "bestFor": "DALL-E画像生成内蔵のAIグラフィックデザイン。",
+    "qualityNote": "DALL-Eとデザインテンプレを統合。SNS向けビジュアルに寛大な無料枠。",
+    "caveat": "Microsoftアカウント必須。日次生成上限あり。"
+  },
+  "leonardo-ai": {
+    "bestFor": "微調整モデルと日次無料クレジットの高品質AI画像生成。",
+    "qualityNote": "日150無料トークン・複数専門モデル・image-to-image。有料級の品質。",
+    "caveat": "アカウント必須。高解像度はトークン消費が早い。"
+  },
+  "ideogram": {
+    "bestFor": "ロゴ・ポスター・看板などテキストが正しく描けるAI画像。",
+    "qualityNote": "読めるテキスト付き画像の最高無料ツール。他生成器の弱点を克服。",
+    "caveat": "アカウント必須。無料枠は日次生成上限。"
+  },
+  "capcut": {
+    "bestFor": "AI字幕・エフェクト・背景除去付きフル機能動画編集。",
+    "qualityNote": "ByteDance製。ショート動画向け最高の無料エディタ。AI自動字幕だけで大幅時短。",
+    "caveat": "一部テンプレ・エフェクトはPro要。エクスポートに透かしの場合あり。"
+  },
+  "clipchamp": {
+    "bestFor": "Microsoft製ブラウザ動画編集とAIボイスオーバー。",
+    "qualityNote": "Microsoft買収後Windows標準。AI TTS・テンプレ・ストックメディアが無料枠に。",
+    "caveat": "無料枠は1080pまで。一部ストックはプレミアム。"
+  },
+  "giz-ai": {
+    "bestFor": "単一UIから複数AI動画・画像モデルを試す実験。",
+    "qualityNote": "複数生成モデルを集約。出力比較と用途選定に便利。",
+    "caveat": "無料枠は日次生成数限定。品質はモデル依存。"
+  },
+  "flow-music": {
+    "bestFor": "アカウント不要でテキストから短い音楽クリップを生成。",
+    "qualityNote": "Google Flow Music（旧Riffusion）。スペクトログラムでBGM・ジングル生成。",
+    "caveat": "クリップは短い。本格制作ツールより実験的品質。"
+  },
+  "luvvoice": {
+    "bestFor": "登録不要で多言語の自然なテキスト読み上げ。",
+    "qualityNote": "豊富な声と言語のシンプルTTS。基本利用はアカウント不要。",
+    "caveat": "無料枠は変換文字数上限あり。"
+  },
+  "musicfy": {
+    "bestFor": "AI音楽・ボイスカバー・テキスト→音楽の作曲。",
+    "qualityNote": "ボイス変換・テキスト→音楽・ステム分離。AI音楽探索のクリエイター向け。",
+    "caveat": "無料枠は生成数限定。フル機能はサブスク。"
+  },
+  "suno": {
+    "bestFor": "テキストからボーカル・歌詞・伴奏付きの完成曲を生成。",
+    "qualityNote": "最も印象的な無料AI音楽ツール。驚くほどプロ級のボーカル付き楽曲。",
+    "caveat": "無料枠は日次クレジット限定。商用利用は有料プラン要。"
+  },
+  "tinywow": {
+    "bestFor": "執筆・PDF・画像・動画を一括の無料AI・ファイルツール群。",
+    "qualityNote": "AIライター・要約・PDF変換・画像編集など数百ツール。ファイルは自動削除でプライバシー配慮。",
+    "caveat": "広告付き。個別ツールは専門製品より粗い場合あり。"
+  },
+  "toolbaz": {
+    "bestFor": "登録不要の手軽なAIテキスト生成・リライト・コンテンツ作成。",
+    "qualityNote": "テキスト生成・言い換え・コンテンツ検出など無料AI執筆ツール集。"
+  },
+  "quillbot": {
+    "bestFor": "学術・ビジネス文書の言い換え・文法・要約。",
+    "qualityNote": "最高の無料言い換えツール。文法・要約・引用生成も搭載。",
+    "caveat": "無料枠は言い換え125語まで。長文はプレミアム。"
+  },
+  "deepl-translator": {
+    "bestFor": "特に欧州言語で最も自然な機械翻訳。",
+    "qualityNote": "ニュアンスでGoogle翻訳を上回る一貫性。Web利用はアカウント不要。文書対応。",
+    "caveat": "無料Web版は文字数上限。言語ペアにより品質差あり。"
+  },
+  "google-translate": {
+    "bestFor": "130以上の言語をアカウント不要で即時翻訳。",
+    "qualityNote": "無料翻訳で最大の言語カバレッジ。カメラ翻訳・会話モード・オフライン対応。",
+    "caveat": "言語ペアで品質差大。ニュアンスが失われることあり。"
+  },
+  "languagetool": {
+    "bestFor": "30以上の言語でアカウント不要の文法・スタイルチェック。",
+    "qualityNote": "多言語対応OSS文法チェッカー。非英語向けGrammarly代替に最適。",
+    "caveat": "無料枠は文字数上限と高度提案が少ない。"
+  },
+  "hemingway-editor": {
+    "bestFor": "複雑な文・受動態を可視化して明瞭な文章に。",
+    "qualityNote": "可読性特化。読みにくい文・副詞・受動態をハイライト。",
+    "caveat": "英語のみ。誤り修正ではなく問題箇所の指摘。"
+  },
+  "copy-ai": {
+    "bestFor": "テンプレ付きマーケティングコピー・SNS・ビジネス文書生成。",
+    "qualityNote": "マーケ特化執筆に優秀。広告・メール・商品説明・SNSテンプレ豊富。",
+    "caveat": "無料枠は1席・月2,000語まで。"
+  },
+  "rytr": {
+    "bestFor": "ブログ・メール・広告・SNS向け40以上のテンプレAI執筆。",
+    "qualityNote": "トーン・用途テンプレで構造化コンテンツ作成。十分な出発点になる。",
+    "caveat": "無料枠は月10,000文字まで。"
+  },
+  "chatpdf": {
+    "bestFor": "PDFをアップロードして内容について即座に質問。",
+    "qualityNote": "任意のPDFとチャット。論文・契約・長文の素早い理解に最適。",
+    "caveat": "無料枠はPDFページ数・日次質問数に制限。"
+  },
+  "smallpdf-ai": {
+    "bestFor": "PDFから要点を素早く要約・抽出。",
+    "qualityNote": "信頼のSmallpdfスイートの一部。正確な要約で重要箇所をハイライト。",
+    "caveat": "無料枠は日次処理上限。フルスイートはサブスク。"
+  },
+  "ilovepdf": {
+    "bestFor": "結合・分割・圧縮・変換・署名・編集などPDF全操作。",
+    "qualityNote": "Web最大級の無料PDFツールキット。アカウント不要で変換・圧縮・編集。",
+    "caveat": "無料枠は日次タスク上限。バッチ処理はプレミアム。"
+  },
+  "pdf24": {
+    "bestFor": "アカウント不要の信頼できるPDF作成・編集・変換。",
+    "qualityNote": "完全無料・ファイル制限なし・真にログイン不要。最も寛大な無料PDFツールの一つ。"
+  },
+  "perplexity-search": {
+    "bestFor": "検証可能な出典付きで調査・研究質問に答えたいとき。",
+    "qualityNote": "出典表示で最も信頼できるAI検索。クリック可能な引用付き。調査・ファクトチェック・学習に最適。",
+    "caveat": "Pro Search（詳細検索）は無料枠限定。基本検索は無制限。"
+  },
+  "consensus": {
+    "bestFor": "査読論文から科学的コンセンサスとエビデンスベース回答を探す。",
+    "qualityNote": "2億以上の学術論文を横断検索・統合。エビデンス重視の意思決定に必須。",
+    "caveat": "無料枠は月次検索上限。科学・医療・社会科学向き。"
+  },
+  "elicit": {
+    "bestFor": "論文の発見・要約・データ抽出で文献レビューを自動化。",
+    "qualityNote": "研究者向け構築。論文から構造化データを抽出し研究を統合。",
+    "caveat": "無料枠は利用上限。学術・科学研究で最も強力。"
+  },
+  "semantic-scholar": {
+    "bestFor": "AI要約と引用グラフで学術論文を発見・理解。",
+    "qualityNote": "Allen AI製。2億以上の論文にAI TLDR・引用文脈・影響スコア。完全無料。"
+  },
+  "connected-papers": {
+    "bestFor": "関連論文を視覚的に探索し見落としを防ぐ。",
+    "qualityNote": "論文関係の美しいグラフを生成。文献レビューと重要論文発見に不可欠。",
+    "caveat": "無料枠は月次グラフ数限定。既知の論文から開始が必要。"
+  },
+  "wolfram-alpha": {
+    "bestFor": "数学・科学・工学・データ質問を計算結果で回答。",
+    "qualityNote": "計算知識エンジン。方程式・グラフ・単位変換を精密に処理。",
+    "caveat": "ステップ解説はPro要。無料枠は答えのみの場合あり。"
+  },
+  "desmos": {
+    "bestFor": "関数・データ・幾何のインタラクティブグラフ計算。",
+    "qualityNote": "Web最高の無料グラフ計算機。世界中の教師・学生が利用。"
+  },
+  "geogebra": {
+    "bestFor": "幾何・代数・微積・統計の学習・教育用インタラクティブ数学。",
+    "qualityNote": "世界規模で使われる包括的無料数学ソフト。グラフ・3D・表計算・CAS。"
+  },
+  "khan-academy": {
+    "bestFor": "数学・科学・コンピューティング等の無料世界水準教育とAIチューター。",
+    "qualityNote": "Khanmigo AIチューター付き完全無料。K-12から大学レベルまで演習付き。",
+    "caveat": "Khanmigo AI機能は無料枠で利用制限の場合あり。"
+  },
+  "symbolab": {
+    "bestFor": "代数・微積・三角関数等のステップバイステップ解法。",
+    "qualityNote": "答えだけでなく詳細な解法手順を表示。基礎から高度まで幅広くカバー。",
+    "caveat": "無料枠は日次ステップ解説上限。フルアクセスはサブスク。"
+  },
+  "mathway": {
+    "bestFor": "カメラ入力で即座に数学問題を解く—スマホを向けるだけ。",
+    "qualityNote": "基礎数学から微積・統計まで対応。カメラ入力で宿題に最適。",
+    "caveat": "無料枠は答えのみ。ステップ解説はプレミアム。"
+  },
+  "gamma": {
+    "bestFor": "テキストプロンプトから数分で美しいプレゼン・文書・Webサイトを作成。",
+    "qualityNote": "最高のAIプレゼンツール。簡単な説明から洗練スライドを生成。見た目も本物級。",
+    "caveat": "無料枠はGammaブランディング付き。PowerPoint書き出しはクレジット要。"
+  },
+  "beautiful-ai": {
+    "bestFor": "デザインルールに自動準拠し常にプロ品質のプレゼン。",
+    "qualityNote": "コンテンツ追加に合わせて適応するスマートテンプレ。良いデザイン原則を自動適用。",
+    "caveat": "無料枠は限定。実用機能の多くはPro要。"
+  },
+  "slidesai": {
+    "bestFor": "テキスト・メモをGoogleスライドに自動変換。",
+    "qualityNote": "Googleスライドアドオン。テキスト貼り付けでレイアウト・画像付きスライド完成。",
+    "caveat": "無料枠は月3プレゼンまで。"
+  },
+  "excalidraw": {
+    "bestFor": "デザインサブスク不要でアイデア・システム図・UIスケッチ・計画を説明。",
+    "qualityNote": "成熟した人気OSS図解ツール。ブラウザですぐ使える。"
+  },
+  "photopea": {
+    "bestFor": "インストール不可な環境でのPhotoshop級画像編集。",
+    "qualityNote": "PSD対応を含む最強クラスの無料ブラウザ画像エディタ。"
+  },
+  "penpot": {
+    "bestFor": "Figmaが高額・ロックイン過多なときのUIデザインと共同作業。",
+    "qualityNote": "本格的OSSプロダクトデザインツール。ホスト・セルフホスト両対応。",
+    "caveat": "ホスト共同作業はアカウント要。セルフホストは技術的慣れが必要。"
+  },
+  "diagrams-net": {
+    "bestFor": "アーキテクチャ図・フローチャート・ネットワーク図・ドキュメント用ビジュアル。",
+    "qualityNote": "地味で信頼できる定番。ローカル保存でコア作業にアカウント不要。"
+  },
+  "stackblitz": {
+    "bestFor": "ローカルセットアップ不要の即時Webアプリプロトタイプとデバッグ。",
+    "qualityNote": "インストール摩擦を除く高速ブラウザ開発環境。学習・古いPCに最適。"
+  },
+  "codesandbox": {
+    "bestFor": "共有可能なフロントエンド実験・再現・学習プロジェクト。",
+    "qualityNote": "ブラウザからコードを見せ共有する最も簡単な方法の一つ。"
+  },
+  "bolt-new": {
+    "bestFor": "AI支援でブラウザ内フルスタックWebアプリを構築・デプロイ。",
+    "qualityNote": "StackBlitz製。自然言語で生成・実行・デプロイ。プロトタイピングに革命的。",
+    "caveat": "無料枠は日次AIトークン限定。複雑アプリは手動調整が必要な場合あり。"
+  },
+  "v0-dev": {
+    "bestFor": "テキストや画像から本番品質のReact/Next.js UIコンポーネントを生成。",
+    "qualityNote": "Tailwind付きReact生成の最高AIツール。動くクリーンなコードを出力。",
+    "caveat": "無料枠は生成上限。React/Next.js特化。"
+  },
+  "replit": {
+    "bestFor": "ブラウザでコーディング・実行・デプロイと内蔵AI支援。",
+    "qualityNote": "フル開発環境をブラウザに。AIエージェントが説明からアプリ構築。学習・プロトタイプ向き。",
+    "caveat": "無料枠はリソース制限。常時稼働デプロイは有料。"
+  },
+  "continue-dev": {
+    "bestFor": "VS Code/JetBrainsに任意モデル（ローカル含む）のAIコーディング支援を追加。",
+    "qualityNote": "OSS AIコーディングアシスタントの筆頭。Ollama・OpenAI・Anthropic等対応。データ完全制御。"
+  },
+  "ollama": {
+    "bestFor": "自マシンで完全プライベート・ゼロコストのローカルAI実行。",
+    "qualityNote": "Llama・Mistral・CodeLlama等をローカル実行する最も簡単な方法。ワンコマンドで開始。",
+    "caveat": "8GB以上RAM推奨。大モデルはGPUでないと遅い。"
+  },
+  "cody-sourcegraph": {
+    "bestFor": "現在ファイルだけでなくコードベース全体を理解するAIアシスタント。",
+    "qualityNote": "無料枠に寛大な補完とチャット。コードベース文脈で汎用AIより精度向上。",
+    "caveat": "無料枠はチャット・コマンドに月次上限。"
+  },
+  "github-pages": {
+    "bestFor": "静的サイト・ドキュメント・ポートフォリオ・小ツールを無料公開。",
+    "qualityNote": "リポジトリから公開する最もシンプルなサーバーレス経路。"
+  },
+  "cloudflare-pages": {
+    "bestFor": "プレビューデプロイと強力なグローバルエッジ付き無料静的ホスティング。",
+    "qualityNote": "寛大な無料枠と本番級配信。小チーム・個人開発者向き。"
+  },
+  "supabase": {
+    "bestFor": "プロトタイプ向け本格バックエンド：DB・認証・ストレージ・エッジ関数。",
+    "qualityNote": "ゼロドルスタートで最速の信頼できるOSS Firebase代替。",
+    "caveat": "ホスト無料枠はクォータあり。通常アカウント必須。"
+  },
+  "neon": {
+    "bestFor": "プロトタイプ・デモ・SQL学習・小アプリ向け無料Postgres。",
+    "qualityNote": "開発者フレンドリーなブランチングとモダンPostgres体験の実用的無料DB。"
+  },
+  "railway": {
+    "bestFor": "静的ホスティングでは足りない小規模サービスのデプロイ。",
+    "qualityNote": "リポジトリを素早くライブサービスにする優れたDX。",
+    "caveat": "無料/クレジット方針は頻繁に変動。依存前に要確認。"
+  },
+  "render": {
+    "bestFor": "DevOps負荷なしの静的サイト・小Webサービス・シンプルデプロイ。",
+    "qualityNote": "明確なデプロイUX。localhost超えの初心者向け定番経路。",
+    "caveat": "無料サービスはスリープし上限が変わる場合あり。"
+  },
+  "n8n": {
+    "bestFor": "タスク単位課金なしで退屈なワークフローを自動化。",
+    "qualityNote": "セルフホスト可能な強力ワークフロー自動化。有料連携を多く置き換え可能。",
+    "caveat": "クラウドホストは有料/フリーミアム。ゼロコストはセルフホスト。"
+  },
+  "uptime-kuma": {
+    "bestFor": "Webサイト・API・cron・個人インフラの監視。",
+    "qualityNote": "洗練で実用的な最高クラスの無料セルフホスト稼働監視。"
+  },
+  "kuma-status": {
+    "bestFor": "有料SaaSに飛びつかずOSSの監視/ステータスページ。",
+    "qualityNote": "急速に高額化しがちなカテゴリの信頼できるOSS代替。"
+  },
+  "vaultwarden": {
+    "bestFor": "家族・小グループ向け軽量Bitwarden互換パスワードマネージャー。",
+    "qualityNote": "サブスクなしで優秀なパスワード管理を実現する実績ある軽量方式。",
+    "caveat": "パスワード基盤のセルフホストはバックアップとセキュリティ習慣が必須。"
+  },
+  "bitwarden-free": {
+    "bestFor": "一般ユーザーが実際に使える無料パスワードマネージャー。",
+    "qualityNote": "無料枠で本質的なパスワード管理をマルチデバイスでカバー。"
+  },
+  "proton-drive-free": {
+    "bestFor": "共有マシンで無防備に置きたくない文書のプライベートファイル保存。",
+    "qualityNote": "信頼できるプロバイダーのプライバシー重視無料枠。",
+    "caveat": "無料プランはストレージ限定。"
+  },
+  "joplin-cloudless": {
+    "bestFor": "Notionロックインなしでメモ・調査・計画・個人ナレッジを所有。",
+    "qualityNote": "ローカル優先制御と複数同期オプションの優秀OSSメモアプリ。"
+  },
+  "cryptpad": {
+    "bestFor": "プライベートな共同ドキュメント・シート・フォーム・ホワイトボード。",
+    "qualityNote": "E2E暗号化共同作業は無料Webツールでは希少。CryptPadは本格選択肢。"
+  },
+  "libretranslate": {
+    "bestFor": "閉じた商用APIに全面依存しない翻訳。",
+    "qualityNote": "公開インスタンスとセルフホスト可能なOSS翻訳。",
+    "caveat": "公開インスタンスは品質・レート制限がばらつく。"
+  },
+  "freecodecamp": {
+    "bestFor": "有料ブートキャンプが無理なときの体系的コーディング学習。",
+    "qualityNote": "動画だけでなく実践付きの大規模実績カリキュラム。"
+  },
+  "roadmap-sh": {
+    "bestFor": "コース購入なしで次に学ぶべきことを把握。",
+    "qualityNote": "チュートリアルノイズを切り抜ける高シグナル開発者ロードマップ。"
+  },
+  "open-meteo": {
+    "bestFor": "天気・気候・履歴・大気質・ジオコーディング・予報プロトタイプ。",
+    "qualityNote": "APIキー不要・明確なドキュメント・強力なモデルカバレッジ・OSSサーバー。",
+    "caveat": "無料非商用利用に制限と帰属表示が必要。"
+  },
+  "nws-api": {
+    "bestFor": "米国の気象警報・予報・観測所・ゾーン・公共安全アプリ。",
+    "qualityNote": "本格的警報・市民ツールには公式米国気象データが正解。",
+    "caveat": "米国特化。利用方針遵守とリクエストでのアプリ識別が必要。"
+  },
+  "data-gov": {
+    "bestFor": "米連邦の健康・労働・気候・金融・公共サービスデータセット探索。",
+    "qualityNote": "公共善データの索引。本格的市民・サバイバルツールの基盤。"
+  },
+  "rest-countries": {
+    "bestFor": "国メタデータ・国旗・通貨・国番号・地域フィルタ。",
+    "qualityNote": "実アプリと教育に有用で理解しやすいドメインの信頼スターターAPI。"
+  },
+  "frankfurter": {
+    "bestFor": "金融API登録なしの通貨換算プロトタイプ。",
+    "qualityNote": "ECB参照データを使うシンプルな為替レートAPI。",
+    "caveat": "取引・リアルタイム金融判断には不向き。"
+  },
+  "openfoodfacts-api": {
+    "bestFor": "栄養アプリ・バーコード検索・食料品ツール・公衆衛生プロトタイプ。",
+    "qualityNote": "コミュニティ維持のオープン食品DB。低予算アプリに実用価値。"
+  },
+  "overpass-api": {
+    "bestFor": "クリニック・避難所・図書館・交通・水道・店舗等の公開地図要素検索。",
+    "qualityNote": "OpenStreetMapクエリで独自地図なしの実用的ローカル支援ツールを構築可能。",
+    "caveat": "公開インスタンスは共有リソース。結果をキャッシュし控えめに利用。"
+  },
+  "nominatim": {
+    "bestFor": "低トラフィック市民ツールの住所検索と逆ジオコーディング。",
+    "qualityNote": "OSMベースプロジェクトの標準オープンジオコーディング経路。",
+    "caveat": "厳格な公開利用方針。本番・高トラフィックはセルフホストまたはプロバイダ利用。"
+  },
+  "wikimedia-api": {
+    "bestFor": "検索・要約・メディア・ページメタデータ・無料ナレッジ統合。",
+    "qualityNote": "地球上で最も価値ある公開知識インフラへの直接アクセス。"
+  },
+  "open-library-api": {
+    "bestFor": "書籍検索・ISBN検索・著者データ・表紙・図書館向けプロジェクト。",
+    "qualityNote": "書籍・教育ツール向けの無料公開APIとデータダンプ。",
+    "caveat": "高トラフィック第三者バックエンド用途ではない。"
+  },
+  "crossref-api": {
+    "bestFor": "学術メタデータ・DOI検索・引用・文献発見。",
+    "qualityNote": "研究ツールと引用ワークフローに不可欠な無料インフラ。"
+  },
+  "hacker-news-api": {
+    "bestFor": "開発者ニュースリーダー・トレンド追跡・検索実験・API学習。",
+    "qualityNote": "認証不要のシンプル無料API。HNデータと安定した例。"
+  },
+  "openalex": {
+    "bestFor": "研究発見・著者/機関グラフ・引用・オープン文献計量。",
+    "qualityNote": "寛大な公開アクセスと明確なドキュメントを持つ本格オープン学術索引。"
+  },
+  "github-api": {
+    "bestFor": "リポジトリ検索・Issue・PR・リリース・自動化・ポートフォリオツール。",
+    "qualityNote": "OSSエコシステム向け開発者ツール構築のデフォルトAPI。",
+    "caveat": "未認証レート制限は低い。トークンで改善するが保護必須。"
+  },
+  "gitlab-api": {
+    "bestFor": "GitLabプロジェクト・パイプライン・Issue・MR周りのオープンDevOps自動化。",
+    "qualityNote": "無料/セルフホストGitLabでも本格的内部ツールを構築できる広範API。"
+  },
+  "jsonplaceholder": {
+    "bestFor": "fetch・CRUD UI・デモ・テスト・フロントエンド演習の学習。",
+    "qualityNote": "実クライアントパターンを教えつつ最速のフェイクREST API。"
+  },
+  "dummyjson": {
+    "bestFor": "ECデモ・認証モック・カート・商品・リアルなフロントエンド練習。",
+    "qualityNote": "おもちゃ例より実用的なフェイクデータ。実アプリに近いエンドポイント。"
+  },
+  "httpbin": {
+    "bestFor": "クライアント・ヘッダー・認証・リダイレクト・Cookie・Webhookのテスト。",
+    "qualityNote": "開発者がいずれ必要になる定番HTTP検査エンドポイント。"
+  },
+  "pollinations-api": {
+    "bestFor": "有料モデルキーなしで小アプリに生成画像・テキストを追加。",
+    "qualityNote": "初心者にも簡単で、迅速プロトタイプに十分オープンなAPI。"
+  },
+  "libretranslate-api": {
+    "bestFor": "セルフホストが有料閉鎖APIより望ましい翻訳機能。",
+    "qualityNote": "翻訳はプライバシー敏感なサバイバルツールになり得る—セルフホスト経路が重要。",
+    "caveat": "公開エンドポイントはキー・レート制限あり。信頼性はセルフホスト推奨。"
+  },
+  "ripgrep": {
+    "bestFor": "大規模コードベースのテキストを瞬時に検索。",
+    "qualityNote": "開発者が最初に入れるべきCLI改善の一つ。何時間も節約。"
+  },
+  "fd": {
+    "bestFor": "難解なfind構文を覚えずにファイル検索。",
+    "qualityNote": "高速で読みやすく、fzfやエディタと相性抜群。"
+  },
+  "jq": {
+    "bestFor": "JSON APIレスポンスの読取・フィルタ・変換・デバッグ。",
+    "qualityNote": "低スペックマシンでAPIを扱う人に必須。"
+  },
+  "yq": {
+    "bestFor": "スクリプトでYAML/JSON/TOML/XML設定を編集。",
+    "qualityNote": "Docker・Kubernetes・CI・設定リポジトリ向け実用的インフラ接着剤。"
+  },
+  "httpie": {
+    "bestFor": "生curlより親しみやすい構文でAPIテスト。",
+    "qualityNote": "REST APIデバッグで初心者もプロも実感する生産性向上。"
+  },
+  "curl": {
+    "bestFor": "ほぼあらゆるネットワークリクエストのダウンロード・調査・スクリプト化。",
+    "qualityNote": "どこにでもある万能ネットワークツール。依然として最強。"
+  },
+  "git": {
+    "bestFor": "有料ツールなしで作業履歴を所有し共同作業。",
+    "qualityNote": "脆いコピペ開発から脱するためのコアスキル/ツール。"
+  },
+  "gh-cli": {
+    "bestFor": "ターミナルからリポジトリ・PR・Issue・リリース・Actionsを管理。",
+    "qualityNote": "GitHubを個人開発者・メンテナ向けスクリプト可能インフラに変換。"
+  },
+  "uv": {
+    "bestFor": "Pythonパッケージ・プロジェクト管理と遅いPythonツールの置き換え。",
+    "qualityNote": "控えめなハードウェアでもモダンなPythonセットアップ体験を実現する高速さ。"
+  },
+  "pnpm": {
+    "bestFor": "より速くディスク使用量が少ないNodeパッケージインストール。",
+    "qualityNote": "node_modules肥大化が痛い古いノートPCに最適。"
+  },
+  "mise": {
+    "bestFor": "Node・Python・Go・Ruby・Javaとプロジェクトタスクを一貫管理。",
+    "qualityNote": "言語別バージョン管理ツールの山を置き換える実用的モダン選択肢。"
+  },
+  "lazygit": {
+    "bestFor": "ターミナルからGit変更を視覚的に理解・管理。",
+    "qualityNote": "Git概念は分かるがプレッシャー下で明確なUIが欲しい人向け。"
+  },
+  "hyperfine": {
+    "bestFor": "推測ではなくコマンド性能を正直に計測。",
+    "qualityNote": "再現可能ベンチマークで性能議論を具体化。"
+  },
+  "tokei": {
+    "bestFor": "監査・リポジトリ理解のため言語別コード行数を即座に集計。",
+    "qualityNote": "SaaS分析なしで高速なコードベース可視化。"
+  },
+  "ruff": {
+    "bestFor": "常時実行できるほど高速なPythonリント・フォーマット。",
+    "qualityNote": "Pythonコード品質とフィードバックループの大きな無料アップグレード。"
+  },
+  "biome": {
+    "bestFor": "JavaScript/TypeScriptプロジェクトの高速フォーマット・リント。",
+    "qualityNote": "フロントエンド保守を簡素化する本格オールインワンツール。"
+  },
+  "playwright": {
+    "bestFor": "E2Eテスト・スクリーンショット・ブラウザ自動化・ビジュアルチェック。",
+    "qualityNote": "優秀なドキュメントとクロスブラウザ対応の本番級無料ブラウザ自動化。"
+  },
+  "just": {
+    "bestFor": "test・build・deploy・format・reset等の明確なプロジェクトコマンド定義。",
+    "qualityNote": "暗黙知なしでコントリビューターを成功に導く小さく読みやすい自動化。"
+  },
+  "direnv": {
+    "bestFor": "ディレクトリ入室時にプロジェクト環境を安全にロード。",
+    "qualityNote": "シェル履歴やREADME儀式から秘密とセットアップを分離。"
+  },
+  "k6": {
+    "bestFor": "APIやサイトが実トラフィックに耐えるかテスト。",
+    "qualityNote": "ユーザーが先に試す前にソロ開発者へフィードバックを与えるOSS負荷テスト。"
+  },
+  "rclone": {
+    "bestFor": "多数のストレージプロバイダ間のバックアップとファイル同期。",
+    "qualityNote": "安価/無料ストレージをスクリプト可能バックアップ基盤に変換。"
+  },
+  "podman": {
+    "bestFor": "Docker Desktopロックインなしのローカルコンテナ実行。",
+    "qualityNote": "ルートレスコンテナとオープンツールで低予算開発環境に最適。"
+  },
+  "sqlite": {
+    "bestFor": "ローカルアプリ・プロトタイプ・スクリプト・小サービス・データ分析。",
+    "qualityNote": "最も過小評価されるゼロコストDB：サーバー・アカウント・請求なし。"
+  },
+  "trivy": {
+    "bestFor": "コンテナ・依存関係・IaC・シークレット・リポジトリリスクのスキャン。",
+    "qualityNote": "貧しい開発スタックに追加しやすい高価値セキュリティツールの一つ。"
+  },
+  "gitleaks": {
+    "bestFor": "APIキー漏洩を請求や侵害になる前に検出。",
+    "qualityNote": "無料クレジットやAPIキーを使う人に必須。"
+  },
+  "age": {
+    "bestFor": "モダンで分かりやすいCLIでファイル暗号化。",
+    "qualityNote": "旧来の暗号化ワークフローより正しく使いやすい。"
+  },
+  "syncthing": {
+    "bestFor": "中央クラウドアカウントなしで自デバイス間のプライベート同期。",
+    "qualityNote": "所有権が必要でクラウド追加課金が無理な人に最適。"
+  },
+  "fzf": {
+    "bestFor": "ファイル・履歴・ブランチ・プロセス等パイプ入力のインタラクティブ選択。",
+    "qualityNote": "小さなツールがターミナル全体の感触を変える。"
+  },
+  "bat": {
+    "bestFor": "シンタックスハイライトと有用なデフォルトでファイル閲覧。",
+    "qualityNote": "ターミナル読取を楽にする小さなQoLアップグレード。"
+  },
+  "eza": {
+    "bestFor": "素のlsより明確なディレクトリ構造とメタデータ表示。",
+    "qualityNote": "可視性がミス防止に効く乱雑プロジェクト向け。"
+  },
+  "zoxide": {
+    "bestFor": "長いパスを打たず頻出ディレクトリへジャンプ。",
+    "qualityNote": "小さなツール、日々の大きな効果。"
+  },
+  "huggingface-inference-api": {
+    "bestFor": "自前推論サーバーなしで数千のオープンモデルをAPI呼び出し。",
+    "qualityNote": "ホストAPIで最大のオープンモデルカタログ。実験・デモ・低トラフィックプロトタイプに有用。",
+    "caveat": "無料エンドポイントは共有容量でスリープ・レート制限あり。本番は有料またはセルフホスト。"
+  },
+  "kilo-gateway": {
+    "bestFor": "500以上のモデルへ無料ルート・BYOK・ローカル推論でアプリ/エージェントをルーティング。",
+    "qualityNote": "Kilo Gatewayが多プロバイダ推論を集約。kilo-auto/free等の無料モデルルートを公開。",
+    "caveat": "匿名無料ルートはレート制限。一部無料プロバイダはデータログの可能性—機密コードに注意。"
+  },
+  "openrouter-free": {
+    "bestFor": "1つのOpenAI互換APIキーで多数の無料モデルバリアントを選択。",
+    "qualityNote": "OpenRouterが厳選無料モデルカタログとopenrouter/freeルーターを提供。実験・コーディング・チャット向き。",
+    "caveat": "無料バリアントは分/日上限がありローテーション。依存前に各モデルページを確認。"
+  },
+  "groq-api": {
+    "bestFor": "Llama・Qwen・GPT-OSS等オープンモデルの高速API推論。",
+    "qualityNote": "Groqはモデル別の明確な無料制限を公開。オープンウェイト推論の最速ホスト経路の一つ。",
+    "caveat": "無料制限はプロトタイプ向きで本番高トラフィックには不足。クォータはモデル・組織で変動。"
+  },
+  "free-the-ai": {
+    "bestFor": "チャット・ツール・ストリーミング・画像エンドポイントの無料OpenAI互換APIゲートウェイ。",
+    "qualityNote": "FreeTheAiが1キーで多数モデルを集約。クレカ・課金設定不要でホビーアプリに便利。",
+    "caveat": "Discord/キー登録必須。日次成功上限あり。可用性と品質は変動しやすい。"
+  },
+  "glhf-gg": {
+    "bestFor": "高性能自宅マシンなしで大規模LLMを無料GPUで実行。",
+    "qualityNote": "ブラウザでオープンモルを動かす無料GPU時間を提供。"
+  },
+  "together-ai": {
+    "bestFor": "Llama・Mixtral等オープンモデルへの無料APIアクセス。",
+    "qualityNote": "無料スタータークレジット。ホビーAIアプリバックエンドで人気。"
+  },
+  "cerebras-inference": {
+    "bestFor": "プロトタイプ・デモ向け大容量日次トークン予算の超高速API推論。",
+    "qualityNote": "Cerebrasは約100万トークン/日・14,400リクエスト/日の無料枠を公開。OpenAI互換API。",
+    "caveat": "アカウント必須。無料枠のコンテキストとモデル選択は限定。本番前にクォータ確認。"
+  },
+  "fal-ai": {
+    "bestFor": "高速APIによるプログラム的画像生成・編集。",
+    "qualityNote": "無料クレジットあり。本番プロトタイピングで人気。"
+  },
+  "replicate": {
+    "bestFor": "シンプルAPI呼び出しで1000以上のオープンAIモデルを実行。",
+    "qualityNote": "巨大モデルライブラリと寛大な無料実験枠。"
+  },
+  "banana-dev": {
+    "bestFor": "インフラ管理なしでサーバーレスGPU上のMLモデル実行。",
+    "qualityNote": "無料枠にCPU分数と一部GPUアクセス。"
+  },
+  "google-colab": {
+    "bestFor": "無料クラウドノートブックでPython・ML・データサイエンスとGPU。",
+    "qualityNote": "無料GPUアクセスが学生・ホビイストのキラー機能。"
+  },
+  "kaggle": {
+    "bestFor": "ML学習・データセット探索・GPUノートブックでの無料コンペ。",
+    "qualityNote": "無料GPUノートブックと10万以上の公開データセット。"
+  },
+  "koboldcpp": {
+    "bestFor": "任意マシンでシンプルUIのGGUF LLMをローカル実行。",
+    "qualityNote": "軽量でCPU動作。低スペックハードウェア向き。"
+  },
+  "lm-studio": {
+    "bestFor": "クリーンなGUIでローカルLLMを発見・ダウンロード・実行。",
+    "qualityNote": "非技術ユーザー向けプライベートAIチャットに最適。"
+  },
+  "jan-ai": {
+    "bestFor": "プライベートにローカルLLMを動かすOSSデスクトップアプリ。",
+    "qualityNote": "活発に開発。ダウンロードモデルでオフライン動作のクリーンUX。"
+  },
+  "open-webui": {
+    "bestFor": "RAG・マルチモデル・ファイル対応のLLMセルフホストWeb UI。",
+    "qualityNote": "旧Ollama WebUIから本格OSS AIチャットプラットフォームへ進化。"
+  },
+  "text-generation-webui": {
+    "bestFor": "拡張・キャラクターカード・API付き高度ローカルLLMホスティング。",
+    "qualityNote": "最も柔軟なOSSローカルLLM UI。学習曲線は急。"
+  },
+  "llama-cpp-python": {
+    "bestFor": "スクリプト・アプリからllama.cppでLLMを実行するPythonバインディング。",
+    "qualityNote": "PythonコードからローカルLLM統合をアクセス可能に。"
+  },
+  "gpt4all": {
+    "bestFor": "インターネットなしで任意PC上のプライベートローカルAIアシスタント。",
+    "qualityNote": "巨大モデルハブを持つ最も成熟したローカルLLMデスクトップアプリの一つ。"
+  },
+  "stablediffusion-webui": {
+    "bestFor": "生成を完全制御するローカルStable Diffusion実行。",
+    "qualityNote": "数千拡張を持つ最も人気のOSS Stable Diffusion UI。"
+  },
+  "stablediffusion-comfyui": {
+    "bestFor": "複雑なStable Diffusionワークフローを構築するビジュアルノードUI。",
+    "qualityNote": "上級者向け究極の柔軟性。学習曲線あり。"
+  },
+  "fooocus": {
+    "bestFor": "自動プロンプト強化付きシンプルStable Diffusion GUI。",
+    "qualityNote": "Midjourney風ワンクリック生成をOSSで。"
+  },
+  "midjourney-free": {
+    "bestFor": "高品質芸術的AI画像生成（無料トライアルあり）。",
+    "qualityNote": "業界最高水準の美的品質。無料トライアルは生成数限定。"
+  },
+  "dall-e-free": {
+    "bestFor": "Microsoft Copilot/Bing経由の無料DALL-E画像生成。",
+    "qualityNote": "ChatGPT PlusなしでDALL-E 3品質にアクセス。"
+  },
+  "kaiber-free": {
+    "bestFor": "スタイル転送とアニメーション付きAI動画生成。",
+    "qualityNote": "無料枠に短尺動画生成の日次クレジット。"
+  },
+  "runway-free": {
+    "bestFor": "AI動画編集・グリーンスクリーン・生成。",
+    "qualityNote": "業界標準の動画AIツール。無料トライアルクレジット付き。"
+  },
+  "pika-free": {
+    "bestFor": "DiscordまたはWeb経由の無料AI動画生成。",
+    "qualityNote": "テキストプロンプトから短いアニメクリップ生成で人気。"
+  },
+  "moises-free": {
+    "bestFor": "音楽トラックからボーカルと楽器を分離。",
+    "qualityNote": "無料枠に基本ステム分離とピッチシフト。"
+  },
+  "whisper-web": {
+    "bestFor": "ブラウザで動く無料音声→テキスト文字起こし。",
+    "qualityNote": "WebAssembly経由でクライアント側OpenAI Whisperを実行。"
+  },
+  "paperpal": {
+    "bestFor": "学術・科学執筆のリアルタイムAIライティングと文法。",
+    "qualityNote": "学術執筆パターンに特化して訓練。"
+  },
+  "writefull": {
+    "bestFor": "LaTeX対応の学術執筆向けAI言語フィードバック。",
+    "qualityNote": "研究者・学術関係者向けに設計。"
+  },
+  "obsidian": {
+    "bestFor": "リンクとグラフビュー付きローカル優先個人ナレッジベース。",
+    "qualityNote": "個人利用無料。セカンドブレイン構築に最適。"
+  },
+  "logseq": {
+    "bestFor": "アウトライナーベースのローカル優先ナレッジ管理。",
+    "qualityNote": "Roam ResearchとObsidianのOSS代替。"
+  },
+  "vercel-free": {
+    "bestFor": "サーバーレス関数付き無料フロントエンドデプロイ。",
+    "qualityNote": "Next.jsと静的サイトの業界標準。"
+  },
+  "deno-deploy-free": {
+    "bestFor": "エッジでTypeScript/JavaScriptを無料実行。",
+    "qualityNote": "無料枠は1日10万リクエスト。"
+  },
+  "pdf-ai": {
+    "bestFor": "AIによるPDF分析と質問応答。",
+    "qualityNote": "クリーンなUIと優れた文書理解。",
+    "caveat": "無料枠は文書数制限。"
+  },
+  "docanalyzer": {
+    "bestFor": "AIで複数文書を分析・比較。",
+    "qualityNote": "契約レビューと文書比較に有用。"
+  },
+  "brilliant": {
+    "bestFor": "数学・科学・CS基礎のインタラクティブ学習。",
+    "qualityNote": "優れた問題ベース学習アプローチ。",
+    "caveat": "無料枠はコースアクセス限定。"
+  },
+  "exercism": {
+    "bestFor": "人間メンター付きで完全無料のプログラミング学習。",
+    "qualityNote": "非営利。ボランティアによる優秀なコードレビュー。"
+  },
+  "leetcode-free": {
+    "bestFor": "技術面接向けコーディング問題の練習。",
+    "qualityNote": "面接対策の業界標準。多数の無料問題。",
+    "caveat": "プレミアムでより多くの問題と機能。"
+  },
+  "notion-free": {
+    "bestFor": "基本AI機能付きメモ・Wiki・プロジェクト管理のオールインワン。",
+    "qualityNote": "個人利用は寛大な無料枠。基本AI執筆アシスタント付き。フルAIは有料。",
+    "caveat": "チーム機能は有料プラン要。"
+  },
+  "anytype": {
+    "bestFor": "ローカル優先同期のプライバシー重視ナレッジ管理。",
+    "qualityNote": "E2E暗号化でサーバー側データアクセスなし。"
+  },
+  "gitbook-free": {
+    "bestFor": "プロジェクト向け美しい公開ドキュメント作成。",
+    "qualityNote": "OSSプロジェクトドキュメントに最適。公開は無料。"
+  },
+  "udio": {
+    "bestFor": "ジャンル制御付き高品質AI音楽生成。",
+    "qualityNote": "Sunoに匹敵するプロ品質出力。",
+    "caveat": "無料枠は月次上限。"
+  },
+  "mubert": {
+    "bestFor": "コンテンツ向けロイヤリティフリーBGM生成。",
+    "qualityNote": "YouTube・ポッドキャスト・動画背景に最適。",
+    "caveat": "無料枠は透かし。商用は有料。"
+  },
+  "haiper": {
+    "bestFor": "テキストまたは画像プロンプトからの高速AI動画生成。",
+    "qualityNote": "無料枠でも十分な品質で素早い生成。",
+    "caveat": "無料枠はクレジット制。"
+  },
+  "tensor-art": {
+    "bestFor": "数千のコミュニティモデルで画像生成。",
+    "qualityNote": "寛大な日次無料クレジットの巨大モデルライブラリ。"
+  },
+  "seaart": {
+    "bestFor": "豊富なLoRAモデル対応のAI画像生成。",
+    "qualityNote": "アニメ・スタイルアートと多数カスタムモデルに強い。",
+    "caveat": "無料クレジット制で日次上限。"
+  },
+  "jenni-ai": {
+    "bestFor": "引用サポート付き学術執筆支援。",
+    "qualityNote": "エッセイ・研究論文を書く学生向け。",
+    "caveat": "無料枠は日次語数上限。"
+  },
+  "tldraw": {
+    "bestFor": "図解・スケッチ向け無料共同ホワイトボード。",
+    "qualityNote": "OSS。ブラウザでアカウント不要に完全動作。"
+  },
+  "zed-editor": {
+    "bestFor": "内蔵AI支援付き高速モダンコードエディタ。",
+    "qualityNote": "Atom創設者製。ネイティブ性能と共同AI。"
+  },
+  "codeium": {
+    "bestFor": "任意IDEで動く無料AIコード補完。",
+    "qualityNote": "GitHub Copilotの強力代替。個人は完全無料。"
+  },
+  "multi-dev": {
+    "bestFor": "ゼロ設定AIコーディング。36プロバイダー・タスクフォーク・自動承認。",
+    "qualityNote": "完全無料・サブスクなし。AIプロバイダーには直接支払い。",
+    "caveat": "中間マージンなしだがプロバイダー費用は発生。"
+  },
+  "freehive": {
+    "bestFor": "OAuthトークンでClaude・ChatGPT・Geminiに統一APIアクセス。APIキー不要。",
+    "qualityNote": "ローカル優先のOpenAI/Anthropic互換。CLIツールのOAuthトークンを利用。",
+    "caveat": "CLIツール（Claude Code・Codex CLI・Gemini CLI）と共有。同時実行は避ける。"
+  },
+  "nova-ai": {
+    "bestFor": "12プロバイダー346以上モデルの本番級AIコーディング。",
+    "qualityNote": "285以上のテスト付きOSS。プロバイダー横断で日3万以上無料リクエスト。",
+    "caveat": "無料枠は日次上限。大量使用は有料プロバイダー検討。"
+  },
+  "free-ai-coder": {
+    "bestFor": "Qwen Coder 7BとCLI↔Webセッション同期。日5万トークン無料。",
+    "qualityNote": "MITライセンスOSS CLI。OpenRouter経由346以上モデル。クロスプラットフォーム同期。",
+    "caveat": "日5万トークン無料。無制限はBYOK。"
+  },
+  "firebase-studio": {
+    "bestFor": "Gemini搭載プロトタイピングとフルスタックアプリ。Google Cloud統合。",
+    "qualityNote": "Code OSSベース。Firebase統合付き無料ワークスペース。",
+    "caveat": "一部統合（Firebase App Hosting等）はCloud Billing要の場合あり。"
+  },
+  "google-antigravity": {
+    "bestFor": "GeminiベースIDEのビジュアルエージェント管理。Google製。",
+    "qualityNote": "Google製ビジュアルワークフロー。公開プレビュー中は無料。",
+    "caveat": "プレビュー中無料。終了後の価格は未定。"
+  },
+  "kursor": {
+    "bestFor": "Kimi搭載Cursor代替。エージェントモード・コード検索・ファイル編集。",
+    "qualityNote": "MITライセンスOSS。Kimiは登録で無料クォータ。",
+    "caveat": "Kimi APIキー必須（無料クォータあり）。"
+  },
+  "terax": {
+    "bestFor": "軽量（7MB）ターミナルIDEとエージェントAIサイドパネル。テレメトリなし。",
+    "qualityNote": "Apache-2.0。Tauri 2 + Rust。テレメトリ・アカウント不要。",
+    "caveat": "ツールは無料。モデルトークンは自費またはローカルモデル。"
+  },
+  "claurst": {
+    "bestFor": "チャットフォークとメモリ統合のマルチプロバイダーターミナルTUI。",
+    "qualityNote": "GPL-3.0。GitHub 9.7K+スター。高速でメモリ効率の良いRust実装。",
+    "caveat": "ツールは無料。モデルトークンは自費。"
+  },
+  "openade": {
+    "bestFor": "エージェント開発環境。ローカル優先・クラウドなし・BYOK。",
+    "qualityNote": "OSS。クラウド同期なしのローカル優先。Claude CodeまたはCodexと連携。",
+    "caveat": "ツールは無料。APIアクセス（Claude CodeまたはCodex）は自費。"
+  },
+  "kodely": {
+    "bestFor": "インテリジェントコンテキスト最適化によるコスト最適化AIコーディング。",
+    "qualityNote": "OSSでモデル非依存。コンテキスト最適化でトークン消費を削減。",
+    "caveat": "ツールは無料。モデルトークンは自費。"
+  },
+  "async-ide": {
+    "bestFor": "エージェントファーストデスクトップワークスペース。VS Codeフォークではない一から構築。",
+    "qualityNote": "Apache-2.0。クラウドロックインなしのローカル優先。Electron + React + Monaco。",
+    "caveat": "ツールは無料。モデルトークンは自費。"
+  },
+  "freeride": {
+    "bestFor": "無料プロバイダー間の自動フェイルオーバー。Claude Code・Codex・Gemini CLIをラップ。",
+    "qualityNote": "OSSローカルゲートウェイ。OpenRouter・Groq・NVIDIA NIM等で自動フェイルオーバー。",
+    "caveat": "複数プロバイダーの無料枠を利用。レート制限あり。"
+  },
+  "free-claude-code": {
+    "bestFor": "任意プロバイダーでClaude Code。17プロバイダー間のモデル別ルーティング。",
+    "qualityNote": "OSSプロキシ。ストリーミングとツール使用対応のモデル別ルーティング。",
+    "caveat": "ツールは無料。選択プロバイダーのAPIアクセスは自費。"
+  },
+  "github-copilot-free": {
+    "bestFor": "マルチエージェントハブ付きインライン補完。月2,000補完+50チャット無料。",
+    "qualityNote": "Microsoft製。SWE-bench約55%。個人向け寛大な無料枠。",
+    "caveat": "月2,000補完+50チャット無料。追加利用は有料プラン。"
+  },
+  "gemini-code-assist": {
+    "bestFor": "高利用上限のGoogle Cloud開発者向け。月18万補完無料。",
+    "qualityNote": "Google製の寛大な無料枠。Google Cloud開発に最適。",
+    "caveat": "月18万補完無料。Google Cloudアカウント要の場合あり。"
+  },
+  "amazon-q-developer": {
+    "bestFor": "AWSインフラコードと無制限補完。月50エージェントリクエスト無料。",
+    "qualityNote": "Amazon製。無制限補完と月50エージェントリクエスト無料。",
+    "caveat": "補完無制限無料。エージェントは月50無料。AWSアカウント要の場合あり。"
+  },
+  "google-ai-studio": {
+    "bestFor": "Geminiモデルのプロトタイピングと長コンテキストアプリ向け無料APIキー取得。",
+    "qualityNote": "Google製ワークスペース。Flashモデルは超大コンテキストと高TPM無料枠。",
+    "caveat": "Googleアカウント必須。無料枠プロンプトはGoogleサービス改善に使われる可能性—機密作業前にデータ設定確認。"
+  },
+  "google-gemini-api": {
+    "bestFor": "長コンテキストと寛大な無料TPMクォータでの大量プロトタイピング。",
+    "qualityNote": "Google AI Studio/Gemini APIが大コンテキスト無料Geminiと強力マルチモーダルを公開。",
+    "caveat": "Googleアカウント/プロジェクト必須。無料利用はGoogleサービス改善に使われる可能性。モデル別レート制限。"
+  },
+  "claude-free": {
+    "bestFor": "メッセージあたり最高品質—執筆・分析・コーディング・文書レビュー。",
+    "qualityNote": "Anthropic製。推論と執筆品質最高。約10〜20メッセージ/日。",
+    "caveat": "日次上限は厳しい。無料枠はファイルアップロード不可。"
+  },
+  "free-ai": {
+    "bestFor": "400以上のAIツールを一箇所に—チャット・画像・動画・音声・音楽・執筆・コード。",
+    "qualityNote": "OSSモデル（Qwen 2.5 72B・FLUX・CogVideoX・Kokoro）。商用利用OK。",
+    "caveat": "日3万トークン永久無料。上限超えは月$5からの有料プラン。"
+  },
+  "doubao": {
+    "bestFor": "中国消費者向けマルチモーダル。2.6億MAU、中国最速成長。",
+    "qualityNote": "ByteDance製。2026年Q1にBaiduを逆転。日100万トークン無料。",
+    "caveat": "中国のみ。中国の電話番号必須。"
+  },
+  "ernie-bot": {
+    "bestFor": "エンタープライズAPI利用。Baidu Maps・Baidu Cloudと密連携。",
+    "qualityNote": "Baidu製。エンタープライズAPI利用首位。日200万トークン無料。",
+    "caveat": "中国のみ。Baiduアカウント必須。"
+  },
+  "quark": {
+    "bestFor": "長文書研究—256Kコンテキスト、受験・学生クエリ。",
+    "qualityNote": "Alibaba製。Alibaba系最速成長。日50万トークン無料。",
+    "caveat": "中国のみ。Alibabaアカウント必須。"
+  },
+  "yuanbao": {
+    "bestFor": "WeChatファーストワークフロー—WeChat・QQ・Tencent Docs直接統合。",
+    "qualityNote": "Tencent製。中国AI検索エンジン第4位。日50万トークン無料。",
+    "caveat": "中国のみ。Tencent/WeChatアカウント必須。"
+  },
+  "kimi": {
+    "bestFor": "長文書研究—最大コンテキストウィンドウ（200万トークン）。",
+    "qualityNote": "Moonshot AI製。長コンテキストタスクに最適。日100万トークン無料。",
+    "caveat": "中国+香港のみ。中国の電話番号必須。"
+  },
+  "volcano-engine": {
+    "bestFor": "高頻度API呼び出し—最大日次クォータ、無制限並列。",
+    "qualityNote": "ByteDance製。日200万トークン永久、登録で自動付与。",
+    "caveat": "中国のみ。実名認証必須。"
+  },
+  "alibaba-bailian": {
+    "bestFor": "マルチモデルテスト—Qwen・GLM・MiniMax等。",
+    "qualityNote": "Alibaba製。100万トークン永久、新規ユーザーのみ。",
+    "caveat": "中国のみ。実名認証必須。新規ユーザーのみ。"
+  },
+  "baidu-qianfan": {
+    "bestFor": "Baiduエコシステム—ERNIEモデル、長期テスト期間。",
+    "qualityNote": "Baidu製。モデルあたり100万トークン、3ヶ月有効。",
+    "caveat": "中国のみ。実名認証必須。3ヶ月有効。"
+  },
+  "tencent-hunyuan": {
+    "bestFor": "長期プロジェクト—安定、12ヶ月有効。",
+    "qualityNote": "Tencent製。年100万トークン、HunYuan-Liteは直接無料。",
+    "caveat": "中国のみ。実名認証必須。並列制限（TPM/RPM）あり。"
+  },
+  "gemini-cli": {
+    "bestFor": "最大コンテキスト（100万トークン）、無料フロンティアモデル、Google製。",
+    "qualityNote": "Google製Apache-2.0。ReActループ・MCP対応。Googleアカウントで日1,000リクエスト・60リクエスト/分。",
+    "caveat": "Googleアカウント必須。レート制限（日1,000・60/分）。Terminal-Bench 2.1で70.7%。"
+  },
+  "costrict": {
+    "bestFor": "エンタープライズ級開発—厳格モード・コードレビュー・補完。",
+    "qualityNote": "Apache-2.0。GitHub 3.9Kスター、260コントリビューター。プライベートデプロイ。",
+    "caveat": "BYOK（独自キー持込）。セットアップ必要。"
+  },
+  "mimocode": {
+    "bestFor": "クロスセッションメモリ—セッション間でプロジェクト理解を永続化。",
+    "qualityNote": "MITライセンス。GitHub 3.9Kスター。OpenCodeフォーク。MiMo Autoは期間限定無料。",
+    "caveat": "MiMo Autoは期間限定無料、その後BYOK。"
+  },
+  "korgex": {
+    "bestFor": "改ざん検知台帳、ハッシュ連鎖因果台帳、監査可能、MCP。",
+    "qualityNote": "約1,586テスト。Python 3.10-3.13、MCP対応。検証可能台帳と因果認知トレース。",
+    "caveat": "BYOK。新しいプロジェクト（成熟度低）。MITライセンス。"
+  },
+  "openhands": {
+    "bestFor": "自律コーディングエージェント、Issue→PRワークフロー、本番級。",
+    "qualityNote": "シリーズA $1,880万。AMD・Apple・Google・Amazon・Netflix・NVIDIAが利用。イベントストリーム・Dockerサンドボックス。",
+    "caveat": "Docker必須、BYOK。Claude 4.5/4でSWE-bench Verified 53-72%。"
+  },
+  "agent-zero": {
+    "bestFor": "エージェント用フルLinux、プラグインハブ、スキル、Space Agent。",
+    "qualityNote": "50コントリビューター、61リリース、活発にメンテナンス。Dockerベース、A0 CLI Connector。",
+    "caveat": "Docker必須。/homeマウントはリスク理解の上で。A0 CLIは信頼マシンのみ。"
+  },
+  "opencode": {
+    "bestFor": "ターミナルファースト、75以上のLLMプロバイダー、Ollama/LM Studio経由ローカルモデル。",
+    "qualityNote": "最もスター数の多いOSSコーディングエージェント。MIT。エージェントコーディング向けZenモデルリスト。",
+    "caveat": "BYOK—API呼び出しは自費。AI SDKとModels.devで75以上のプロバイダー対応。"
+  },
+  "claude-code": {
+    "bestFor": "最高推論、ターミナル+IDE+デスクトップ、100万コンテキスト、Opus 4.8。",
+    "qualityNote": "Anthropic製。Opus 4.8。Terminal-Bench 2.1で78.9%、SWE-bench Verifiedで88.6%。",
+    "caveat": "Claudeサブスク（$20/月）またはAPIキー必須。Opus 4.7比で欠陥見逃し4倍低減。"
+  },
+  "cline": {
+    "bestFor": "VS Code + JetBrains + CLI、フルターミナルとブラウザアクセス。",
+    "qualityNote": "Apache-2.0、活発にメンテナンス。Claude/GPT向けフルターミナル・ブラウザアクセス。",
+    "caveat": "BYOK—API呼び出しは自費。性能はモデル依存。"
+  },
+  "aider": {
+    "bestFor": "Git対応ペアプログラミング、任意LLM、成熟プロジェクト。",
+    "qualityNote": "Apache-2.0、成熟プロジェクト。Git対応、任意LLMと連携。",
+    "caveat": "BYOK—API呼び出しは自費。性能はモデル依存。"
+  },
+  "kilo-code": {
+    "bestFor": "VS Code・JetBrains・CLIコーディングエージェント。無料モデルルーティング・BYOK・ローカル推論。",
+    "qualityNote": "Apache-2.0コーディングエージェント。Kilo Gateway無料モデル・BYOK・ローカル・有料プロバイダーをゼロマージンで。",
+    "caveat": "Auto Freeはレート制限。無料ルートは上流プロバイダーによりプロンプトログの可能性。BYOK/有料はKilo外で課金。"
+  },
+  "roo-code": {
+    "bestFor": "マルチエージェントモード、5.0評価、高度ワークフローのVS Code拡張。",
+    "qualityNote": "Apache-2.0。Clineフォーク。マルチエージェントとカスタムペルソナ。VS Codeマーケットプレイス5.0。",
+    "caveat": "BYOK—API呼び出しは自費。性能はモデル依存。"
+  },
+  "cursor": {
+    "bestFor": "業界標準AI IDE。複数ファイル編集のComposerモード。",
+    "qualityNote": "評価額$500億の商用製品。Composerで複雑なマルチファイルタスク。無料枠は月50スローリクエスト。",
+    "caveat": "無料枠は月50スローリクエスト。Proは月$20で無制限高速リクエスト。"
+  },
+  "windsurf": {
+    "bestFor": "無料枠付き自律長期タスク。複雑なリファクタリング向き。",
+    "qualityNote": "Codeium製無料枠。複雑タスク向け自律エージェントモード。",
+    "caveat": "無料枠は利用上限。大量使用は有料ティア。"
+  },
+  "kiro": {
+    "bestFor": "AWS製スペック駆動開発。無料枠：日50リクエスト。",
+    "qualityNote": "AWS製スペック駆動アプローチ。日50リクエスト無料。構造化開発ワークフロー向き。",
+    "caveat": "無料枠は日50リクエスト。AWSアカウント必須。"
+  },
+  "goose": {
+    "bestFor": "Block（Square）製CLI+デスクトップエージェント。Apache-2.0、マルチプラットフォーム。",
+    "qualityNote": "Apache-2.0。Block（旧Square）製。CLIとデスクトップ。任意LLMと連携。",
+    "caveat": "BYOK—API呼び出しは自費。性能はモデル依存。"
+  },
+  "tabby": {
+    "bestFor": "ローカルモデルによるセルフホストコード補完。クラウド依存なし。",
+    "qualityNote": "Apache-2.0セルフホスト。ローカルモデルでコード補完。完全プライバシー。",
+    "caveat": "良好な性能にはGPU推奨。品質はモデル依存。"
+  },
+  "void": {
+    "bestFor": "AI機能付きVS Codeフォーク。現在一時停止だがアーキテクチャに注目。",
+    "qualityNote": "Apache-2.0 VS Codeフォーク。一時停止中だがアーキテクチャとコミュニティ関心が高い。",
+    "caveat": "プロジェクトは現在一時停止。将来再開の可能性。"
+  },
+  "stagewise": {
+    "bestFor": "ブラウザベースAIコーディング。インストール不要、ブラウザで動作。",
+    "qualityNote": "Apache-2.0ブラウザベース。インストール不要。素早いプロトタイピング向き。",
+    "caveat": "ブラウザ制約。大規模プロジェクトには不向き。"
+  },
+  "bolt-diy": {
+    "bestFor": "AIエージェント付きクラウドIDE。StackBlitz製、MITライセンス。",
+    "qualityNote": "MIT、StackBlitz製。フルスタック開発向けAIエージェント付きクラウドIDE。",
+    "caveat": "BYOK—API呼び出しは自費。クラウドベースでインターネット必須。"
+  },
+  "mragent": {
+    "bestFor": "軽量・プライバシーファースト・Web UI・音声入力・無料プロバイダー。",
+    "qualityNote": "NVIDIA NIM・Qwen OAuth（約2K req/日）・Groq等を標準搭載。クレカ不要。",
+    "caveat": "無料枠はレート制限。Web UIはポート6326、音声入力（Groq Whisper）、Telegram/Discord/Slack。"
+  },
+  "drodo": {
+    "bestFor": "2,397 AIスキル、14,936ワークフローテンプレート、238エキスパートエージェント、n8n自動化。",
+    "qualityNote": "モデル非依存、ライブマルチエージェントミッションコントロール、分析。n8n自動化エンジン（自動インストール）。",
+    "caveat": "Node.js・Git・n8n（自動インストール）必須。マルチチャネル（Telegram/Slack/Discord）。"
+  },
+  "synapse": {
+    "bestFor": "20以上の内蔵ツール、MCP統合、Google OAuth、デスクトップアプリ。",
+    "qualityNote": "プランモード、アーティファクト管理、永続メモリ。Tauri v2デスクトップ、Telegram連携。",
+    "caveat": "Python 3.12+、Node.js、PostgreSQL（任意）必須。Apache-2.0。"
+  },
+  "codebot-ai": {
+    "bestFor": "暗号監査証跡、ポリシー統治、サンドボックス、8プロバイダー。",
+    "qualityNote": "8プロバイダー（ローカル+クラウド）、32内蔵ツール、CORD安全エンジン。SHA-256ハッシュ連鎖ログ。",
+    "caveat": "BYOK。ローカルLLM品質はモデル依存。SWE-bench Verified 48%（50タスクスライス）。MIT。"
+  },
+  "yuan": {
+    "bestFor": "決定論的Decision Engine、コード品質強制、3モード。",
+    "qualityNote": "3モード（CHAT/HYBRID/AGENT）、15内蔵ツール、SubAgentオーケストレーション。HierarchicalPlanner。",
+    "caveat": "BYOK（OpenAI/Anthropic/Google）。Stall Detector、Self-Evaluation、Execution Receipt。"
+  },
+  "kode": {
+    "bestFor": "検証ファースト、Goバイナリ、決定論的検証、セキュリティ。",
+    "qualityNote": "30リリース。TypeScript + Go、Tree-sitter。セキュリティ検証、ブラウザ検証。",
+    "caveat": "BYOK。新しいプロジェクト。非同期サブエージェント、Kode CIV PR Gateway。"
+  },
+  "autopilot": {
+    "bestFor": "自己拡張、厳格安全レール、完全自律、並列マルチエージェント。",
+    "qualityNote": "Guardian安全層、ブラウザ認証情報取得、セッション保存/再開。Webhookデーモン。",
+    "caveat": "Claude Code必須。macOS/Linux/Windows。並列マルチエージェント、MCP自動検出。"
+  },
+  "auroracoder": {
+    "bestFor": "DeepSeek V4 Pro、VNCデスクトップ、並列ツール、Dockerサンドボックス。",
+    "qualityNote": "5リリース。Python + JavaScript + Go、ネイティブOpenAI関数呼び出し。VNCデスクトップ（ポート6080）。",
+    "caveat": "Docker必須。実験的npmランチャー（サンドボックスなし）。MITライセンス。"
+  },
+  "yoyo-evolve": {
+    "bestFor": "自己進化、200行→51,000行以上、2,000以上テスト、52日間。",
+    "qualityNote": "Rustベース。52日間の自律進化、35ソースファイル。ストリーミング出力、拡張思考。",
+    "caveat": "Anthropic APIキー必須。サブエージェント生成、並列ツール、プロバイダーフェイルオーバー。"
+  },
+  "xethryon": {
+    "bestFor": "スウォームオーケストレーション、自律モード、ナレッジグラフ、サイバーパンクテーマ。",
+    "qualityNote": "OpenCode + Claude Code機能のフォーク。3エージェントモード（CONSTRUCT/ARCHITECT/COORDINATE）。",
+    "caveat": "スウォームには自律モード（F4）必須。ライブスウォームダッシュボード、クロスセッションメモリ。"
+  },
+  "continuous-agent": {
+    "bestFor": "24/7自律、優先度キュー、マルチベンダーワーカー、PM2デーモン。",
+    "qualityNote": "PM2デーモン、Markdownベース通信、10失敗憲法上限。戦略選択。",
+    "caveat": "PM2、マルチベンダー設定（Claude/Codex/Kimi）必須。needs-you.mdで人間支援。"
+  },
+  "langchain": {
+    "bestFor": "エンタープライズ採用、月3,450万ダウンロード、グラフベースオーケストレーション。",
+    "qualityNote": "最も採用されたエージェントフレームワーク。ステートフル有向グラフ、メモリ、ツール、ヒューマンインザループ。",
+    "caveat": "セットアップ・BYOK必要。40以上のモデルプロバイダー。MITライセンス。"
+  },
+  "crewai": {
+    "bestFor": "ロールベースマルチエージェントチーム、ビジュアル設計、無料枠（50実行）。",
+    "qualityNote": "無料枠（50実行、1ライブクルー、1席）。有料は月$99から。Crews・エージェント・タスク。",
+    "caveat": "無料枠限定（50実行、1ライブクルー）。MITライセンス。"
+  },
+  "dify": {
+    "bestFor": "RAGとエージェントパイプライン、オールインワンワークフロー、可観測性。",
+    "qualityNote": "最もスター数の多いエージェントプラットフォーム（144Kスター）。ビジュアルワークフロー、RAG、エージェントオーケストレーション。",
+    "caveat": "クラウド無料枠限定。セルフホストはセットアップ必要。Apache-2.0。"
+  },
+  "tencent-adp": {
+    "bestFor": "エンタープライズ級マルチエージェント、150以上プラグイン、MCP、WeChat統合。",
+    "qualityNote": "Tencent製。3モード（マルチエージェント/ワークフロー/シングルエージェント）、YouTu-Agent OSS。RAG + Text-to-SQL。",
+    "caveat": "中国のみ。Tencent Cloudアカウント・実名認証必須。プロプライエタリ。"
+  },
+  "baidu-appbuilder": {
+    "bestFor": "40以上Baiduエコシステムコンポーネント、ERNIEモデル、RAG、AgentRuntime。",
+    "qualityNote": "Apache-2.0。50コントリビューター、29リリース。AgentRuntime（Flask/Chainlit）、appbuilder_bce_deploy。",
+    "caveat": "中国のみ。Baidu Cloudアカウント必須。無料トライアル制限。トレース機能。"
+  },
+  "tencent-cloudbase-agent-ui": {
+    "bestFor": "WeChatミニプログラム統合、DeepSeek/Hunyuanモデル、デュアルモード。",
+    "qualityNote": "MITライセンス。37リリース、活発にメンテナンス。デュアルモード（エージェント/モデル）、ストリーミング出力。",
+    "caveat": "中国のみ。Tencent CloudBase環境必須。マルチラウンドセッション。"
+  },
+  "llama-3.3": {
+    "bestFor": "汎用・多言語・コーディング・推論。最も人気のオープンモデルファミリー。",
+    "qualityNote": "Apache 2.0。Ollama・LM Studio・HuggingFace経由。8BはノートPC、70Bはデスクトップ、405Bはサーバー。",
+    "caveat": "VRAM：8B約16GB、70B約140GB、405B約800GB"
+  },
+  "qwen-2.5": {
+    "bestFor": "多言語・コーディング・数学・長コンテキスト。スマホからサーバーまで幅広いサイズ。",
+    "qualityNote": "Apache 2.0。多言語とコードで最高クラス。0.6Bはスマホ、72Bはワークステーション、397Bはサーバー。",
+    "caveat": "VRAM：0.6B約2GB、72B約140GB、397B約800GB"
+  },
+  "deepseek-r1": {
+    "bestFor": "高度推論・コーディング・数学・思考連鎖。GPT-4級に匹敵。",
+    "qualityNote": "MIT。R1は推論特化、V3は汎用。技術タスクに優秀。量子化版はコンシューマーハードで動作。",
+    "caveat": "VRAM：37B活性化約75GB（量子化）、フル671BはエンタープライズGPU要"
+  },
+  "mistral-small": {
+    "bestFor": "高速効率的推論。コーディング・多言語・エッジデプロイ向き。",
+    "qualityNote": "Apache 2.0。Mistral AI（フランス）。Small 3（22B）は多くのタスクに効率的。Medium 3で品質向上。Mixtral 8x22Bで高能力。",
+    "caveat": "VRAM：Small 3約44GB、Medium 3約141GB、8x22B約280GB"
+  },
+  "gemma-3": {
+    "bestFor": "ノートPCとエッジ向け軽量・効率的・安全なAI。Google製。",
+    "qualityNote": "Apache 2.0（最新版は利用規約要確認）。Gemma 3は効率設計。2B-27B。RAM限定デバイス向き。",
+    "caveat": "VRAM：2B約4GB、9B約18GB、27B約54GB"
+  },
+  "glm-5": {
+    "bestFor": "長コンテキスト推論、多言語タスク、高度問題解決。",
+    "qualityNote": "MIT。2026年2月リリース。744B総数/40B活性MoE。Huawei Ascendチップのみで訓練。SWE-bench Verified 77.8%で競争力。",
+    "caveat": "VRAM：量子化40B約80GB、フルモデルはエンタープライズハードウェア要"
+  },
+  "glm-5.1": {
+    "bestFor": "SWE-bench Pro最高スコア（58.4%）のエージェントコーディング。8時間自律タスク実行。",
+    "qualityNote": "MIT。2026年4月リリース。754B総数/40B活性MoE。SWE-Bench Pro第1位、GPT-5.4とClaude Opus 4.6を上回る。",
+    "caveat": "VRAM：量子化約85GB、フル性能には相当なハードウェア要"
+  },
+  "glm-5.2": {
+    "bestFor": "100万トークンコンテキストのコーディングファースト。長期自律ソフトウェア開発。",
+    "qualityNote": "MIT。2026年6月13日リリース。100万トークンコンテキスト。米国AI規制への回答として位置づけ。オープンウェイト公開。",
+    "caveat": "VRAM：量子化約100GB以上、フルモデルはエンタープライズハードウェア要"
+  },
+  "qwen3": {
+    "bestFor": "235B MoEで22B活性パラメータの大規模多言語モデル。Think/Non-thinkモード。",
+    "qualityNote": "Apache 2.0。2025年5月リリース。235B総数/22B活性MoE。中国語・英語・日本語・韓国語に強い。",
+    "caveat": "VRAM：MoEモデルはコンシューマーハード向けに慎重な量子化が必要"
+  },
+  "qwen3-coder": {
+    "bestFor": "480B総数/35B活性のコーディング特化モデル。Aider Polyglotで61.8%のエージェントコーディング。",
+    "qualityNote": "Apache 2.0。2025年7月リリース。7.5Tトークン（70%コード）で訓練。YaRNで最大100万コンテキストのMoE。",
+    "caveat": "VRAM：量子化約70GB、フルモデルはエンタープライズハードウェア要（250GB以上）"
+  }
+}
