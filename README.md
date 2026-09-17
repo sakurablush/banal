@@ -3,7 +3,7 @@
 **Free, forkable reference for AI and developer tools — curated for builders who fund their own stack.**
 
 Banal is a single static site: **273 tools** with honest access labels, **52 prompt
-templates** in English and Japanese, **38 open models**, and **10 workflow stacks**.
+templates** in English and Japanese, **39 open models**, and **10 workflow stacks**.
 No backend. No accounts. No installs. No telemetry. Clone it, host it for free,
 copy it to a USB, or open `dist/index.html` from disk.
 
@@ -32,7 +32,7 @@ numbers. See [MINDSET.md](MINDSET.md) for voice and editorial rules.
 - **52 prompt templates** in EN/JA — career, money, health, paperwork, dev
   workflows, crisis scripts. Copy, fill blanks, paste into any free chat listed
   in the app.
-- **38 open models** and **10 tool stacks** for common zero-budget workflows.
+- **39 open models** and **10 tool stacks** for common zero-budget workflows.
 - **Static delivery.** HTML, CSS, TypeScript in the browser. Build once, host
   anywhere.
 - **Bilingual from day one.** English and Japanese at the same quality bar.
@@ -420,7 +420,7 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------- | ----------- |
 | [GLM-5 (Zhipu AI)](https://huggingface.co/zai-org/GLM-5)                     | Long-context reasoning, multilingual tasks, and advanced problem solving.         | 💻 CLI  | Open source |
 | [GLM-5.1 (Zhipu AI)](https://huggingface.co/zai-org/GLM-5.1)                 | Agentic coding with top SWE-bench Pro score (58.4%). 8-hour autonomous task exec… | 💻 CLI  | Open source |
-| [GLM-5.2 (Zhipu AI)](https://huggingface.co/zai-org)                         | Coding-first with 1M token context window. Long-horizon autonomous software deve… | 💻 CLI  | Open source |
+| [GLM-5.2 (Zhipu AI)](https://huggingface.co/zai-org/GLM-5.2)                 | Coding-first with 1M token context window. Long-horizon autonomous software deve… | 💻 CLI  | Open source |
 | [Qwen3 (Alibaba)](https://huggingface.co/Qwen/Qwen3-235B-A22B)               | Massive multilingual model with 22B active parameters across 235B MoE. Think/Non… | 💻 CLI  | Open source |
 | [Qwen3-Coder (Alibaba)](https://huggingface.co/collections/Qwen/qwen3-coder) | Specialized coding model with 480B total / 35B active. Agentic coding with 61.8%… | 💻 CLI  | Open source |
 
