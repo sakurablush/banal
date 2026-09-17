@@ -25,7 +25,7 @@ principles behind the project are in [`SPIRIT.md`](../SPIRIT.md).
 - **A weekly catalog audit** that HEAD/GETs every tool URL and writes a
   date-stamped summary to [`docs/verification/`](../docs/verification/).
   Failures are listed transparently; some are bot blocks, not dead tools.
-- **A complete CI gate**: lint, typecheck, 662 tests across 36 files,
+- **A complete CI gate**: lint, typecheck, 704 tests across 42 files,
   and `npm audit --audit-level=moderate` on every push.
 - **MIT license.** Fork, rename, host, give away.
 
@@ -43,7 +43,7 @@ voice in the user-facing copy met the editorial test in
 - The number of prompt templates in the README matches the `TEMPLATES`
   object in `src/lib/prompt-templates.ts` (52).
 - The test counts in the documentation match the output of
-  `npm run test:run` (662 tests across 36 files at this marker).
+  `npm run test:run` (704 tests across 42 files at this marker).
 - The README audit line matches the latest file in
   `docs/verification/` (synced by `npm run verify:tools`).
 - The tool URLs in [`docs/TOOLS-DIRECTORY.md`](docs/TOOLS-DIRECTORY.md) are
@@ -93,5 +93,5 @@ Banal follows [Semantic Versioning](https://semver.org/):
   dependency updates, and catalog corrections that do not require a fork to
   update.
 
-The current version is `1.0.4` (see the `version` field in `package.json`).
+The current version is `1.0.5` (see the `version` field in `package.json`).
 Release notes for every version live in [`CHANGELOG.md`](CHANGELOG.md).

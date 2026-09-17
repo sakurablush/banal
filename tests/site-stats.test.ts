@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { getSiteStats, interpolateSiteStats } from '../src/data/site-stats';
 import { zeroKeyTools } from '../src/data/zero-key-tools';

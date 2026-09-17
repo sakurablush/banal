@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Cross-content integrity: stacks, guides, and prompt templates stay aligned
  * with zero-key-tools IDs, EN/JA parity, and honest-limit copy conventions.

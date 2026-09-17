@@ -5,7 +5,10 @@ All notable changes to Banal are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.5] - 2026-09-17
+
+Patch release: WebGL cosmic-shader hero rewrite, AI Models + Inference Providers
+catalog refresh, and dependency bumps. No catalog, API, or breaking changes.
 
 ### Changed
 
@@ -19,9 +22,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **AI Models catalog refreshed** (2026-09-16). DeepSeek V4 Pro retired
   (2026-09-14) → **DeepSeek V4.1 Flash** (552B MoE, 1M ctx, MIT). Kimi K2.5
   sunset (2026-08-31) → **Kimi K3** (2.8T, 1M ctx) + **Kimi K2.7 Code**.
-  GLM-5/GLM-5.1 → **GLM-5.2**. Llama 4 Maverick/Scout release dates corrected
+  GLM-5.2 → **GLM-5.3** (753B MoE, custom license, mmluPro 89.1). Llama 4
+  Maverick/Scout release dates corrected
   to 2025-04-05 with accurate benchmarks and EU restriction notes. Qwen 3.5
   marked multimodal (text/image/video) with NVFP4 quantization.
+  - **2026 Q3/Q4 open-weight releases added** (2026-09-17): DeepSeek V4 Pro
+    (0813, 1.65T MoE) and V4 Flash (0731, 284B MoE); Qwen3.8-27B (262K ctx);
+    IFM K2 Horizon fleet (0.9B/3.7B/7B/32B/MoVA-36B-A4B/375B-A23B, 524K
+    ctx); Nex-N2.5 Max (1.6T MoE); Atria Dawn Preview (744B MoE, MIT);
+    MiniMax M2 (1M ctx); MiniCPM5-2B (edge); Gander 9B (omni);
+    ZGCM-1 7B (MIT); gpt-oss-120b/20b (Apache 2.0). Mistral Small 4 (119B
+    MoE) and Mistral Medium 3.5 (128B dense) added; Mistral Large 3 corrected
+    to 675B MoE. Catalog count 39 → 57.
 
 - **Inference Providers refreshed** (2026-09-16). `lastVerified` bumped to
   2026-09-16 across all 14 providers; DeepSeek model lists updated to V4.1 Flash.

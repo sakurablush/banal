@@ -43,8 +43,14 @@ jobs:
       - name: Align npm with packageManager field
         run: npm i -g npm@10.9.2
 
-      - name: Install dependencies (clean, reproducible)
-        run: npm ci --no-audit --no-fund
+      # `--ignore-scripts` is deliberate: no package in this tree defines a
+      # lifecycle script that the build needs. esbuild ships prebuilt
+      # binaries via @esbuild/* platform packages (no postinstall), and
+      # fsevents is an optional macOS-only dep that never runs on the
+      # Linux runner. Skipping scripts removes the supply-chain attack
+      # surface entirely while keeping `npm ci` reproducible.
+      - name: Install dependencies (clean, reproducible, no lifecycle scripts)
+        run: npm ci --no-audit --no-fund --ignore-scripts
 
       # Single source of truth: the `ci` script in package.json defines the
       # shared gate (lint + format + typecheck + test:run + audit). Keep both

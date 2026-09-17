@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { searchTools } from '../src/fuse-search';
 import { zeroKeyTools } from '../src/data/zero-key-tools';

@@ -41,8 +41,9 @@ jobs:
       - name: Align npm with packageManager field
         run: npm i -g npm@10.9.2
 
-      - name: Install dependencies
-        run: npm ci --no-audit --no-fund
+      - name: Install dependencies (no lifecycle scripts — see ci.yml for
+             the reasoning; the build needs no postinstall step)
+        run: npm ci --no-audit --no-fund --ignore-scripts
 
       # Do NOT use continue-on-error here: we WANT the job to fail when
       # verification surfaces problems, so the issue-creation step below

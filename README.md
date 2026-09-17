@@ -3,7 +3,7 @@
 **Free, forkable reference for AI and developer tools — curated for builders who fund their own stack.**
 
 Banal is a single static site: **273 tools** with honest access labels, **52 prompt
-templates** in English and Japanese, **39 open models**, and **10 workflow stacks**.
+templates** in English and Japanese, **57 open models**, and **10 workflow stacks**.
 No backend. No accounts. No installs. No telemetry. Clone it, host it for free,
 copy it to a USB, or open `dist/index.html` from disk.
 
@@ -32,7 +32,7 @@ numbers. See [MINDSET.md](MINDSET.md) for voice and editorial rules.
 - **52 prompt templates** in EN/JA — career, money, health, paperwork, dev
   workflows, crisis scripts. Copy, fill blanks, paste into any free chat listed
   in the app.
-- **39 open models** and **10 tool stacks** for common zero-budget workflows.
+- **57 open models** and **10 tool stacks** for common zero-budget workflows.
 - **Static delivery.** HTML, CSS, TypeScript in the browser. Build once, host
   anywhere.
 - **Bilingual from day one.** English and Japanese at the same quality bar.
@@ -663,7 +663,7 @@ Full learning material:
 - **No backend.** Language, theme, stacks, filters, and prompt drafts live in
   `localStorage` / `sessionStorage` on your device only.
 - **No runtime npm dependencies** for end users.
-- **Test gate:** `npm run ci` — lint, typecheck, Vitest (662 tests across 36
+- **Test gate:** `npm run ci` — lint, typecheck, Vitest (704 tests across 42
   files), coverage enforced, `npm audit --audit-level=moderate`.
 - **CI:** every push + weekly
   [`verify-tools`](.github/workflows/verify-tools.yml) catalog audit →

@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { toolStacks } from '../src/data/tool-stacks';
 import { toolStacksJa } from '../src/data/tool-stacks-ja';
