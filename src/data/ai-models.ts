@@ -798,7 +798,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'Apache 2.0', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/databricks/dbrx-instruct',
+      huggingFace: 'https://huggingface.co/transformers-community/dbrx-instruct',
       inferenceProviders: ['openrouter', 'together'],
       localRunners: ['ollama', 'vllm'],
     },
@@ -1400,7 +1400,7 @@ export const aiModels: AIModel[] = [
     license: { type: 'MIT', commercial: true },
     availability: {
       openWeights: true,
-      huggingFace: 'https://huggingface.co/zgcm/ZGCM-1',
+      huggingFace: 'https://huggingface.co/zgcagi/ZGCM-1-7B',
       inferenceProviders: [],
       localRunners: ['vllm', 'ollama'],
     },
