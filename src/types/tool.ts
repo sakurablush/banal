@@ -97,12 +97,7 @@ export interface TagDefinition {
 export type Surface = 'web' | 'api' | 'cli';
 
 export type AccessType =
-  | 'no-login'
-  | 'public-api'
-  | 'open-source'
-  | 'free-tier'
-  | 'free-key'
-  | 'self-host';
+  'no-login' | 'public-api' | 'open-source' | 'free-tier' | 'free-key' | 'self-host';
 
 export type PricingModel = 'free' | 'freemium' | 'paid' | 'byok' | 'open-source';
 
@@ -266,12 +261,7 @@ export interface AIModel {
 // ─── Tool Stack Interface ───────────────────────────────────────────────────
 
 export type StackAudience =
-  | 'freelancer'
-  | 'indie-hacker'
-  | 'startup'
-  | 'student'
-  | 'job-seeker'
-  | 'developer';
+  'freelancer' | 'indie-hacker' | 'startup' | 'student' | 'job-seeker' | 'developer';
 
 export type StackBudget = 'zero' | 'low' | 'medium' | 'high';
 export type StackExperience = 'beginner' | 'intermediate' | 'advanced';

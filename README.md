@@ -119,7 +119,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 ### AI tools
 
 <a id="ai-chat-assistants"></a>
-
 <details open>
 <summary><strong>AI Chat &amp; Assistants</strong> (41)</summary>
 
@@ -170,7 +169,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="ai-image-generation-editing"></a>
-
 <details>
 <summary><strong>AI Image Generation &amp; Editing</strong> (20)</summary>
 
@@ -200,7 +198,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="ai-video-generation-editing"></a>
-
 <details>
 <summary><strong>AI Video Generation &amp; Editing</strong> (7)</summary>
 
@@ -217,7 +214,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="ai-audio-music-voice-tts"></a>
-
 <details>
 <summary><strong>AI Audio, Music, Voice &amp; TTS</strong> (8)</summary>
 
@@ -235,7 +231,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="ai-writing-summarization-translation"></a>
-
 <details>
 <summary><strong>AI Writing, Summarization &amp; Translation</strong> (12)</summary>
 
@@ -257,7 +252,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="ai-search-research-engines"></a>
-
 <details>
 <summary><strong>AI Search &amp; Research Engines</strong> (6)</summary>
 
@@ -273,7 +267,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="ai-document-pdf-tools"></a>
-
 <details>
 <summary><strong>AI Document &amp; PDF Tools</strong> (6)</summary>
 
@@ -289,7 +282,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="ai-presentations-slides"></a>
-
 <details>
 <summary><strong>AI Presentations &amp; Slides</strong> (3)</summary>
 
@@ -302,7 +294,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="ai-math-science-education"></a>
-
 <details>
 <summary><strong>AI Math, Science &amp; Education</strong> (7)</summary>
 
@@ -319,7 +310,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="ai-coding-assistants"></a>
-
 <details>
 <summary><strong>AI Coding Assistants</strong> (52)</summary>
 
@@ -381,7 +371,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="ai-agent-platforms"></a>
-
 <details>
 <summary><strong>AI Agent Platforms</strong> (6)</summary>
 
@@ -397,7 +386,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="open-source-models-download-run-locally"></a>
-
 <details>
 <summary><strong>Open Source Models (Download &amp; Run Locally)</strong> (5)</summary>
 
@@ -412,7 +400,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="latest-open-source-models"></a>
-
 <details>
 <summary><strong>Latest Open Source Models</strong> (5)</summary>
 
@@ -429,7 +416,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 ### Developer tools
 
 <a id="coding-developer-workflow"></a>
-
 <details>
 <summary><strong>Coding &amp; Developer Workflow</strong> (34)</summary>
 
@@ -473,7 +459,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="backend-hosting-databases"></a>
-
 <details>
 <summary><strong>Backend, Hosting &amp; Databases</strong> (10)</summary>
 
@@ -493,7 +478,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="automation-ops-monitoring"></a>
-
 <details>
 <summary><strong>Automation, Ops &amp; Monitoring</strong> (7)</summary>
 
@@ -510,7 +494,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="security-privacy"></a>
-
 <details>
 <summary><strong>Security &amp; Privacy</strong> (7)</summary>
 
@@ -527,7 +510,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="productivity-life-admin"></a>
-
 <details>
 <summary><strong>Productivity &amp; Life Admin</strong> (9)</summary>
 
@@ -546,7 +528,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="learning-career-leverage"></a>
-
 <details>
 <summary><strong>Learning &amp; Career Leverage</strong> (7)</summary>
 
@@ -563,7 +544,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="public-data-open-datasets"></a>
-
 <details>
 <summary><strong>Public Data &amp; Open Datasets</strong> (8)</summary>
 
@@ -581,7 +561,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="docs-research-knowledge"></a>
-
 <details>
 <summary><strong>Docs, Research &amp; Knowledge</strong> (8)</summary>
 
@@ -599,7 +578,6 @@ Expand a category below, or open the [flat directory](docs/TOOLS-DIRECTORY.md) f
 </details>
 
 <a id="design-images-audio-video"></a>
-
 <details>
 <summary><strong>Design, Images, Audio &amp; Video</strong> (5)</summary>
 

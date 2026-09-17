@@ -3,12 +3,7 @@
  */
 
 export type StorageClearScope =
-  | 'prompts'
-  | 'saved-filters'
-  | 'custom-stacks'
-  | 'analytics'
-  | 'theme'
-  | 'all';
+  'prompts' | 'saved-filters' | 'custom-stacks' | 'analytics' | 'theme' | 'all';
 
 export const STORAGE_KEYS = {
   lang: 'banal-lang',
