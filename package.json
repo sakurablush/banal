@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.5.1",
-    "@types/three": "^0.160.0",
+    "@types/three": "^0.186.0",
     "@typescript-eslint/eslint-plugin": "^8.70.0",
     "@typescript-eslint/parser": "^8.70.0",
     "@vitest/coverage-v8": "^5.0.1",
@@ -79,6 +79,6 @@
   },
   "packageManager": "npm@10.9.2",
   "dependencies": {
-    "three": "^0.160.0"
+    "three": "^0.186.0"
   }
 }
