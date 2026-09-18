@@ -3288,8 +3288,12 @@ textarea.sp-form-input {
 [data-theme='light'] .zk2-card:hover {
   background: var(--light-card-solid) !important;
   border-color: var(--light-active-border) !important;
-  box-shadow: 0 18px 45px -20px rgba(79, 70, 229, 0.18) !important;
-  transform: translateY(-2px) scale(1.012) !important;
+  overflow: visible !important;
+  transform: translateY(-3px) scale(1.012) !important;
+  box-shadow:
+    0 24px 50px -18px rgba(124, 58, 237, 0.3),
+    0 0 0 1px rgba(124, 58, 237, 0.22),
+    0 8px 24px -8px rgba(15, 23, 42, 0.2) !important;
 }
 
 [data-theme='light'] .zk2-card-surface {
@@ -4170,11 +4174,11 @@ textarea.sp-form-input {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
-  padding: 24px 0 16px 24px;
+  padding: 28px 28px 32px 28px;
   max-height: var(--panel-tiles-effective-scroll-height);
   overflow-y: auto;
   overflow-x: hidden;
-  scroll-padding-top: 60px;
+  scroll-padding: 28px 28px 32px 28px;
   align-items: stretch;
 }
 
@@ -4200,22 +4204,57 @@ textarea.sp-form-input {
   flex-direction: column;
   gap: 0.75rem;
   transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   min-height: 180px;
   height: 100%;
   position: relative;
+  z-index: 0;
   overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow, border-color;
+  backface-visibility: hidden;
   cursor: pointer;
   content-visibility: auto;
   contain-intrinsic-size: auto 180px;
 }
 
+.prompt-card-horizontal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, transparent, rgba(168, 85, 247, 0), transparent);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background 0.3s ease;
+  z-index: 2;
+}
+
 .prompt-card-horizontal:hover {
   background: rgba(255, 255, 255, 0.045);
-  border-color: rgba(168, 85, 247, 0.25);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px -10px rgba(124, 58, 237, 0.2);
+  border-color: rgba(168, 85, 247, 0.3);
+  transform: translateY(-3px) scale(1.012);
+  overflow: visible;
+  box-shadow:
+    0 24px 50px -18px rgba(124, 58, 237, 0.35),
+    0 0 0 1px rgba(168, 85, 247, 0.18),
+    0 8px 24px -8px rgba(0, 0, 0, 0.45);
+  z-index: 2;
+}
+
+.prompt-card-horizontal:hover::before {
+  background: linear-gradient(
+    140deg,
+    rgba(168, 85, 247, 0.55),
+    rgba(217, 70, 239, 0.25),
+    transparent
+  );
 }
 
 /* Prompt title in horizontal card */
@@ -4392,21 +4431,33 @@ textarea.sp-form-input {
 [data-theme='light'] .tool-card-horizontal {
   background: var(--light-card);
   border-color: var(--light-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 [data-theme='light'] .tool-card-horizontal:hover {
   background: var(--light-card-solid);
   border-color: var(--light-active-border);
+  box-shadow:
+    0 24px 50px -18px rgba(124, 58, 237, 0.28),
+    0 0 0 1px rgba(124, 58, 237, 0.22),
+    0 8px 24px -8px rgba(15, 23, 42, 0.18);
 }
 
 [data-theme='light'] .prompt-card-horizontal {
   background: var(--light-card);
   border-color: var(--light-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 [data-theme='light'] .prompt-card-horizontal:hover {
   background: var(--light-card-solid);
   border-color: var(--light-active-border);
+  box-shadow:
+    0 24px 50px -18px rgba(124, 58, 237, 0.28),
+    0 0 0 1px rgba(124, 58, 237, 0.22),
+    0 8px 24px -8px rgba(15, 23, 42, 0.18);
 }
 
 [data-theme='light'] .quick-filter-chip {
@@ -4491,26 +4542,61 @@ textarea.sp-form-input {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s cubic-bezier(0.23, 1, 0.32, 1),
-    box-shadow 0.2s ease;
+    border-color 0.25s cubic-bezier(0.23, 1, 0.32, 1),
+    background 0.25s ease,
+    transform 0.25s cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 0.25s ease;
   min-height: 180px;
   height: 100%;
   position: relative;
   z-index: 0;
   overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow, border-color;
+  backface-visibility: hidden;
   content-visibility: auto;
   contain-intrinsic-size: auto 180px;
 }
 
+.tool-card-horizontal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, transparent, rgba(168, 85, 247, 0), transparent);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background 0.3s ease;
+  z-index: 2;
+}
+
 .tool-card-horizontal:hover {
   background: rgba(255, 255, 255, 0.045);
-  border-color: rgba(168, 85, 247, 0.25);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px -10px rgba(124, 58, 237, 0.2);
-  z-index: 0;
+  border-color: rgba(168, 85, 247, 0.3);
+  transform: translateY(-3px) scale(1.012);
+  overflow: visible;
+  box-shadow:
+    0 24px 50px -18px rgba(124, 58, 237, 0.35),
+    0 0 0 1px rgba(168, 85, 247, 0.18),
+    0 8px 24px -8px rgba(0, 0, 0, 0.45);
+  z-index: 2;
+}
+
+.tool-card-horizontal:hover::before {
+  background: linear-gradient(
+    140deg,
+    rgba(168, 85, 247, 0.55),
+    rgba(217, 70, 239, 0.25),
+    transparent
+  );
 }
 
 .tool-card-horizontal:focus-visible {

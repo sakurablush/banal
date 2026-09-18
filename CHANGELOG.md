@@ -5,6 +5,39 @@ All notable changes to Banal are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-09-18
+
+### Added
+
+- **GLM-5.2, GLM-5.3 Flash, Qwen3.8-27B, Qwen3.8 2.4T-A95B added to the
+  AI Models catalog.** GLM-5.2 (753B MoE, MIT, 1M ctx, 2026-06-16) is the
+  predecessor to GLM-5.3 and the first GLM with a solid 1M-token context.
+  GLM-5.3 Flash (320B/18B active, MIT, 1M ctx, natively multimodal,
+  2026-08-26) is the cheap sibling of GLM-5.3. Qwen3.8-27B (27B dense,
+  Apache 2.0, 262K ctx, 2026-08-13) and Qwen3.8 2.4T-A95B (2.4T/95B active,
+  Qwen3.8-Max license, 262K ctx, 2026-08-12) are the first open-weight
+  Qwen-Max-class models. Catalog count 58 → 61.
+
+### Fixed
+
+- **Release dates and context windows corrected** for several existing entries
+  against their Hugging Face model cards: Qwen3 235B-A22B → 2025-04-29,
+  Qwen3-Coder 480B → 2025-07-22, Kimi K2.7 Code → 2026-06-12, Atria Dawn
+  Preview → 256K ctx / 2026-09-14, GLM-5.3 → 2026-08-14.
+
+- **"Stored data on this device" dialog background in light mode.** The
+  `.filter-modal` / `.filter-saved-menu` declarations reference
+  `var(--bg-elevated, #1a1028)`, but `--bg-elevated` was never defined in the
+  light-theme block — so the dialog rendered the dark fallback `#1a1028`
+  behind dark `--text-primary` text. Added `--bg-elevated: #ffffff` to the
+  light block.
+
+- **Card hover states restored** in `src/style.css`. `.zk2-card`,
+  `.tool-card-horizontal`, and `.prompt-card-horizontal` now layer a purple
+  glow, a colored hairline border, and a deeper drop shadow on hover, with
+  `overflow: visible` so the glow is not clipped; the light-theme hover
+  overrides carry the same transform and shadow.
+
 ## [1.1.0] - 2026-09-18
 
 ### Added

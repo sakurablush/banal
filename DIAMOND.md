@@ -6,7 +6,7 @@ to find the rest of the documentation. The full project description is in
 
 ## Current version
 
-`1.1.0` (see the `version` field in `package.json`). Release notes for every
+`1.2.0` (see the `version` field in `package.json`). Release notes for every
 version live in [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Versioning
