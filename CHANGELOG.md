@@ -5,7 +5,7 @@ All notable changes to Banal are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.0] - 2026-09-18
+## [1.2.1] - 2026-09-18
 
 ### Added
 
@@ -20,6 +20,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Directory tile hover no longer clips card edges.** Hover transforms
+  (`translateY(-2px) scale(1.006)`) previously pushed cards past their
+  container's `overflow: hidden`, so the glow and border vanished off-screen.
+  Fixed by:
+  - setting `overflow: visible` on `.zk2-card`, `.tool-card-horizontal`, and
+    `.prompt-card-horizontal` (not just on `:hover`),
+  - raising `.tools-horizontal-scroll` padding from `28px` to `40px` top /
+    `44px` bottom with matching `scroll-padding`, and
+  - switching the scroll containers (`panel-content-scroll`,
+    `.models-content`, `.zk2-layout > .zk2-horizontal-content`) from
+    `overflow: hidden` to `overflow: visible` so the hover glow has room to
+    paint. The vertical scroll (`overflow-y: auto`) is preserved.
+
 - **Release dates and context windows corrected** for several existing entries
   against their Hugging Face model cards: Qwen3 235B-A22B → 2025-04-29,
   Qwen3-Coder 480B → 2025-07-22, Kimi K2.7 Code → 2026-06-12, Atria Dawn
@@ -31,12 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   light-theme block — so the dialog rendered the dark fallback `#1a1028`
   behind dark `--text-primary` text. Added `--bg-elevated: #ffffff` to the
   light block.
-
-- **Card hover states restored** in `src/style.css`. `.zk2-card`,
-  `.tool-card-horizontal`, and `.prompt-card-horizontal` now layer a purple
-  glow, a colored hairline border, and a deeper drop shadow on hover, with
-  `overflow: visible` so the glow is not clipped; the light-theme hover
-  overrides carry the same transform and shadow.
 
 ## [1.1.0] - 2026-09-18
 
