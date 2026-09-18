@@ -5,6 +5,31 @@ All notable changes to Banal are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-09-18
+
+### Added
+
+- **GLM-5.2 added to the AI Models catalog** (753B MoE, MIT, 1M ctx, release
+  2026-06-16). It is GLM-5.3's predecessor and the first GLM to ship a solid
+  1M-token context; kept alongside GLM-5.3 for long-horizon work. Catalog count
+  57 → 58. `AI_MODEL_COUNT`, the homepage, and README now report 58.
+
+### Fixed
+
+- **Card hover states restored** in `src/style.css`. `.zk2-card` now layers a
+  purple glow, a colored hairline border, and a deeper drop shadow on hover,
+  with `overflow: visible` so the glow is not clipped; the light-theme
+  `.zk2-card-surface` hover carries the same transform.
+
+### Fixed
+
+- **"Stored data on this device" dialog background in light mode.** The
+  `.filter-modal` / `.filter-saved-menu` declarations reference
+  `var(--bg-elevated, #1a1028)`, but `--bg-elevated` was never defined in the
+  light-theme block — so the dialog rendered the dark fallback `#1a1028`
+  behind dark `--text-primary` text. Added `--bg-elevated: #ffffff` to the
+  light block so modals use the light surface with dark text.
+
 ## [1.0.5] - 2026-09-17
 
 Patch release: WebGL cosmic-shader hero rewrite, AI Models + Inference Providers
