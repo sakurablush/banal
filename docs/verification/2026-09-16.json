@@ -1,0 +1,211 @@
+{
+  "date": "2026-09-16",
+  "generatedAt": "2026-09-16T18:03:10.767Z",
+  "totalTools": 273,
+  "verified": 241,
+  "failed": 30,
+  "errors": 2,
+  "successRate": 0.883,
+  "lastVerifiedCoverage": {
+    "total": 273,
+    "withDate": 273,
+    "withoutDate": 0,
+    "percentage": 100
+  },
+  "failedTools": [
+    {
+      "id": "perchance-chat",
+      "name": "Perchance AI Chat",
+      "url": "https://perchance.org/ai-chat",
+      "status": 403
+    },
+    {
+      "id": "chatgpt-free",
+      "name": "ChatGPT Free",
+      "url": "https://chatgpt.com/",
+      "status": 403
+    },
+    {
+      "id": "google-gemini",
+      "name": "Google Gemini",
+      "url": "https://gemini.google.com/",
+      "status": "error"
+    },
+    {
+      "id": "meta-ai",
+      "name": "Meta AI",
+      "url": "https://www.meta.ai/",
+      "status": 403
+    },
+    {
+      "id": "pi-ai",
+      "name": "Pi AI",
+      "url": "https://pi.ai/",
+      "status": 403
+    },
+    {
+      "id": "grok",
+      "name": "Grok",
+      "url": "https://x.com/i/grok",
+      "status": 403
+    },
+    {
+      "id": "deepseek-chat",
+      "name": "DeepSeek",
+      "url": "https://chat.deepseek.com/",
+      "status": 403
+    },
+    {
+      "id": "phind",
+      "name": "Phind",
+      "url": "https://www.phind.com/",
+      "status": 403
+    },
+    {
+      "id": "mistral-le-chat",
+      "name": "Mistral Le Chat",
+      "url": "https://chat.mistral.ai/",
+      "status": 403
+    },
+    {
+      "id": "poe",
+      "name": "Poe",
+      "url": "https://poe.com/",
+      "status": 403
+    },
+    {
+      "id": "perchance-image",
+      "name": "Perchance AI Image",
+      "url": "https://perchance.org/ai-text-to-image-generator",
+      "status": 403
+    },
+    {
+      "id": "craiyon",
+      "name": "Craiyon",
+      "url": "https://www.craiyon.com/",
+      "status": 403
+    },
+    {
+      "id": "canva-free",
+      "name": "Canva Free",
+      "url": "https://www.canva.com/",
+      "status": 403
+    },
+    {
+      "id": "leonardo-ai",
+      "name": "Leonardo.ai",
+      "url": "https://leonardo.ai/",
+      "status": 403
+    },
+    {
+      "id": "ideogram",
+      "name": "Ideogram",
+      "url": "https://ideogram.ai/",
+      "status": 403
+    },
+    {
+      "id": "quillbot",
+      "name": "QuillBot",
+      "url": "https://quillbot.com/",
+      "status": 403
+    },
+    {
+      "id": "perplexity-search",
+      "name": "Perplexity",
+      "url": "https://www.perplexity.ai/",
+      "status": 403
+    },
+    {
+      "id": "wolfram-alpha",
+      "name": "Wolfram Alpha",
+      "url": "https://www.wolframalpha.com/",
+      "status": 404
+    },
+    {
+      "id": "gamma",
+      "name": "Gamma",
+      "url": "https://gamma.app/",
+      "status": 403
+    },
+    {
+      "id": "glhf-gg",
+      "name": "GLHF.gg",
+      "url": "https://glhf.gg/",
+      "status": "error"
+    },
+    {
+      "id": "banana-dev",
+      "name": "Banana.dev",
+      "url": "https://app.banana.dev/",
+      "status": 526
+    },
+    {
+      "id": "kaggle",
+      "name": "Kaggle",
+      "url": "https://www.kaggle.com/",
+      "status": 404
+    },
+    {
+      "id": "midjourney-free",
+      "name": "Midjourney Free Trial",
+      "url": "https://www.midjourney.com/",
+      "status": 403
+    },
+    {
+      "id": "exercism",
+      "name": "Exercism",
+      "url": "https://exercism.org/",
+      "status": 403
+    },
+    {
+      "id": "leetcode-free",
+      "name": "LeetCode Free",
+      "url": "https://leetcode.com/",
+      "status": 403
+    },
+    {
+      "id": "tensor-art",
+      "name": "Tensor.Art",
+      "url": "https://tensor.art/",
+      "status": 403
+    },
+    {
+      "id": "codeium",
+      "name": "Codeium",
+      "url": "https://codeium.com/",
+      "status": 429
+    },
+    {
+      "id": "nova-ai",
+      "name": "Nova",
+      "url": "https://github.com/AethyrionAI/Nova",
+      "status": 404
+    },
+    {
+      "id": "claude-free",
+      "name": "Claude Free",
+      "url": "https://claude.ai/",
+      "status": 403
+    },
+    {
+      "id": "ernie-bot",
+      "name": "ERNIE Bot (文心一言)",
+      "url": "https://yiyan.baidu.com/",
+      "status": 404
+    },
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "url": "https://claude.ai/code",
+      "status": 403
+    },
+    {
+      "id": "windsurf",
+      "name": "Windsurf",
+      "url": "https://codeium.com/windsurf",
+      "status": 429
+    }
+  ],
+  "duplicates": [],
+  "avgResponseTimeMs": 644
+}

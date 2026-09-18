@@ -1,0 +1,65 @@
+# Labeler rules consumed by .github/workflows/labeler.yml
+# actions/labeler@v6 schema — label names are top-level keys.
+# https://github.com/actions/labeler
+
+# Workflows and CI/CD
+ci:
+  - changed-files:
+      - any-glob-to-any-file: '.github/**'
+
+infrastructure:
+  - changed-files:
+      - any-glob-to-any-file: '.github/**'
+
+# Dependencies
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'package.json'
+          - 'package-lock.json'
+
+# Source code
+code:
+  - changed-files:
+      - any-glob-to-any-file: 'src/**'
+
+# Tests
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'tests/**'
+          - '**/*.test.ts'
+          - '**/*.spec.ts'
+
+# Tool database
+data:
+  - changed-files:
+      - any-glob-to-any-file: 'src/data/**'
+
+tools:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/data/**'
+          - 'scripts/verify-tools.ts'
+
+maintenance:
+  - changed-files:
+      - any-glob-to-any-file: 'scripts/verify-tools.ts'
+
+# Security
+# NOTE: src/auth, src/security, src/crypto do not exist in this repo today.
+# Add the corresponding globs back here if those directories are ever created.
+security:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'SECURITY.md'
+          - 'PENTEST_REPORT.md'
+
+# Docs
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'docs/**'
+          - '*.md'
+          - 'SECURITY.md'
+          - 'PENTEST_REPORT.md'
